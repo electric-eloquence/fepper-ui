@@ -1,0 +1,13 @@
+{
+  "name": "fepper-ui",
+  "homepage": "https://github.com/electric-eloquence/fepper-ui",
+  "description": "This is the client-side package that powers the Fepper UI",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
