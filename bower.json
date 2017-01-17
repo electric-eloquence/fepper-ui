@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "classlist": "2014.12.13",
+    "eventEmitter": "4.2.11",
     "he": "^1.1.0",
     "hogan": "^3.0.2",
     "jquery": "2.1.4",
