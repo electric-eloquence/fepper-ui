@@ -1,8 +1,21 @@
-## Fepper UI
+#fepper-ui
+The client-side package that powers the Fepper UI.
 
-# A frontend prototyper for the rapid prototyping of websites
+This package is automatically installed with a normal Fepper installation. To install it manually:
 
-### This is the client-side package that powers the Fepper UI.
+```shell
+* cd public
+* npm install
+```
 
-### Install
-* bower install fepper-ui
+To update:
+
+```shell
+* cd public
+* npm update
+```
+
+See the [Fepper README](https://github.com/electric-eloquence/fepper) for more information.
+
+Please report any bugs and submit contributions at
+https://github.com/electric-eloquence/fepper-ui
