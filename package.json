@@ -7,7 +7,7 @@
     "url": "git+https://github.com/electric-eloquence/fepper-ui.git"
   },
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "wolfy87-eventemitter": "4.2.11",
     "he": "^1.1.0",
     "hogan.js": "^3.0.2",
