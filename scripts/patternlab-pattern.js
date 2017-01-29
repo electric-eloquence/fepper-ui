@@ -75,7 +75,7 @@ function receiveIframeMessage(event) {
     } else {
       
       // handle the style guide
-      path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("styleguide\/html\/styleguide.html","")+data.path+'?'+Date.now();
+      path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("node_modules\/fepper-ui\/markup\/styleguide.html","")+data.path+'?'+Date.now();
       window.location.replace(path);
       
     }
@@ -129,7 +129,7 @@ var urlHandler = {
     }
     
     if (name == "all") {
-      return "styleguide/html/styleguide.html";
+      return "node_modules/fepper-ui/markup/styleguide.html";
     } else if (name == "snapshots") {
       return "snapshots/index.html";
     }
@@ -270,7 +270,7 @@ var urlHandler = {
     var iFramePath = "";
     iFramePath = this.getFileName(patternName);
     if (iFramePath === "") {
-      iFramePath = "styleguide/html/styleguide.html";
+      iFramePath = "node_modules/fepper-ui/markup/styleguide.html";
     }
     
     var obj = JSON.stringify({ "event": "patternLab.updatePath", "path": iFramePath });

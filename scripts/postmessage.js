@@ -96,7 +96,7 @@ function receiveIframeMessage(event) {
 		} else {
 			
 			// handle the style guide
-			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("styleguide\/html\/styleguide.html","")+data.path+'?'+Date.now();
+			path = window.location.protocol+"//"+window.location.host+window.location.pathname.replace("node_modules\/fepper-ui\/markup\/styleguide.html","")+data.path+'?'+Date.now();
 			window.location.replace(path);
 			
 		}
