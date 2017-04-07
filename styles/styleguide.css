@@ -1117,7 +1117,7 @@
 .annotation-tip {
   display: block;
   position: absolute;
-  margin-top: -10px !important;
+  margin-top: 1px !important;
   margin-left: -10px !important;
   width: 25px !important;
   height: 25px !important;
