@@ -345,12 +345,6 @@ var panelsUtil = {
       els[i].classList.remove('sg-tab-title-active');
     }
     
-    // hide all of the panels
-    els = document.querySelectorAll('#sg-'+patternPartial+'-panels div.sg-tabs-panel');
-    for (i = 0; i < els.length; ++i) {
-      els[i].style.display = 'none';
-    }
-    
     // add active tab class
     document.getElementById('sg-'+patternPartial+'-'+panelID+'-tab').classList.add('sg-tab-title-active');
     

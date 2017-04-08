@@ -96,6 +96,7 @@ var annotationsViewer = {
 		var obj = JSON.stringify({ "commentToggle": "off" });
 		document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
 		annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
+		$('#sg-vp-wrap').css('padding-bottom', '0');
 		$('#sg-t-annotations').removeClass('active');
 	},
 	
@@ -104,17 +105,30 @@ var annotationsViewer = {
 	*/
 	commentContainerInit: function() {
 		
-		// the bulk of this template is in core/templates/index.mustache
-		if (document.getElementById("sg-annotation-container") === null) {
-			$('<div id="sg-annotation-container" class="sg-view-container"></div>').html($("#annotations-template").html()).appendTo('body').css('bottom',-$(document).outerHeight());
-			setTimeout(function(){ $('#sg-annotation-container').addClass('anim-ready'); },50); //Add animation class once container is positioned out of frame
+		// might need to namespace this to window.fepperUi, but that needs to come as we better object-orient this
+		window.onloadTodos = window.onloadTodos || [];
+		
+		// need to prevent over-writing window.onload, so only define this once
+		if (!window.onloadTodos.length) {
+			window.onload = function() {
+				while (window.onloadTodos.length) {
+					window.onloadTodos.shift()();
+				}
+			};
 		}
+		
+		window.onloadTodos.push(function() {
+			$('#sg-annotation-container') // has class sg-view-container
+				.css('bottom',-$(document).outerHeight())
+				.addClass('anim-ready');
+		});
 		
 		// make sure the close button handles the click
 		$('body').delegate('#sg-annotation-close-btn','click',function() {
 			annotationsViewer.commentsActive = false;
 			$('#sg-t-annotations').removeClass('active');
 			annotationsViewer.slideComment($('#sg-annotation-container').outerHeight());
+			$('#sg-vp-wrap').css('padding-bottom', '0');
 			var obj = JSON.stringify({ "commentToggle": "off" });
 			document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
 			return false;
@@ -204,6 +218,12 @@ var annotationsViewer = {
 		
 		// slide the comment section into view
 		annotationsViewer.slideComment(0);
+
+		// add padding to bottom of viewport wrapper so pattern foot can be viewed
+		// delay it so it gets added after animation completes
+		window.setTimeout(function() {
+			$("#sg-vp-wrap").css("padding-bottom", $("#sg-annotation-container").outerHeight() + "px");
+		}, 300);
 		
 		if (annotationsViewer.moveToOnInit != "0") {
 			annotationsViewer.moveTo(annotationsViewer.moveToOnInit);
