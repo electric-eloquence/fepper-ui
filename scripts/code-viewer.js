@@ -104,6 +104,7 @@ var codeViewer = {
 		document.getElementById('sg-viewport').contentWindow.postMessage(obj,codeViewer.targetOrigin);
 		codeViewer.codeActive = false;
 		codeViewer.slideCode($('#sg-code-container').outerHeight());
+		$('#sg-vp-wrap').css('padding-bottom', '0');
 		$('#sg-t-code').removeClass('active');
 	},
 	
@@ -112,11 +113,23 @@ var codeViewer = {
 	*/
 	codeContainerInit: function() {
 		
-		// the bulk of this template is in core/templates/index.mustache
-		if (document.getElementById("sg-code-container") === null) {
-			$('<div id="sg-code-container" class="sg-view-container"></div>').html($("#code-template").html()).appendTo('body').css('bottom',-$(document).outerHeight());
-			setTimeout(function(){ $('#sg-code-container').addClass('anim-ready'); },50); //Add animation class once container is positioned out of frame
+		// might need to namespace this to window.fepperUi, but that needs to come as we better object-orient this
+		window.onloadTodos = window.onloadTodos || [];
+		
+		// need to prevent over-writing window.onload, so only define this once
+		if (!window.onloadTodos.length) {
+			window.onload = function() {
+				while (window.onloadTodos.length) {
+					window.onloadTodos.shift()();
+				}
+			};
 		}
+		
+		window.onloadTodos.push(function() {
+			$('#sg-code-container') // has class sg-view-container
+				.css('bottom',-$(document).outerHeight())
+				.addClass('anim-ready');
+		});
 		
 		// make sure the close button handles the click
 		$('body').delegate('#sg-code-close-btn','click',function() {
@@ -342,6 +355,12 @@ var codeViewer = {
 		
 		// move the code into view
 		codeViewer.slideCode(0);
+
+		// add padding to bottom of viewport wrapper so pattern foot can be viewed
+		// delay it so it gets added after animation completes
+		window.setTimeout(function() {
+			$("#sg-vp-wrap").css("padding-bottom", $("#sg-code-container").outerHeight() + "px");
+		}, 300);
 		
 		$("#sg-code-loader").css("display","none");
 		

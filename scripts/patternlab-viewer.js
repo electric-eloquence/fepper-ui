@@ -156,7 +156,7 @@ var DataSaver = {
 };
 
 /*!
- * Simple Layout Rendering for Pattern Lab
+ * Simple Layout Rendering for Pattern Lab. Load these here, and not with React, to avoid a render delay.
  *
  * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license
@@ -165,16 +165,18 @@ var DataSaver = {
 try {
   
   /* load pattern nav */
-  var template         = document.getElementById("pl-pattern-nav-template");
+  var template         = document.getElementById("pl-pattern-nav-target");
   var templateCompiled = Hogan.compile(template.innerHTML);
   var templateRendered = templateCompiled.render(navItems);
-  document.getElementById("pl-pattern-nav-target").innerHTML = templateRendered;
+  template.innerHTML = templateRendered;
+  template.classList.remove('is-vishidden');
   
   /* load ish controls */
-  var template         = document.getElementById("pl-ish-controls-template");
+  var template         = document.getElementById("sg-controls");
   var templateCompiled = Hogan.compile(template.innerHTML);
   var templateRendered = templateCompiled.render(ishControls);
-  document.getElementById("sg-controls").innerHTML = templateRendered;
+  template.innerHTML = templateRendered;
+  template.classList.remove('is-vishidden');
   
 } catch(e) {
   
@@ -418,13 +420,6 @@ var modalViewer = {
     // make sure the listener for checkpanels is set-up
     Dispatcher.addListener('insertPanels', modalViewer.insert);
     
-    // watch for resizes and hide the modal container as appropriate when the modal is already hidden
-    $(window).on('resize', function() {
-      if (DataSaver.findValue('modalActive') === 'false') {
-        modalViewer.slide($('#sg-modal-container').outerHeight());
-      }
-    });
-    
     // add the info/code panel onclick handler
     $('#sg-t-patterninfo').click(function(e) {
       e.preventDefault();
@@ -433,28 +428,11 @@ var modalViewer = {
       modalViewer.toggle();
     });
     
-    // make sure the close button handles the click
-    $('#sg-modal-close-btn').on('click', function(e) {
-      
-      e.preventDefault();
-      
-      // hide any open annotations
-      obj = JSON.stringify({ 'event': 'patternLab.annotationsHighlightHide' });
-      document.getElementById('sg-viewport').contentWindow.postMessage(obj, modalViewer.targetOrigin);
-      
-      // hide the viewer
-      modalViewer.close();
-      
-    });
-    
     // see if the modal is already active, if so update attributes as appropriate
     if (DataSaver.findValue('modalActive') === 'true') {
       modalViewer.active = true;
       $('#sg-t-patterninfo').html("Hide Pattern Info");
     }
-    
-    // make sure the modal viewer is not viewable, it's alway hidden by default. the pageLoad event determines when it actually opens
-    modalViewer.hide();
     
     // review the query strings in case there is something the modal viewer is supposed to handle by default
     var queryStringVars = urlHandler.getRequestVars();
@@ -499,9 +477,6 @@ var modalViewer = {
     // add an active class to the button that matches this template
     $('#sg-t-'+modalViewer.template+' .sg-checkbox').addClass('active');
 
-    //Add active class to modal
-    $('#sg-modal-container').addClass('active');
-    
     // show the modal
     modalViewer.show();
     
@@ -517,9 +492,6 @@ var modalViewer = {
     // not that the modal viewer is no longer active
     DataSaver.updateValue('modalActive', 'false');
     modalViewer.active = false;
-    
-    //Add active class to modal
-    $('#sg-modal-container').removeClass('active');
     
     // remove the active class from all of the checkbox items
     $('.sg-checkbox').removeClass('active');
@@ -537,13 +509,6 @@ var modalViewer = {
   },
   
   /**
-  * hide the modal window, add 30px to account for the X box
-  */
-  hide: function() {
-    modalViewer.slide($('#sg-modal-container').outerHeight()+30);
-  },
-  
-  /**
   * insert the copy for the modal window. if it's meant to be sent back to the iframe do do
   * @param  {String}       the rendered template that should be inserted
   * @param  {String}       the patternPartial that the rendered template is related to
@@ -558,14 +523,8 @@ var modalViewer = {
       var obj = JSON.stringify({ 'event': 'patternLab.patternModalInsert', 'patternPartial': patternPartial, 'modalContent': templateRendered.outerHTML });
       document.getElementById('sg-viewport').contentWindow.postMessage(obj, modalViewer.targetOrigin);
       
-    } else {
-      
-      // insert the panels and open the viewer
-      $('#sg-modal-content').html(templateRendered);
-      modalViewer.open();
-      
     }
-    
+      
     // update the wording unless this is a default viewall opening
     if (switchText === true) {
       $('#sg-t-patterninfo').html("Hide Pattern Info");
@@ -588,37 +547,6 @@ var modalViewer = {
     
     // gather the data that will fill the modal window
     panelsViewer.gatherPanels(patternData, iframePassback, switchText);
-    
-  },
-  
-  /**
-  * slides the modal window into or out of view
-  * @param  {Integer}      where the modal window should be slide to
-  */
-  slide: function(pos) {
-    pos = (pos === 0) ? 0 : -pos;
-    $('#sg-modal-container').css('bottom',pos);
-  },
-  
-  /**
-  * slides the modal window to a particular annotation
-  * @param  {Integer}      the number for the element that should be highlighted
-  */
-  slideToAnnotation: function(pos) {
-    
-    // remove active class
-    els = document.querySelectorAll('#sg-annotations > .sg-annotations-list > li');
-    for (i = 0; i < els.length; ++i) {
-      els[i].classList.remove('active');
-    }
-    
-    // add active class to called element and scroll to it
-    for (i = 0; i < els.length; ++i) {
-      if ((i+1) == pos) {
-        els[i].classList.add('active');
-        $('.sg-pattern-extra-info').animate({scrollTop: els[i].offsetTop - 10}, 600);
-      }
-    }
     
   },
   
@@ -742,12 +670,6 @@ var panelsUtil = {
     els = document.querySelectorAll('#sg-'+patternPartial+'-tabs li');
     for (i = 0; i < els.length; ++i) {
       els[i].classList.remove('sg-tab-title-active');
-    }
-    
-    // hide all of the panels
-    els = document.querySelectorAll('#sg-'+patternPartial+'-panels div.sg-tabs-panel');
-    for (i = 0; i < els.length; ++i) {
-      els[i].style.display = 'none';
     }
     
     // add active tab class
@@ -1100,127 +1022,6 @@ var panelsViewer = {
 };
 
 /*!
- * Pattern Finder
- *
- * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
- * Licensed under the MIT license
- *
- * @requires url-handler.js
- *
- */
-
-var patternFinder = {
-  
-  data:   [],
-  active: false,
-  
-  init: function() {
-    
-    for (var patternType in patternPaths) {
-      if (patternPaths.hasOwnProperty(patternType)) {
-        for (var pattern in patternPaths[patternType]) {
-          var obj = {};
-          obj.patternPartial = patternType+"-"+pattern;
-          obj.patternPath    = patternPaths[patternType][pattern];
-          this.data.push(obj);
-        }
-      }
-    }
-    
-    // instantiate the bloodhound suggestion engine
-    var patterns = new Bloodhound({
-      datumTokenizer: function(d) { return Bloodhound.tokenizers.nonword(d.patternPartial); },
-      queryTokenizer: Bloodhound.tokenizers.nonword,
-      limit: 10,
-      local: this.data
-    });
-    
-    // initialize the bloodhound suggestion engine
-    patterns.initialize();
-    
-    $('#sg-find .typeahead').typeahead({ highlight: true }, {
-      displayKey: 'patternPartial',
-      source: patterns.ttAdapter()
-    }).on('typeahead:selected', patternFinder.onSelected).on('typeahead:autocompleted', patternFinder.onAutocompleted);
-    
-  },
-  
-  passPath: function(item) {
-    // update the iframe via the history api handler
-    patternFinder.closeFinder();
-    var obj = JSON.stringify({ "event": "patternLab.updatePath", "path": urlHandler.getFileName(item.patternPartial) });
-    document.getElementById("sg-viewport").contentWindow.postMessage(obj, urlHandler.targetOrigin);
-  },
-  
-  onSelected: function(e,item) {
-    patternFinder.passPath(item);
-  },
-  
-  onAutocompleted: function(e,item) {
-    patternFinder.passPath(item);
-  },
-  
-  toggleFinder: function() {
-    if (!patternFinder.active) {
-      patternFinder.openFinder();
-    } else {
-      patternFinder.closeFinder();
-    }
-  },
-  
-  openFinder: function() {
-    patternFinder.active = true;
-    $('#sg-find .typeahead').val("");
-    $("#sg-find").addClass('show-overflow');
-  },
-  
-  closeFinder: function() {
-    patternFinder.active = false;
-    document.activeElement.blur();
-    $("#sg-find").removeClass('show-overflow');
-    $('#sg-find .typeahead').val("");
-  },
-  
-  receiveIframeMessage: function(event) {
-    
-    // does the origin sending the message match the current host? if not dev/null the request
-    if ((window.location.protocol !== "file:") && (event.origin !== window.location.protocol+"//"+window.location.host)) {
-      return;
-    }
-    
-    var data = {};
-    try {
-      data = (typeof event.data !== 'string') ? event.data : JSON.parse(event.data);
-    } catch(e) {}
-    
-    if ((data.event !== undefined) && (data.event == "patternLab.keyPress")) {
-      
-      if (data.keyPress == 'ctrl+shift+f') {
-        patternFinder.toggleFinder();
-        return false;
-      }
-      
-    }
-    
-  }
-  
-};
-
-patternFinder.init();
-
-window.addEventListener("message", patternFinder.receiveIframeMessage, false);
-
-$('#sg-find .typeahead').focus(function() {
-  if (!patternFinder.active) {
-    patternFinder.openFinder();
-  }
-});
-
-$('#sg-find .typeahead').blur(function() {
-  patternFinder.closeFinder();
-});
-
-/*!
  * Basic postMessage Support
  *
  * Copyright (c) 2013-2016 Dave Olsen, http://dmolsen.com
@@ -1318,75 +1119,59 @@ window.addEventListener("message", receiveIframeMessage, false);
  * @requires postmessage.js
  */
 
-(function (w) {
+$(document).ready(function () {
 
-  var sw = document.body.clientWidth, //Viewport Width
-    sh = $(document).height(), //Viewport Height
-    minViewportWidth = parseInt(config.ishMinimum), //Minimum Size for Viewport
-    maxViewportWidth = parseInt(config.ishMaximum), //Maxiumum Size for Viewport
-    viewportResizeHandleWidth = 14, //Width of the viewport drag-to-resize handle
-    $sgViewport = $('#sg-viewport'), //Viewport element
-    $sizePx = $('.sg-size-px'), //Px size input element in toolbar
-    $sizeEms = $('.sg-size-em'), //Em size input element in toolbar
-    $bodySize = (config.ishFontSize !== undefined) ? parseInt(config.ishFontSize) : parseInt($('body').css('font-size')), //Body size of the document,
-    $headerHeight = $('.sg-header').height(),
-    discoID = false,
+  var uiFns = window.FEPPER_UI.uiFns,
+    uiProps = window.FEPPER_UI.uiProps,
+    sw = uiProps.sw,
+    minViewportWidth = uiProps.minViewportWidth,
+    maxViewportWidth = uiProps.maxViewportWidth,
+    viewportResizeHandleWidth = uiProps.viewportResizeHandleWidth,
+    $sgViewport = uiProps.$sgViewport,
+    $bodySize = uiProps.$bodySize,
     discoMode = false,
-    fullMode = true,
+    fullMode = uiProps.fullMode,
     hayMode = false;
 
-
-
   //Update dimensions on resize
-  $(w).resize(function() {
-    sw = document.body.clientWidth;
-    sh = $(document).height();
+  $(window).resize(function() {
+    uiProps.sw = document.body.clientWidth;
+    uiProps.sh = $(document).height();
 
-    setAccordionHeight();
+    uiFns.setAccordionHeight();
 
     if(fullMode === true) {
       sizeiframe(sw, false);
     }
   });
 
-  // Accordion dropdown
-  $('.sg-acc-handle').on("click", function(e){
-    e.preventDefault();
-
-    var $this = $(this),
-      $panel = $this.next('.sg-acc-panel'),
-      subnav = $this.parent().parent().hasClass('sg-acc-panel');
-
-    //Close other panels if link isn't a subnavigation item
-    if (!subnav) {
-      $('.sg-acc-handle').not($this).removeClass('active');
-      $('.sg-acc-panel').not($panel).removeClass('active');
-    }
-
-    //Activate selected panel
-    $this.toggleClass('active');
-    $panel.toggleClass('active');
-    setAccordionHeight();
-  });
-
-  //Accordion Height
-  function setAccordionHeight() {
-    var $activeAccordion = $('.sg-acc-panel.active').first(),
-      accordionHeight = $activeAccordion.height(),
-      availableHeight = sh-$headerHeight; //Screen height minus the height of the header
-
-    $activeAccordion.height(availableHeight); //Set height of accordion to the available height
+  /* Disco Mode */
+  function disco() {
+    sizeiframe(getRandom(minViewportWidth,sw));
   }
 
-  $('.sg-nav-toggle').on("click", function(e){
-    e.preventDefault();
-    $('.sg-nav-container').toggleClass('active');
+  var killDisco = uiFns.killDisco;
+  var startDisco = uiFns.startDisco;
+
+  jwerty.key('ctrl+shift+d', function(e) {
+    if (!discoMode) {
+      startDisco();
+    } else {
+      killDisco();
+    }
+    return false;
   });
 
-  // "View (containing clean, code, raw, etc options) Trigger
-  $('#sg-t-toggle').on("click", function(e){
-    e.preventDefault();
-    $(this).parents('ul').toggleClass('active');
+  var killHay = uiFns.killHay;
+  var startHay = uiFns.startHay;
+
+  // start hay from a keyboard shortcut
+  jwerty.key('ctrl+shift+h', function(e) {
+    if (!hayMode) {
+      startHay();
+    } else {
+      killHay();
+    }
   });
 
   //Size Trigger
@@ -1453,149 +1238,6 @@ window.addEventListener("message", receiveIframeMessage, false);
     return false;
   });
 
-  //Click Full Width Button
-  $('#sg-size-full').on("click", function(e){ //Resets
-    e.preventDefault();
-    killDisco();
-    killHay();
-    fullMode = true;
-    sizeiframe(sw);
-  });
-
-  //Click Random Size Button
-  $('#sg-size-random').on("click", function(e){
-    e.preventDefault();
-    killDisco();
-    killHay();
-    fullMode = false;
-    sizeiframe(getRandom(minViewportWidth,sw));
-  });
-
-  //Click for Disco Mode, which resizes the viewport randomly
-  $('#sg-size-disco').on("click", function(e){
-    e.preventDefault();
-    killHay();
-    fullMode = false;
-
-    if (discoMode) {
-      killDisco();
-
-    } else {
-      startDisco();
-    }
-  });
-
-  /* Disco Mode */
-  function disco() {
-    sizeiframe(getRandom(minViewportWidth,sw));
-  }
-
-  function killDisco() {
-    discoMode = false;
-    clearInterval(discoID);
-    discoID = false;
-  }
-
-  function startDisco() {
-    discoMode = true;
-    discoID = setInterval(disco, 800);
-  }
-
-  jwerty.key('ctrl+shift+d', function(e) {
-    if (!discoMode) {
-      startDisco();
-    } else {
-      killDisco();
-    }
-    return false;
-  });
-
-  //Stephen Hay Mode - "Start with the small screen first, then expand until it looks like shit. Time for a breakpoint!"
-  $('#sg-size-hay').on("click", function(e){
-    e.preventDefault();
-    killDisco();
-    if (hayMode) {
-      killHay();
-    } else {
-      startHay();
-    }
-  });
-
-  //Stop Hay! Mode
-  function killHay() {
-    var currentWidth = $sgViewport.width();
-    hayMode = false;
-    $sgViewport.removeClass('hay-mode');
-    $('#sg-gen-container').removeClass('hay-mode');
-    sizeiframe(Math.floor(currentWidth));
-  }
-
-  // start Hay! mode
-  function startHay() {
-    hayMode = true;
-    $('#sg-gen-container').removeClass("vp-animate").width(minViewportWidth+viewportResizeHandleWidth);
-    $sgViewport.removeClass("vp-animate").width(minViewportWidth);
-
-    var timeoutID = window.setTimeout(function(){
-      $('#sg-gen-container').addClass('hay-mode').width(maxViewportWidth+viewportResizeHandleWidth);
-      $sgViewport.addClass('hay-mode').width(maxViewportWidth);
-
-      setInterval(function(){ var vpSize = $sgViewport.width(); updateSizeReading(vpSize); },100);
-    }, 200);
-  }
-
-  // start hay from a keyboard shortcut
-  jwerty.key('ctrl+shift+h', function(e) {
-    if (!hayMode) {
-      startHay();
-    } else {
-      killHay();
-    }
-  });
-
-  //Pixel input
-  $sizePx.on('keydown', function(e){
-    var val = Math.floor($(this).val());
-
-    if(e.keyCode === 38) { //If the up arrow key is hit
-      val++;
-      sizeiframe(val,false);
-    } else if(e.keyCode === 40) { //If the down arrow key is hit
-      val--;
-      sizeiframe(val,false);
-    } else if(e.keyCode === 13) { //If the Enter key is hit
-      e.preventDefault();
-      sizeiframe(val); //Size Iframe to value of text box
-      $(this).blur();
-    }
-  });
-
-  $sizePx.on('keyup', function(){
-    var val = Math.floor($(this).val());
-    updateSizeReading(val,'px','updateEmInput');
-  });
-
-  //Em input
-  $sizeEms.on('keydown', function(e){
-    var val = parseFloat($(this).val());
-
-    if(e.keyCode === 38) { //If the up arrow key is hit
-      val++;
-      sizeiframe(Math.floor(val*$bodySize),false);
-    } else if(e.keyCode === 40) { //If the down arrow key is hit
-      val--;
-      sizeiframe(Math.floor(val*$bodySize),false);
-    } else if(e.keyCode === 13) { //If the Enter key is hit
-      e.preventDefault();
-      sizeiframe(Math.floor(val*$bodySize)); //Size Iframe to value of text box
-    }
-  });
-
-  $sizeEms.on('keyup', function(){
-    var val = parseFloat($(this).val());
-    updateSizeReading(val,'em','updatePxInput');
-  });
-
   // set 0 to 320px as a default
   jwerty.key('ctrl+shift+0', function(e) {
     e.preventDefault();
@@ -1603,114 +1245,10 @@ window.addEventListener("message", receiveIframeMessage, false);
     return false;
   });
 
-  // handle the MQ click
-  var mqs = [];
-  $('#sg-mq a').each(function(i) {
-
-    mqs.push($(this).html());
-
-    // bind the click
-    $(this).on("click", function(i,k) {
-      return function(e) {
-        e.preventDefault();
-        var val = $(k).html();
-        var type = (val.indexOf("px") !== -1) ? "px" : "em";
-        val = val.replace(type,"");
-        var width = (type === "px") ? val*1 : val*$bodySize;
-        sizeiframe(width,true);
-      };
-    }(i,this));
-
-    // bind the keyboard shortcut. can't use cmd on a mac because 3 & 4 are for screenshots
-    jwerty.key('ctrl+shift+'+(i+1), function (k) {
-      return function(e) {
-        var val = $(k).html();
-        var type = (val.indexOf("px") !== -1) ? "px" : "em";
-        val = val.replace(type,"");
-        var width = (type === "px") ? val*1 : val*$bodySize;
-        sizeiframe(width,true);
-        return false;
-      };
-    }(this));
-
-  });
-
-  //Resize the viewport
-  //'size' is the target size of the viewport
-  //'animate' is a boolean for switching the CSS animation on or off. 'animate' is true by default, but can be set to false for things like nudging and dragging
-  function sizeiframe(size,animate) {
-    var theSize;
-
-    if(size>maxViewportWidth) { //If the entered size is larger than the max allowed viewport size, cap value at max vp size
-      theSize = maxViewportWidth;
-    } else if(size<minViewportWidth) { //If the entered size is less than the minimum allowed viewport size, cap value at min vp size
-      theSize = minViewportWidth;
-    } else {
-      theSize = size;
-    }
-
-    //Conditionally remove CSS animation class from viewport
-    if(animate===false) {
-      $('#sg-gen-container,#sg-viewport').removeClass("vp-animate"); //If aninate is set to false, remove animate class from viewport
-    } else {
-      $('#sg-gen-container,#sg-viewport').addClass("vp-animate");
-    }
-
-    $('#sg-gen-container').width(theSize+viewportResizeHandleWidth); //Resize viewport wrapper to desired size + size of drag resize handler
-    $sgViewport.width(theSize); //Resize viewport to desired size
-
-    var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-    var obj = JSON.stringify({ "event": "patternLab.resize", "resize": "true" });
-    document.getElementById('sg-viewport').contentWindow.postMessage(obj,targetOrigin);
-
-    updateSizeReading(theSize); //Update values in toolbar
-    saveSize(theSize); //Save current viewport to cookie
-  }
-
-  $("#sg-gen-container").on('transitionend webkitTransitionEnd', function(e){
-    var targetOrigin = (window.location.protocol === "file:") ? "*" : window.location.protocol+"//"+window.location.host;
-    var obj = JSON.stringify({ "event": "patternLab.resize", "resize": "true" });
-    document.getElementById('sg-viewport').contentWindow.postMessage(obj,targetOrigin);
-  });
-
-  function saveSize(size) {
-    if (!DataSaver.findValue('vpWidth')) {
-      DataSaver.addValue("vpWidth",size);
-    } else {
-      DataSaver.updateValue("vpWidth",size);
-    }
-  }
-
-
-  //Update Pixel and Em inputs
-  //'size' is the input number
-  //'unit' is the type of unit: either px or em. Default is px. Accepted values are 'px' and 'em'
-  //'target' is what inputs to update. Defaults to both
-  function updateSizeReading(size,unit,target) {
-    var emSize, pxSize;
-
-    if(unit==='em') { //If size value is in em units
-      emSize = size;
-      pxSize = Math.floor(size*$bodySize);
-    } else { //If value is px or absent
-      pxSize = size;
-      emSize = size/$bodySize;
-    }
-
-    if (target === 'updatePxInput') {
-      $sizePx.val(pxSize);
-    } else if (target === 'updateEmInput') {
-      $sizeEms.val(emSize.toFixed(2));
-    } else {
-      $sizeEms.val(emSize.toFixed(2));
-      $sizePx.val(pxSize);
-    }
-  }
-
-  /* Returns a random number between min and max */
-  function getRandom (min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
-  }
+  var sizeiframe = uiFns.sizeiframe;
+  var saveSize = uiFns.saveSize;
+  var updateSizeReading = uiFns.updateSizeReading;
+  var getRandom = uiFns.getRandom;
 
   //Update The viewport size
   function updateViewportWidth(size) {
@@ -1719,52 +1257,6 @@ window.addEventListener("message", receiveIframeMessage, false);
 
     updateSizeReading(size);
   }
-
-  $('#sg-gen-container').on('touchstart', function(event){});
-
-  // handles widening the "viewport"
-  //   1. on "mousedown" store the click location
-  //   2. make a hidden div visible so that it can track mouse movements and make sure the pointer doesn't get lost in the iframe
-  //   3. on "mousemove" calculate the math, save the results to a cookie, and update the viewport
-  $('#sg-rightpull').mousedown(function(event) {
-
-    // capture default data
-    var origClientX = event.clientX;
-    var origViewportWidth = $sgViewport.width();
-
-    fullMode = false;
-
-    // show the cover
-    $("#sg-cover").css("display","block");
-
-    // add the mouse move event and capture data. also update the viewport width
-    $('#sg-cover').mousemove(function(event) {
-      var viewportWidth;
-
-      viewportWidth = origViewportWidth + 2*(event.clientX - origClientX);
-
-      if (viewportWidth > minViewportWidth) {
-
-        if (!DataSaver.findValue('vpWidth')) {
-          DataSaver.addValue("vpWidth",viewportWidth);
-        } else {
-          DataSaver.updateValue("vpWidth",viewportWidth);
-        }
-
-        sizeiframe(viewportWidth,false);
-      }
-    });
-
-    return false;
-
-  });
-
-  // on "mouseup" we unbind the "mousemove" event and hide the cover again
-  $('body').mouseup(function() {
-    $('#sg-cover').unbind('mousemove');
-    $('#sg-cover').css("display","none");
-  });
-
 
   // capture the viewport width that was loaded and modify it so it fits with the pull bar
   var origViewportWidth = $("#sg-viewport").width();
@@ -1823,12 +1315,6 @@ window.addEventListener("message", receiveIframeMessage, false);
   urlHandler.skipBack = true;
   document.getElementById("sg-viewport").contentWindow.location.replace(iFramePath);
 
-  //Close all dropdowns and navigation
-  function closePanels() {
-    $('.sg-nav-container, .sg-nav-toggle, .sg-acc-handle, .sg-acc-panel').removeClass('active');
-    patternFinder.closeFinder();
-  }
-
   // update the iframe with the source from clicked element in pull down menu. also close the menu
   // having it outside fixes an auto-close bug i ran into
   $('a[data-patternpartial]').on("click", function(e){
@@ -1836,12 +1322,7 @@ window.addEventListener("message", receiveIframeMessage, false);
     // update the iframe via the history api handler
     var obj = JSON.stringify({ "event": "patternLab.updatePath", "path": urlHandler.getFileName($(this).attr("data-patternpartial")) });
     document.getElementById("sg-viewport").contentWindow.postMessage(obj, urlHandler.targetOrigin);
-    closePanels();
-  });
-
-  // handle when someone clicks on the grey area of the viewport so it auto-closes the nav
-  $('#sg-vp-wrap').click(function() {
-    closePanels();
+    uiFns.closePanels();
   });
 
   // Listen for resize changes
@@ -1929,4 +1410,4 @@ window.addEventListener("message", receiveIframeMessage, false);
   }
   window.addEventListener("message", receiveIframeMessage, false);
 
-})(this);
+});
