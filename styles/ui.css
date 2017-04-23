@@ -256,7 +256,7 @@
   display: block;
   width: auto;
   font-size: 1rem;
-  padding: 0.5rem 0.7rem;
+  padding: 0.5rem 0.5rem;
 }
 
 .sg-icon-search, .sg-icon-cog, .sg-checkbox.active, .sg-checkbox, .sg-icon-file, .sg-icon-link, .sg-icon-keyboard, .sg-icon-eye {
@@ -311,14 +311,15 @@
 
 .sg-current-size {
   font-size: 70%;
+  line-height: 1;
   color: #808080;
-  padding: 0.85em 0.7em;
+  padding: 0.75em 1em;
 }
 .sg-current-size:hover .sg-input {
   background: #999;
   color: #000;
 }
-@media all and (min-width: 72em) {
+@media all and (min-width: 64em) {
   .sg-current-size {
     float: left;
   }
@@ -339,7 +340,7 @@
 .sg-size-options li {
   background-color: transparent;
 }
-@media all and (min-width: 72em) {
+@media all and (min-width: 64em) {
   .sg-size-options {
     float: left;
     position: static;
