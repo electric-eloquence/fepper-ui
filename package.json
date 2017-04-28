@@ -18,5 +18,22 @@
     "react-dom": "^15.4.2",
     "typeahead.js": "0.10.5",
     "wolfy87-eventemitter": "4.2.11"
-  }
+  },
+  "keywords": [
+    "atomic",
+    "component",
+    "design",
+    "end",
+    "fepper",
+    "front",
+    "front-end",
+    "frontend",
+    "lab",
+    "library",
+    "pattern",
+    "prototype",
+    "prototyper",
+    "prototyping",
+    "template"
+  ]
 }
