@@ -19,6 +19,7 @@
   left: 0;
   z-index: 1;
   width: 100%;
+  min-width: 320px;
   /**
   * All lists appearing in the header
   */
@@ -296,7 +297,6 @@
   content: "\e605";
 }
 .sg-control .sg-input {
-  padding: 0.1em;
   -webkit-transition: all 0.2s ease-out;
   -moz-transition: all 0.2s ease-out;
   -ms-transition: all 0.2s ease-out;
@@ -313,7 +313,7 @@
   font-size: 70%;
   line-height: 1;
   color: #808080;
-  padding: 0.75em 1em;
+  padding: 1em 1em 0;
 }
 .sg-current-size:hover .sg-input {
   background: #999;
@@ -322,15 +322,6 @@
 @media all and (min-width: 64em) {
   .sg-current-size {
     float: left;
-  }
-}
-
-.sg-size {
-  width: 135px;
-}
-@media all and (min-width: 48em) {
-  .sg-size {
-    width: auto;
   }
 }
 
@@ -359,18 +350,26 @@
   border: 0;
   padding: 0;
 }
-
+#sg-form > * {
+  display: inline-block;
+}
 .sg-input {
   margin: -2px 0 0 0;
-  padding: 0;
+  padding: 0 0 1px;
   border: 0;
   background-color: #222;
   color: gray;
-  width: 25px;
+  height: 12px;
   text-align: right;
 }
+.sg-size-px {
+  width: 30px;
+}
+.sg-size-em {
+  width: 35px;
+}
 @media all and (min-width: 48em) {
-  .sg-input {
+  .sg-size-px {
     width: 35px;
   }
 }
