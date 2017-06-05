@@ -1,4 +1,4 @@
-# Client-side package that powers the Fepper UI.
+# Client-side package that powers the Fepper UI
 
 ### Install
 This package is automatically installed with a normal Fepper installation. To 
