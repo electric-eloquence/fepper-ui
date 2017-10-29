@@ -23,6 +23,3 @@ not directly relevant to this package.
 
 See the [Fepper README](https://github.com/electric-eloquence/fepper#ui-customization) 
 for more information.
-
-Please report any bugs and submit contributions at
-https://github.com/electric-eloquence/fepper-ui
