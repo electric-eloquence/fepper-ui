@@ -23,6 +23,10 @@
     "template"
   ],
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/electric-eloquence/fepper-ui/issues"
+  },
+  "homepage": "https://github.com/electric-eloquence/fepper-ui#readme",
   "devDependencies": {
     "he": "1.1.0",
     "hogan.js": "3.0.2",
