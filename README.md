@@ -17,7 +17,7 @@ install it manually:
 * npm update
 ```
 
-### UI Customization
+### Customize
 
 All aspects of the UI are available for customization. For example, the toolbar
 can accept additions, modifications, and deletions per the needs of end users. 
