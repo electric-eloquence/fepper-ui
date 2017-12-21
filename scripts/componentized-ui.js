@@ -38,10 +38,12 @@ var uiCreate = function (createRenderObj) {
       var dynamicScriptId = 'components-for-client';
       var dynamicScriptOld = document.getElementById(dynamicScriptId);
       var dynamicScriptNew = document.createElement('script');
+
       dynamicScriptNew.id = dynamicScriptId;
       dynamicScriptNew.innerHTML = dynamicScriptOld.innerHTML;
       docHeadObj.removeChild(dynamicScriptOld);
       docHeadObj.appendChild(dynamicScriptNew);
+
       while (window.FEPPER_UI.reRenderFns.length) {
         window.FEPPER_UI.reRenderFns.shift()();
       }
