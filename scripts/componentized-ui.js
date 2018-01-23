@@ -1,6 +1,9 @@
-var React;
-var isClient = typeof window === 'object';
-var isServer = typeof global === 'object';
+'use strict';
+
+const isClient = typeof window === 'object';
+const isServer = typeof global === 'object';
+
+let React;
 
 if (isClient) {
   React = window.React;
@@ -9,10 +12,11 @@ else if (isServer) {
   React = require('react');
 }
 
-var uiCreate = function (createRenderObj) {
-  return React.createClass({
+const uiCreate = function (createRenderObj) {
+  return class extends React.Component {
+    constructor(props) {
+      super(props);
 
-    getInitialState: function () {
       if (isClient) {
         window.uiInst = this;
         window.FEPPER_UI.reRenderFns = [];
@@ -20,24 +24,23 @@ var uiCreate = function (createRenderObj) {
       else if (isServer) {
         global.uiInst = this;
       }
-      return {};
-    },
+    }
 
-    render: function () {
+    render() {
       if (isClient) {
         return window.componentsForClient();
       }
       else if (isServer) {
         return createRenderObj();
       }
-    },
+    }
 
-    handleEvent: function () {
+    handleEvent() {
       delete window.componentsForClient;
-      var docHeadObj = document.getElementsByTagName('head')[0];
-      var dynamicScriptId = 'components-for-client';
-      var dynamicScriptOld = document.getElementById(dynamicScriptId);
-      var dynamicScriptNew = document.createElement('script');
+      const docHeadObj = document.getElementsByTagName('head')[0];
+      const dynamicScriptId = 'components-for-client';
+      const dynamicScriptOld = document.getElementById(dynamicScriptId);
+      const dynamicScriptNew = document.createElement('script');
 
       dynamicScriptNew.id = dynamicScriptId;
       dynamicScriptNew.innerHTML = dynamicScriptOld.innerHTML;
@@ -48,8 +51,8 @@ var uiCreate = function (createRenderObj) {
         window.FEPPER_UI.reRenderFns.shift()();
       }
     }
-  });
-};
+  };
+}
 
 if (isClient) {
   window.FEPPER_UI.uiCreate = uiCreate;

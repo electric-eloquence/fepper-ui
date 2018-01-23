@@ -113,23 +113,9 @@ var codeViewer = {
 	*/
 	codeContainerInit: function() {
 		
-		// might need to namespace this to window.fepperUi, but that needs to come as we better object-orient this
-		window.onloadTodos = window.onloadTodos || [];
-		
-		// need to prevent over-writing window.onload, so only define this once
-		if (!window.onloadTodos.length) {
-			window.onload = function() {
-				while (window.onloadTodos.length) {
-					window.onloadTodos.shift()();
-				}
-			};
-		}
-		
-		window.onloadTodos.push(function() {
-			$('#sg-code-container') // has class sg-view-container
-				.css('bottom',-$(document).outerHeight())
-				.addClass('anim-ready');
-		});
+		$('#sg-code-container') // has class sg-view-container
+			.css('bottom',-$(document).outerHeight())
+			.addClass('anim-ready');
 		
 		// make sure the close button handles the click
 		$('body').delegate('#sg-code-close-btn','click',function() {
@@ -421,7 +407,7 @@ $(document).ready(function() { codeViewer.onReady(); });
 window.addEventListener("message", codeViewer.receiveIframeMessage, false);
 
 // make sure if a new pattern or view-all is loaded that comments are turned on as appropriate
-$('#sg-viewport').load(function() {
+$('#sg-viewport').on("load", function() {
 	if (codeViewer.codeActive) {
 		var obj = JSON.stringify({ "codeToggle": "on" });
 		document.getElementById('sg-viewport').contentWindow.postMessage(obj,codeViewer.targetOrigin);
