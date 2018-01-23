@@ -105,23 +105,9 @@ var annotationsViewer = {
 	*/
 	commentContainerInit: function() {
 		
-		// might need to namespace this to window.fepperUi, but that needs to come as we better object-orient this
-		window.onloadTodos = window.onloadTodos || [];
-		
-		// need to prevent over-writing window.onload, so only define this once
-		if (!window.onloadTodos.length) {
-			window.onload = function() {
-				while (window.onloadTodos.length) {
-					window.onloadTodos.shift()();
-				}
-			};
-		}
-		
-		window.onloadTodos.push(function() {
-			$('#sg-annotation-container') // has class sg-view-container
-				.css('bottom',-$(document).outerHeight())
-				.addClass('anim-ready');
-		});
+		$('#sg-annotation-container') // has class sg-view-container
+			.css('bottom',-$(document).outerHeight())
+			.addClass('anim-ready');
 		
 		// make sure the close button handles the click
 		$('body').delegate('#sg-annotation-close-btn','click',function() {
@@ -281,7 +267,7 @@ $(document).ready(function() { annotationsViewer.onReady(); });
 window.addEventListener("message", annotationsViewer.receiveIframeMessage, false);
 
 // make sure if a new pattern or view-all is loaded that comments are turned on as appropriate
-$('#sg-viewport').load(function() {
+$('#sg-viewport').on("load", function() {
 	if (annotationsViewer.commentsActive) {
 		var obj = JSON.stringify({ "commentToggle": "on" });
 		document.getElementById('sg-viewport').contentWindow.postMessage(obj,annotationsViewer.targetOrigin);
