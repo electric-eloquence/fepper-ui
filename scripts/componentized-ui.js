@@ -1,5 +1,3 @@
-'use strict';
-
 const isClient = typeof window === 'object';
 const isServer = typeof global === 'object';
 
