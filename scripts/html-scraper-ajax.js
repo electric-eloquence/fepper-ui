@@ -138,10 +138,13 @@
 
         // Insert new script element such that it fires on load.
         const node4insert = d.getElementById('help-text');
-        const script2insert = d.createElement('script');
-        script2insert.src = baseUrl + '/node_modules/fepper-ui/scripts/html-scraper-dhtml.js';
 
-        node4insert.parentNode.insertBefore(script2insert, node4insert);
+        if (node4insert) {
+          const script2insert = d.createElement('script');
+          script2insert.src = baseUrl + '/node_modules/fepper-ui/scripts/html-scraper-dhtml.js';
+
+          node4insert.parentNode.insertBefore(script2insert, node4insert);
+        }
 
         resolve();
       };
