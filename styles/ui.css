@@ -85,7 +85,7 @@
 * Accordions are dropdowns used for the primary nav and
 * tools dropdowns.
 */
-.sg-acc-handle:after {
+.sg-acc-handle::after {
   content: '▼';
   color: rgba(255, 255, 255, 0.25);
   display: inline-block;
@@ -97,18 +97,18 @@
           transition: all 0.1s ease-out;
 }
 @media all and (min-width: 42em) {
-  .sg-acc-handle:after {
+  .sg-acc-handle::after {
     float: none;
   }
 }
-.sg-acc-handle:hover:after, .sg-acc-handle:focus:after {
+.sg-acc-handle:hover::after, .sg-acc-handle:focus::after {
   color: #808080;
 }
 .sg-acc-handle.active {
   color: #fff;
   background: #222;
 }
-.sg-acc-handle.active:after {
+.sg-acc-handle.active::after {
   top: -2px;
   color: #808080;
   -webkit-transform: rotate(180deg);
@@ -197,7 +197,7 @@
 /**
 * Pattern States that appear in the dropdown nav
 */
-.sg-nav .sg-pattern-state:before {
+.sg-nav .sg-pattern-state::before {
   margin-top: -4px;
   margin-bottom: 0;
   margin-left: -4px;
@@ -260,6 +260,10 @@
   padding: 0.5rem 0.5rem;
 }
 
+.sg-checklist .sg-checklist-icon::before {
+  margin-right: 0.4em;
+}
+
 .sg-icon-search, .sg-icon-cog, .sg-checkbox.active, .sg-checkbox, .sg-icon-file, .sg-icon-link, .sg-icon-keyboard, .sg-icon-eye {
   font-family: 'icomoon';
   speak: none;
@@ -288,12 +292,11 @@
   right: 0;
 }
 
-.sg-checkbox:before {
+.sg-checkbox::before {
   content: "\e606";
   display: inline-block;
-  margin-right: 0.4em;
 }
-.sg-checkbox.active:before {
+.sg-checkbox.active::before {
   content: "\e605";
 }
 .sg-control .sg-input {
@@ -362,23 +365,15 @@
   height: 12px;
   text-align: right;
 }
-.sg-size-px {
+#sg-size-px {
   width: 30px;
 }
-.sg-size-em {
+#sg-size-em {
   width: 35px;
 }
 @media all and (min-width: 48em) {
-  .sg-size-px {
+  #sg-size-px {
     width: 35px;
-  }
-}
-#sg-size-mq {
-  display: none;
-}
-@media all and (min-width: 72em) {
-  #sg-size-mq {
-    display: block;
   }
 }
 #sg-find {
@@ -386,7 +381,7 @@
   text-transform: lowercase;
 }
 
-.sg-icon-search:before {
+.sg-icon-search::before {
   content: "\e600";
   font-size: 85%;
 }
@@ -448,25 +443,23 @@
 .tt-suggestion p {
   margin: 0;
 }
-.sg-icon-eye:before {
+.sg-icon-eye::before {
   content: "\e60b";
 }
 
-.sg-icon-link:before {
+.sg-icon-link::before {
   content: "\e608";
-  margin-right: 0.4em;
 }
-.sg-icon-cog:before {
+.sg-icon-cog::before {
   content: "\e601";
 }
 
-.sg-icon-keyboard:before {
+.sg-icon-keyboard::before {
   content: "\e609";
 }
 
-.sg-icon-file:before {
+.sg-icon-file::before {
   content: "\e607";
-  margin-right: 0.4em;
 }
 /**
 * Viewport wrapper div
@@ -510,10 +503,6 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
-#sg-gen-container.hay-mode {
-  -webkit-transition: all 40s linear;
-          transition: all 40s linear;
-}
 
 /**
 * Viewport iframe
@@ -531,15 +520,6 @@
   left: 0;
   right: 0;
   background-color: white;
-  /**
-  * Hay Mode transition
-  * 1) Hay Mode (disabled by default) starts with the smallest
-  * viewport then slowly expands http://bradfrost.com/blog/post/ish-2-0/
-  */
-}
-#sg-viewport.hay-mode {
-  -webkit-transition: all 40s linear;
-          transition: all 40s linear;
 }
 
 /**
@@ -659,7 +639,7 @@
   padding: 0;
 }
 
-#sg-code-tabs li {
+.sg-code-title {
   float: left;
   background-color: #333;
   font-size: 1.3em;

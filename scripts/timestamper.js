@@ -1,4 +1,8 @@
-$(document).ready(() => {
+/**
+ * Write timestamp to cookie to test whether the same timestamp was written to the file system of the Express server.
+ * In this way, we can verify that the browser and server are on the same machine.
+ */
+$(document).ready(function () {
   'use strict';
 
   const fepperTs = $.cookie('fepper_ts') || '0';
