@@ -158,7 +158,7 @@
 
     scraperTargeter.addEventListener(
       'submit',
-      (e) => {
+      function (e) {
         e.preventDefault();
 
         const message = d.getElementById('message');

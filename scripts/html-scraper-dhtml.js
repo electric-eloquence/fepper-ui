@@ -9,7 +9,7 @@
 
   targeter.addEventListener(
     'submit',
-    () => {
+    function () {
       targeter.action = '/html-scraper?url=';
       targeter.action += encodeURIComponent(targeter.url.value);
       targeter.action += '&selector=';
@@ -24,7 +24,7 @@
 
   helpButton.addEventListener(
     'click',
-    (e) => {
+    function (e) {
       e.preventDefault();
 
       if (helpButton.innerHTML === 'Help') {
@@ -45,7 +45,7 @@
   if (importer) {
     importer.addEventListener(
       'submit',
-      (e) => {
+      function (e) {
         if (!/^[0-9a-z][\w\-\.]*$/i.test(importer.filename.value)) {
           e.preventDefault();
 
