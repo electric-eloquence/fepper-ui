@@ -37,7 +37,7 @@
   color: #808080;
   text-decoration: none;
   line-height: 1;
-  padding: 0.94em 0.6em 1em;
+  padding: 0.982em 0.3571em 0.982em 0.4018em;
   -webkit-transition: background 0.1s ease-out;
           transition: background 0.1s ease-out;
   -webkit-transition: color 0.1s ease-out;
@@ -258,7 +258,7 @@
   display: block;
   width: auto;
   font-size: 1rem;
-  padding: 0.5rem 0.35rem;
+  padding: 0.5rem 0.25rem 0 0.28125rem;
 }
 
 .sg-checklist .sg-checklist-icon::before {
@@ -317,7 +317,7 @@
   font-size: 70%;
   line-height: 1;
   color: #808080;
-  padding: 0.94em 0.7em 0.94em 1.2em;
+  padding: 0.982em 0.3571em 0 0.4018em;
 }
 .sg-current-size:hover .sg-input {
   background: #999;
