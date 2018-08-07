@@ -37,7 +37,7 @@
   color: #808080;
   text-decoration: none;
   line-height: 1;
-  padding: 0.94em 0.7em;
+  padding: 0.982em 0.3571em 0.982em 0.4018em;
   -webkit-transition: background 0.1s ease-out;
           transition: background 0.1s ease-out;
   -webkit-transition: color 0.1s ease-out;
@@ -222,6 +222,7 @@
 * Controls contains viewport resizer and tools dropdown
 */
 .sg-controls {
+  background-color: #000;
   border: 0;
   position: absolute;
   top: 0;
@@ -257,7 +258,7 @@
   display: block;
   width: auto;
   font-size: 1rem;
-  padding: 0.5rem 0.5rem;
+  padding: 0.5rem 0.25rem 0 0.28125rem;
 }
 
 .sg-checklist .sg-checklist-icon::before {
@@ -316,7 +317,7 @@
   font-size: 70%;
   line-height: 1;
   color: #808080;
-  padding: 1em 1em 0;
+  padding: 0.982em 0.3571em 0 0.4018em;
 }
 .sg-current-size:hover .sg-input {
   background: #999;
@@ -333,6 +334,9 @@
 }
 .sg-size-options li {
   background-color: transparent;
+}
+.sg-size-options a {
+  padding-right: 0.4018em;
 }
 @media all and (min-width: 64em) {
   .sg-size-options {
@@ -519,7 +523,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: white;
+  background-color: #fff;
 }
 
 /**

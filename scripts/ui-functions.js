@@ -598,8 +598,7 @@
         return;
       }
 
-      let iframePath = '';
-      iframePath = uiFns.urlHander.getFilename(patternName);
+      let iframePath = uiFns.urlHandler.getFilename(patternName);
 
       if (iframePath === '') {
         iframePath = 'node_modules/fepper-ui/styleguide.html';
