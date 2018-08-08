@@ -997,7 +997,7 @@
   }
 
   $document.ready(function () {
-    const bodySize = uiProps.bodySize;
+    const bodyFontSize = uiProps.bodyFontSize;
     const sgGenContainer = uiProps.sgGenContainer;
     const sgViewport = uiProps.sgViewport;
     const updateSizeReading = uiFns.updateSizeReading;
@@ -1154,10 +1154,10 @@
       vpWidth = searchParams.w || searchParams.width;
 
       if (vpWidth.indexOf('em') > -1) {
-        vpWidth = Math.floor(Math.floor(vpWidth.replace('em', '')) * bodySize);
+        vpWidth = Math.round(vpWidth.replace('em', '') * bodyFontSize);
       }
       else {
-        vpWidth = Math.floor(vpWidth.replace('px', ''));
+        vpWidth = vpWidth.replace('px', '');
       }
 
       dataSaver.updateValue('vpWidth', vpWidth);

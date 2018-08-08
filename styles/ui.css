@@ -302,7 +302,7 @@
   font-size: 0.7em;
   line-height: 1;
   color: #808080;
-  padding: 0.982em 0.3571em 0 0.4018em;
+  padding: 0.9375em 0.3571em 0 0.4018em;
 }
 .sg-current-size:hover .sg-input {
   background: #999;
@@ -315,26 +315,19 @@
 }
 
 .sg-size-options {
-  min-width: auto;
+  float: left;
+  position: static;
+}
+.sg-size-options > li {
+  float: left;
+  border: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
 }
 .sg-size-options li {
   background-color: transparent;
 }
 .sg-size-options a {
   padding-right: 0.4018em;
-}
-@media all and (min-width: 1025px) {
-  .sg-size-options {
-    float: left;
-    position: static;
-    max-height: none;
-    max-width: none;
-  }
-  .sg-size-options > li {
-    float: left;
-    border: 0;
-    border-left: 1px solid rgba(255, 255, 255, 0.05);
-  }
 }
 
 #sg-form {
@@ -360,6 +353,11 @@
 }
 #sg-size-em {
   width: 35px;
+}
+@media all and (max-width: 1024px) {
+  #sg-form-label {
+    cursor: pointer;
+  }
 }
 @media all and (min-width: 768px) {
   #sg-size-px {

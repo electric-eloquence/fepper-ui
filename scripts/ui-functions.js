@@ -380,7 +380,7 @@
    * @param {string} target - What input to update.
    */
   uiFns.updateSizeReading = (size, unit, target) => {
-    const bodySize = uiProps.bodySize;
+    const bodyFontSize = uiProps.bodyFontSize;
     const sgSizeEm = uiProps.sgSizeEm; // Em size input element in toolbar.
     const sgSizePx = uiProps.sgSizePx; // Px size input element in toolbar.
 
@@ -389,11 +389,11 @@
 
     if (unit === 'em') { // If size value is in em units.
       emSize = size;
-      pxSize = Math.floor(size * bodySize);
+      pxSize = Math.round(size * bodyFontSize);
     }
     else { // If value is px or absent.
       pxSize = size;
-      emSize = size / bodySize;
+      emSize = size / bodyFontSize;
     }
 
     if (target === 'updatePxInput') {
@@ -639,7 +639,7 @@
       uiProps.title = d.getElementById('title');
 
       // Measurements.
-      uiProps.bodySize = parseInt(window.getComputedStyle(d.body).getPropertyValue('font-size'), 10);
+      uiProps.bodyFontSize = parseInt(window.getComputedStyle(d.body).getPropertyValue('font-size'), 10);
       uiProps.headerHeight = d.getElementsByClassName('sg-header')[0].clientHeight;
       uiProps.maxViewportWidth = parseInt(config.ishMaximum); // Maxiumum Size for Viewport.
       uiProps.minViewportWidth = parseInt(config.ishMinimum); // Minimum Size for Viewport.
