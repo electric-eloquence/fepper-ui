@@ -85,12 +85,9 @@
       $sgFind.toggleClass('active');
       $sgFind.toggleClass('show-overflow');
 
-      if ($sgFind.hasClass('active')) {
-        $sgFindTypeahead.focus();
+      if ($sgFToggle.hasClass('active')) {
         window.FEPPER_UI.uiFns.setAccordionHeight();
-      }
-      else {
-        $sgFindTypeahead.blur();
+        $sgFindTypeahead.focus();
       }
     }
   }
@@ -130,8 +127,30 @@
     $sgFind = $('#sg-find');
     $sgFindTypeahead = $sgFind.find('#typeahead');
 
-    $sgFToggle.click(function () {
-      $sgFindTypeahead.focus();
+    $sgFToggle.click(function (e) {
+      e.preventDefault();
+
+      const $this = $(this);
+      const $panel = $this.next('.sg-acc-panel');
+      const subnav = $this.parent().parent().hasClass('sg-acc-panel');
+
+      // Close other panels if link isn't a subnavigation item.
+      if (!subnav) {
+        $('.sg-acc-handle').not($this).removeClass('active');
+        $('.sg-acc-panel').not($panel).removeClass('active');
+      }
+
+      patternFinder.toggleFinder();
+
+      return false;
+    });
+
+    $sgFToggle.mouseenter(function () {
+      $sgFToggle.addClass('mouseentered');
+    });
+
+    $sgFToggle.mouseleave(function () {
+      $sgFToggle.removeClass('mouseentered');
     });
 
     $sgFindTypeahead.typeahead(
@@ -154,7 +173,9 @@
     );
 
     $sgFindTypeahead.blur(function () {
-      closeFinder(); // Do not invoke an infinite loop by calling patternFinder.closeFinder().
+      if (!$sgFToggle.hasClass('mouseentered')) {
+        closeFinder(); // Do not invoke an infinite loop by calling patternFinder.closeFinder().
+      }
     });
 
     Mousetrap.bind('ctrl+shift+f', function (e) {
