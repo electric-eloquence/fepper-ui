@@ -8,7 +8,6 @@
 
   const $window = $(window);
   const $document = $(document);
-  const $sgTPatternInfo = $('#sg-t-patterninfo');
 
   const panelsUtil = uiFns.panelsUtil;
   const sizeiframe = uiFns.sizeiframe;
@@ -287,7 +286,6 @@
       if (panelContentCount === panels.count()) {
         panelsViewer.renderPanels(panels, patternData, iframePassback, switchText);
       }
-
     },
 
     /**
@@ -533,20 +531,9 @@
       // Make sure the listener for insertPanels is set-up.
       dispatcher.addListener('insertPanels', modalViewer.insert);
 
-      // Add the info/code panel click handler.
-      $sgTPatternInfo.click(function (e) {
-        e.preventDefault();
-
-        $('#sg-tools-toggle').removeClass('active');
-        $(this).parents('ul').removeClass('active');
-        modalViewer.toggle();
-      });
-
       // See if the modal is already active. If so update attributes as appropriate.
       if (dataSaver.findValue('modalActive') === 'true') {
         modalViewer.active = true;
-
-        $sgTPatternInfo.html('Hide Pattern Info');
       }
 
       const searchParams = uiProps.searchParams;
@@ -606,8 +593,6 @@
       $('.sg-checkbox').removeClass('active');
       // Hide the modal.
       modalViewer.hide();
-      // Update the wording.
-      $sgTPatternInfo.html('Show Pattern Info');
       // Tell the styleguide to close.
       uiProps.sgViewport.contentWindow.postMessage(obj, uiProps.targetOrigin);
     },
@@ -618,9 +603,8 @@
      * @param {string} templateRendered - The rendered template that should be inserted.
      * @param {string} patternPartial - The patternPartial that the rendered template is related to.
      * @param {boolean} iframePassback - If the refresh is of a view-all view and the content should be sent back.
-     * @param {boolean} switchText - If the text in the dropdown should be switched.
      */
-    insert: (templateRendered, patternPartial, iframePassback, switchText) => {
+    insert: (templateRendered, patternPartial, iframePassback) => {
       if (iframePassback) {
         // Send a message to the pattern.
         const obj = {
@@ -628,12 +612,8 @@
           patternPartial: patternPartial,
           modalContent: templateRendered.outerHTML
         };
-        uiProps.sgViewport.contentWindow.postMessage(obj, uiProps.targetOrigin);
-      }
 
-      // Update the wording unless this is a default viewall opening.
-      if (switchText === true) {
-        $sgTPatternInfo.html('Hide Pattern Info');
+        uiProps.sgViewport.contentWindow.postMessage(obj, uiProps.targetOrigin);
       }
     },
 
@@ -997,7 +977,7 @@
   }
 
   $document.ready(function () {
-    const bodySize = uiProps.bodySize;
+    const bodyFontSize = uiProps.bodyFontSize;
     const sgGenContainer = uiProps.sgGenContainer;
     const sgViewport = uiProps.sgViewport;
     const updateSizeReading = uiFns.updateSizeReading;
@@ -1154,10 +1134,10 @@
       vpWidth = searchParams.w || searchParams.width;
 
       if (vpWidth.indexOf('em') > -1) {
-        vpWidth = Math.floor(Math.floor(vpWidth.replace('em', '')) * bodySize);
+        vpWidth = Math.round(vpWidth.replace('em', '') * bodyFontSize);
       }
       else {
-        vpWidth = Math.floor(vpWidth.replace('px', ''));
+        vpWidth = vpWidth.replace('px', '');
       }
 
       dataSaver.updateValue('vpWidth', vpWidth);
