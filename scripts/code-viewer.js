@@ -459,6 +459,17 @@
       false
     );
 
+    // On window resize, adjust the distance with which to hide the panel.
+    $(window).resize(function () {
+      const bottomDist = parseInt($sgCodeContainer.css('bottom'), 10);
+
+      if (Number.isNaN(bottomDist) || bottomDist === 0) {
+        return;
+      }
+
+      codeViewer.slideCode($sgCodeContainer.outerHeight());
+    });
+
     // Toggle the code panel.
     Mousetrap.bind('ctrl+shift+c', function (e) {
       e.preventDefault();
