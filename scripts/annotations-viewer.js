@@ -301,6 +301,17 @@
       false
     );
 
+    // On window resize, adjust the distance with which to hide the panel.
+    $(window).resize(function () {
+      const bottomDist = parseInt($sgAnnotationContainer.css('bottom'), 10);
+
+      if (Number.isNaN(bottomDist) || bottomDist === 0) {
+        return;
+      }
+
+      annotationsViewer.slideComment($sgAnnotationContainer.outerHeight());
+    });
+
     $('#sg-view li a').click(function () {
       const $thisParentParent = $(this).parent().parent();
 
