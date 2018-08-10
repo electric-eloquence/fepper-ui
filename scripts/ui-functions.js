@@ -3,6 +3,7 @@
 
   window.FEPPER_UI = {};
   const config = window.config;
+  const dataSaver = window.dataSaver;
   const uiFns = window.FEPPER_UI.uiFns = {};
   const uiProps = window.FEPPER_UI.uiProps = {};
 
@@ -216,8 +217,6 @@
   };
 
   uiFns.saveSize = (size) => {
-    const dataSaver = window.dataSaver;
-
     if (!dataSaver.findValue('vpWidth')) {
       dataSaver.addValue('vpWidth', size);
     }
@@ -623,6 +622,7 @@
     function () {
       // Saved elements.
       uiProps.sgGenContainer = d.getElementById('sg-gen-container');
+      uiProps.sgHeader = d.querySelector('.sg-header');
       uiProps.sgPatterns = d.getElementById('sg-patterns');
       uiProps.sgRaw = d.getElementById('sg-raw');
       uiProps.sgSizeDisco = d.getElementById('sg-size-disco');
@@ -640,14 +640,14 @@
 
       // Measurements.
       uiProps.bodyFontSize = parseInt(window.getComputedStyle(d.body).getPropertyValue('font-size'), 10);
-      uiProps.headerHeight = d.getElementsByClassName('sg-header')[0].clientHeight;
-      uiProps.maxViewportWidth = parseInt(config.ishMaximum); // Maxiumum Size for Viewport.
-      uiProps.minViewportWidth = parseInt(config.ishMinimum); // Minimum Size for Viewport.
+      uiProps.headerHeight = uiProps.sgHeader ? uiProps.sgHeader.clientHeight : null;
+      uiProps.maxViewportWidth = config ? parseInt(config.ishMaximum) : null; // Maxiumum Size for Viewport.
+      uiProps.minViewportWidth = config ? parseInt(config.ishMinimum) : null; // Minimum Size for Viewport.
       uiProps.sh = window.innerHeight;
       uiProps.sw = d.body.clientWidth;
       uiProps.viewportResizeHandleWidth = 14; // Width of the viewport drag-to-resize handle.
 
-      const savedVpWidth = parseInt(window.dataSaver.findValue('vpWidth'), 10);
+      const savedVpWidth = dataSaver ? parseInt(dataSaver.findValue('vpWidth'), 10) : null;
 
       // Modes.
       uiProps.discoMode = false;
