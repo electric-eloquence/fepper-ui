@@ -3,7 +3,6 @@
 
   window.FEPPER_UI = {};
   const config = window.config;
-  const dataSaver = window.dataSaver;
   const uiFns = window.FEPPER_UI.uiFns = {};
   const uiProps = window.FEPPER_UI.uiProps = {};
 
@@ -217,6 +216,8 @@
   };
 
   uiFns.saveSize = (size) => {
+    const dataSaver = window.dataSaver;
+
     if (!dataSaver.findValue('vpWidth')) {
       dataSaver.addValue('vpWidth', size);
     }
@@ -647,7 +648,7 @@
       uiProps.sw = d.body.clientWidth;
       uiProps.viewportResizeHandleWidth = 14; // Width of the viewport drag-to-resize handle.
 
-      const savedVpWidth = dataSaver ? parseInt(dataSaver.findValue('vpWidth'), 10) : null;
+      const savedVpWidth = window.dataSaver ? parseInt(window.dataSaver.findValue('vpWidth'), 10) : null;
 
       // Modes.
       uiProps.discoMode = false;
