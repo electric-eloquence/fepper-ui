@@ -371,7 +371,7 @@
       // Request the mustache markup version of the pattern.
       const m = new XMLHttpRequest();
       m.onload = codeViewer.saveMustache;
-      m.open('GET', filename.replace(/\.html/, '.mustache') + '?' + (new Date()).getTime(), true);
+      m.open('GET', filename.replace(/\.html/, window.config.patternExtension) + '?' + (new Date()).getTime(), true);
       m.send();
 
       // Move the code into view.
