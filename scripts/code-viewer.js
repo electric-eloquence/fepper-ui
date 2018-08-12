@@ -361,6 +361,7 @@
 
       // Get the file name of the pattern so we can get the various editions of the code that can show in code view.
       const filename = urlHandler.getFilename(patternPartial);
+      const patternExtension = window.config.patternExtension || '.mustache';
 
       // Request the encoded markup version of the pattern.
       const e = new XMLHttpRequest();
@@ -371,7 +372,7 @@
       // Request the mustache markup version of the pattern.
       const m = new XMLHttpRequest();
       m.onload = codeViewer.saveMustache;
-      m.open('GET', filename.replace(/\.html/, window.config.patternExtension) + '?' + (new Date()).getTime(), true);
+      m.open('GET', filename.replace(/\.html/, patternExtension) + '?' + (new Date()).getTime(), true);
       m.send();
 
       // Move the code into view.
