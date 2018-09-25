@@ -43,6 +43,9 @@
           const title = d.getElementById('title').innerHTML.replace('Fepper - ', '');
           const path = window.location.origin + '/mustache-browser/?title=' + title + '&code=' + code;
           uiProps.sgViewport.contentWindow.location.replace(path);
+
+          // Close code viewer.
+          window.codeViewer.closeCode();
         }
       },
       false
