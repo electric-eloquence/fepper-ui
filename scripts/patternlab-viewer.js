@@ -846,34 +846,6 @@
         urlHandler.skipBack = false;
 
         break;
-
-      case 'patternLab.reload':
-        // Reload the location if there was a message to do so.
-        window.location.reload();
-
-        break;
-
-      case 'patternLab.updatePath':
-        if (window.patternData.patternPartial) {
-          // Handle patterns and the view all page.
-          const re = /(patterns|snapshots)\/(.*)$/;
-          const path =
-            window.location.protocol + '//' + window.location.host + window.location.pathname.replace(re, '') +
-            data.path + '?' + Date.now();
-
-          window.location.replace(path);
-        }
-        else {
-          // Handle the style guide.
-          const path =
-            window.location.protocol + '//' + window.location.host +
-            window.location.pathname.replace('node_modules\/fepper-ui\/styleguide.html', '') + data.path + '?' +
-            Date.now();
-
-          window.location.replace(path);
-        }
-
-        break;
     }
   }
 
@@ -1186,7 +1158,7 @@
     $('a[data-patternpartial]').click(function (e) {
       e.preventDefault();
 
-      // update the iframe via the history api handler
+      // Update the iframe via the history api handler.
       const obj = {
         event: 'patternLab.updatePath',
         path: urlHandler.getFilename($(this).attr('data-patternpartial'))

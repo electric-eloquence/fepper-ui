@@ -440,9 +440,6 @@
       if (name === 'all') {
         return 'node_modules/fepper-ui/styleguide.html';
       }
-      else if (name === 'snapshots') {
-        return 'snapshots/index.html';
-      }
 
       const paths = (name.indexOf('viewall-') !== -1) ? window.viewAllPaths : window.patternPaths;
       const nameClean = name.replace('viewall-', '');

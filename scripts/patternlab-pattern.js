@@ -39,28 +39,33 @@
 
     let path;
 
-    if (data.event === 'patternLab.updatePath') {
-      if (patternData.patternPartial) {
-        // Handle patterns and the view all page.
-        const re = /(patterns|snapshots)\/(.*)$/;
-        path = window.location.protocol + '//' + window.location.host + window.location.pathname.replace(re, '') +
-          data.path + '?' + Date.now();
+    switch (data.event) {
+      case 'patternLab.updatePath':
+        if (patternData.patternPartial) {
+          // Handle patterns and the view all page.
+          const re = /patterns\/.*$/;
+          path = window.location.protocol + '//' + window.location.host + window.location.pathname.replace(re, '') +
+            data.path + '?' + Date.now();
 
-        window.location.replace(path);
-      }
-      else {
-        // Handle the style guide.
-        path =
-          window.location.protocol + '//' + window.location.host +
-          window.location.pathname.replace('node_modules\/fepper-ui\/styleguide.html', '') + data.path + '?' +
-          Date.now();
+          window.location.replace(path);
+        }
+        else {
+          // Handle the style guide.
+          path =
+            window.location.protocol + '//' + window.location.host +
+            window.location.pathname.replace('node_modules\/fepper-ui\/styleguide.html', '') + data.path + '?' +
+            Date.now();
 
-        window.location.replace(path);
-      }
-    }
-    else if (data.event === 'patternLab.reload') {
-      // Reload the location if there was a message to do so.
-      window.location.reload();
+          window.location.replace(path);
+        }
+
+        break;
+
+      case 'patternLab.reload':
+        // Reload the location if there was a message to do so.
+        window.location.reload();
+
+        break;
     }
   }
 
