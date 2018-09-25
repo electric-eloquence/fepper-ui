@@ -45,11 +45,11 @@
         const els = d.getElementsByClassName('sg-code');
         const sgPatterns = d.getElementById('sg-patterns');
 
-        // if this is an overlay make sure it's active for the click event
+        // If this is an overlay make sure it's active for the click event.
         codePattern.codeOverlayActive = false;
         codePattern.codeEmbeddedActive = false;
 
-        // see which flag to toggle based on if this is a styleguide or view-all page
+        // See which flag to toggle based on if this is a styleguide or view-all page.
         if (data.codeToggle === 'on') {
           codePattern.codeActive = true;
           if (sgPatterns) {

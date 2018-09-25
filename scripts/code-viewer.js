@@ -25,7 +25,7 @@
   const codeViewer = window.codeViewer = {
     // Set up some defaults.
     codeActive: false,
-    tabActive: 'e',
+    tabActive: 'm',
     encoded: '',
     mustache: '',
     ids: {e: '#sg-code-title-html', m: '#sg-code-title-mustache'},

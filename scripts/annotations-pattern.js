@@ -50,7 +50,7 @@
                       e.preventDefault();
                       e.stopPropagation();
 
-                      // if an element was clicked on while the overlay was already on swap it
+                      // If an element was clicked on while the overlay was already on swap it.
                       const obj = {
                         displaynumber: item_.displaynumber,
                         el: item_.el,
