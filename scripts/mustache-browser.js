@@ -1,9 +1,12 @@
-(() => {
+((d, uiProps) => {
   'use strict';
 
-  const pd = parent.document;
-  const codeFill = pd.getElementById('sg-code-fill');
-  const codeTitle = pd.getElementById('sg-code-title-mustache');
+  if (window.location.protocol === 'file:') {
+    return;
+  }
+
+  const codeFill = d.getElementById('sg-code-fill');
+  const codeTitle = d.getElementById('sg-code-title-mustache');
 
   if (codeFill) {
     // Give the PL Mustache code viewer the appearance of being linked.
@@ -26,10 +29,10 @@
       function () {
         if (codeTitle.className.indexOf('sg-code-title-active') > -1) {
           // Remove padding from viewport bottom.
-          pd.getElementById('sg-vp-wrap').style.paddingBottom = 0;
+          d.getElementById('sg-vp-wrap').style.paddingBottom = 0;
 
           // Close nav item.
-          const sgView = pd.getElementById('sg-view');
+          const sgView = d.getElementById('sg-view');
           sgView.style.height = 'auto';
           sgView.classList.remove('active');
 
@@ -41,11 +44,15 @@
           code = code.replace(/><!--/g, '>&lt;!--');
 
           // Load Mustache Browser
-          const title = pd.getElementById('title').innerHTML.replace('Pattern Lab - ', '');
-          window.location = window.location.origin + '/mustache-browser/?title=' + title + '&code=' + code;
+          const title = d.getElementById('title').innerHTML.replace(uiProps.titleAppName + uiProps.titleSeparator, '');
+          const path = window.location.origin + '/mustache-browser/?title=' + title + '&code=' + code;
+          uiProps.sgViewport.contentWindow.location.assign(path);
+
+          // Close code viewer.
+          window.codeViewer.closeCode();
         }
       },
       false
     );
   }
-})();
+})(document, window.FEPPER_UI.uiProps);

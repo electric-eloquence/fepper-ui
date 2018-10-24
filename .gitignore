@@ -1,4 +1,7 @@
 .*.swp
-node_modules
-patternlab-data.js
-styleguide.html
+.DS_Store
+/data/*
+/scripts/ui.js
+/styleguide.html
+/styles/ui.css
+node_modules/

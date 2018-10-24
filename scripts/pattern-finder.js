@@ -1,10 +1,6 @@
 ((d, uiProps, uiFns) => {
   'use strict';
 
-  if (self !== top || typeof $ !== 'function') {
-    return;
-  }
-
   const Mousetrap = window.Mousetrap;
   const patternPaths = window.patternPaths;
   let $sgFToggle;
@@ -21,22 +17,17 @@
     constructor() {
       this.data = [];
 
-      for (let patternType in patternPaths) {
-        if (!patternPaths.hasOwnProperty(patternType)) {
+      for (let patternPartial in patternPaths) {
+        if (!patternPaths.hasOwnProperty(patternPartial)) {
           continue;
         }
 
-        for (let pattern in patternPaths[patternType]) {
-          if (!patternPaths[patternType].hasOwnProperty(pattern)) {
-            continue;
-          }
+        const obj = {
+          patternPartial,
+          patternPath: patternPaths[patternPartial]
+        };
 
-          const obj = {};
-          obj.patternPartial = patternType + '-' + pattern;
-          obj.patternPath = patternPaths[patternType][pattern];
-
-          this.data.push(obj);
-        }
+        this.data.push(obj);
       }
 
       // Instantiate the bloodhound suggestion engine.
@@ -71,8 +62,8 @@
 
     passPath(item) {
       const obj = {
-        event: 'patternLab.updatePath',
-        path: uiFns.urlHandler.getFilename(item.patternPartial)
+        event: 'patternlab.updatePath',
+        path: item.patternPartial
       };
 
       // Update the iframe via the history api handler.
@@ -86,13 +77,16 @@
       $sgFind.toggleClass('show-overflow');
 
       if ($sgFToggle.hasClass('active')) {
-        window.FEPPER_UI.uiFns.setAccordionHeight();
         $sgFindTypeahead.focus();
       }
     }
   }
 
-  // Watch the iframe source so that it can be sent back to everyone else.
+  /**
+   * This gets attached as an event listener, so do not use arrow function notation.
+   *
+   * @param {object} event - Event object.
+   */
   function receiveIframeMessage(event) {
     const data = uiFns.receiveIframeMessageBoilerplate(event);
 
@@ -101,7 +95,7 @@
     }
 
     switch (data.event) {
-      case 'patternLab.keyPress':
+      case 'patternlab.keyPress':
         switch (data.keyPress) {
           case 'ctrl+shift+f':
             window.patternFinder.toggleFinder();
@@ -130,20 +124,7 @@
     $sgFToggle.click(function (e) {
       e.preventDefault();
 
-      const $this = $(this);
-      const $panel = $this.next('.sg-acc-panel');
-      const subnav = $this.parent().parent().hasClass('sg-acc-panel');
-
-      // Close other panels if link isn't a subnavigation item.
-      if (!subnav) {
-        $('.sg-acc-handle').not($this).removeClass('active');
-        $('.sg-acc-panel').not($panel).removeClass('active');
-
-        if (!$this.hasClass('sg-size-label')) {
-          $('.sg-size').removeClass('active');
-        }
-      }
-
+      uiFns.closeOtherPanels(this);
       patternFinder.toggleFinder();
 
       return false;
