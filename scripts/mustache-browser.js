@@ -1,6 +1,10 @@
 ((d, uiProps) => {
   'use strict';
 
+  if (window.location.protocol === 'file:') {
+    return;
+  }
+
   const codeFill = d.getElementById('sg-code-fill');
   const codeTitle = d.getElementById('sg-code-title-mustache');
 
@@ -40,9 +44,9 @@
           code = code.replace(/><!--/g, '>&lt;!--');
 
           // Load Mustache Browser
-          const title = d.getElementById('title').innerHTML.replace('Fepper - ', '');
+          const title = d.getElementById('title').innerHTML.replace(uiProps.titleAppName + uiProps.titleSeparator, '');
           const path = window.location.origin + '/mustache-browser/?title=' + title + '&code=' + code;
-          uiProps.sgViewport.contentWindow.location.replace(path);
+          uiProps.sgViewport.contentWindow.location.assign(path);
 
           // Close code viewer.
           window.codeViewer.closeCode();
