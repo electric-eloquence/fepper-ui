@@ -373,6 +373,12 @@
     }
   };
 
+  uiFns.updateTitle = (patternPartial) => {
+    const titleSplit = uiProps.title.innerHTML.split(uiProps.titleSeparator);
+
+    uiProps.title.innerHTML = titleSplit[0] + uiProps.titleSeparator + patternPartial;
+  };
+
   /**
    * URL Handler.
    *
@@ -481,12 +487,6 @@
       if (uiProps.sgRaw) {
         uiProps.sgRaw.setAttribute('href', window.patternPaths[patternPartial]);
       }
-    },
-
-    updateTitle: (patternPartial) => {
-      const titleSplit = uiProps.title.innerHTML.split(uiProps.titleSeparator);
-
-      uiProps.title.innerHTML = titleSplit[0] + uiProps.titleSeparator + patternPartial;
     }
   };
 
