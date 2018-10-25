@@ -296,15 +296,7 @@
     false
   );
 
-  // Before unloading the iframe make sure any active overlay is turned off/closed.
-  window.onbeforeunload = function () {
-    const obj = {annotationsOverlay: 'off'};
-
-    parent.postMessage(obj, targetOrigin);
-  };
-
   // Tell the parent iframe that keyboard shortcuts were pressed.
-
   // Toggle the annotations panel.
   Mousetrap.bind('ctrl+shift+a', function (e) {
     e.preventDefault();

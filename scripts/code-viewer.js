@@ -368,12 +368,6 @@
 
       // Move the code into view.
       codeViewer.slideCode(0);
-
-      // Add padding to bottom of viewport wrapper so pattern foot can be viewed.
-      // Delay it so it gets added after animation completes.
-      window.setTimeout(() => {
-        uiProps.sgVpWrap.style.paddingBottom = $sgCodeContainer.outerHeight() + 'px';
-      }, uiProps.timeoutDefault);
     }
   };
 

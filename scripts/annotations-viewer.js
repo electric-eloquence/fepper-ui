@@ -171,12 +171,6 @@
       // Slide the annotation section into view.
       annotationsViewer.slideAnnotations(0);
 
-      // Add padding to bottom of viewport wrapper so pattern foot can be viewed delay it so it gets added after
-      // animation completes.
-      window.setTimeout(() => {
-        uiProps.sgVpWrap.style.paddingBottom = $sgAnnotationsContainer.outerHeight() + 'px';
-      }, uiProps.timeoutDefault);
-
       if (annotationsViewer.moveToOnInit !== '0') {
         annotationsViewer.moveToOnInit = '0';
 

@@ -153,15 +153,7 @@
   // Add the click handlers to the elements that have an annotations.
   window.addEventListener('message', receiveIframeMessage, false);
 
-  // Before unloading the iframe, make sure any active overlay is turned off/closed.
-  window.onbeforeunload = function () {
-    const obj = {codeOverlay: 'off'};
-
-    parent.postMessage(obj, targetOrigin);
-  };
-
   // Tell the parent iframe that keys were pressed.
-
   // Toggle the code panel.
   Mousetrap.bind('ctrl+shift+c', function (e) {
     e.preventDefault();
