@@ -51,6 +51,10 @@
 
           // Close code viewer.
           window.codeViewer.closeCode();
+
+          // Update annotations and code viewer states.
+          window.annotationsViewer.mustacheBrowser = true;
+          window.codeViewer.mustacheBrowser = true;
         }
       },
       false

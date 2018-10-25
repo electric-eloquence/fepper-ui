@@ -9,7 +9,7 @@
     (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
   const viewall = Boolean(sgPatternToggleAnnotations.length);
 
-  // Before declaring and running anything else, tell the iframe parent whether this is a viewall or not.
+  // Before declaring and running anything else, tell the viewer whether this is a viewall or not.
   if (viewall) {
     parent.postMessage({annotationsViewall: viewall}, targetOrigin);
   }
@@ -296,15 +296,7 @@
     false
   );
 
-  // Before unloading the iframe make sure any active overlay is turned off/closed.
-  window.onbeforeunload = function () {
-    const obj = {annotationsOverlay: 'off'};
-
-    parent.postMessage(obj, targetOrigin);
-  };
-
-  // Tell the parent iframe that keyboard shortcuts were pressed.
-
+  // Tell the viewer that keyboard shortcuts were pressed.
   // Toggle the annotations panel.
   Mousetrap.bind('ctrl+shift+a', function (e) {
     e.preventDefault();

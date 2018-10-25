@@ -32,7 +32,7 @@
     uiFns.urlHandler.popPattern(event);
   };
 
-  // If there are clicks within the iframe, make sure the nav in the iframe parent closes.
+  // If there are clicks within the pattern, make sure the nav in the viewer closes.
   d.body.addEventListener(
     'click',
     function () {
@@ -41,7 +41,7 @@
     false
   );
 
-  // Find all links and add an click handler for replacing the iframe address so the history works.
+  // Find all links and add a click handler for replacing the address so the history works.
   const aTags = d.getElementsByTagName('a');
 
   for (let i = 0; i < aTags.length; i++) {
@@ -117,7 +117,7 @@
     'DOMContentLoaded',
     function () {
       const patternDataEl = d.getElementById('sg-pattern-data-footer');
-      let patternData = {};
+      let patternData;
 
       try {
         patternData = JSON.parse(patternDataEl.innerHTML);
@@ -126,17 +126,22 @@
         // Fail gracefully.
       }
 
-      // Notify the iframe parent what pattern this is so it updates itself appropriately.
-      const path = window.location.toString();
-      const parts = path.split('?');
-      const options = {event: 'patternlab.pageLoad', path: parts[0]};
-      options.patternPartial = patternData.patternPartial || 'viewall';
-
-      if (patternData.lineage) {
-        options.lineage = patternData.lineage;
+      // Just return if this is a viewall (or doesn't have global patternData in the footer).
+      if (!patternData) {
+        return;
       }
 
-      parent.postMessage(options, uiProps.targetOrigin);
+      // Notify the viewer what pattern this is so it updates itself appropriately.
+      const path = window.location.toString();
+      const parts = path.split('?');
+      const obj = {event: 'patternlab.pageLoad', path: parts[0]};
+      obj.patternPartial = patternData.patternPartial;
+
+      if (patternData.lineage) {
+        obj.lineage = patternData.lineage;
+      }
+
+      parent.postMessage(obj, uiProps.targetOrigin);
     },
     false
   );

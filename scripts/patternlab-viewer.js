@@ -460,7 +460,7 @@
       )
     );
 
-    // Click handler for elements in pull down menus. Update the iframe with its source. Also close the menu.
+    // Click handler for elements in pull down menus. Update the iframe. Also close the menu.
     $('a[data-patternpartial]').click(function (e) {
       e.preventDefault();
 

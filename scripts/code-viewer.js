@@ -27,6 +27,7 @@
     encoded: '',
     ids: {e: '#sg-code-title-html', m: '#sg-code-title-mustache'},
     mustache: '',
+    mustacheBrowser: false,
     tabActive: 'm',
     viewall: false,
 
@@ -78,7 +79,7 @@
     },
 
     closeCode: function () {
-      // Tell the iframe code view has been turned off.
+      // Tell the pattern that code view has been turned off.
       const obj = {codeToggle: 'off'};
 
       uiProps.sgViewport.contentWindow.postMessage(obj, uiProps.targetOrigin);
@@ -119,6 +120,11 @@
     },
 
     openCode: function () {
+      // Do nothing if viewing Mustache Browser.
+      if (codeViewer.mustacheBrowser) {
+        return;
+      }
+
       // Make sure the annotations overlay is off before showing code view.
       const objAnnotationsToggle = {annotationsToggle: 'off'};
       window.annotationsViewer.annotationsActive = false;
@@ -127,7 +133,7 @@
       uiProps.sgViewport.contentWindow.postMessage(objAnnotationsToggle, uiProps.targetOrigin);
       window.annotationsViewer.slideAnnotations($sgCodeContainer.outerHeight());
 
-      // Tell the iframe code view has been turned on.
+      // Tell the pattern that code view has been turned on.
       const objCodeToggle = {codeToggle: 'on'};
 
       uiProps.sgViewport.contentWindow.postMessage(objCodeToggle, uiProps.targetOrigin);
@@ -321,7 +327,7 @@
         $sgCodeLineageR.css('display', 'none');
       }
 
-      // When clicking on a lineage item change the iframe source.
+      // When clicking on a lineage item update the iframe.
       $('#sg-code-lineage-fill a, #sg-code-lineager-fill a').click(function (e) {
         e.preventDefault();
 
@@ -368,12 +374,6 @@
 
       // Move the code into view.
       codeViewer.slideCode(0);
-
-      // Add padding to bottom of viewport wrapper so pattern foot can be viewed.
-      // Delay it so it gets added after animation completes.
-      window.setTimeout(() => {
-        uiProps.sgVpWrap.style.paddingBottom = $sgCodeContainer.outerHeight() + 'px';
-      }, uiProps.timeoutDefault);
     }
   };
 
@@ -391,6 +391,9 @@
 
     if (data.codeOverlay) {
       if (data.codeOverlay === 'on') {
+        // Can assume we're not viewing the Mustache Browser.
+        codeViewer.mustacheBrowser = false;
+
         // Make sure the annotations overlay is off before showing code view.
         window.annotationsViewer.annotationsActive = false;
 

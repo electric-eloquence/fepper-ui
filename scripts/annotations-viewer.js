@@ -15,6 +15,7 @@
     // Set-up default sections.
     annotationsActive: false,
     moveToOnInit: 0,
+    mustacheBrowser: false,
     viewall: false,
 
     /**
@@ -65,6 +66,11 @@
     },
 
     openAnnotations: () => {
+      // Do nothing if viewing Mustache Browser.
+      if (annotationsViewer.mustacheBrowser) {
+        return;
+      }
+
       // Make sure the code view overlay is off before showing the annotations view.
       const objCodeToggle = {codeToggle: 'off'};
       const codeViewer = window.codeViewer;
@@ -74,7 +80,7 @@
       uiProps.sgViewport.contentWindow.postMessage(objCodeToggle, uiProps.targetOrigin);
       codeViewer.slideCode($sgAnnotationsContainer.outerHeight());
 
-      // Tell the iframe annotation view has been turned on.
+      // Tell the pattern that annotations view has been turned on.
       const objAnnotationsToggle = {annotationsToggle: 'on'};
 
       uiProps.sgViewport.contentWindow.postMessage(objAnnotationsToggle, uiProps.targetOrigin);
@@ -171,12 +177,6 @@
       // Slide the annotation section into view.
       annotationsViewer.slideAnnotations(0);
 
-      // Add padding to bottom of viewport wrapper so pattern foot can be viewed delay it so it gets added after
-      // animation completes.
-      window.setTimeout(() => {
-        uiProps.sgVpWrap.style.paddingBottom = $sgAnnotationsContainer.outerHeight() + 'px';
-      }, uiProps.timeoutDefault);
-
       if (annotationsViewer.moveToOnInit !== '0') {
         annotationsViewer.moveToOnInit = '0';
 
@@ -199,8 +199,11 @@
 
     if (data.annotationsOverlay) {
       if (data.annotationsOverlay === 'on') {
-        annotationsViewer.updateAnnotations(data.annotations);
+        // Can assume we're not viewing the Mustache Browser.
+        annotationsViewer.mustacheBrowser = false;
         annotationsViewer.viewall = data.viewall || false;
+
+        annotationsViewer.updateAnnotations(data.annotations);
       }
       else {
         annotationsViewer.closeAnnotations();
