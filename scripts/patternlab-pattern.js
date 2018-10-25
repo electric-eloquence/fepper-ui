@@ -32,7 +32,7 @@
     uiFns.urlHandler.popPattern(event);
   };
 
-  // If there are clicks within the iframe, make sure the nav in the iframe parent closes.
+  // If there are clicks within the pattern, make sure the nav in the viewer closes.
   d.body.addEventListener(
     'click',
     function () {
@@ -41,7 +41,7 @@
     false
   );
 
-  // Find all links and add an click handler for replacing the iframe address so the history works.
+  // Find all links and add a click handler for replacing the address so the history works.
   const aTags = d.getElementsByTagName('a');
 
   for (let i = 0; i < aTags.length; i++) {
@@ -126,23 +126,22 @@
         // Fail gracefully.
       }
 
-      // Some pages, like Mustache Browser pages, don't want to postMessage the patternlab.pageLoad event.
-      // Just return.
+      // Just return if this is a viewall (or doesn't have global patternData in the footer).
       if (!patternData) {
         return;
       }
 
-      // Notify the iframe parent what pattern this is so it updates itself appropriately.
+      // Notify the viewer what pattern this is so it updates itself appropriately.
       const path = window.location.toString();
       const parts = path.split('?');
-      const options = {event: 'patternlab.pageLoad', path: parts[0]};
-      options.patternPartial = patternData.patternPartial || 'viewall';
+      const obj = {event: 'patternlab.pageLoad', path: parts[0]};
+      obj.patternPartial = patternData.patternPartial;
 
       if (patternData.lineage) {
-        options.lineage = patternData.lineage;
+        obj.lineage = patternData.lineage;
       }
 
-      parent.postMessage(options, uiProps.targetOrigin);
+      parent.postMessage(obj, uiProps.targetOrigin);
     },
     false
   );

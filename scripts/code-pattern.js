@@ -9,7 +9,7 @@
     (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
   const viewall = Boolean(sgPatternToggleCode.length);
 
-  // Before declaring and running anything else, tell the iframe parent whether this is a viewall or not.
+  // Before declaring and running anything else, tell the viewer whether this is a viewall or not.
   if (viewall) {
     parent.postMessage({codeViewall: viewall}, targetOrigin);
   }
@@ -153,7 +153,7 @@
   // Add the click handlers to the elements that have an annotations.
   window.addEventListener('message', receiveIframeMessage, false);
 
-  // Tell the parent iframe that keys were pressed.
+  // Tell the viewer that keys were pressed.
   // Toggle the code panel.
   Mousetrap.bind('ctrl+shift+c', function (e) {
     e.preventDefault();
