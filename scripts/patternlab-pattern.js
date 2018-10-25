@@ -117,13 +117,19 @@
     'DOMContentLoaded',
     function () {
       const patternDataEl = d.getElementById('sg-pattern-data-footer');
-      let patternData = {};
+      let patternData;
 
       try {
         patternData = JSON.parse(patternDataEl.innerHTML);
       }
       catch (err) {
         // Fail gracefully.
+      }
+
+      // Some pages, like Mustache Browser pages, don't want to postMessage the patternlab.pageLoad event.
+      // Just return.
+      if (!patternData) {
+        return;
       }
 
       // Notify the iframe parent what pattern this is so it updates itself appropriately.
