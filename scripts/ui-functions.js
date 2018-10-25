@@ -431,10 +431,10 @@
      */
     popPattern: (e) => {
       const state = e.state;
-      let patternName = '';
+      let patternPartial = '';
 
       if (state && state.pattern) {
-        patternName = state.pattern;
+        patternPartial = state.pattern;
       }
       else {
         uiFns.urlHandler.skipBack = false;
@@ -442,11 +442,11 @@
         return;
       }
 
-      const iframePath = window.patternPaths[patternName];
+      const iframePath = window.patternPaths[patternPartial];
 
       const obj = {event: 'patternlab.updatePath', path: iframePath};
-      uiProps.title.innerHTML = uiProps.titleAppName + uiProps.titleSeparator + patternName;
 
+      uiFns.updateTitle(patternPartial);
       uiProps.sgViewport.contentWindow.postMessage(obj, uiProps.targetOrigin);
 
       if (uiProps.sgRaw) {
@@ -456,12 +456,12 @@
 
     /**
      * Push a pattern onto the current history based on a click.
-     * @param {string} pattern - The shorthand partials syntax for a given pattern.
+     * @param {string} patternPartial - The shorthand partials syntax for a given pattern.
      * @param {string} path - The path given by the loaded iframe.
      */
-    pushPattern: (pattern, path) => {
-      const data = {pattern};
-      const searchParam = '?p=' + pattern;
+    pushPattern: (patternPartial, path) => {
+      const data = {patternPartial};
+      const searchParam = '?p=' + patternPartial;
       let addressReplacement;
 
       if (window.location.protocol === 'file:') {
@@ -469,18 +469,24 @@
       }
       else {
         addressReplacement = window.location.protocol + '//' + window.location.host +
-          window.location.pathname.replace('index.html', '') + '?p=' + pattern;
+          window.location.pathname.replace('index.html', '') + '?p=' + patternPartial;
       }
 
       if (history.pushState) {
         history.pushState(data, null, addressReplacement);
       }
 
-      uiProps.title.innerHTML = uiProps.titleAppName + uiProps.titleSeparator + pattern;
+      uiFns.updateTitle(patternPartial);
 
       if (uiProps.sgRaw) {
-        uiProps.sgRaw.setAttribute('href', window.patternPaths[pattern]);
+        uiProps.sgRaw.setAttribute('href', window.patternPaths[patternPartial]);
       }
+    },
+
+    updateTitle: (patternPartial) => {
+      const titleSplit = uiProps.title.innerHTML.split(uiProps.titleSeparator);
+
+      uiProps.title.innerHTML = titleSplit[0] + uiProps.titleSeparator + patternPartial;
     }
   };
 
@@ -531,8 +537,7 @@
       uiProps.searchParams = uiFns.urlHandler.getSearchParams();
       uiProps.targetOrigin =
         (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
-      uiProps.titleAppName = 'Fepper';
-      uiProps.titleSeparator = ' - ';
+      uiProps.titleSeparator = ' : ';
     },
     false
   );

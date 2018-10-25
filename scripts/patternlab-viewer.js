@@ -411,27 +411,27 @@
     const protocol = window.location.protocol;
     const baseIframePath =
       protocol + '//' + window.location.host + window.location.pathname.replace('index.html', '');
-    let patternName;
+    let patternPartial;
 
     if (searchParams.p || searchParams.pattern) {
-      patternName = searchParams.p || searchParams.pattern;
+      patternPartial = searchParams.p || searchParams.pattern;
     }
     else if (
       typeof config.defaultPattern === 'string' &&
       config.defaultPattern.trim().length
     ) {
-      patternName = config.defaultPattern;
+      patternPartial = config.defaultPattern;
     }
     else {
-      patternName = 'viewall';
+      patternPartial = 'viewall';
     }
 
-    const patternPath = window.patternPaths[patternName];
+    const patternPath = window.patternPaths[patternPartial];
     const iframePath = baseIframePath + patternPath + '?' + Date.now();
     urlHandler.skipBack = true;
 
     // Update DOM.
-    d.getElementById('title').innerHTML = uiProps.titleAppName + uiProps.titleSeparator + patternName;
+    uiFns.updateTitle(patternPartial);
     d.getElementById('patternlab-html').classList.add('protocol-' + protocol.slice(0, -1));
 
     if (uiProps.sgRaw) {
@@ -439,7 +439,7 @@
     }
 
     // Update history.
-    history.replaceState({pattern: patternName}, null, null);
+    history.replaceState({pattern: patternPartial}, null, null);
 
     // Update iframe.
     sgViewport.contentWindow.location.replace(iframePath);
