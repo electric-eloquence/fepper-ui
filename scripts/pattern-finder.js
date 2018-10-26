@@ -126,8 +126,6 @@
 
       uiFns.closeOtherPanels(this);
       patternFinder.toggleFinder();
-
-      return false;
     });
 
     $sgFToggle.mouseenter(function () {
