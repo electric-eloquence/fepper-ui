@@ -150,7 +150,7 @@
      * Find the value using the given key.
      *
      * @param {string} name - The name of the key.
-     * @return {string} The value of the key or empty string if the value isn't found.
+     * @returns {string} The value of the key or empty string if the value isn't found.
      */
     findValue(name) {
       if ($.cookie(this.cookieName)) {

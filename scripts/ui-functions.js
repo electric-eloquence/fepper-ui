@@ -136,7 +136,7 @@
    *
    * @param {number} min - Start of range.
    * @param {number} max - End of range.
-   * @return {number} Random number.
+   * @returns {number} Random number.
    */
   uiFns.getRandom = (min, max) => {
     return Math.floor(Math.random() * (max - min) + min);
@@ -172,7 +172,7 @@
    * Boilerplate for receiveIframeMessage functions.
    *
    * @param {object} event - Event object.
-   * @return {object|undefined} Event data.
+   * @returns {object|undefined} Event data.
    */
   uiFns.receiveIframeMessageBoilerplate = (event) => {
     // Does the origin sending the message match the current host? If not, dev/null the request.
@@ -396,7 +396,7 @@
      *
      * @param {string} name - The shorthand partials syntax for a given pattern.
      * @param {object} paths - The paths to be compared.
-     * @return {array} The pattern type and pattern name.
+     * @returns {array} The pattern type and pattern name.
      */
     getPatternInfo: (name, paths) => {
       const patternBits = name.split('-');
@@ -417,7 +417,7 @@
     /**
      * Get query string search params for a particular item.
      *
-     * @return {object} An object containing to keys and values of window.location.search.
+     * @returns {object} An object containing to keys and values of window.location.search.
      */
     getSearchParams: () => {
       const paramsObj = {};
