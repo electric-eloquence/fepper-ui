@@ -36,17 +36,9 @@
           sgView.style.height = 'auto';
           sgView.classList.remove('active');
 
-          // Encode code for rendering.
-          let code = encodeURIComponent(codeFill.innerHTML);
-          // HTML entities for mustacheBrowser.spanTokensStrip() to work.
-          code = code.replace(/><</g, '>&lt;<');
-          code = code.replace(/><\/</g, '>&lt;/<');
-          code = code.replace(/><!--/g, '>&lt;!--');
-
           // Load Mustache Browser
-          const titleSplit = d.getElementById('title').innerHTML.split(uiProps.titleSeparator);
-          const title = titleSplit[1] || '';
-          const path = window.location.origin + '/mustache-browser/?title=' + title + '&code=' + code;
+          const patternPartial = d.documentElement.dataset.patternpartial;
+          const path = window.location.origin + '/mustache-browser/?partial=' + patternPartial;
           uiProps.sgViewport.contentWindow.location.assign(path);
 
           // Close code viewer.

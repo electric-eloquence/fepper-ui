@@ -14,23 +14,14 @@
     }
 
     switch (data.event) {
-      case 'patternlab.updatePath': {
-        window.location.replace('../../' + data.path + '?' + Date.now());
-      }
+      case 'patternlab.updatePath':
+        window.location.replace('../../' + data.path);
+
+        break;
     }
   }
 
   window.addEventListener('message', receiveIframeMessage, false);
-
-  /**
-   * Handle the onpopstate event.
-   *
-   * @param {object} event - Event object.
-   */
-  window.onpopstate = function (event) {
-    uiFns.urlHandler.skipBack = true;
-    uiFns.urlHandler.popPattern(event);
-  };
 
   // If there are clicks within the pattern, make sure the nav in the viewer closes.
   d.body.addEventListener(
@@ -42,26 +33,31 @@
   );
 
   // Find all links and add a click handler for replacing the address so the history works.
-  const aTags = d.getElementsByTagName('a');
+  const aTags = d.querySelectorAll('a');
 
-  for (let i = 0; i < aTags.length; i++) {
-    aTags[i].addEventListener(
+  for (let aTag of aTags) {
+    aTag.addEventListener(
       'click',
       function (e) {
-        const href = this.getAttribute('href');
-        const target = this.getAttribute('target');
-
-        if (target !== '_parent' && target !== '_blank') {
-          if (href && href !== '#') {
-            if (!this.classList.contains('fp-express')) {
-              e.preventDefault();
-              window.location.replace(href);
-            }
-          }
-          else {
-            e.preventDefault();
-          }
+        if (this.classList.contains('fp-express')) {
+          return;
         }
+
+        e.preventDefault();
+
+        // Use .getAttribute() to get raw "#" value, and not the full URL from the .href property.
+        const href = aTag.getAttribute('href');
+
+        if (!href || href === '#') {
+          return;
+        }
+
+        // Do not navigate outside this domain from within the iframe.
+        if (aTag.hostname !== window.location.hostname) {
+          return;
+        }
+
+        window.location.replace(href);
       },
       false
     );
@@ -131,14 +127,32 @@
         return;
       }
 
-      // Notify the viewer what pattern this is so it updates itself appropriately.
-      const path = window.location.toString();
-      const parts = path.split('?');
-      const obj = {event: 'patternlab.pageLoad', path: parts[0]};
-      obj.patternPartial = patternData.patternPartial;
+      const parts = window.location.href.split('?');
+      let obj;
 
-      if (patternData.lineage) {
-        obj.lineage = patternData.lineage;
+      // When navigating back to a pattern from the Mustache Browser, invoke patternlab.updatePatternInfo for its
+      // special treatment of browser history in this instance.
+      if (d.referrer.indexOf(window.location.protocol + '//' + window.location.host + '/mustache-browser') === 0) {
+        obj = {
+          event: 'patternlab.updatePatternInfo',
+          path: parts[0],
+          patternPartial: patternData.patternPartial
+        };
+      }
+
+      // Notify the viewer what pattern this is so it updates itself appropriately.
+      else {
+        obj = {event: 'patternlab.pageLoad'};
+        obj.patternPartial = patternData.patternPartial;
+
+        if (patternData.lineage) {
+          obj.lineage = patternData.lineage;
+        }
+
+        if (!d.getElementById('mustache-browser')) {
+          obj.annotationsMustacheBrowser = false;
+          obj.codeMustacheBrowser = false;
+        }
       }
 
       parent.postMessage(obj, uiProps.targetOrigin);

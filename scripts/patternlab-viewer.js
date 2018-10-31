@@ -224,12 +224,12 @@
     }
 
     switch (data.event) {
-      case 'patternlab.bodyClick':
+      case 'patternlab.bodyClick': {
         uiFns.closeAllPanels();
 
         break;
-
-      case 'patternlab.keyPress':
+      }
+      case 'patternlab.keyPress': {
         switch (data.keyPress) {
           case 'ctrl+alt+0':
           case 'ctrl+shift+0':
@@ -289,21 +289,29 @@
         }
 
         break;
-
-      case 'patternlab.pageLoad':
-        if (!urlHandler.skipBack) {
-          if (
-            !history.state ||
-            history.state.pattern !== data.patternPartial
-          ) {
-            urlHandler.pushPattern(data.patternPartial, data.path);
-          }
+      }
+      case 'patternlab.pageLoad': {
+        if (
+          !urlHandler.skipBack &&
+          (!history.state || history.state.pattern !== data.patternPartial)
+        ) {
+          urlHandler.pushPattern(data.patternPartial);
         }
 
-        // Reset the defaults.
+        // Reset default.
         urlHandler.skipBack = false;
 
         break;
+      }
+      case 'patternlab.updatePatternInfo': {
+        const addressReplacement = uiFns.urlHandler.getAddressReplacement(data.patternPartial);
+
+        // The primary use-case for this function is replacing history state instead of pushing it.
+        history.replaceState({pattern: data.patternPartial}, null, addressReplacement);
+        uiFns.updatePatternInfo(data.patternPartial, data.path);
+
+        break;
+      }
     }
   }
 
@@ -409,8 +417,6 @@
     }
 
     const protocol = window.location.protocol;
-    const baseIframePath =
-      protocol + '//' + window.location.host + window.location.pathname.replace('index.html', '');
     let patternPartial;
 
     if (searchParams.p || searchParams.pattern) {
@@ -426,19 +432,14 @@
       patternPartial = 'viewall';
     }
 
-    const patternPath = window.patternPaths[patternPartial];
-    const iframePath = baseIframePath + patternPath + '?' + Date.now();
+    const iframePath = window.patternPaths[patternPartial];
     urlHandler.skipBack = true;
 
     // Update DOM.
-    uiFns.updateTitle(patternPartial);
-    d.getElementById('patternlab-html').classList.add('protocol-' + protocol.slice(0, -1));
+    uiFns.updatePatternInfo(patternPartial, iframePath);
+    d.documentElement.classList.add('protocol-' + protocol.slice(0, -1));
 
-    if (uiProps.sgRaw) {
-      uiProps.sgRaw.setAttribute('href', patternPath);
-    }
-
-    // Update history.
+    // Update history. Need to do this so uiFns.urlHandler.popPattern has an Event.state.pattern to work with.
     history.replaceState({pattern: patternPartial}, null, null);
 
     // Update iframe.

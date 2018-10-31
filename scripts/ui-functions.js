@@ -373,10 +373,15 @@
     }
   };
 
-  uiFns.updateTitle = (patternPartial) => {
-    const titleSplit = uiProps.title.innerHTML.split(uiProps.titleSeparator);
+  uiFns.updatePatternInfo = (patternPartial, path) => {
+    const titleSplit = d.title.split(uiProps.titleSeparator);
+    d.title = titleSplit[0] + uiProps.titleSeparator + patternPartial;
 
-    uiProps.title.innerHTML = titleSplit[0] + uiProps.titleSeparator + patternPartial;
+    d.documentElement.setAttribute('data-patternpartial', patternPartial);
+
+    if (uiProps.sgRaw) {
+      uiProps.sgRaw.setAttribute('href', path);
+    }
   };
 
   /**
@@ -390,6 +395,21 @@
   uiFns.urlHandler = {
     // Set up some default vars.
     skipBack: false,
+
+    getAddressReplacement: (patternPartial) => {
+      const searchParam = '?p=' + patternPartial;
+      let addressReplacement;
+
+      if (window.location.protocol === 'file:') {
+        addressReplacement = window.location.href.split('?')[0] + searchParam;
+      }
+      else {
+        addressReplacement = window.location.protocol + '//' + window.location.host +
+          window.location.pathname.replace('index.html', '') + searchParam;
+      }
+
+      return addressReplacement;
+    },
 
     /**
      * Break up a pattern into its parts, pattern type and pattern name.
@@ -431,7 +451,7 @@
     },
 
     /**
-     * Based on a click forward or backward modify the url and iframe source.
+     * On a click forward or backward, modify the url and iframe source.
      *
      * @param {object} e - Event info like state and properties set in pushState().
      */
@@ -449,44 +469,29 @@
       }
 
       const iframePath = window.patternPaths[patternPartial];
-
       const obj = {event: 'patternlab.updatePath', path: iframePath};
+      const pParam = uiFns.urlHandler.getSearchParams().p;
 
-      uiFns.updateTitle(patternPartial);
-      uiProps.sgViewport.contentWindow.postMessage(obj, uiProps.targetOrigin);
+      if (pParam && pParam !== patternPartial) {
+        const addressReplacement = uiFns.urlHandler.getAddressReplacement(patternPartial);
 
-      if (uiProps.sgRaw) {
-        uiProps.sgRaw.setAttribute('href', iframePath);
+        history.replaceState(state, null, addressReplacement);
       }
+
+      uiFns.updatePatternInfo(patternPartial, iframePath);
+      uiProps.sgViewport.contentWindow.postMessage(obj, uiProps.targetOrigin);
     },
 
     /**
      * Push a pattern onto the current history based on a click.
      * @param {string} patternPartial - The shorthand partials syntax for a given pattern.
-     * @param {string} path - The path given by the loaded iframe.
      */
-    pushPattern: (patternPartial, path) => {
-      const data = {patternPartial};
-      const searchParam = '?p=' + patternPartial;
-      let addressReplacement;
+    pushPattern: (patternPartial) => {
+      const addressReplacement = uiFns.urlHandler.getAddressReplacement(patternPartial);
+      const data = {pattern: patternPartial};
 
-      if (window.location.protocol === 'file:') {
-        addressReplacement = path.split('/').slice(0, -3).join('/') + '/index.html' + searchParam;
-      }
-      else {
-        addressReplacement = window.location.protocol + '//' + window.location.host +
-          window.location.pathname.replace('index.html', '') + '?p=' + patternPartial;
-      }
-
-      if (history.pushState) {
-        history.pushState(data, null, addressReplacement);
-      }
-
-      uiFns.updateTitle(patternPartial);
-
-      if (uiProps.sgRaw) {
-        uiProps.sgRaw.setAttribute('href', window.patternPaths[patternPartial]);
-      }
+      history.pushState(data, null, addressReplacement);
+      uiFns.updatePatternInfo(patternPartial, window.patternPaths[patternPartial]);
     }
   };
 
@@ -512,7 +517,6 @@
       uiProps.sgTToggle = d.getElementById('sg-t-toggle');
       uiProps.sgViewport = d.getElementById('sg-viewport');
       uiProps.sgVpWrap = d.getElementById('sg-vp-wrap');
-      uiProps.title = d.getElementById('title');
 
       // Measurements.
       uiProps.bodyFontSize = parseInt(window.getComputedStyle(d.body).getPropertyValue('font-size'), 10);

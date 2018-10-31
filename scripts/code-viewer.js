@@ -412,7 +412,10 @@
         codeViewer.closeCode();
       }
     }
-    else if (data.codeViewall) {
+    else if (typeof data.codeMustacheBrowser === 'boolean') {
+      codeViewer.mustacheBrowser = data.codeMustacheBrowser;
+    }
+    else if (typeof data.codeViewall === 'boolean') {
       codeViewer.viewall = data.codeViewall;
     }
 
