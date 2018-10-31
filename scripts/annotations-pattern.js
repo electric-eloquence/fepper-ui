@@ -91,9 +91,7 @@
       const focusedEl = d.querySelector('.sg-pattern-toggle-annotations.focused');
 
       if (focusedEl) {
-        const top = focusedEl.offsetTop;
-
-        window.scrollTo({top, behavior: 'smooth'});
+        focusedEl.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
       }
       else {
         sgPatternFirst.querySelector('.sg-pattern-toggle-annotations').classList.add('focused');

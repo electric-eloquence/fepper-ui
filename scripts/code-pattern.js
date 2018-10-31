@@ -28,11 +28,15 @@
       const focusedEl = d.querySelector('.sg-pattern-toggle-code.focused');
 
       if (focusedEl) {
-        const top = focusedEl.offsetTop;
-
-        window.scrollTo({top, behavior: 'smooth'});
+        focusedEl.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
       }
       else {
+        if (!sgPatternFirst) {
+          parent.postMessage({annotationsViewall: false, codeViewall: false, targetOrigin});
+
+          return;
+        }
+
         sgPatternFirst.querySelector('.sg-pattern-toggle-code').classList.add('focused');
         window.scrollTo({top: 0, behavior: 'smooth'});
       }

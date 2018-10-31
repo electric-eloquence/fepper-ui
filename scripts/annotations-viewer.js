@@ -215,7 +215,10 @@
     else if (data.annotationsViewallClick) {
       annotationsViewer.openAnnotations();
     }
-    else if (data.annotationsViewall) {
+    else if (typeof data.annotationsMustacheBrowser === 'boolean') {
+      annotationsViewer.mustacheBrowser = data.annotationsMustacheBrowser;
+    }
+    else if (typeof data.annotationsViewall === 'boolean') {
       annotationsViewer.viewall = data.annotationsViewall;
     }
 
