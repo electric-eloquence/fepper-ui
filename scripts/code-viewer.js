@@ -273,13 +273,16 @@
      *
      * @param {array} lineage - Lineage array.
      * @param {array} lineageR - Reverse lineage array.
-     * @param {string} patternPartial - The name of the pattern.
+     * @param {string} patternPartial - The shorthand partials syntax for a given pattern.
      * @param {string} patternState - inprogress, inreview, complete
      */
     updateCode: function (lineage, lineageR, patternPartial, patternState) {
 
       // Clear any selections that might have been made.
       codeViewer.clearSelection();
+
+      // Set data-patternpartial attribute.
+      $sgCodeContainer.attr('data-patternpartial', patternPartial);
 
       // Draw lineage.
       if (lineage.length) {

@@ -377,8 +377,6 @@
     const titleSplit = d.title.split(uiProps.titleSeparator);
     d.title = titleSplit[0] + uiProps.titleSeparator + patternPartial;
 
-    d.documentElement.setAttribute('data-patternpartial', patternPartial);
-
     if (uiProps.sgRaw) {
       uiProps.sgRaw.setAttribute('href', path);
     }

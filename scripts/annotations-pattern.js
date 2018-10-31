@@ -130,6 +130,7 @@
         annotationsPattern.annotationsActive = true;
 
         let count = 0;
+        let patternPartial;
 
         for (let annotation of window.annotations) {
           let els;
@@ -138,7 +139,7 @@
           if (viewall) {
             for (let el of sgPatternToggleAnnotations) {
               if (el.classList.contains('focused')) {
-                const patternPartial = el.dataset.patternpartial;
+                patternPartial = el.dataset.patternpartial;
 
                 if (!patternPartial) {
                   break;
@@ -164,7 +165,18 @@
 
           // Pattern.
           else {
+            const patternDataEl = d.getElementById('sg-pattern-data-footer');
+            let patternData = {};
+
+            try {
+              patternData = JSON.parse(patternDataEl.innerHTML);
+            }
+            catch (err) {
+              // Fail gracefully.
+            }
+
             els = d.querySelectorAll(annotation.el);
+            patternPartial = patternData.patternPartial || '';
           }
 
           // Loop through all elements with annotations within the query scope.
@@ -214,6 +226,7 @@
         const obj = {
           annotationsOverlay: 'on',
           annotations: annotationsPattern.annotations,
+          patternPartial,
           viewall
         };
 
