@@ -120,14 +120,18 @@
      * When updating the annotations panel, get the annotations from the pattern via postMessage.
      *
      * @param {array} annotations - Annotations array.
+     * @param {string} patternPartial - The shorthand partials syntax for a given pattern.
      */
-    updateAnnotations: (annotations) => {
+    updateAnnotations: (annotations, patternPartial) => {
       const sgAnnotations = d.getElementById('sg-annotations');
 
       // Clear out the annotations container.
       if (sgAnnotations && sgAnnotations.innerHTML !== '') {
         sgAnnotations.innerHTML = '';
       }
+
+      // Set data-patternpartial attribute.
+      $sgAnnotationsContainer.attr('data-patternpartial', patternPartial);
 
       // See how many annotations this pattern might have.
       // If more than zero, write them out.
@@ -203,7 +207,7 @@
         annotationsViewer.mustacheBrowser = false;
         annotationsViewer.viewall = data.viewall || false;
 
-        annotationsViewer.updateAnnotations(data.annotations);
+        annotationsViewer.updateAnnotations(data.annotations, data.patternPartial);
       }
       else {
         annotationsViewer.closeAnnotations();

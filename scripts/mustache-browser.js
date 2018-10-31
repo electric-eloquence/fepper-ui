@@ -36,9 +36,11 @@
           sgView.style.height = 'auto';
           sgView.classList.remove('active');
 
-          // Load Mustache Browser
-          const patternPartial = d.documentElement.dataset.patternpartial;
+          const sgCodeContainer = d.getElementById('sg-code-container');
+          const patternPartial = sgCodeContainer.dataset.patternpartial;
           const path = window.location.origin + '/mustache-browser/?partial=' + patternPartial;
+
+          // Load Mustache Browser
           uiProps.sgViewport.contentWindow.location.assign(path);
 
           // Close code viewer.
