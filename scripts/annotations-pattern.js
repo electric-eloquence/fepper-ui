@@ -130,7 +130,7 @@
         annotationsPattern.annotationsActive = true;
 
         let count = 0;
-        let patternPartial;
+        let patternPartial = '';
 
         for (let annotation of window.annotations) {
           let els;
@@ -139,7 +139,7 @@
           if (viewall) {
             for (let el of sgPatternToggleAnnotations) {
               if (el.classList.contains('focused')) {
-                patternPartial = el.dataset.patternpartial;
+                patternPartial = el.dataset.patternpartial || '';
 
                 if (!patternPartial) {
                   break;
