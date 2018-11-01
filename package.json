@@ -1,6 +1,6 @@
 {
   "name": "fepper-ui",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "The client-side package that powers the Fepper UI",
   "scripts": {
     "prepush": "npm test",
