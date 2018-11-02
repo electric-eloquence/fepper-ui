@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
+ * Licensed under the MIT license.
+ */
 ((d) => {
   'use strict';
 
@@ -16,9 +20,6 @@
 
   /**
    * Annotations support for patterns.
-   *
-   * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
-   * Licensed under the MIT license.
    */
   const annotationsPattern = {
     annotations: [],

@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2013 Brad Frost, http://bradfrostweb.com & Dave Olsen, http://dmolsen.com
+ * Licensed under the MIT license.
+ */
 ((d, uiProps, uiFns) => {
   'use strict';
 
@@ -14,10 +18,6 @@
 
   /**
    * Code view support for the viewer.
-   *
-   * Copyright (c) 2013 Brad Frost, http://bradfrostweb.com & Dave Olsen, http://dmolsen.com
-   * Licensed under the MIT license.
-   *
    * Not using arrow notation for member functions because some need "this" to refer to response objects.
    */
   const codeViewer = window.codeViewer = {

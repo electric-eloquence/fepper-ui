@@ -1,6 +1,4 @@
 /**
- * Annotations Support for the Viewer - v0.3
- *
  * Copyright (c) 2013 Brad Frost, http://bradfrostweb.com & Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license.
  */
@@ -11,6 +9,9 @@
   const $sgAnnotationsContainer = $('#sg-annotations-container');
   const Mousetrap = window.Mousetrap;
 
+  /**
+   * Annotations support for the viewer.
+   */
   const annotationsViewer = window.annotationsViewer = {
     // Set-up default sections.
     annotationsActive: false,
