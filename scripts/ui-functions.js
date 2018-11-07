@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2013-2016 Dave Olsen, http://dmolsen.com
+ * Licensed under the MIT license.
+ */
 ((d) => {
   'use strict';
 
@@ -384,9 +388,6 @@
 
   /**
    * URL Handler.
-   *
-   * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
-   * Licensed under the MIT license.
    *
    * Helps handle the initial iframe source. Parses a string to see if it matches an expected pattern in Pattern Lab.
    */

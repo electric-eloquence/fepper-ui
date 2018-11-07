@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2014 Dave Olsen, http://dmolsen.com
+ * Licensed under the MIT license
+ */
 ((d, uiProps, uiFns) => {
   'use strict';
 
