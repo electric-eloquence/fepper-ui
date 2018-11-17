@@ -67,7 +67,7 @@
     passPath(item) {
       const obj = {
         event: 'patternlab.updatePath',
-        path: item.patternPartial
+        path: item.patternPath
       };
 
       // Update the iframe via the history api handler.
