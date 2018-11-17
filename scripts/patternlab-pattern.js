@@ -44,6 +44,11 @@
       'click',
       function (e) {
         if (this.classList.contains('fp-express')) {
+          if (this.classList.contains('mustache-browser__pattern-link')) {
+            parent.postMessage({annotationsMustacheBrowser: false}, uiProps.targetOrigin);
+            parent.postMessage({codeMustacheBrowser: false}, uiProps.targetOrigin);
+          }
+
           return;
         }
 
