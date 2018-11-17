@@ -44,11 +44,6 @@
       'click',
       function (e) {
         if (this.classList.contains('fp-express')) {
-          if (this.classList.contains('mustache-browser__pattern-link')) {
-            parent.postMessage({annotationsMustacheBrowser: false}, uiProps.targetOrigin);
-            parent.postMessage({codeMustacheBrowser: false}, uiProps.targetOrigin);
-          }
-
           return;
         }
 
@@ -147,6 +142,11 @@
           path: parts[0],
           patternPartial: patternData.patternPartial
         };
+
+        if (!d.getElementById('mustache-browser')) {
+          obj.annotationsMustacheBrowser = false;
+          obj.codeMustacheBrowser = false;
+        }
       }
 
       // Notify the viewer what pattern this is so it updates itself appropriately.

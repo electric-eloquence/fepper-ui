@@ -471,8 +471,6 @@
         event: 'patternlab.updatePath',
         path: $(this).attr('href')
       };
-      window.annotationsViewer.mustacheBrowser = false;
-      window.codeViewer.mustacheBrowser = false;
 
       sgViewport.contentWindow.postMessage(obj, uiProps.targetOrigin);
       uiFns.closeAllPanels();
