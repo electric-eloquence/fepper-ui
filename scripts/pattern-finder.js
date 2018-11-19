@@ -14,7 +14,6 @@
   function closeFinder() {
     $sgFToggle.removeClass('active');
     $sgFind.removeClass('active');
-    $sgFind.removeClass('show-overflow');
   }
 
   class PatternFinder {
@@ -78,7 +77,6 @@
     toggleFinder() {
       $sgFToggle.toggleClass('active');
       $sgFind.toggleClass('active');
-      $sgFind.toggleClass('show-overflow');
 
       if ($sgFToggle.hasClass('active')) {
         $sgFindTypeahead.focus();
