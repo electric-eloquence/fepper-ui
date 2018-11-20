@@ -1,6 +1,7 @@
 .*.swp
 .DS_Store
 /data/*
+/package-lock.json
 /scripts/ui.js
 /styles/ui.css
 node_modules/
