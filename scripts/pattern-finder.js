@@ -14,7 +14,6 @@
   function closeFinder() {
     $sgFToggle.removeClass('active');
     $sgFind.removeClass('active');
-    $sgFind.removeClass('show-overflow');
   }
 
   class PatternFinder {
@@ -67,7 +66,7 @@
     passPath(item) {
       const obj = {
         event: 'patternlab.updatePath',
-        path: item.patternPartial
+        path: item.patternPath
       };
 
       // Update the iframe via the history api handler.
@@ -78,7 +77,6 @@
     toggleFinder() {
       $sgFToggle.toggleClass('active');
       $sgFind.toggleClass('active');
-      $sgFind.toggleClass('show-overflow');
 
       if ($sgFToggle.hasClass('active')) {
         $sgFindTypeahead.focus();

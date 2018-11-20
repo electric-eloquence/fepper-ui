@@ -142,6 +142,11 @@
           path: parts[0],
           patternPartial: patternData.patternPartial
         };
+
+        if (!d.getElementById('mustache-browser')) {
+          obj.annotationsMustacheBrowser = false;
+          obj.codeMustacheBrowser = false;
+        }
       }
 
       // Notify the viewer what pattern this is so it updates itself appropriately.
