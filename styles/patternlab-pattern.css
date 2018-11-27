@@ -23,8 +23,14 @@
 
 .sg-pattern-category-title,
 .sg-pattern-title {
+  font-family: Helvetica, "Liberation Sans", Roboto, sans-serif;
   position: relative;
   z-index: 100;
+}
+.sg-pattern-category-title {
+  line-height: 1.2;
+  margin: 0.4rem 0;
+  padding: 0.4rem 0 0;
 }
 .sg-pattern-title {
   font-size: 1.6rem;
