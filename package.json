@@ -3,8 +3,12 @@
   "version": "0.5.1",
   "description": "The client-side package that powers the Fepper UI",
   "scripts": {
-    "prepush": "npm test",
-    "test": "./node_modules/.bin/eslint scripts"
+    "test": "eslint scripts"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm test"
+    }
   },
   "repository": {
     "type": "git",
@@ -34,9 +38,9 @@
   "homepage": "https://github.com/electric-eloquence/fepper-ui#readme",
   "devDependencies": {
     "eslint": "3.x",
-    "feplet": "^0.2.0",
+    "feplet": "^0.2.1",
     "he": "1.1.0",
-    "husky": "^0.14.3",
+    "husky": "^1.2.0",
     "jquery": "3.3.1",
     "jquery.cookie": "1.4.1",
     "js-beautify": "1.6.4",

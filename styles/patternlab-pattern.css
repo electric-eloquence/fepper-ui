@@ -2,6 +2,10 @@
  * Copyright (c) 2013 Brad Frost, http://bradfrostweb.com & Dave Olsen, http://dmolsen.com
  */
 .sg-main {
+  margin: 0 auto;
+  max-width: 1152px;
+  min-width: 320px;
+  padding: 3.2rem 0.8rem 0;
   position: relative;
 }
 
@@ -23,8 +27,14 @@
 
 .sg-pattern-category-title,
 .sg-pattern-title {
+  font-family: Helvetica, "Liberation Sans", Roboto, sans-serif;
   position: relative;
   z-index: 100;
+}
+.sg-pattern-category-title {
+  line-height: 1.2;
+  margin: 0.4rem 0;
+  padding: 0.4rem 0 0;
 }
 .sg-pattern-title {
   font-size: 1.6rem;
@@ -71,6 +81,7 @@
   line-height: 1;
   padding: 1rem 0.9rem 0.9rem 1rem;
   position: relative;
+  text-decoration: none;
 }
 .sg-pattern-info-toggle:hover,
 .sg-pattern-info-toggle:focus,
