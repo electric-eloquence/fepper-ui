@@ -11,7 +11,7 @@
     "$": true
   },
   "rules": {
-    // Errors.
+    // error
     "array-bracket-spacing": [2, "never"],
     "block-scoped-var": 2,
     "brace-style": [2, "stroustrup", {"allowSingleLine": true}],
@@ -32,12 +32,10 @@
     "no-array-constructor": 2,
     "no-caller": 2,
     "no-catch-shadow": 2,
-    "no-duplicate-case": 0,
     "no-eval": 2,
     "no-extend-native": 2,
     "no-extra-bind": 2,
     "no-extra-parens": [2, "functions"],
-    "no-fallthrough": 0,
     "no-implied-eval": 2,
     "no-iterator": 2,
     "no-label-var": 2,
@@ -79,7 +77,7 @@
     "spaced-comment": [2, "always"],
     "strict": [2, "function"],
     "yoda": [2, "never"],
-    // Warnings.
+    // warn
     "max-len": [1, 120, 4, {
       "ignoreUrls": true,
       "ignoreComments": false
@@ -89,6 +87,9 @@
     "no-use-before-define": 1,
     "valid-jsdoc": [1, {
       "requireReturn": false
-    }]
+    }],
+    // off
+    "no-duplicate-case": 0,
+    "no-fallthrough": 0
   }
 }
