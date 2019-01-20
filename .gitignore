@@ -1,6 +1,10 @@
+*.log
+*.tmp*
+*~
 .*.swp
 .DS_Store
 /data/*
 /scripts/ui.js
 /styles/ui.css
 node_modules/
+package-lock.json
