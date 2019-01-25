@@ -38,7 +38,7 @@
   "homepage": "https://github.com/electric-eloquence/fepper-ui#readme",
   "devDependencies": {
     "eslint": "3.x",
-    "feplet": "^0.2.2",
+    "feplet": "*",
     "he": "1.1.0",
     "husky": "^1.3.1",
     "jquery": "3.3.1",
