@@ -170,7 +170,7 @@
      */
     saveEncoded: function () {
       let encoded = this.responseText;
-      encoded = window.html_beautify(encoded, {indent_size: 2});
+      encoded = window.html_beautify(encoded, {indent_size: 2, wrap_line_length: 0});
       encoded = window.he.encode(encoded);
       codeViewer.encoded = encoded;
 
