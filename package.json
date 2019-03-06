@@ -42,7 +42,7 @@
     "husky": "1.x",
     "jquery": "3.3.1",
     "jquery.cookie": "1.4.1",
-    "js-beautify": "^1.8.9",
+    "js-beautify": "^1.9.0",
     "mousetrap": "1.6.2",
     "prismjs": "1.5.1",
     "typeahead.js": "0.10.5",
