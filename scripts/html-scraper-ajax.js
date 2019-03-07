@@ -73,6 +73,7 @@
     }
 
     // Validate that name is a css selector.
+    // eslint-disable-next-line no-useless-escape
     if (!/^(#|\.)?[_a-z][\w#\-\.]*$/i.test(name)) {
       return null;
     }

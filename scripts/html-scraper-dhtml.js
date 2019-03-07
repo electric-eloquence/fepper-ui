@@ -46,6 +46,7 @@
     importer.addEventListener(
       'submit',
       function (e) {
+        // eslint-disable-next-line no-useless-escape
         if (!/^[0-9a-z][\w\-\.]*$/i.test(importer.filename.value)) {
           e.preventDefault();
 
