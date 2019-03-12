@@ -172,6 +172,7 @@
       let encoded = this.responseText;
       encoded = window.html_beautify(encoded, {indent_size: 2, wrap_line_length: 0});
       encoded = window.he.encode(encoded);
+      encoded = encoded.replace(/^\s*$\n/gm, ''); // Delete empty lines.
       codeViewer.encoded = encoded;
 
       if (codeViewer.tabActive === 'e') {
