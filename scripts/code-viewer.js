@@ -170,8 +170,32 @@
      */
     saveEncoded: function () {
       let encoded = this.responseText;
-      encoded = window.html_beautify(encoded, {indent_size: 2, wrap_line_length: 0});
+
+      // We sometimes want markup code to be in an HTML-like template language with tags delimited by stashes.
+      // In order for js-beautify to indent such code correctly, any space between control characters #, ^, and /, and
+      // the variable name must be removed. However, we want to add the spaces back later.
+      // \u00A0 is &nbsp; a space character not enterable by keyboard, and therefore a good delimiter.
+      encoded = encoded.replace(/(\{\{#)(\s+)(\S+)/g, '$1$3$2\u00A0');
+      encoded = encoded.replace(/(\{\{\^)(\s+)(\S+)/g, '$1$3$2\u00A0');
+      encoded = encoded.replace(/(\{\{\/)(\s+)(\S+)/g, '$1$3$2\u00A0');
+
+      encoded = window.html_beautify(encoded, {
+        indent_handlebars: true,
+        indent_size: 2,
+        wrap_line_length: 0
+      });
+
+      // Add back removed spaces to retain the look intended by the author.
+      encoded = encoded.replace(/(\{\{#)(\S+)(\s+)\u00A0/g, '$1$3$2');
+      encoded = encoded.replace(/(\{\{\^)(\S+)(\s+)\u00A0/g, '$1$3$2');
+      encoded = encoded.replace(/(\{\{\/)(\S+)(\s+)\u00A0/g, '$1$3$2');
+
+      // Delete empty lines.
+      encoded = encoded.replace(/^\s*$\n/gm, '');
+
+      // Encode with HTML entities.
       encoded = window.he.encode(encoded);
+
       codeViewer.encoded = encoded;
 
       if (codeViewer.tabActive === 'e') {
