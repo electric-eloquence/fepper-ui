@@ -27,7 +27,7 @@
 
 .sg-pattern-category-title,
 .sg-pattern-title {
-  font-family: Helvetica, "Liberation Sans", Roboto, sans-serif;
+  font-family: Helvetica, "Nimbus Sans L", "Liberation Sans", Roboto, sans-serif;
   position: relative;
   z-index: 100;
 }
