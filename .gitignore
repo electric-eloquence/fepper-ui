@@ -3,8 +3,10 @@
 *~
 .*.swp
 .DS_Store
+.coveralls.yml
+.nyc_output/
 /data/*
-/scripts/ui.js
+/scripts/ui/compilation.js
 /styles/ui.css
 node_modules/
 package-lock.json
