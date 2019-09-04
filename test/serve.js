@@ -198,6 +198,9 @@ module.exports = new Promise((resolve) => {
         case '.js':
           contentType = 'application/javascript';
           break;
+        case '.styl':
+          contentType = 'application/javascript';
+          break;
         case '.svg':
           contentType = 'image/svg+xml';
           break;
