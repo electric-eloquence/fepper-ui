@@ -47,7 +47,7 @@
     "mousetrap": "1.6.2",
     "prismjs": "1.5.1",
     "redux": "^4.0.4",
-    "requerio": "^0.4.4",
+    "requerio": "0.5.0-rc.0",
     "typeahead.js": "0.10.5",
     "universal-cookie": "^4.0.2",
     "wolfy87-eventemitter": "4.2.11"
