@@ -1,0 +1,24 @@
+language: node_js
+node_js:
+  - "12"
+matrix:
+  include:
+    - os: linux
+      sudo: required
+      addons:
+        apt:
+          sources:
+            - google-chrome
+          packages:
+            - google-chrome-stable
+    - os: osx
+      sudo: required
+      env: HOMEBREW_CASK_OPTS='--appdir=/Applications'
+before_install:
+  - |
+    if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+      brew update > /dev/null
+      brew cask install google-chrome
+    fi
+after_script:
+  - npm run coverage

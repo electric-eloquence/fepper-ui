@@ -2,6 +2,7 @@
   "name": "fepper-ui",
   "description": "The client-side package that powers the Fepper UI",
   "scripts": {
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "e2e": "node test/e2e",
     "lint": "eslint scripts && eslint test",
     "test": "npm run unit && npm run e2e",
