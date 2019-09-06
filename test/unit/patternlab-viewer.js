@@ -347,7 +347,7 @@ describe('patternlabViewer', function () {
           // Restore original window width.
           $orgs.window.dispatchAction('innerWidth', swOrig);
           done();
-        }, uiProps.timeoutDefault);
+        }, uiProps.timeoutDefault * 2);
       });
 
       it('sizes viewport with a "w" search param', function () {
