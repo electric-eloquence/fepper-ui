@@ -8,10 +8,10 @@ describe('Listeners end-to-end tests', function () {
       it('close button closes annotations viewer', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-annotations').click();
-        browser.pause(1000);
+        browser.pause(700);
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
         $('#sg-annotations-close-btn').click();
-        browser.pause(1000);
+        browser.pause(700);
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
     });
@@ -23,7 +23,7 @@ describe('Listeners end-to-end tests', function () {
 
       it('"ctrl+shift+a" toggles annotations viewer', function () {
         browser.keys(['Control', 'Shift', 'a']);
-        browser.pause(1000);
+        browser.pause(700);
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-annotations').getHTML(false)).to.equal(`<div id="annotation-1">
 <h2>1. Navigation</h2>
@@ -36,7 +36,7 @@ menu anchor.</p>
 </div>
 </div>`);
         browser.keys(['Control', 'Shift', 'a']);
-        browser.pause(1000);
+        browser.pause(700);
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
     });
@@ -51,17 +51,17 @@ menu anchor.</p>
       it('close button closes code viewer', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-code').click();
-        browser.pause(1000);
+        browser.pause(700);
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
         $('#sg-code-close-btn').click();
-        browser.pause(1000);
+        browser.pause(700);
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
 
       it('HTML button displays HTML code', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-code').click();
-        browser.pause(1000);
+        browser.pause(700);
         expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
         $('#sg-code-title-html').click();
         expect($('#sg-code-fill').getText())
@@ -72,7 +72,7 @@ menu anchor.</p>
       it('Mustache button displays Mustache code', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-code').click();
-        browser.pause(1000);
+        browser.pause(700);
         $('#sg-code-title-html').click();
         expect($('#sg-code-fill').getText())
           .to.equal(`<a href="../04-pages-00-homepage/04-pages-00-homepage.html">Home</a>
@@ -89,11 +89,11 @@ menu anchor.</p>
 
       it('"ctrl+shift+c" toggles code viewer', function () {
         browser.keys(['Control', 'Shift', 'c']);
-        browser.pause(1000);
+        browser.pause(700);
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
         browser.keys(['Control', 'Shift', 'c']);
-        browser.pause(1000);
+        browser.pause(700);
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
 
@@ -106,7 +106,7 @@ menu anchor.</p>
 
       it('"ctrl+alt+h" selects the HTML tab in code viewer', function () {
         browser.keys(['Control', 'Shift', 'c']);
-        browser.pause(1000);
+        browser.pause(700);
         expect($('#sg-code-title-html').getAttribute('class')).to.not.have.string('sg-code-title-active');
         browser.keys(['Control', 'Alt', 'h']);
         expect($('#sg-code-title-html').getAttribute('class')).to.have.string('sg-code-title-active');
@@ -114,7 +114,7 @@ menu anchor.</p>
 
       it('"ctrl+shift+u" selects the Mustache tab in code viewer', function () {
         browser.keys(['Control', 'Shift', 'c']);
-        browser.pause(1000);
+        browser.pause(700);
         browser.keys(['Control', 'Shift', 'y']);
         expect($('#sg-code-title-mustache').getAttribute('class')).to.not.have.string('sg-code-title-active');
         browser.keys(['Control', 'Shift', 'u']);
@@ -123,7 +123,7 @@ menu anchor.</p>
 
       it('"ctrl+alt+h" selects the Mustache tab in code viewer', function () {
         browser.keys(['Control', 'Shift', 'c']);
-        browser.pause(1000);
+        browser.pause(700);
         browser.keys(['Control', 'Alt', 'h']);
         expect($('#sg-code-title-mustache').getAttribute('class')).to.not.have.string('sg-code-title-active');
         browser.keys(['Control', 'Alt', 'm']);
@@ -141,7 +141,7 @@ menu anchor.</p>
       it('reveals link to Mustache browser when hovering over Mustache code in code viewer', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-code').click();
-        browser.pause(1000);
+        browser.pause(700);
         expect($('#sg-code-fill').getCSSProperty('cursor').value).to.equal('auto');
         $('#sg-code-fill').moveTo(10, 10);
         expect($('#sg-code-fill').getCSSProperty('cursor').value).to.equal('pointer');
@@ -150,7 +150,7 @@ menu anchor.</p>
       it('shows default cursor when hovering over HTML code in code viewer', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-code').click();
-        browser.pause(1000);
+        browser.pause(700);
         $('#sg-code-title-html').click();
         expect($('#sg-code-fill').getCSSProperty('cursor').value).to.equal('auto');
         $('#sg-code-fill').moveTo(10, 10);
@@ -166,7 +166,7 @@ menu anchor.</p>
       it('redirects to Mustache browser when clicking on Mustache code in code viewer', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-code').click();
-        browser.pause(1000);
+        browser.pause(700);
         $('#sg-code-fill').click();
         browser.switchToFrame($('#sg-viewport'));
         expect($('main').getAttribute('id')).to.equal('mustache-browser');
@@ -176,19 +176,19 @@ menu anchor.</p>
       it('closes code viewer when clicking on Mustache code in code viewer', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-code').click();
-        browser.pause(1000);
+        browser.pause(700);
         $('#sg-code-fill').click();
-        browser.pause(1000);
+        browser.pause(700);
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
 
       it('does nothing when clicking on HTML code in code viewer', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-code').click();
-        browser.pause(1000);
+        browser.pause(700);
         $('#sg-code-title-html').click();
         $('#sg-code-fill').click();
-        browser.pause(1000);
+        browser.pause(700);
         browser.switchToFrame($('#sg-viewport'));
         expect($('main').error.error).to.equal('no such element');
         browser.switchToParentFrame();
