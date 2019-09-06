@@ -1,6 +1,10 @@
 describe('Listeners end-to-end tests', function () {
   describe('annotationsViewer', function () {
     describe('click', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('close button closes annotations viewer', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-annotations').click();
@@ -8,11 +12,15 @@ describe('Listeners end-to-end tests', function () {
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
         $('#sg-annotations-close-btn').click();
         browser.pause(700);
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-353px');
+        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
     });
 
     describe('Mousetrap', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('"ctrl+shift+a" toggles annotations viewer', function () {
         browser.keys(['Control', 'Shift', 'a']);
         browser.pause(700);
@@ -29,13 +37,17 @@ menu anchor.</p>
 </div>`);
         browser.keys(['Control', 'Shift', 'a']);
         browser.pause(700);
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-353px');
+        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
     });
   });
 
   describe('codeViewer', function () {
     describe('click', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('close button closes code viewer', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-code').click();
@@ -43,7 +55,7 @@ menu anchor.</p>
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
         $('#sg-code-close-btn').click();
         browser.pause(700);
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-353px');
+        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
 
       it('HTML button displays HTML code', function () {
@@ -71,6 +83,10 @@ menu anchor.</p>
     });
 
     describe('Mousetrap', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('"ctrl+shift+c" toggles code viewer', function () {
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
@@ -78,7 +94,7 @@ menu anchor.</p>
         expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-353px');
+        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
 
       it('"ctrl+shift+y" selects the HTML tab in code viewer', function () {
@@ -118,6 +134,10 @@ menu anchor.</p>
 
   describe('mustacheBrowser', function () {
     describe('mouseenter', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('reveals link to Mustache browser when hovering over Mustache code in code viewer', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-code').click();
@@ -139,6 +159,10 @@ menu anchor.</p>
     });
 
     describe('click', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('redirects to Mustache browser when clicking on Mustache code in code viewer', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-code').click();
@@ -155,7 +179,7 @@ menu anchor.</p>
         browser.pause(700);
         $('#sg-code-fill').click();
         browser.pause(700);
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-353px');
+        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
 
       it('does nothing when clicking on HTML code in code viewer', function () {
@@ -175,6 +199,10 @@ menu anchor.</p>
 
   describe('patternFinder', function () {
     describe('Mousetrap', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('"ctrl+shift+f" toggles patternFinder', function () {
         $('.sg-nav-elements').$('.sg-acc-handle').click();
         expect($('.sg-nav-elements').$('.sg-acc-handle').getAttribute('class')).to.have.string('active');
@@ -222,6 +250,10 @@ menu anchor.</p>
 
   describe('patternlabViewer', function () {
     describe('window.resize', function () {
+      before(function () {
+        browser.setWindowSize(1200, 640);
+      });
+
       it('updates viewport width when in whole mode', function () {
         $('#sg-size-w').click();
         browser.pause(100);
@@ -233,6 +265,10 @@ menu anchor.</p>
     });
 
     describe('.sg-pop click', function () {
+      before(function () {
+        browser.setWindowSize(1300, 640);
+      });
+
       it('loads pattern', function () {
         $('.sg-nav-elements').$('.sg-acc-handle').click();
         $('.sg-nav-elements').$('.sg-pop').click();
@@ -251,6 +287,10 @@ menu anchor.</p>
     });
 
     describe('viewport resizer buttons', function () {
+      before(function () {
+        browser.setWindowSize(1300, 640);
+      });
+
       it('LG button resizes to Large', function () {
         $('#sg-size-lg').click();
         browser.pause(1000);
@@ -284,6 +324,10 @@ menu anchor.</p>
 
     // Test the viewport sizes in reverse to reduce the distance shrinking from 1300 in the previous tests.
     describe('Mousetrap', function () {
+      before(function () {
+        browser.setWindowSize(1300, 640);
+      });
+
       it('"ctrl+shift+l" resizes to Large', function () {
         browser.keys(['Control', 'Shift', 'l']);
         browser.pause(1000);
@@ -390,6 +434,10 @@ menu anchor.</p>
   });
 
   describe('urlHandler', function () {
+    before(function () {
+      browser.setWindowSize(1024, 640);
+    });
+
     it('handles history correctly for back and forward buttons', function () {
       $('.sg-nav-elements').$('.sg-acc-handle').click();
       $('.sg-nav-elements').$('.sg-pop').click();
