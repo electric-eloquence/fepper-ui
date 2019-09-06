@@ -7,6 +7,7 @@ describe('Listeners end-to-end tests', function () {
 
       it('close button closes annotations viewer', function () {
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-t-annotations').click();
         browser.pause(700);
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
@@ -50,6 +51,7 @@ menu anchor.</p>
 
       it('close button closes code viewer', function () {
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
@@ -60,6 +62,7 @@ menu anchor.</p>
 
       it('HTML button displays HTML code', function () {
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
         expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
@@ -71,6 +74,7 @@ menu anchor.</p>
 
       it('Mustache button displays Mustache code', function () {
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
         $('#sg-code-title-html').click();
@@ -140,6 +144,7 @@ menu anchor.</p>
 
       it('reveals link to Mustache browser when hovering over Mustache code in code viewer', function () {
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
         expect($('#sg-code-fill').getCSSProperty('cursor').value).to.equal('auto');
@@ -149,6 +154,7 @@ menu anchor.</p>
 
       it('shows default cursor when hovering over HTML code in code viewer', function () {
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
         $('#sg-code-title-html').click();
@@ -165,6 +171,7 @@ menu anchor.</p>
 
       it('redirects to Mustache browser when clicking on Mustache code in code viewer', function () {
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
         $('#sg-code-fill').click();
@@ -175,6 +182,7 @@ menu anchor.</p>
 
       it('closes code viewer when clicking on Mustache code in code viewer', function () {
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
         $('#sg-code-fill').click();
@@ -184,6 +192,7 @@ menu anchor.</p>
 
       it('does nothing when clicking on HTML code in code viewer', function () {
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
         $('#sg-code-title-html').click();
@@ -219,6 +228,7 @@ menu anchor.</p>
 
       it('"ctrl+shift+f" closes patternFinder while focus is outside patternFinder', function () {
         $('#sg-f-toggle').click();
+        browser.pause(100);
         expect($('#sg-f-toggle').getAttribute('class')).to.have.string('active');
         expect($('#sg-find').getAttribute('class')).to.have.string('active');
         browser.keys('Tab');
@@ -238,6 +248,7 @@ menu anchor.</p>
 
       it('"esc" closes patternFinder while focus is outside patternFinder', function () {
         $('#sg-f-toggle').click();
+        browser.pause(100);
         expect($('#sg-f-toggle').getAttribute('class')).to.have.string('active');
         expect($('#sg-find').getAttribute('class')).to.have.string('active');
         browser.keys('Tab');
