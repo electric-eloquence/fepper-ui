@@ -3,10 +3,6 @@ os: osx
 node_js:
   - "12"
 before_install:
-  - brew update
-addons:
-  homebrew:
-    casks:
-      - google-chrome
+  -  brew cask install google-chrome
 after_script:
   - npm run coverage
