@@ -160,6 +160,7 @@ menu anchor.</p>
 
     beforeEach(function () {
       $('.sg-nav-scrape').$('.sg-acc-handle').click();
+      browser.pause(100);
       $('.sg-nav-scrape').$('.sg-pop').click();
       browser.switchToFrame($('#sg-viewport'));
     });
@@ -290,6 +291,7 @@ menu anchor.</p>
 
     beforeEach(function () {
       $('.sg-nav-scrape').$('.sg-acc-handle').click();
+      browser.pause(100);
       $('.sg-nav-scrape').$('.sg-pop').click();
       browser.switchToFrame($('#sg-viewport'));
     });
@@ -431,6 +433,7 @@ menu anchor.</p>
 
       it('pattern anchor clicks switch the pattern in the iframe', function () {
         $('.sg-nav-compounds').$('.sg-acc-handle').click();
+        browser.pause(100);
         $('.sg-nav-compounds').$('.sg-pop').click();
         expect($('#sg-raw').getAttribute('href'))
           .to.equal('http://localhost:8080/patterns/01-compounds-block/01-compounds-block.html');

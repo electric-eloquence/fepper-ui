@@ -280,6 +280,7 @@ menu anchor.</p>
 
       it('loads pattern', function () {
         $('.sg-nav-elements').$('.sg-acc-handle').click();
+        browser.pause(100);
         $('.sg-nav-elements').$('.sg-pop').click();
         expect($('#sg-raw').getAttribute('href'))
           .to.equal('http://localhost:8080/patterns/00-elements-anchor/00-elements-anchor.html');
@@ -289,6 +290,7 @@ menu anchor.</p>
         $('.sg-nav-compounds').$('.sg-acc-handle').click();
         expect($('.sg-nav-compounds').$('.sg-acc-handle').getAttribute('class')).to.have.string('active');
         expect($('.sg-nav-compounds').$('.sg-acc-panel').getAttribute('class')).to.have.string('active');
+        browser.pause(100);
         $('.sg-nav-compounds').$('.sg-pop').click();
         expect($('.sg-nav-compounds').$('.sg-acc-handle').getAttribute('class')).to.not.have.string('active');
         expect($('.sg-nav-compounds').$('.sg-acc-panel').getAttribute('class')).to.not.have.string('active');
@@ -449,10 +451,13 @@ menu anchor.</p>
 
     it('handles history correctly for back and forward buttons', function () {
       $('.sg-nav-elements').$('.sg-acc-handle').click();
+      browser.pause(100);
       $('.sg-nav-elements').$('.sg-pop').click();
       $('.sg-nav-compounds').$('.sg-acc-handle').click();
+      browser.pause(100);
       $('.sg-nav-compounds').$('.sg-pop').click();
       $('.sg-nav-components').$('.sg-acc-handle').click();
+      browser.pause(100);
       $('.sg-nav-components').$('.sg-pop').click();
       browser.back();
       expect($('#sg-raw').getAttribute('href'))
