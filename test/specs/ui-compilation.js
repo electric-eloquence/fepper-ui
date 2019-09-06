@@ -25,8 +25,11 @@ describe('UI compilation of index page js', function () {
 
   describe('html/01-body/20-header/30-sg-nav-container/30-sg-nav-toggle/a.js', function () {
     describe('.sg-nav-toggle', function () {
-      it('click', function () {
+      before(function () {
         browser.setWindowSize(700, 768);
+      });
+
+      it('click', function () {
         expect($('#sg-nav-target').getAttribute('class')).to.not.have.string('active');
         $('.sg-nav-toggle').click();
         expect($('#sg-nav-target').getAttribute('class')).to.have.string('active');
@@ -82,6 +85,10 @@ describe('UI compilation of index page js', function () {
     });
 
     describe('#sg-size-px', function () {
+      before(function () {
+        browser.setWindowSize(1025, 640);
+      });
+
       it('decreases px size on ArrowDown keydown', function () {
         $('#sg-size-px').click();
         expect($('#sg-viewport').getSize().width).to.equal(1025);
@@ -108,6 +115,10 @@ describe('UI compilation of index page js', function () {
     });
 
     describe('#sg-size-em', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('increases em size on ArrowDown keydown', function () {
         $('#sg-size-em').click();
         expect($('#sg-viewport').getSize().width).to.equal(1024);
@@ -134,6 +145,10 @@ describe('UI compilation of index page js', function () {
     });
 
     describe('#sg-size-w', function () {
+      before(function () {
+        browser.setWindowSize(1025, 640);
+      });
+
       it('resizes to whole width', function () {
         $('#sg-size-w').click();
         browser.pause(700);
@@ -142,6 +157,10 @@ describe('UI compilation of index page js', function () {
     });
 
     describe('#sg-size-random', function () {
+      before(function () {
+        browser.setWindowSize(1025, 640);
+      });
+
       it('resizes to whole width', function () {
         const sgViewportWidthBefore = $('#sg-viewport').getSize().width;
 
@@ -156,6 +175,10 @@ describe('UI compilation of index page js', function () {
     });
 
     describe('#sg-size-disco', function () {
+      before(function () {
+        browser.setWindowSize(1025, 640);
+      });
+
       it('toggles disco mode on and off', function () {
         let sgViewportWidth = $('#sg-viewport').getSize().width;
 
@@ -177,6 +200,10 @@ describe('UI compilation of index page js', function () {
     });
 
     describe('#sg-size-grow', function () {
+      before(function () {
+        browser.setWindowSize(1025, 640);
+      });
+
       it('toggles grow mode on and off', function () {
         let sgViewportWidth = $('#sg-viewport').getSize().width;
 
@@ -199,6 +226,10 @@ describe('UI compilation of index page js', function () {
 
   describe('html/01-body/20-header/60-sg-controls/40-sg-find/li.js', function () {
     describe('#sg-f-toggle', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('mouseenter', function () {
         $('#sg-f-toggle').moveTo();
         expect($('#sg-f-toggle').getAttribute('class')).to.have.string('mouseentered');
@@ -247,6 +278,10 @@ describe('UI compilation of index page js', function () {
     });
 
     describe('#typeahead', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('blur', function () {
         $('#sg-f-toggle').click();
         expect($('#sg-f-toggle').getAttribute('class')).to.have.string('active');
@@ -287,6 +322,10 @@ describe('UI compilation of index page js', function () {
 
   describe('html/01-body/20-header/60-sg-controls/60-sg-view/li.js', function () {
     describe('#sg-t-annotations', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('click toggles annotations viewer', function () {
         $('#sg-t-toggle').click();
         // Open code viewer first to make sure it gets closed.
@@ -296,7 +335,7 @@ describe('UI compilation of index page js', function () {
         $('#sg-t-annotations').click();
         browser.pause(700);
         expect($('#sg-t-code').getAttribute('class')).to.not.have.string('active');
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-322.5px');
+        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
         expect($('#sg-t-annotations').getAttribute('class')).to.have.string('active');
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-view').getAttribute('class')).to.not.have.string('active');
@@ -304,7 +343,7 @@ describe('UI compilation of index page js', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-annotations').click();
         browser.pause(700);
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-322.5px');
+        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
         expect($('#sg-t-annotations').getAttribute('class')).to.not.have.string('active');
         expect($('#sg-view').getAttribute('class')).to.not.have.string('active');
         expect($('#sg-t-toggle').getAttribute('class')).to.not.have.string('active');
@@ -312,6 +351,10 @@ describe('UI compilation of index page js', function () {
     });
 
     describe('#sg-t-code', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('click toggles code viewer', function () {
         $('#sg-t-toggle').click();
         // Open annotations viewer first to make sure it gets closed.
@@ -321,7 +364,7 @@ describe('UI compilation of index page js', function () {
         $('#sg-t-code').click();
         browser.pause(700);
         expect($('#sg-t-annotations').getAttribute('class')).to.not.have.string('active');
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-322.5px');
+        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
         expect($('#sg-t-code').getAttribute('class')).to.have.string('active');
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-view').getAttribute('class')).to.not.have.string('active');
@@ -329,7 +372,7 @@ describe('UI compilation of index page js', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-code').click();
         browser.pause(700);
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-322.5px');
+        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
         expect($('#sg-t-code').getAttribute('class')).to.not.have.string('active');
         expect($('#sg-view').getAttribute('class')).to.not.have.string('active');
         expect($('#sg-t-toggle').getAttribute('class')).to.not.have.string('active');
@@ -337,6 +380,10 @@ describe('UI compilation of index page js', function () {
     });
 
     describe('#sg-raw', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('pattern opens in new tab and menu closes', function () {
         $('#sg-t-toggle').click();
         $('#sg-raw').click();
@@ -356,6 +403,10 @@ describe('UI compilation of index page js', function () {
 
   describe('ui/core/styleguide/index//html/01-body/20-header/60-sg-controls/80-sg-tools/li.js', function () {
     describe('.sg-tool', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('Fepper Docs opens in new tab and menu closes', function () {
         $('#sg-tools-toggle').click();
         $$('.sg-tool')[0].click();
@@ -390,6 +441,10 @@ describe('UI compilation of index page js', function () {
 
   describe('ui/core/styleguide/index//html/01-body/40-main/main.js', function () {
     describe('#sg-viewport', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('sends the postMessage to annotate pattern if annotations viewer is toggled on', function () {
         $('#sg-t-toggle').click();
         $('#sg-t-annotations').click();

@@ -1,6 +1,10 @@
 describe('Pattern end-to-end tests', function () {
   describe('annotations-viewer.js', function () {
     describe('click', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('viewall annotations viewer button toggles annotations viewer', function () {
         $('.sg-pop[data-patternpartial="viewall"]').click();
         browser.switchToFrame($('#sg-viewport'));
@@ -22,11 +26,15 @@ menu anchor.</p>
         $('#sg-pattern-toggle-annotations-components-region').click();
         browser.pause(700);
         browser.switchToParentFrame();
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-353px');
+        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
     });
 
     describe('Mousetrap', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('"ctrl+shift+a" toggles annotations viewer', function () {
         browser.switchToFrame($('#sg-viewport'));
         browser.keys(['Control', 'Shift', 'a']);
@@ -47,13 +55,17 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'a']);
         browser.pause(700);
         browser.switchToParentFrame();
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-353px');
+        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
     });
   });
 
   describe('code-viewer.js', function () {
     describe('click', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('viewall code viewer button toggles code viewer', function () {
         $('.sg-pop[data-patternpartial="viewall"]').click();
         browser.switchToFrame($('#sg-viewport'));
@@ -66,11 +78,15 @@ menu anchor.</p>
         $('#sg-pattern-toggle-code-components-region').click();
         browser.pause(700);
         browser.switchToParentFrame();
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-353px');
+        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
     });
 
     describe('Mousetrap', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('"ctrl+shift+c" toggles code viewer', function () {
         browser.switchToFrame($('#sg-viewport'));
         browser.keys(['Control', 'Shift', 'c']);
@@ -82,7 +98,7 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
         browser.switchToParentFrame();
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-353px');
+        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
 
       it('"ctrl+shift+y" selects the HTML tab in code viewer', function () {
@@ -138,6 +154,10 @@ menu anchor.</p>
   });
 
   describe('html-scraper-ajax.js', function () {
+    before(function () {
+      browser.setWindowSize(1024, 640);
+    });
+
     beforeEach(function () {
       $('.sg-nav-scrape').$('.sg-acc-handle').click();
       $('.sg-nav-scrape').$('.sg-pop').click();
@@ -264,6 +284,10 @@ menu anchor.</p>
   });
 
   describe('html-scraper-dhtml.js', function () {
+    before(function () {
+      browser.setWindowSize(1024, 640);
+    });
+
     beforeEach(function () {
       $('.sg-nav-scrape').$('.sg-acc-handle').click();
       $('.sg-nav-scrape').$('.sg-pop').click();
@@ -364,6 +388,10 @@ menu anchor.</p>
 
   describe('pattern-finder.js', function () {
     describe('Mousetrap', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('"ctrl+shift+f" toggles Pattern Finder', function () {
         $('.sg-nav-elements').$('.sg-acc-handle').click();
         expect($('.sg-nav-elements').$('.sg-acc-handle').getAttribute('class')).to.have.string('active');
@@ -386,6 +414,10 @@ menu anchor.</p>
 
   describe('patternlab-viewer.js', function () {
     describe('click', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('bodyClick closes nav panels', function () {
         $('.sg-nav-elements').$('.sg-acc-handle').click();
         expect($('.sg-nav-elements').$('.sg-acc-handle').getAttribute('class')).to.have.string('active');
@@ -411,12 +443,16 @@ menu anchor.</p>
     });
 
     describe('Mousetrap', function () {
+      before(function () {
+        browser.setWindowSize(1024, 640);
+      });
+
       it('"ctrl+alt+w" resizes to whole width', function () {
         browser.switchToFrame($('#sg-viewport'));
         browser.keys(['Control', 'Alt', 'w']);
         browser.pause(1000);
         browser.switchToParentFrame();
-        expect($('#sg-viewport').getSize().width).to.equal(1200);
+        expect($('#sg-viewport').getSize().width).to.equal(1024);
       });
 
       it('"ctrl+alt+r" resizes to a random width', function () {
@@ -484,7 +520,7 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'w']);
         browser.switchToParentFrame();
         browser.pause(1000);
-        expect($('#sg-viewport').getSize().width).to.equal(1200);
+        expect($('#sg-viewport').getSize().width).to.equal(1024);
       });
 
       it('"ctrl+shift+s" resizes to Small', function () {

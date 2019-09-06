@@ -1,20 +1,10 @@
 language: node_js
+os: osx
 node_js:
   - "12"
-matrix:
-  include:
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - google-chrome
-          packages:
-            - fonts-liberation
-            - google-chrome-stable
-    - os: osx
-      addons:
-        homebrew:
-          casks:
-            - google-chrome
+addons:
+  homebrew:
+    casks:
+      - google-chrome
 after_script:
   - npm run coverage
