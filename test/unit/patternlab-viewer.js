@@ -314,6 +314,7 @@ describe('patternlabViewer', function () {
         global.location.search = '?grow=true';
         const swOrig = uiProps.sw;
 
+        $orgs['#sg-size-grow'].dispatchAction('blur');
         // Decrease window width so we have a short, but accurate test.
         $orgs.window.dispatchAction('innerWidth', uiProps.minViewportWidth + 5);
 
@@ -347,7 +348,7 @@ describe('patternlabViewer', function () {
           // Restore original window width.
           $orgs.window.dispatchAction('innerWidth', swOrig);
           done();
-        }, uiProps.timeoutDefault * 2);
+        }, uiProps.timeoutDefault);
       });
 
       it('sizes viewport with a "w" search param', function () {
