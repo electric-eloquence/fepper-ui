@@ -292,6 +292,8 @@ describe('patternlabViewer', function () {
         const growIdDuring = fepperUi.uiProps.growId;
 
         setTimeout(() => {
+          uiFns.stopGrow();
+
           expect(discoModeBefore).to.be.false;
           expect(discoIdBefore).to.not.be.ok;
           expect(documentStateBefore.activeOrganism).to.be.null;
@@ -314,7 +316,6 @@ describe('patternlabViewer', function () {
         global.location.search = '?grow=true';
         const swOrig = uiProps.sw;
 
-        $orgs['#sg-size-grow'].dispatchAction('blur');
         // Decrease window width so we have a short, but accurate test.
         $orgs.window.dispatchAction('innerWidth', uiProps.minViewportWidth + 5);
 
@@ -333,6 +334,8 @@ describe('patternlabViewer', function () {
         const growIdDuring = fepperUi.uiProps.growId;
 
         setTimeout(() => {
+          uiFns.stopGrow();
+
           expect(discoModeBefore).to.be.false;
           expect(discoIdBefore).to.not.be.ok;
           expect(documentStateBefore.activeOrganism).to.be.null;
