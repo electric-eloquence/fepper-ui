@@ -7,6 +7,7 @@ describe('UI compilation of index page js', function () {
         expect($('#sg-nav-target').getAttribute('class')).to.have.string('active');
         expect($('.sg-acc-handle').getAttribute('class')).to.not.have.string('active');
         expect($('.sg-acc-panel').getAttribute('class')).to.not.have.string('active');
+        browser.pause(100);
         $('.sg-acc-handle').click();
         expect($('.sg-acc-handle').getAttribute('class')).to.have.string('active');
         expect($('.sg-acc-panel').getAttribute('class')).to.have.string('active');
@@ -328,10 +329,12 @@ describe('UI compilation of index page js', function () {
 
       it('click toggles annotations viewer', function () {
         $('#sg-t-toggle').click();
+        browser.pause(100);
         // Open code viewer first to make sure it gets closed.
         $('#sg-t-code').click();
         browser.pause(700);
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-t-annotations').click();
         browser.pause(700);
         expect($('#sg-t-code').getAttribute('class')).to.not.have.string('active');
@@ -341,6 +344,7 @@ describe('UI compilation of index page js', function () {
         expect($('#sg-view').getAttribute('class')).to.not.have.string('active');
         expect($('#sg-t-toggle').getAttribute('class')).to.not.have.string('active');
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-t-annotations').click();
         browser.pause(700);
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
@@ -357,10 +361,12 @@ describe('UI compilation of index page js', function () {
 
       it('click toggles code viewer', function () {
         $('#sg-t-toggle').click();
+        browser.pause(100);
         // Open annotations viewer first to make sure it gets closed.
         $('#sg-t-annotations').click();
         browser.pause(700);
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
         expect($('#sg-t-annotations').getAttribute('class')).to.not.have.string('active');
@@ -370,6 +376,7 @@ describe('UI compilation of index page js', function () {
         expect($('#sg-view').getAttribute('class')).to.not.have.string('active');
         expect($('#sg-t-toggle').getAttribute('class')).to.not.have.string('active');
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
@@ -386,6 +393,7 @@ describe('UI compilation of index page js', function () {
 
       it('pattern opens in new tab and menu closes', function () {
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-raw').click();
 
         const windowHandles = browser.getWindowHandles();
@@ -409,6 +417,7 @@ describe('UI compilation of index page js', function () {
 
       it('Fepper Docs opens in new tab and menu closes', function () {
         $('#sg-tools-toggle').click();
+        browser.pause(100);
         $$('.sg-tool')[0].click();
 
         const windowHandles = browser.getWindowHandles();
@@ -425,6 +434,7 @@ describe('UI compilation of index page js', function () {
 
       it('Keyboard Shortcuts opens in new tab and menu closes', function () {
         $('#sg-tools-toggle').click();
+        browser.pause(100);
         $$('.sg-tool')[2].click();
 
         const windowHandles = browser.getWindowHandles();
@@ -447,6 +457,7 @@ describe('UI compilation of index page js', function () {
 
       it('sends the postMessage to annotate pattern if annotations viewer is toggled on', function () {
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-t-annotations').click();
         browser.pause(700);
         browser.switchToFrame($('#sg-viewport'));
@@ -467,6 +478,7 @@ describe('UI compilation of index page js', function () {
 
       it('sends the postMessage to load code for pattern if code viewer is toggled on', function () {
         $('#sg-t-toggle').click();
+        browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
         expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');

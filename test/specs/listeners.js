@@ -228,7 +228,6 @@ menu anchor.</p>
 
       it('"ctrl+shift+f" closes patternFinder while focus is outside patternFinder', function () {
         $('#sg-f-toggle').click();
-        browser.pause(100);
         expect($('#sg-f-toggle').getAttribute('class')).to.have.string('active');
         expect($('#sg-find').getAttribute('class')).to.have.string('active');
         browser.keys('Tab');
@@ -248,7 +247,6 @@ menu anchor.</p>
 
       it('"esc" closes patternFinder while focus is outside patternFinder', function () {
         $('#sg-f-toggle').click();
-        browser.pause(100);
         expect($('#sg-f-toggle').getAttribute('class')).to.have.string('active');
         expect($('#sg-find').getAttribute('class')).to.have.string('active');
         browser.keys('Tab');
