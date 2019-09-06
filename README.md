@@ -35,7 +35,7 @@ for more information.
 [snyk-image]: https://snyk.io//test/github/electric-eloquence/fepper-ui/master/badge.svg
 [snyk-url]: https://snyk.io//test/github/electric-eloquence/fepper-ui/master
 
-[travis-image]: https://travis-ci.org/electric-eloquence/fepper-ui.svg?label=mac%20%26%20linux
+[travis-image]: https://img.shields.io/travis/electric-eloquence/fepper-npm.svg
 [travis-url]: https://travis-ci.org/electric-eloquence/fepper-ui
 
 [coveralls-image]: https://img.shields.io/coveralls/electric-eloquence/fepper-ui/master.svg
