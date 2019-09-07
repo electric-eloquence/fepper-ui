@@ -1,3 +1,6 @@
+/**
+ * e2e test server and runner.
+ */
 const {spawn} = require('child_process');
 
 require('./serve').then((server) => {

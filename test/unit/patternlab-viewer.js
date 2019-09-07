@@ -3,7 +3,7 @@ import fs from 'fs';
 import sinon from 'sinon';
 
 import PatternlabViewer from '../../scripts/classes/patternlab-viewer';
-import fepperUi from '../init';
+import fepperUi from '../unit';
 
 const sandbox = sinon.createSandbox();
 

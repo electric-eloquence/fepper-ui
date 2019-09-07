@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 
-import fepperUi from '../init';
+import fepperUi from '../unit';
 
 const $orgs = fepperUi.requerio.$orgs;
 const uiComp = fepperUi.uiComp;

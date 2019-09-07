@@ -1,4 +1,3 @@
-import * as uiData from '../ui/data.js';
 import UiFns from '../ui/functions.js';
 import UiProps from '../ui/properties.js';
 import DataSaver from '../classes/data-saver.js';
@@ -10,11 +9,11 @@ import Timestamper from '../classes/timestamper.js';
 import UrlHandler from '../classes/url-handler.js';
 
 export default class FepperUi {
-  constructor(Requerio, $scoped, ReduxScoped, $organisms, root, uiData_) {
+  constructor(Requerio, $scoped, ReduxScoped, $organisms, root, uiData) {
     this.requerio = new Requerio($scoped, ReduxScoped, $organisms);
     this.requerio.init();
 
-    this.uiData = uiData_ || uiData;
+    this.uiData = uiData;
     this.uiFns = new UiFns(this, root);
     this.uiProps = new UiProps(this, root);
     this.cookies = new root.UniversalCookie();

@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 
 import CodeViewer from '../../scripts/classes/code-viewer';
-import fepperUi from '../init';
+import fepperUi from '../unit';
 
 const $orgs = fepperUi.requerio.$orgs;
 const annotationsViewer = fepperUi.annotationsViewer;

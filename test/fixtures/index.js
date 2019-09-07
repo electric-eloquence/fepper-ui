@@ -13,7 +13,7 @@ const listeners = new Listeners(fepperUi);
 fepperUi.uiComp = uiComp;
 
 Object.keys(fepperUi).forEach((classKey) => {
-  if (typeof fepperUi[classKey] === 'object' && typeof fepperUi[classKey].stoke === 'function') {
+  if (fepperUi[classKey] instanceof Object && typeof fepperUi[classKey].stoke === 'function') {
     fepperUi[classKey].stoke();
   }
 });

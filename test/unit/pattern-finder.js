@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import sinon from 'sinon';
 
 import PatternFinder from '../../scripts/classes/pattern-finder';
-import fepperUi from '../init';
+import fepperUi from '../unit';
 
 const sandbox = sinon.createSandbox();
 

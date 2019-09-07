@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import sinon from 'sinon';
 
-import fepperUi from '../init';
+import fepperUi from '../unit';
 
 const sandbox = sinon.createSandbox();
 

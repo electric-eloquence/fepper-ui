@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 
 import Timestamper from '../../scripts/classes/timestamper';
-import fepperUi from '../init';
+import fepperUi from '../unit';
 
 const timestamper = fepperUi.timestamper;
 

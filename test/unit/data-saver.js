@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 
 import DataSaver from '../../scripts/classes/data-saver';
-import fepperUi from '../init';
+import fepperUi from '../unit';
 
 const dataSaver = fepperUi.dataSaver;
 
