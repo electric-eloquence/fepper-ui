@@ -3,7 +3,7 @@ import FepperUi from './requerio/fepper-ui.js';
 import Requerio from '../node_modules/requerio/src/requerio.js';
 import $organisms from './requerio/organisms.js';
 import Listeners from './listeners/index.js';
-import * as uiComp from '../ui/compilation.js';
+import * as uiComp from './ui/compilation.js';
 
 window.Feplet = Feplet;
 
