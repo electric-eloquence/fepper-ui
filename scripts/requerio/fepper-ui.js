@@ -9,8 +9,8 @@ import Timestamper from '../classes/timestamper.js';
 import UrlHandler from '../classes/url-handler.js';
 
 export default class FepperUi {
-  constructor(Requerio, $scoped, ReduxScoped, $organisms, root, uiData) {
-    this.requerio = new Requerio($scoped, ReduxScoped, $organisms);
+  constructor(Requerio, jQueryOrCheerio, Redux, $organisms, root, uiData) {
+    this.requerio = new Requerio(jQueryOrCheerio, Redux, $organisms);
     this.requerio.init();
 
     this.uiData = uiData;
