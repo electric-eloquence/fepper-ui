@@ -101,17 +101,17 @@ export default class {
 
     // Do same thing with fepper-obj.js, overriding any values conflicting with those in variables.styl.
     if (FEPPER.breakpoints && typeof FEPPER.breakpoints === 'object') {
-      for (let key in FEPPER.breakpoints) {
+      for (let bpName in FEPPER.breakpoints) {
         /* istanbul ignore if */
-        if (typeof FEPPER.breakpoints[key].maxWidth === 'undefined') {
+        if (typeof FEPPER.breakpoints[bpName].maxWidth === 'undefined') {
           continue;
         }
 
-        if (FEPPER.breakpoints[key].maxWidth < 0) {
-          bpObjTmp[key] = MAX_SAFE_INTEGER;
+        if (FEPPER.breakpoints[bpName].maxWidth < 0) {
+          bpObjTmp[bpName] = MAX_SAFE_INTEGER;
         }
         else {
-          bpObjTmp[key] = FEPPER.breakpoints[key].maxWidth;
+          bpObjTmp[bpName] = FEPPER.breakpoints[bpName].maxWidth;
         }
       }
     }
