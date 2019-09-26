@@ -88,13 +88,13 @@ export default class {
     // Iterate through `window` or `global` to check for properties set by variables.styl.
     // If found, populate the tmp object for sorting.
     // Replace -1 (or any negative value) with MAX_SAFE_INTEGER.
-    for (let key in root) {
-      if (key.indexOf('bp_') === 0 && key.indexOf('_max') === key.length - 4) {
-        if (root[key] < 0) {
-          bpObjTmp[key.slice(3, key.length - 4)] = MAX_SAFE_INTEGER;
+    for (let globalVar in root) {
+      if (globalVar.indexOf('bp_') === 0 && globalVar.indexOf('_max') === globalVar.length - 4) {
+        if (root[globalVar] < 0) {
+          bpObjTmp[globalVar.slice(3, globalVar.length - 4)] = MAX_SAFE_INTEGER;
         }
         else {
-          bpObjTmp[key.slice(3, key.length - 4)] = root[key];
+          bpObjTmp[globalVar.slice(3, globalVar.length - 4)] = root[globalVar];
         }
       }
     }
