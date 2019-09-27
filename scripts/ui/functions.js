@@ -103,7 +103,7 @@ export default class {
     if (FEPPER.breakpoints instanceof Object) {
       for (let i in FEPPER.breakpoints) {
         /* istanbul ignore if */
-        if (!FEPPER.breakpoints[i] instanceof Object || typeof FEPPER.breakpoints[i].maxWidth !== 'number') {
+        if (!(FEPPER.breakpoints[i] instanceof Object) || typeof FEPPER.breakpoints[i].maxWidth !== 'number') {
           continue;
         }
 

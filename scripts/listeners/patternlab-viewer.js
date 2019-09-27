@@ -34,11 +34,7 @@ export default class {
       );
 
       // Click handlers for viewport resize buttons.
-      for (let bp in this.uiProps.bpObj) {
-        if (!this.uiProps.bpObj.hasOwnProperty(bp)) {
-          continue;
-        }
-
+      for (let bp of Object.keys(this.uiProps.bpObj)) {
         this.$orgs['#sg-size-' + bp].on('click', (e) => {
           e.preventDefault();
 

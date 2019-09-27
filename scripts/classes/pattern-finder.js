@@ -38,12 +38,7 @@ export default class {
     this.uiFns = fepperUi.uiFns;
     this.uiProps = fepperUi.uiProps;
 
-    for (let patternPartial in this.patternPaths) {
-      /* istanbul ignore next */
-      if (!this.patternPaths.hasOwnProperty(patternPartial)) {
-        continue;
-      }
-
+    for (let patternPartial of Object.keys(this.patternPaths)) {
       const obj = {
         patternPartial,
         patternPath: this.patternPaths[patternPartial]

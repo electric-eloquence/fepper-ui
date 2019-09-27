@@ -32,18 +32,10 @@ describe('patternFinder', function () {
     });
 
     it('initializes correctly', function () {
-      let i = 0;
-
-      for (let patternPartial in patternFinder.patternPaths) {
-        if (!patternFinder.patternPaths.hasOwnProperty(patternPartial)) {
-          continue;
-        }
-
+      Object.keys(patternFinder.patternPaths).forEach((patternPartial, i) => {
         expect(patternFinder.data[i].patternPartial).to.equal(patternPartial);
         expect(patternFinder.data[i].patternPath).to.equal(patternFinder.patternPaths[patternPartial]);
-
-        i++;
-      }
+      });
 
       expect(patternFinder.patterns).to.be.an.instanceof(global.Bloodhound);
     });
