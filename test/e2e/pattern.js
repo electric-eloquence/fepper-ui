@@ -435,10 +435,12 @@ menu anchor.</p>
         $('.sg-nav-compounds').$('.sg-acc-handle').click();
         browser.pause(100);
         $('.sg-nav-compounds').$('.sg-pop').click();
+        browser.pause(100);
         expect($('#sg-raw').getAttribute('href'))
           .to.equal('http://localhost:8080/patterns/01-compounds-block/01-compounds-block.html');
         browser.switchToFrame($('#sg-viewport'));
         $('a').click();
+        browser.pause(100);
         browser.switchToParentFrame();
         expect($('#sg-raw').getAttribute('href'))
           .to.equal('http://localhost:8080/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
