@@ -282,6 +282,7 @@ menu anchor.</p>
         $('.sg-nav-elements').$('.sg-acc-handle').click();
         browser.pause(100);
         $('.sg-nav-elements').$('.sg-pop').click();
+        browser.pause(100);
         expect($('#sg-raw').getAttribute('href'))
           .to.equal('http://localhost:8080/patterns/00-elements-anchor/00-elements-anchor.html');
       });
@@ -459,6 +460,7 @@ menu anchor.</p>
       $('.sg-nav-components').$('.sg-acc-handle').click();
       browser.pause(100);
       $('.sg-nav-components').$('.sg-pop').click();
+      browser.pause(100);
       browser.back();
       expect($('#sg-raw').getAttribute('href'))
         .to.equal('http://localhost:8080/patterns/01-compounds-block/01-compounds-block.html');
