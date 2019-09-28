@@ -2,7 +2,7 @@ import Feplet from '../node_modules/feplet/dist/feplet.browser.es6.min.js';
 import FepperUi from './requerio/fepper-ui.js';
 import Listeners from './listeners/index.js';
 import $organisms from './requerio/organisms.js';
-import Requerio from '../node_modules/requerio/src/requerio.js';
+import Requerio from '../node_modules/requerio/dist/requerio.npm.mjs';
 import * as uiComp from './ui/compilation.js';
 import * as uiData from './ui/data.js';
 
