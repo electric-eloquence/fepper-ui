@@ -41,14 +41,14 @@
   },
   "homepage": "https://github.com/electric-eloquence/fepper-ui#readme",
   "dependencies": {
-    "feplet": "*",
+    "feplet": "^1.0.0",
     "he": "1.1.0",
     "jquery": "3.4.1",
     "js-beautify": "1.9.0",
     "mousetrap": "1.6.2",
     "prismjs": "1.5.1",
     "redux": "^4.0.4",
-    "requerio": "*",
+    "requerio": "^0.5.0",
     "typeahead.js": "0.10.5",
     "universal-cookie": "^4.0.2",
     "wolfy87-eventemitter": "4.2.11"
