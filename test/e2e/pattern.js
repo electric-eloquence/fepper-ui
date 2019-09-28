@@ -179,6 +179,7 @@ menu anchor.</p>
       $('[name="filename"]').click();
       $('[name="filename"]').setValue('test');
       $('[name="import-form"]').click();
+      browser.pause(100);
       expect($('html').getHTML(false)).to.equal(`<head>
     <title id="title">Fepper HTML Scraper</title>
     <meta charset="UTF-8">
