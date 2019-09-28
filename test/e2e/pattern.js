@@ -306,6 +306,7 @@ menu anchor.</p>
       $('[name="selector"]').click();
       $('[name="selector"]').setValue('p');
       $('[name="url-form"]').click();
+      browser.pause(100);
       expect($('html').getHTML(false)).to.equal(`<head>
     <title id="title">Fepper HTML Scraper</title>
     <meta charset="UTF-8">
