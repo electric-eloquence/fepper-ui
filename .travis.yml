@@ -7,6 +7,6 @@ branches:
   - master
   - release
 before_install:
-  -  brew cask install google-chrome
+  - brew cask install google-chrome
 after_script:
   - npm run coverage
