@@ -12,10 +12,10 @@ const fepperUi = new FepperUi(Requerio, window.$, window.Redux, $organisms, wind
 const listeners = new Listeners(fepperUi);
 fepperUi.uiComp = uiComp;
 
-Object.keys(fepperUi).forEach((classKey) => {
+for (let classKey of Object.keys(fepperUi)) {
   if (fepperUi[classKey] instanceof Object && typeof fepperUi[classKey].stoke === 'function') {
     fepperUi[classKey].stoke();
   }
-});
+}
 
 listeners.listen();

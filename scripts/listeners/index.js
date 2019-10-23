@@ -23,11 +23,11 @@ export default class {
   }
 
   listen() {
-    Object.keys(this).forEach((classKey) => {
+    for (let classKey of Object.keys(this)) {
       if (this[classKey] instanceof Object && typeof this[classKey].listen === 'function') {
         this[classKey].listen();
       }
-    });
+    }
 
     const annotationsViewer = this.fepperUi.annotationsViewer;
     const codeViewer = this.fepperUi.codeViewer;
