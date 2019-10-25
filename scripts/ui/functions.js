@@ -1,19 +1,29 @@
 let root;
+let fepperUiInst;
 
 export default class {
 
   /**
    * UI Functions. Various and sundry utility functions.
-   * This gets instantiated before nearly everything else, so uiProps, dataSaver, etc. are undefined at instantiation.
-   * Cannot attach them to `this` in the constructor. Must be accessed through this.fepperUi in the methods.
    *
    * @param {object} fepperUi - The Fepper UI instance.
    * @param {object} root - `global` or `window`.
    */
   constructor(fepperUi, root_) {
     root = root_;
-    this.fepperUi = fepperUi;
-    this.$orgs = fepperUi.requerio.$orgs;
+    fepperUiInst = fepperUi;
+  }
+
+  get dataSaver() {
+    return fepperUiInst.dataSaver;
+  }
+
+  get $orgs() {
+    return fepperUiInst.requerio.$orgs;
+  }
+
+  get uiProps() {
+    return fepperUiInst.uiProps;
   }
 
   /**
@@ -60,7 +70,7 @@ export default class {
    * @param {object} thisArg - What will be passed as the `this` keyword by the .apply() method.
    * @returns {function} The callback set to only run if does not get called back again within the debounce period.
    */
-  debounce(callback, wait = this.fepperUi.uiProps.timeoutDefault, thisArg = null) {
+  debounce(callback, wait = this.uiProps.timeoutDefault, thisArg = null) {
     let timeout = null;
     let callbackArgs = null;
 
@@ -207,12 +217,11 @@ export default class {
       return;
     }
 
-    const uiProps = this.fepperUi.uiProps;
-    const maxViewportWidth = uiProps.maxViewportWidth;
-    const minViewportWidth = uiProps.minViewportWidth;
-    uiProps.wholeMode = wholeMode;
+    const maxViewportWidth = this.uiProps.maxViewportWidth;
+    const minViewportWidth = this.uiProps.minViewportWidth;
+    this.uiProps.wholeMode = wholeMode;
 
-    this.fepperUi.dataSaver.updateValue('wholeMode', wholeMode);
+    this.dataSaver.updateValue('wholeMode', wholeMode);
 
     let size;
 
@@ -240,31 +249,29 @@ export default class {
 
     // Resize viewport wrapper to desired size + size of drag resize handler.
     this.$orgs['#sg-gen-container']
-      .dispatchAction('css', {width: (size + uiProps.sgRightpullWidth) + 'px'});
+      .dispatchAction('css', {width: (size + this.uiProps.sgRightpullWidth) + 'px'});
     // Resize viewport to desired size.
     this.$orgs['#sg-viewport'].dispatchAction('css', {width: size + 'px'});
 
     this.updateSizeReading(size); // Update values in toolbar.
-    this.fepperUi.dataSaver.updateValue('vpWidth', size); // Save current viewport to cookie.
+    this.dataSaver.updateValue('vpWidth', size); // Save current viewport to cookie.
   }
 
   startDisco() {
-    const uiProps = this.fepperUi.uiProps;
-    uiProps.discoMode = true;
+    this.uiProps.discoMode = true;
 
     this.stopGrow();
     this.$orgs['#sg-size-disco'].dispatchAction('focus');
-    this.sizeIframe(this.getRandom(uiProps.minViewportWidth, uiProps.sw));
+    this.sizeIframe(this.getRandom(this.uiProps.minViewportWidth, this.uiProps.sw));
 
-    uiProps.discoId = setInterval(() => {
-      this.sizeIframe(this.getRandom(uiProps.minViewportWidth, uiProps.sw));
+    this.uiProps.discoId = setInterval(() => {
+      this.sizeIframe(this.getRandom(this.uiProps.minViewportWidth, this.uiProps.sw));
     }, 1000);
   }
 
   startGrow() {
-    const uiProps = this.fepperUi.uiProps;
-    let viewportWidth = uiProps.minViewportWidth;
-    uiProps.growMode = true;
+    let viewportWidth = this.uiProps.minViewportWidth;
+    this.uiProps.growMode = true;
 
     this.stopDisco();
     this.$orgs['#sg-gen-container'].dispatchAction('removeClass', 'vp-animate');
@@ -272,8 +279,8 @@ export default class {
     this.$orgs['#sg-size-grow'].dispatchAction('focus');
     this.sizeIframe(viewportWidth, false);
 
-    uiProps.growId = setInterval(() => {
-      if (viewportWidth < uiProps.sw) {
+    this.uiProps.growId = setInterval(() => {
+      if (viewportWidth < this.uiProps.sw) {
         viewportWidth++;
 
         this.sizeIframe(viewportWidth, false);
@@ -285,23 +292,21 @@ export default class {
   }
 
   stopDisco() {
-    const uiProps = this.fepperUi.uiProps;
-    uiProps.discoMode = false;
-    uiProps.discoId = clearInterval(uiProps.discoId);
+    this.uiProps.discoMode = false;
+    this.uiProps.discoId = clearInterval(this.uiProps.discoId);
 
     this.$orgs['#sg-size-disco'].dispatchAction('blur');
   }
 
   stopGrow() {
-    const uiProps = this.fepperUi.uiProps;
-    uiProps.growMode = false;
-    uiProps.growId = clearInterval(uiProps.growId);
+    this.uiProps.growMode = false;
+    this.uiProps.growId = clearInterval(this.uiProps.growId);
 
     this.$orgs['#sg-size-grow'].dispatchAction('blur');
   }
 
   toggleDisco() {
-    if (!this.fepperUi.uiProps.discoMode) {
+    if (!this.uiProps.discoMode) {
       this.startDisco();
     }
     else {
@@ -310,7 +315,7 @@ export default class {
   }
 
   toggleGrow() {
-    if (!this.fepperUi.uiProps.growMode) {
+    if (!this.uiProps.growMode) {
       this.startGrow();
     }
     else {
@@ -325,9 +330,8 @@ export default class {
    * @param {string} path - The URL path to the pattern.
    */
   updatePatternInfo(patternPartial, path) {
-    const uiProps = this.fepperUi.uiProps;
-    const titleSplit = root.document.title.split(uiProps.titleSeparator);
-    root.document.title = titleSplit[0] + uiProps.titleSeparator + patternPartial;
+    const titleSplit = root.document.title.split(this.uiProps.titleSeparator);
+    root.document.title = titleSplit[0] + this.uiProps.titleSeparator + patternPartial;
 
     this.$orgs['#sg-raw'].dispatchAction('attr', {href: path});
   }
@@ -340,8 +344,7 @@ export default class {
    * @param {[string]} target - What input to update.
    */
   updateSizeReading(size, unit, target) {
-    const uiProps = this.fepperUi.uiProps;
-    const bodyFontSize = uiProps.bodyFontSize;
+    const bodyFontSize = this.uiProps.bodyFontSize;
 
     let emSize;
     let pxSize;
@@ -371,7 +374,7 @@ export default class {
    */
   updateViewportWidth(size) {
     this.$orgs['#sg-gen-container']
-      .dispatchAction('css', {width: (size + this.fepperUi.uiProps.sgRightpullWidth) + 'px'});
+      .dispatchAction('css', {width: (size + this.uiProps.sgRightpullWidth) + 'px'});
     this.$orgs['#sg-viewport'].dispatchAction('css', {width: size + 'px'});
     this.updateSizeReading(size);
   }
