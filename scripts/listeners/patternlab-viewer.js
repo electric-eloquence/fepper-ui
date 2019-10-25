@@ -2,7 +2,6 @@
 
 export default class {
   constructor(fepperUi) {
-    this.fepperUi = fepperUi;
     this.$orgs = fepperUi.requerio.$orgs;
     this.uiFns = fepperUi.uiFns;
     this.uiProps = fepperUi.uiProps;

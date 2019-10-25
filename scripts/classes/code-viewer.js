@@ -185,6 +185,7 @@ export default class {
   constructor(fepperUi, root_) {
     root = root_;
     fepperUiInst = fepperUi;
+
     this.codeActive = false;
     this.selectForCopy = false;
     this.encoded = '';

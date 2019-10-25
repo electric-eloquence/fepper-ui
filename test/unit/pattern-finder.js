@@ -25,16 +25,16 @@ describe('patternFinder', function () {
       expect(patternFinder).to.have.property('receiveIframeMessage');
       expect(patternFinder).to.have.property('data');
       expect(patternFinder).to.have.property('$orgs');
-      expect(patternFinder).to.have.property('patternPaths');
+      expect(patternFinder).to.have.property('uiData');
       expect(patternFinder).to.have.property('uiFns');
       expect(patternFinder).to.have.property('uiProps');
       expect(patternFinder).to.have.property('patterns');
     });
 
     it('initializes correctly', function () {
-      Object.keys(patternFinder.patternPaths).forEach((patternPartial, i) => {
+      Object.keys(patternFinder.uiData.patternPaths).forEach((patternPartial, i) => {
         expect(patternFinder.data[i].patternPartial).to.equal(patternPartial);
-        expect(patternFinder.data[i].patternPath).to.equal(patternFinder.patternPaths[patternPartial]);
+        expect(patternFinder.data[i].patternPath).to.equal(patternFinder.uiData.patternPaths[patternPartial]);
       });
 
       expect(patternFinder.patterns).to.be.an.instanceof(global.Bloodhound);

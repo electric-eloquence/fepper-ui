@@ -9,8 +9,9 @@ export default class {
    * @param {object} fepperUi - The Fepper UI instance.
    */
   constructor(cookieName, fepperUi) {
-    this.cookieName = cookieName;
     fepperUiInst = fepperUi;
+
+    this.cookieName = cookieName;
   }
 
   // In case fepperUi.cookies is undefined at instantiation.

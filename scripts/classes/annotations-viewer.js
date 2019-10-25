@@ -66,6 +66,7 @@ export default class {
   constructor(fepperUi, root_) {
     root = root_;
     fepperUiInst = fepperUi;
+
     this.annotationsActive = false;
     this.moveToNumber = 0;
     this.mustacheBrowser = false;

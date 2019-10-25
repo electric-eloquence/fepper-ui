@@ -9,11 +9,11 @@ import UrlHandler from './url-handler.js';
 
 export default class {
   constructor(fepperUi) {
-    this.fepperUi = fepperUi;
     this.$orgs = fepperUi.requerio.$orgs;
     this.uiFns = fepperUi.uiFns;
     this.uiProps = fepperUi.uiProps;
     this.dataSaver = fepperUi.dataSaver;
+
     this.annotationsViewer = new AnnotationsViewer(fepperUi);
     this.codeViewer = new CodeViewer(fepperUi);
     this.mustacheBrowser = new MustacheBrowser(fepperUi);
@@ -28,10 +28,6 @@ export default class {
         this[classKey].listen();
       }
     }
-
-    const annotationsViewer = this.fepperUi.annotationsViewer;
-    const codeViewer = this.fepperUi.codeViewer;
-    const patternFinder = this.fepperUi.patternFinder;
 
     document.addEventListener('DOMContentLoaded', () => {
       const vpWidth = this.dataSaver.findValue('vpWidth');
@@ -78,7 +74,7 @@ export default class {
             return;
           }
 
-          annotationsViewer.slideAnnotations(
+          this.annotationsViewer.slideAnnotations(
             this.$orgs['#sg-annotations-container'].getState().innerHeight
           );
 
@@ -88,7 +84,7 @@ export default class {
             return;
           }
 
-          codeViewer.slideCode(this.$orgs['#sg-code-container'].getState().innerHeight);
+          this.codeViewer.slideCode(this.$orgs['#sg-code-container'].getState().innerHeight);
         }
       }));
     });
@@ -96,15 +92,15 @@ export default class {
     const Mousetrap = window.Mousetrap;
 
     Mousetrap.bind('esc', () => {
-      if (annotationsViewer.annotationsActive) {
-        annotationsViewer.closeAnnotations();
+      if (this.annotationsViewer.annotationsActive) {
+        this.annotationsViewer.closeAnnotations();
       }
 
-      if (codeViewer.codeActive) {
-        codeViewer.closeCode();
+      if (this.codeViewer.codeActive) {
+        this.codeViewer.closeCode();
       }
 
-      patternFinder.closeFinder();
+      this.patternFinder.closeFinder();
     });
   }
 }

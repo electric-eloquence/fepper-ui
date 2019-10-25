@@ -12,6 +12,7 @@ export default class {
   constructor(fepperUi, root_) {
     root = root_;
     fepperUiInst = fepperUi;
+
     this.skipBack = false;
   }
 

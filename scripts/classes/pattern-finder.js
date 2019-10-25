@@ -34,12 +34,13 @@ export default class {
   constructor(fepperUi, root_) {
     root = root_;
     fepperUiInst = fepperUi;
+
     this.data = [];
 
-    for (let patternPartial of Object.keys(this.patternPaths)) {
+    for (let patternPartial of Object.keys(this.uiData.patternPaths)) {
       const obj = {
         patternPartial,
-        patternPath: this.patternPaths[patternPartial]
+        patternPath: this.uiData.patternPaths[patternPartial]
       };
 
       this.data.push(obj);
@@ -68,8 +69,8 @@ export default class {
     return fepperUiInst.requerio.$orgs;
   }
 
-  get patternPaths() {
-    return fepperUiInst.uiData.patternPaths;
+  get uiData() {
+    return fepperUiInst.uiData;
   }
 
   get uiFns() {
