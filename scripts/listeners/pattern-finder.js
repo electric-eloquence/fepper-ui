@@ -3,6 +3,7 @@
 export default class {
   constructor(fepperUi) {
     this.$orgs = fepperUi.requerio.$orgs;
+    this.closeFinder = fepperUi.patternFinder.closeFinder;
     this.patternFinder = fepperUi.patternFinder;
   }
 
