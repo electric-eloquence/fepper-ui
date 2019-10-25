@@ -80,6 +80,8 @@ export default class {
     return fepperUiInst.uiProps;
   }
 
+  // Methods
+
   closeFinder() {
     this.$orgs['#sg-f-toggle'].dispatchAction('removeClass', 'active');
     this.$orgs['#sg-find'].dispatchAction('removeClass', 'active');

@@ -28,6 +28,8 @@ export default class {
     return fepperUiInst.uiProps;
   }
 
+  // Methods.
+
   /**
    * Close all panels. Remove "active" class. No params.
    */

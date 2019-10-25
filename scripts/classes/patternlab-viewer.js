@@ -146,7 +146,9 @@ export default class {
     return fepperUiInst.urlHandler;
   }
 
-  // Declared first because it must be unit tested before the other methods. Be sure to e2e test .stoke().
+  // Methods.
+
+  // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
   stoke() {
     const protocol = root.location.protocol;
 

@@ -33,6 +33,8 @@ export default class {
     return fepperUiInst.uiProps;
   }
 
+  // Methods.
+
   /**
    * Get the URL to display a pattern in the viewer. Use this to replace the existing URL in the browser address bar.
    *

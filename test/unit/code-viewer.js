@@ -12,10 +12,10 @@ describe('codeViewer', function () {
     it('instantiates correctly', function () {
       expect(codeViewer).to.be.an.instanceof(CodeViewer);
       expect(Object.keys(codeViewer).length).to.equal(11);
-      expect(codeViewer).to.have.property('printXHRErrorClosure');
+      expect(codeViewer).to.have.property('getPrintXHRErrorFunction');
       expect(codeViewer).to.have.property('receiveIframeMessage');
-      expect(codeViewer).to.have.property('saveEncodedClosure');
-      expect(codeViewer).to.have.property('saveMustacheClosure');
+      expect(codeViewer).to.have.property('getSaveEncodedFunction');
+      expect(codeViewer).to.have.property('getSaveMustacheFunction');
       expect(codeViewer).to.have.property('$orgs');
       expect(codeViewer).to.have.property('uiData');
       expect(codeViewer).to.have.property('uiFns');
@@ -182,11 +182,11 @@ describe('codeViewer', function () {
     });
   });
 
-  describe('.saveEncodedClosure()', function () {
+  describe('.getSaveEncodedFunction()', function () {
     it('returns a function that saves encoded HTML', function () {
       codeViewer.encoded = '';
       codeViewer.tabActive = 'e';
-      const saveEncoded = codeViewer.saveEncodedClosure(codeViewer).bind({responseText: 'encoded'});
+      const saveEncoded = codeViewer.getSaveEncodedFunction(codeViewer).bind({responseText: 'encoded'});
 
       $orgs['#sg-code-title-html'].dispatchAction('removeClass', 'sg-code-title-active');
       $orgs['#sg-code-title-mustache'].dispatchAction('removeClass', 'sg-code-title-active');
@@ -211,11 +211,11 @@ describe('codeViewer', function () {
     });
   });
 
-  describe('.saveMustacheClosure()', function () {
+  describe('.getSaveMustacheFunction()', function () {
     it('returns a function that saves Mustache-like Feplet', function () {
       codeViewer.mustache = '';
       codeViewer.tabActive = 'm';
-      const saveMustache = codeViewer.saveMustacheClosure(codeViewer).bind({responseText: 'mustache'});
+      const saveMustache = codeViewer.getSaveMustacheFunction(codeViewer).bind({responseText: 'mustache'});
 
       $orgs['#sg-code-title-html'].dispatchAction('removeClass', 'sg-code-title-active');
       $orgs['#sg-code-title-mustache'].dispatchAction('removeClass', 'sg-code-title-active');
@@ -603,7 +603,7 @@ describe('codeViewer', function () {
       };
       codeViewer.tabActive = 'e';
       const printXHRError =
-        codeViewer.printXHRErrorClosure(codeViewer).bind({status: 418, statusText: 'I\'m a teapot'});
+        codeViewer.getPrintXHRErrorFunction(codeViewer).bind({status: 418, statusText: 'I\'m a teapot'});
 
       $orgs['#sg-code-title-html'].dispatchAction('removeClass', 'sg-code-title-active');
       $orgs['#sg-code-title-mustache'].dispatchAction('removeClass', 'sg-code-title-active');
@@ -632,7 +632,7 @@ describe('codeViewer', function () {
         protocol: 'file:'
       };
       codeViewer.tabActive = 'm';
-      const printXHRError = codeViewer.printXHRErrorClosure(codeViewer).bind({});
+      const printXHRError = codeViewer.getPrintXHRErrorFunction(codeViewer).bind({});
 
       $orgs['#sg-code-title-html'].dispatchAction('removeClass', 'sg-code-title-active');
       $orgs['#sg-code-title-mustache'].dispatchAction('removeClass', 'sg-code-title-active');

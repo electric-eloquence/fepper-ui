@@ -26,9 +26,9 @@ function addLineageListeners($orgs, uiProps) {
 }
 
 export default class {
-  // Declared as class field to retain function-scoped `this` context while keeping the class constructor tidy.
+  // Declared as a class field to retain function-scoped `this` context while keeping the class constructor tidy.
   // Exposed as property on the instance so it can be unit tested.
-  printXHRErrorClosure = (codeViewer) => {
+  getPrintXHRErrorFunction = (codeViewer) => {
     return function () {
       let error;
 
@@ -127,9 +127,9 @@ export default class {
 
   // This runs once the AJAX request for the encoded markup is finished.
   // If the encoded tab is the current active tab, it adds the content to the default code container.
-  // Declared as class field to retain function-scoped `this` context while keeping the class constructor tidy.
+  // Declared as a class field to retain function-scoped `this` context while keeping the class constructor tidy.
   // Exposed as property on the instance so it can be unit tested.
-  saveEncodedClosure = (codeViewer) => {
+  getSaveEncodedFunction = (codeViewer) => {
     return function () {
       let encoded = this.responseText;
 
@@ -168,9 +168,9 @@ export default class {
 
   // Run this once the AJAX request for the mustache markup has finished.
   // If the mustache tab is the current active tab, add the content to the default code container.
-  // Declared as class field to retain function-scoped `this` context while keeping the class constructor tidy.
+  // Declared as a class field to retain function-scoped `this` context while keeping the class constructor tidy.
   // Exposed as property on the instance so it can be unit tested.
-  saveMustacheClosure = (codeViewer) => {
+  getSaveMustacheFunction = (codeViewer) => {
     return function () {
       let mustache = this.responseText;
       mustache = root.he.encode(mustache);
@@ -220,7 +220,9 @@ export default class {
     return fepperUiInst.urlHandler;
   }
 
-  // Declared first because it must be unit tested before the other methods. Be sure to e2e test .stoke().
+  // Methods.
+
+  // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
   stoke() {
     // Load the query strings in case code view has to show by default.
     const searchParams = this.urlHandler.getSearchParams();
@@ -492,15 +494,15 @@ export default class {
 
     // Request the encoded markup version of the pattern.
     const e = new root.XMLHttpRequest();
-    e.onload = this.saveEncodedClosure(this);
-    e.onerror = this.printXHRErrorClosure(this);
+    e.onload = this.getSaveEncodedFunction(this);
+    e.onerror = this.getPrintXHRErrorFunction(this);
     e.open('GET', filename.replace(/\.html/, '.markup-only.html') + '?' + (new Date()).getTime(), true);
     e.send();
 
     // Request the Mustache markup version of the pattern.
     const m = new root.XMLHttpRequest();
-    m.onload = this.saveMustacheClosure(this);
-    m.onerror = this.printXHRErrorClosure(this);
+    m.onload = this.getSaveMustacheFunction(this);
+    m.onerror = this.getPrintXHRErrorFunction(this);
     m.open('GET', filename.replace(/\.html/, patternExtension) + '?' + (new Date()).getTime(), true);
     m.send();
   }

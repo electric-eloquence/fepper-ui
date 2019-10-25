@@ -18,6 +18,8 @@ export default class {
     return fepperUiInst.cookies;
   }
 
+  // Methods.
+
   /**
    * Add a given value to the cookie. Do not update if it already exists.
    *
