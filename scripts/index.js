@@ -10,6 +10,7 @@ window.Feplet = Feplet;
 
 const fepperUi = new FepperUi(Requerio, window.$, window.Redux, $organisms, window, uiData);
 const listeners = new Listeners(fepperUi);
+// uiComp allows for UI customization. Defining after instantiation so tests can use a non-customized compilation.
 fepperUi.uiComp = uiComp;
 
 for (let classKey of Object.keys(fepperUi)) {
