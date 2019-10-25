@@ -1,4 +1,5 @@
 let root;
+let fepperUiInst;
 
 export default class {
 
@@ -10,11 +11,26 @@ export default class {
    */
   constructor(fepperUi, root_) {
     root = root_;
-    this.$orgs = fepperUi.requerio.$orgs;
-    this.patternPaths = fepperUi.uiData.patternPaths;
+    fepperUiInst = fepperUi;
     this.skipBack = false;
-    this.uiFns = fepperUi.uiFns;
-    this.uiProps = fepperUi.uiProps;
+  }
+
+  // Getters for fepperUi instance props in case they are undefined at instantiation.
+
+  get $orgs() {
+    return fepperUiInst.requerio.$orgs;
+  }
+
+  get uiData() {
+    return fepperUiInst.uiData;
+  }
+
+  get uiFns() {
+    return fepperUiInst.uiFns;
+  }
+
+  get uiProps() {
+    return fepperUiInst.uiProps;
   }
 
   /**
@@ -72,7 +88,7 @@ export default class {
       return;
     }
 
-    const iframePath = this.patternPaths[patternPartial];
+    const iframePath = this.uiData.patternPaths[patternPartial];
     const obj = {event: 'patternlab.updatePath', path: iframePath};
     const pParam = this.getSearchParams().p;
 
@@ -96,6 +112,6 @@ export default class {
     const data = {pattern: patternPartial};
 
     root.history.pushState(data, null, addressReplacement);
-    this.uiFns.updatePatternInfo(patternPartial, this.patternPaths[patternPartial]);
+    this.uiFns.updatePatternInfo(patternPartial, this.uiData.patternPaths[patternPartial]);
   }
 }

@@ -9,7 +9,7 @@ describe('timestamper', function () {
   describe('.constructor()', function () {
     it('works', function () {
       expect(timestamper).to.be.an.instanceof(Timestamper);
-      expect(Object.keys(timestamper).length).to.equal(1);
+      expect(Object.keys(timestamper).length).to.equal(0);
       expect(timestamper).to.have.property('cookies');
     });
   });

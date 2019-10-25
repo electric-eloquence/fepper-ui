@@ -1,9 +1,15 @@
 let root;
+let fepperUiInst;
 
 export default class {
   constructor(fepperUi, root_) {
     root = root_;
-    this.cookies = fepperUi.cookies;
+    fepperUiInst = fepperUi;
+  }
+
+  // In case fepperUi.cookies is undefined at instantiation.
+  get cookies() {
+    return fepperUiInst.cookies;
   }
 
   stoke() {
