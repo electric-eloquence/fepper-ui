@@ -3,6 +3,7 @@
  * Licensed under the MIT license
  */
 let root;
+let fepperUiInst;
 
 export default class {
   // Declared as a class field to retain the Event function prototype while keeping the class constructor tidy.
@@ -32,11 +33,8 @@ export default class {
 
   constructor(fepperUi, root_) {
     root = root_;
+    fepperUiInst = fepperUi;
     this.data = [];
-    this.$orgs = fepperUi.requerio.$orgs;
-    this.patternPaths = fepperUi.uiData.patternPaths;
-    this.uiFns = fepperUi.uiFns;
-    this.uiProps = fepperUi.uiProps;
 
     for (let patternPartial of Object.keys(this.patternPaths)) {
       const obj = {
@@ -62,6 +60,24 @@ export default class {
 
     // Initialize the bloodhound suggestion engine.
     this.patterns.initialize();
+  }
+
+  // Getters for fepperUi instance props in case they are undefined at instantiation.
+
+  get $orgs() {
+    return fepperUiInst.requerio.$orgs;
+  }
+
+  get patternPaths() {
+    return fepperUiInst.uiData.patternPaths;
+  }
+
+  get uiFns() {
+    return fepperUiInst.uiFns;
+  }
+
+  get uiProps() {
+    return fepperUiInst.uiProps;
   }
 
   closeFinder() {

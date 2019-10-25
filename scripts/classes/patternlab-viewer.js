@@ -5,6 +5,7 @@
  * Licensed under the MIT license.
  */
 let root;
+let fepperUiInst;
 
 export default class {
   // Declared as a class field to retain the Event function prototype while keeping the class constructor tidy.
@@ -112,21 +113,41 @@ export default class {
 
   constructor(fepperUi, root_) {
     root = root_;
-    this.fepperUi = fepperUi;
-    this.$orgs = fepperUi.requerio.$orgs;
-    this.uiData = fepperUi.uiData;
-    this.uiFns = fepperUi.uiFns;
-    this.uiProps = fepperUi.uiProps;
-    this.patternPaths = fepperUi.uiData.patternPaths;
-    this.dataSaver = null;
-    this.urlHandler = null;
+    fepperUiInst = fepperUi;
+  }
+
+  // Getters for fepperUi instance props in case they are undefined at instantiation.
+
+  get dataSaver() {
+    return fepperUiInst.dataSaver;
+  }
+
+  get $orgs() {
+    return fepperUiInst.requerio.$orgs;
+  }
+
+  get requerio() {
+    return fepperUiInst.requerio;
+  }
+
+  get uiData() {
+    return fepperUiInst.uiData;
+  }
+
+  get uiFns() {
+    return fepperUiInst.uiFns;
+  }
+
+  get uiProps() {
+    return fepperUiInst.uiProps;
+  }
+
+  get urlHandler() {
+    return fepperUiInst.urlHandler;
   }
 
   // Declared first because it must be unit tested before the other methods. Be sure to e2e test .stoke().
   stoke() {
-    this.dataSaver = this.fepperUi.dataSaver;
-    this.urlHandler = this.fepperUi.urlHandler;
-
     const protocol = root.location.protocol;
 
     // Use CSS to hide scrape menu if using "file:" protocol.
@@ -199,7 +220,7 @@ export default class {
       patternPartial = 'viewall';
     }
 
-    const iframePath = this.patternPaths[patternPartial];
+    const iframePath = this.uiData.patternPaths[patternPartial];
     this.urlHandler.skipBack = true;
 
     // Update DOM with pattern info.
@@ -317,6 +338,6 @@ export default class {
     });
 
     this.$orgs['#sg-resize-btns'].dispatchAction('html', html);
-    this.fepperUi.requerio.incept(...resizeBtns);
+    this.requerio.incept(...resizeBtns);
   }
 }

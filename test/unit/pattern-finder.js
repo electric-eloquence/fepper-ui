@@ -21,7 +21,7 @@ describe('patternFinder', function () {
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
       expect(patternFinder).to.be.an.instanceof(PatternFinder);
-      expect(Object.keys(patternFinder).length).to.equal(7);
+      expect(Object.keys(patternFinder).length).to.equal(3);
       expect(patternFinder).to.have.property('receiveIframeMessage');
       expect(patternFinder).to.have.property('data');
       expect(patternFinder).to.have.property('$orgs');

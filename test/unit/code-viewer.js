@@ -11,12 +11,11 @@ describe('codeViewer', function () {
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
       expect(codeViewer).to.be.an.instanceof(CodeViewer);
-      expect(Object.keys(codeViewer).length).to.equal(17);
+      expect(Object.keys(codeViewer).length).to.equal(11);
       expect(codeViewer).to.have.property('printXHRErrorClosure');
       expect(codeViewer).to.have.property('receiveIframeMessage');
       expect(codeViewer).to.have.property('saveEncodedClosure');
       expect(codeViewer).to.have.property('saveMustacheClosure');
-      expect(codeViewer).to.have.property('fepperUi');
       expect(codeViewer).to.have.property('$orgs');
       expect(codeViewer).to.have.property('uiData');
       expect(codeViewer).to.have.property('uiFns');

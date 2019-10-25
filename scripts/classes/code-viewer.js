@@ -3,6 +3,7 @@
  * Licensed under the MIT license.
  */
 let root;
+let fepperUiInst;
 
 // Declared outside class scope because it requires function-scoped `this` context.
 // Not in the listeners directory, because we don't need class scoping.
@@ -183,13 +184,7 @@ export default class {
 
   constructor(fepperUi, root_) {
     root = root_;
-    this.fepperUi = fepperUi;
-    this.$orgs = fepperUi.requerio.$orgs;
-    this.uiData = fepperUi.uiData;
-    this.uiFns = fepperUi.uiFns;
-    this.uiProps = fepperUi.uiProps;
-    this.annotationsViewer = null;
-
+    fepperUiInst = fepperUi;
     this.codeActive = false;
     this.selectForCopy = false;
     this.encoded = '';
@@ -199,12 +194,36 @@ export default class {
     this.viewall = false;
   }
 
+  // Getters for fepperUi instance props in case they are undefined at instantiation.
+
+  get annotationsViewer() {
+    return fepperUiInst.annotationsViewer;
+  }
+
+  get $orgs() {
+    return fepperUiInst.requerio.$orgs;
+  }
+
+  get uiData() {
+    return fepperUiInst.uiData;
+  }
+
+  get uiFns() {
+    return fepperUiInst.uiFns;
+  }
+
+  get uiProps() {
+    return fepperUiInst.uiProps;
+  }
+
+  get urlHandler() {
+    return fepperUiInst.urlHandler;
+  }
+
   // Declared first because it must be unit tested before the other methods. Be sure to e2e test .stoke().
   stoke() {
-    this.annotationsViewer = this.fepperUi.annotationsViewer;
-
     // Load the query strings in case code view has to show by default.
-    const searchParams = this.fepperUi.urlHandler.getSearchParams();
+    const searchParams = this.urlHandler.getSearchParams();
 
     if (searchParams.view === 'code' || searchParams.view === 'c') {
       this.selectForCopy = (searchParams.copy === 'true') ? true : false;

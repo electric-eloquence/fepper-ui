@@ -16,14 +16,12 @@ describe('patternlabViewer', function () {
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
       expect(patternlabViewer).to.be.an.instanceof(PatternlabViewer);
-      expect(Object.keys(patternlabViewer).length).to.equal(9);
+      expect(Object.keys(patternlabViewer).length).to.equal(1);
       expect(patternlabViewer).to.have.property('receiveIframeMessage');
-      expect(patternlabViewer).to.have.property('fepperUi');
       expect(patternlabViewer).to.have.property('$orgs');
       expect(patternlabViewer).to.have.property('uiData');
       expect(patternlabViewer).to.have.property('uiFns');
       expect(patternlabViewer).to.have.property('uiProps');
-      expect(patternlabViewer).to.have.property('patternPaths');
       expect(patternlabViewer).to.have.property('dataSaver');
       expect(patternlabViewer).to.have.property('urlHandler');
     });
@@ -493,14 +491,14 @@ describe('patternlabViewer', function () {
 
       it('with a "p" search param', function () {
         global.location.search = '?p=elements-paragraph';
-        patternlabViewer.fepperUi.urlHandler.skipBack = false;
+        patternlabViewer.urlHandler.skipBack = false;
 
-        const skipBackBefore = patternlabViewer.fepperUi.urlHandler.skipBack;
+        const skipBackBefore = patternlabViewer.urlHandler.skipBack;
         const historyStateBefore = global.history.state;
 
         patternlabViewer.stoke();
 
-        const skipBackAfter = patternlabViewer.fepperUi.urlHandler.skipBack;
+        const skipBackAfter = patternlabViewer.urlHandler.skipBack;
         const historyStateAfter = global.history.state;
 
         expect(skipBackBefore).to.be.false;
@@ -512,14 +510,14 @@ describe('patternlabViewer', function () {
       });
 
       it('with config.defaultPattern', function () {
-        patternlabViewer.fepperUi.urlHandler.skipBack = false;
+        patternlabViewer.urlHandler.skipBack = false;
 
-        const skipBackBefore = patternlabViewer.fepperUi.urlHandler.skipBack;
+        const skipBackBefore = patternlabViewer.urlHandler.skipBack;
         const historyStateBefore = global.history.state;
 
         patternlabViewer.stoke();
 
-        const skipBackAfter = patternlabViewer.fepperUi.urlHandler.skipBack;
+        const skipBackAfter = patternlabViewer.urlHandler.skipBack;
         const historyStateAfter = global.history.state;
 
         expect(skipBackBefore).to.be.false;
@@ -530,15 +528,15 @@ describe('patternlabViewer', function () {
       });
 
       it('defaults to viewall', function () {
-        patternlabViewer.fepperUi.urlHandler.skipBack = false;
+        patternlabViewer.urlHandler.skipBack = false;
         delete patternlabViewer.uiData.config.defaultPattern;
 
-        const skipBackBefore = patternlabViewer.fepperUi.urlHandler.skipBack;
+        const skipBackBefore = patternlabViewer.urlHandler.skipBack;
         const historyStateBefore = global.history.state;
 
         patternlabViewer.stoke();
 
-        const skipBackAfter = patternlabViewer.fepperUi.urlHandler.skipBack;
+        const skipBackAfter = patternlabViewer.urlHandler.skipBack;
         const historyStateAfter = global.history.state;
 
         expect(skipBackBefore).to.be.false;
