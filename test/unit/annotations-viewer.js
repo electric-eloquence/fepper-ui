@@ -25,9 +25,8 @@ describe('annotationsViewer', function () {
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
       expect(annotationsViewer).to.be.an.instanceof(AnnotationsViewer);
-      expect(Object.keys(annotationsViewer).length).to.equal(10);
+      expect(Object.keys(annotationsViewer).length).to.equal(5);
       expect(annotationsViewer).to.have.property('receiveIframeMessage');
-      expect(annotationsViewer).to.have.property('fepperUi');
       expect(annotationsViewer).to.have.property('$orgs');
       expect(annotationsViewer).to.have.property('uiFns');
       expect(annotationsViewer).to.have.property('uiProps');

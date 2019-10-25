@@ -3,6 +3,7 @@
  * Licensed under the MIT license.
  */
 let root;
+let fepperUiInst;
 
 export default class {
   // Declared as a class field to retain the Event function prototype while keeping the class constructor tidy.
@@ -64,28 +65,43 @@ export default class {
 
   constructor(fepperUi, root_) {
     root = root_;
-    this.fepperUi = fepperUi;
-    this.$orgs = fepperUi.requerio.$orgs;
-    this.uiFns = fepperUi.uiFns;
-    this.uiProps = fepperUi.uiProps;
-    this.codeViewer = null;
-
+    fepperUiInst = fepperUi;
     this.annotationsActive = false;
     this.moveToNumber = 0;
     this.mustacheBrowser = false;
     this.viewall = false;
   }
 
+  // Getters for fepperUi instance props in case they are undefined at instantiation.
+
+  get codeViewer() {
+    return fepperUiInst.codeViewer;
+  }
+
+  get $orgs() {
+    return fepperUiInst.requerio.$orgs;
+  }
+
+  get uiFns() {
+    return fepperUiInst.uiFns;
+  }
+
+  get uiProps() {
+    return fepperUiInst.uiProps;
+  }
+
+  get urlHandler() {
+    return fepperUiInst.urlHandler;
+  }
+
   // Declared first because it must be unit tested before the other methods. Be sure to e2e test .stoke().
   stoke() {
-    this.codeViewer = this.fepperUi.codeViewer;
-
     this.$orgs['#sg-annotations-container'] // Has class sg-view-container.
       .dispatchAction('css', {bottom: -this.uiProps.sh + 'px'})
       .dispatchAction('addClass', 'anim-ready');
 
     // Load the query strings in case annotations viewer has to show by default.
-    const searchParams = this.fepperUi.urlHandler.getSearchParams();
+    const searchParams = this.urlHandler.getSearchParams();
 
     if (searchParams.view && (searchParams.view === 'annotations' || searchParams.view === 'a')) {
       this.openAnnotations();

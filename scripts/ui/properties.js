@@ -1,11 +1,10 @@
 let root;
+let fepperUiInst;
 
 export default class {
   constructor(fepperUi, root_) {
     root = root_;
-    this.fepperUi = fepperUi;
-    this.$orgs = fepperUi.requerio.$orgs;
-    this.uiFns = fepperUi.uiFns;
+    fepperUiInst = fepperUi;
 
     /* istanbul ignore if */
     if (typeof window === 'object') {
@@ -37,6 +36,18 @@ export default class {
     this.titleSeparator = ' : ';
     this.warnCtrlShiftLEdge = '"ctrl+shift+l" is unpredictable on Microsoft Edge.\nTry "ctrl+alt+l" instead.';
   }
+
+  // Getters for fepperUi instance props in case they are undefined at instantiation.
+
+  get $orgs() {
+    return fepperUiInst.requerio.$orgs;
+  }
+
+  get uiFns() {
+    return fepperUiInst.uiFns;
+  }
+
+  // Additional getters.
 
   get sw() {
     if (typeof window === 'object') {

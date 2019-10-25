@@ -1,3 +1,5 @@
+let fepperUiInst;
+
 export default class {
 
   /**
@@ -8,7 +10,12 @@ export default class {
    */
   constructor(cookieName, fepperUi) {
     this.cookieName = cookieName;
-    this.cookies = fepperUi.cookies;
+    fepperUiInst = fepperUi;
+  }
+
+  // In case fepperUi.cookies is undefined at instantiation.
+  get cookies() {
+    return fepperUiInst.cookies;
   }
 
   /**

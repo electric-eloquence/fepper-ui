@@ -14,6 +14,8 @@ export default class {
     fepperUiInst = fepperUi;
   }
 
+  // Getters for fepperUi instance props in case they are undefined at instantiation.
+
   get dataSaver() {
     return fepperUiInst.dataSaver;
   }

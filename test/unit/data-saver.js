@@ -15,7 +15,7 @@ describe('dataSaver', function () {
   describe('.constructor()', function () {
     it('works', function () {
       expect(dataSaver).to.be.an.instanceof(DataSaver);
-      expect(Object.keys(dataSaver).length).to.equal(2);
+      expect(Object.keys(dataSaver).length).to.equal(1);
       expect(dataSaver).to.have.property('cookieName');
       expect(dataSaver).to.have.property('cookies');
     });
