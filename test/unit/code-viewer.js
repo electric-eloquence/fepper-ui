@@ -1,6 +1,5 @@
 import {expect} from 'chai';
 
-import CodeViewer from '../../scripts/classes/code-viewer';
 import fepperUi from '../unit';
 
 const $orgs = fepperUi.requerio.$orgs;
@@ -10,8 +9,8 @@ const codeViewer = fepperUi.codeViewer;
 describe('codeViewer', function () {
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
-      expect(codeViewer).to.be.an.instanceof(CodeViewer);
-      expect(Object.keys(codeViewer).length).to.equal(11);
+      expect(codeViewer.constructor.name).to.equal('CodeViewer');
+      expect(Object.keys(codeViewer).length).to.equal(12);
       expect(codeViewer).to.have.property('getPrintXHRErrorFunction');
       expect(codeViewer).to.have.property('receiveIframeMessage');
       expect(codeViewer).to.have.property('getSaveEncodedFunction');

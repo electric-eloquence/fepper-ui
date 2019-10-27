@@ -1,7 +1,6 @@
 import {expect} from 'chai';
 import sinon from 'sinon';
 
-import PatternFinder from '../../scripts/classes/pattern-finder';
 import fepperUi from '../unit';
 
 const sandbox = sinon.createSandbox();
@@ -20,8 +19,8 @@ describe('patternFinder', function () {
 
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
-      expect(patternFinder).to.be.an.instanceof(PatternFinder);
-      expect(Object.keys(patternFinder).length).to.equal(3);
+      expect(patternFinder.constructor.name).to.equal('PatternFinder');
+      expect(Object.keys(patternFinder).length).to.equal(4);
       expect(patternFinder).to.have.property('receiveIframeMessage');
       expect(patternFinder).to.have.property('data');
       expect(patternFinder).to.have.property('$orgs');

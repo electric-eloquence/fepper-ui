@@ -2,7 +2,6 @@ import {expect} from 'chai';
 import fs from 'fs';
 import sinon from 'sinon';
 
-import PatternlabViewer from '../../scripts/classes/patternlab-viewer';
 import fepperUi from '../unit';
 
 const sandbox = sinon.createSandbox();
@@ -15,8 +14,8 @@ const uiProps = fepperUi.uiProps;
 describe('patternlabViewer', function () {
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
-      expect(patternlabViewer).to.be.an.instanceof(PatternlabViewer);
-      expect(Object.keys(patternlabViewer).length).to.equal(1);
+      expect(patternlabViewer.constructor.name).to.equal('PatternlabViewer');
+      expect(Object.keys(patternlabViewer).length).to.equal(3);
       expect(patternlabViewer).to.have.property('receiveIframeMessage');
       expect(patternlabViewer).to.have.property('$orgs');
       expect(patternlabViewer).to.have.property('uiData');

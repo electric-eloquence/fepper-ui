@@ -1,6 +1,5 @@
 import {expect} from 'chai';
 
-import AnnotationsViewer from '../../scripts/classes/annotations-viewer';
 import fepperUi from '../unit';
 
 const $orgs = fepperUi.requerio.$orgs;
@@ -24,8 +23,8 @@ menu anchor.</p>
 describe('annotationsViewer', function () {
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
-      expect(annotationsViewer).to.be.an.instanceof(AnnotationsViewer);
-      expect(Object.keys(annotationsViewer).length).to.equal(5);
+      expect(annotationsViewer.constructor.name).to.equal('AnnotationsViewer');
+      expect(Object.keys(annotationsViewer).length).to.equal(6);
       expect(annotationsViewer).to.have.property('receiveIframeMessage');
       expect(annotationsViewer).to.have.property('$orgs');
       expect(annotationsViewer).to.have.property('uiFns');

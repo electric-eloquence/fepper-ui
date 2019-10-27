@@ -1,6 +1,5 @@
 import {expect} from 'chai';
 
-import Timestamper from '../../scripts/classes/timestamper';
 import fepperUi from '../unit';
 
 const timestamper = fepperUi.timestamper;
@@ -8,7 +7,7 @@ const timestamper = fepperUi.timestamper;
 describe('timestamper', function () {
   describe('.constructor()', function () {
     it('works', function () {
-      expect(timestamper).to.be.an.instanceof(Timestamper);
+      expect(timestamper.constructor.name).to.equal('Timestamper');
       expect(Object.keys(timestamper).length).to.equal(0);
       expect(timestamper).to.have.property('cookies');
     });
