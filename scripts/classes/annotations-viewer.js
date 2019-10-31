@@ -190,7 +190,7 @@ export default function (fepperUiInst, root) {
     }
 
     /**
-     * Decide on whterh the annotations panel should be open or closed.
+     * Decide on whether the annotations panel should be open or closed.
      */
     toggleAnnotations() {
       if (!this.annotationsActive) {
