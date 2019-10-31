@@ -309,14 +309,7 @@ export default function (fepperUiInst, root_) {
       }
 
       // Make sure the annotations viewer is off before showing code.
-      const objAnnotationsToggle = {annotationsToggle: 'off'};
-      this.annotationsViewer.annotationsActive = false;
-
-      this.$orgs['#sg-t-annotations'].dispatchAction('removeClass', 'active');
-      this.$orgs['#sg-viewport'][0].contentWindow.postMessage(objAnnotationsToggle, this.uiProps.targetOrigin);
-      this.annotationsViewer.slideAnnotations(
-        this.$orgs['#sg-code-container'].getState().innerHeight
-      );
+      this.annotationsViewer.closeAnnotations();
 
       // Tell the pattern that code viewer has been turned on.
       const objCodeToggle = {codeToggle: 'on'};

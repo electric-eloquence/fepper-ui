@@ -18,14 +18,7 @@ export default function (fepperUiInst) {
         this.$orgs['#sg-annotations-close-btn'].on('click', (e) => {
           e.preventDefault();
 
-          const obj = {annotationsToggle: 'off'};
-          fepperUiInst.annotationsViewer.annotationsActive = false;
-
-          fepperUiInst.annotationsViewer.slideAnnotations(
-            this.$orgs['#sg-annotations-container'].getState().innerHeight
-          );
-          this.$orgs['#sg-t-annotations'].dispatchAction('removeClass', 'active');
-          this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, fepperUiInst.uiProps.targetOrigin);
+          fepperUiInst.annotationsViewer.closeAnnotations();
         });
       });
 
