@@ -25,7 +25,7 @@ export default function (fepperUiInst) {
               path: window.$(this).attr('href')
             };
 
-            this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, fepperUiInst.uiProps.targetOrigin);
+            e.data.this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, fepperUiInst.uiProps.targetOrigin);
             fepperUiInst.uiFns.closeAllPanels();
           }
         );
