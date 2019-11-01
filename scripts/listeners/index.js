@@ -48,8 +48,6 @@ export default function (fepperUiInst) {
           fepperUiInst.uiFns.updateViewportWidth(Number(vpWidth));
         }
 
-        let widthBefore = fepperUiInst.uiProps.sw;
-
         this.$orgs.window.on('resize', fepperUiInst.uiFns.debounce(() => {
           // Update iframe width if in wholeMode.
           if (
@@ -59,9 +57,6 @@ export default function (fepperUiInst) {
             // Set iframe width to window width and wholeMode = true.
             fepperUiInst.uiFns.sizeIframe(fepperUiInst.uiProps.sw, false, true);
           }
-
-          // Adjust the distance with which to hide the annotations and code viewers.
-          const widthNow = fepperUiInst.uiProps.sw;
         }));
       });
 
