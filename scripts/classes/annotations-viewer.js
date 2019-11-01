@@ -93,10 +93,6 @@ export default function (fepperUiInst, root) {
 
     // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
     stoke() {
-      this.$orgs['#sg-annotations-container'] // Has class sg-view-container.
-        .dispatchAction('css', {bottom: -this.uiProps.sh + 'px'})
-        .dispatchAction('addClass', 'anim-ready');
-
       // Load the query strings in case annotations viewer has to show by default.
       const searchParams = this.urlHandler.getSearchParams();
 
@@ -118,6 +114,24 @@ export default function (fepperUiInst, root) {
         Number(this.$orgs['#sg-annotations-container'].getState().innerHeight)
       );
       this.$orgs['#sg-t-annotations'].dispatchAction('removeClass', 'active');
+
+      /* istanbul ignore if */
+      if (typeof getComputedStyle === 'function') {
+        const transitionDurationStr =
+          getComputedStyle(this.$orgs['#sg-annotations-container'][0]).getPropertyValue('transition-duration');
+        let transitionDurationNum;
+
+        if (transitionDurationStr.slice(-2) === 'ms') {
+          transitionDurationNum = parseFloat(transitionDurationStr);
+        }
+        else {
+          transitionDurationNum = parseFloat(transitionDurationStr) * 1000;
+        }
+
+        setTimeout(() => {
+          this.$orgs['#sg-annotations-container'].dispatchAction('removeClass', 'anim-ready');
+        }, transitionDurationNum);
+      }
     }
 
     /**
@@ -143,6 +157,10 @@ export default function (fepperUiInst, root) {
       if (this.mustacheBrowser) {
         return;
       }
+
+      this.$orgs['#sg-annotations-container'] // Has class sg-view-container.
+        .dispatchAction('css', {bottom: -this.uiProps.sh + 'px'})
+        .dispatchAction('addClass', 'anim-ready');
 
       // Make sure the code viewer is off before showing annotations.
       this.codeViewer.closeCode();

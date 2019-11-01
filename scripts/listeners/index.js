@@ -62,29 +62,6 @@ export default function (fepperUiInst) {
 
           // Adjust the distance with which to hide the annotations and code viewers.
           const widthNow = fepperUiInst.uiProps.sw;
-
-          // Only fire if body width has changed, i.e., do not fire if only body height has changed.
-          if (widthNow !== widthBefore) {
-            widthBefore = widthNow;
-
-            const bottomDistAnnotations = parseInt(this.$orgs['#sg-annotations-container'].getState().style.bottom, 10);
-
-            if (Number.isNaN(bottomDistAnnotations) || bottomDistAnnotations === 0) {
-              return;
-            }
-
-            fepperUiInst.annotationsViewer.slideAnnotations(
-              this.$orgs['#sg-annotations-container'].getState().innerHeight
-            );
-
-            const bottomDistCode = parseInt(this.$orgs['#sg-code-container'].getState().style.bottom, 10);
-
-            if (Number.isNaN(bottomDistCode) || bottomDistCode === 0) {
-              return;
-            }
-
-            fepperUiInst.codeViewer.slideCode(this.$orgs['#sg-code-container'].getState().innerHeight);
-          }
         }));
       });
 

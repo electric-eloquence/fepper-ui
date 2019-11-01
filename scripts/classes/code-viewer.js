@@ -235,10 +235,6 @@ export default function (fepperUiInst, root_) {
       else if (this.uiData.config.defaultShowPatternInfo) {
         this.openCode();
       }
-
-      this.$orgs['#sg-code-container'] // Has class sg-view-container.
-        .dispatchAction('css', {bottom: -this.uiProps.sh + 'px'})
-        .dispatchAction('addClass', 'anim-ready');
     }
 
     /**
@@ -300,6 +296,24 @@ export default function (fepperUiInst, root_) {
         Number(this.$orgs['#sg-code-container'].getState().innerHeight)
       );
       this.$orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
+
+      /* istanbul ignore if */
+      if (typeof getComputedStyle === 'function') {
+        const transitionDurationStr =
+          getComputedStyle(this.$orgs['#sg-code-container'][0]).getPropertyValue('transition-duration');
+        let transitionDurationNum;
+
+        if (transitionDurationStr.slice(-2) === 'ms') {
+          transitionDurationNum = parseFloat(transitionDurationStr);
+        }
+        else {
+          transitionDurationNum = parseFloat(transitionDurationStr) * 1000;
+        }
+
+        setTimeout(() => {
+          this.$orgs['#sg-code-container'].dispatchAction('removeClass', 'anim-ready');
+        }, transitionDurationNum);
+      }
     }
 
     openCode() {
@@ -307,6 +321,10 @@ export default function (fepperUiInst, root_) {
       if (this.mustacheBrowser) {
         return;
       }
+
+      this.$orgs['#sg-code-container'] // Has class sg-view-container.
+        .dispatchAction('css', {bottom: -this.uiProps.sh + 'px'})
+        .dispatchAction('addClass', 'anim-ready');
 
       // Make sure the annotations viewer is off before showing code.
       this.annotationsViewer.closeAnnotations();
