@@ -62,12 +62,12 @@ describe('annotationsViewer', function () {
 
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
-      expect(sgAnnotationsContainerStateBefore.classList).to.not.include('anim-ready');
-      expect(sgTAnnotationsStateBefore.classList).to.not.include('active');
+      expect(sgAnnotationsContainerStateBefore.classArray).to.not.include('anim-ready');
+      expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
 
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('0px');
-      expect(sgAnnotationsContainerStateAfter.classList).to.include('anim-ready');
-      expect(sgTAnnotationsStateAfter.classList).to.include('active');
+      expect(sgAnnotationsContainerStateAfter.classArray).to.include('anim-ready');
+      expect(sgTAnnotationsStateAfter.classArray).to.include('active');
       expect(annotationsViewer.moveToNumber).to.equal(0);
     });
 
@@ -86,12 +86,12 @@ describe('annotationsViewer', function () {
 
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
-      expect(sgAnnotationsContainerStateBefore.classList).to.not.include('anim-ready');
-      expect(sgTAnnotationsStateBefore.classList).to.not.include('active');
+      expect(sgAnnotationsContainerStateBefore.classArray).to.not.include('anim-ready');
+      expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
 
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('0px');
-      expect(sgAnnotationsContainerStateAfter.classList).to.include('anim-ready');
-      expect(sgTAnnotationsStateAfter.classList).to.include('active');
+      expect(sgAnnotationsContainerStateAfter.classArray).to.include('anim-ready');
+      expect(sgTAnnotationsStateAfter.classArray).to.include('active');
       expect(annotationsViewer.moveToNumber).to.equal(0);
     });
 
@@ -110,12 +110,12 @@ describe('annotationsViewer', function () {
 
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
-      expect(sgAnnotationsContainerStateBefore.classList).to.not.include('anim-ready');
-      expect(sgTAnnotationsStateBefore.classList).to.not.include('active');
+      expect(sgAnnotationsContainerStateBefore.classArray).to.not.include('anim-ready');
+      expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
 
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('0px');
-      expect(sgAnnotationsContainerStateAfter.classList).to.include('anim-ready');
-      expect(sgTAnnotationsStateAfter.classList).to.include('active');
+      expect(sgAnnotationsContainerStateAfter.classArray).to.include('anim-ready');
+      expect(sgTAnnotationsStateAfter.classArray).to.include('active');
       expect(annotationsViewer.moveToNumber).to.equal(2);
     });
   });
@@ -185,8 +185,8 @@ describe('annotationsViewer', function () {
 
       const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-      expect(sgTAnnotationsStateBefore.classList).to.not.include('active');
-      expect(sgTAnnotationsStateAfter.classList).to.not.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
 
       annotationsViewer.mustacheBrowser = false;
     });
@@ -209,16 +209,16 @@ describe('annotationsViewer', function () {
       const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
       const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-      expect(sgTCodeStateBefore.classList).to.include('active');
+      expect(sgTCodeStateBefore.classArray).to.include('active');
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
-      expect(sgTAnnotationsStateBefore.classList).to.not.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
 
-      expect(sgTCodeStateAfter.classList).to.not.include('active');
+      expect(sgTCodeStateAfter.classArray).to.not.include('active');
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('0px');
-      expect(sgTAnnotationsStateAfter.classList).to.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.include('active');
       expect(annotationsViewer.annotationsActive).to.be.true;
       expect(codeViewer.codeActive).to.be.false;
     });
@@ -234,10 +234,10 @@ describe('annotationsViewer', function () {
 
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
-      expect(sgTAnnotationsStateBefore.classList).to.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.include('active');
 
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTAnnotationsStateAfter.classList).to.not.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
       expect(annotationsViewer.annotationsActive).to.be.false;
     });
   });
@@ -435,10 +435,10 @@ menu anchor.</p>
 
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
-      expect(sgTAnnotationsStateBefore.classList).to.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.include('active');
 
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTAnnotationsStateAfter.classList).to.not.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
       expect(annotationsViewer.annotationsActive).to.be.false;
     });
 
@@ -520,13 +520,13 @@ menu anchor.</p>
       const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
       const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-      expect(sgTCodeStateBefore.classList).to.include('active');
+      expect(sgTCodeStateBefore.classArray).to.include('active');
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgTAnnotationsStateBefore.classList).to.not.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
 
-      expect(sgTCodeStateAfter.classList).to.not.include('active');
+      expect(sgTCodeStateAfter.classArray).to.not.include('active');
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTAnnotationsStateAfter.classList).to.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.include('active');
       expect(annotationsViewer.annotationsActive).to.be.true;
       expect(codeViewer.codeActive).to.be.false;
     });
@@ -555,13 +555,13 @@ menu anchor.</p>
       const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
       const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-      expect(sgTCodeStateBefore.classList).to.include('active');
+      expect(sgTCodeStateBefore.classArray).to.include('active');
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgTAnnotationsStateBefore.classList).to.not.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
 
-      expect(sgTCodeStateAfter.classList).to.not.include('active');
+      expect(sgTCodeStateAfter.classArray).to.not.include('active');
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTAnnotationsStateAfter.classList).to.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.include('active');
       expect(annotationsViewer.annotationsActive).to.be.true;
       expect(codeViewer.codeActive).to.be.false;
     });
@@ -578,9 +578,9 @@ menu anchor.</p>
 
       const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-      expect(sgTAnnotationsStateBefore.classList).to.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.include('active');
 
-      expect(sgTAnnotationsStateAfter.classList).to.not.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
       expect(annotationsViewer.annotationsActive).to.be.false;
     });
 
@@ -602,12 +602,12 @@ menu anchor.</p>
       const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
       const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-      expect(sgTAnnotationsStateBefore.classList).to.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.include('active');
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
 
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTAnnotationsStateAfter.classList).to.not.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
       expect(annotationsViewer.annotationsActive).to.be.false;
     });
   });

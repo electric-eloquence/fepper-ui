@@ -13,7 +13,7 @@ export default function (fepperUiInst) {
         this.$orgs['#sg-code-fill'].on('mouseover', () => {
           const titleState = this.$orgs['#sg-code-title-mustache'].getState();
 
-          if (titleState.classList.includes('sg-code-title-active')) {
+          if (titleState.classArray.includes('sg-code-title-active')) {
             this.$orgs['#sg-code-fill'].dispatchAction('css', {cursor: 'pointer'});
           }
           else {
@@ -25,7 +25,7 @@ export default function (fepperUiInst) {
         this.$orgs['#sg-code-fill'].on('click', () => {
           const titleState = this.$orgs['#sg-code-title-mustache'].getState();
 
-          if (titleState.classList.includes('sg-code-title-active')) {
+          if (titleState.classArray.includes('sg-code-title-active')) {
             const patternPartial = this.$orgs['#sg-code-container'].getState().attribs['data-patternpartial'];
             const path = window.location.origin + '/mustache-browser?partial=' + patternPartial;
 

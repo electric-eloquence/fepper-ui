@@ -55,11 +55,11 @@ describe('codeViewer', function () {
 
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
       expect(sgCodeContainerStateBefore.classArray).to.not.include('anim-ready');
-      expect(sgTCodeStateBefore.classList).to.not.include('active');
+      expect(sgTCodeStateBefore.classArray).to.not.include('active');
 
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('0px');
       expect(sgCodeContainerStateAfter.classArray).to.include('anim-ready');
-      expect(sgTCodeStateAfter.classList).to.include('active');
+      expect(sgTCodeStateAfter.classArray).to.include('active');
       expect(codeViewer.selectForCopy).to.be.false;
     });
 
@@ -78,11 +78,11 @@ describe('codeViewer', function () {
 
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
       expect(sgCodeContainerStateBefore.classArray).to.not.include('anim-ready');
-      expect(sgTCodeStateBefore.classList).to.not.include('active');
+      expect(sgTCodeStateBefore.classArray).to.not.include('active');
 
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('0px');
       expect(sgCodeContainerStateAfter.classArray).to.include('anim-ready');
-      expect(sgTCodeStateAfter.classList).to.include('active');
+      expect(sgTCodeStateAfter.classArray).to.include('active');
       expect(codeViewer.selectForCopy).to.be.false;
     });
 
@@ -102,11 +102,11 @@ describe('codeViewer', function () {
 
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
       expect(sgCodeContainerStateBefore.classArray).to.not.include('anim-ready');
-      expect(sgTCodeStateBefore.classList).to.not.include('active');
+      expect(sgTCodeStateBefore.classArray).to.not.include('active');
 
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('0px');
       expect(sgCodeContainerStateAfter.classArray).to.include('anim-ready');
-      expect(sgTCodeStateAfter.classList).to.include('active');
+      expect(sgTCodeStateAfter.classArray).to.include('active');
       expect(codeViewer.selectForCopy).to.be.false;
 
       codeViewer.uiData.config.defaultShowPatternInfo = false;
@@ -127,11 +127,11 @@ describe('codeViewer', function () {
 
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
       expect(sgCodeContainerStateBefore.classArray).to.not.include('anim-ready');
-      expect(sgTCodeStateBefore.classList).to.not.include('active');
+      expect(sgTCodeStateBefore.classArray).to.not.include('active');
 
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('0px');
       expect(sgCodeContainerStateAfter.classArray).to.include('anim-ready');
-      expect(sgTCodeStateAfter.classList).to.include('active');
+      expect(sgTCodeStateAfter.classArray).to.include('active');
       expect(codeViewer.selectForCopy).to.be.true;
     });
   });
@@ -151,12 +151,12 @@ describe('codeViewer', function () {
       const sgCodeTitleMustacheStateAfter = $orgs['#sg-code-title-mustache'].getState();
       const sgCodeFillStateAfter = $orgs['#sg-code-fill'].getState();
 
-      expect(sgCodeTitleHtmlStateBefore.classList).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateBefore.classList).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateBefore.classArray).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateBefore.classArray).to.not.include('sg-code-title-active');
       expect(sgCodeFillStateBefore.innerHTML).to.not.equal(sgCodeFillStateAfter.innerHTML);
 
-      expect(sgCodeTitleHtmlStateAfter.classList).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateAfter.classList).to.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateAfter.classArray).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateAfter.classArray).to.include('sg-code-title-active');
       expect(sgCodeFillStateAfter.innerHTML).to.equal('mustache');
     });
   });
@@ -180,12 +180,12 @@ describe('codeViewer', function () {
       const sgCodeTitleMustacheStateAfter = $orgs['#sg-code-title-mustache'].getState();
       const sgCodeFillStateAfter = $orgs['#sg-code-fill'].getState();
 
-      expect(sgCodeTitleHtmlStateBefore.classList).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateBefore.classList).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateBefore.classArray).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateBefore.classArray).to.not.include('sg-code-title-active');
       expect(sgCodeFillStateBefore.innerHTML).to.not.equal(sgCodeFillStateAfter.innerHTML);
 
-      expect(sgCodeTitleHtmlStateAfter.classList).to.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateAfter.classList).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateAfter.classArray).to.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateAfter.classArray).to.not.include('sg-code-title-active');
       expect(sgCodeFillStateAfter.innerHTML).to.equal('encoded');
     });
   });
@@ -209,12 +209,12 @@ describe('codeViewer', function () {
       const sgCodeTitleMustacheStateAfter = $orgs['#sg-code-title-mustache'].getState();
       const sgCodeFillStateAfter = $orgs['#sg-code-fill'].getState();
 
-      expect(sgCodeTitleHtmlStateBefore.classList).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateBefore.classList).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateBefore.classArray).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateBefore.classArray).to.not.include('sg-code-title-active');
       expect(sgCodeFillStateBefore.innerHTML).to.not.equal(sgCodeFillStateAfter.innerHTML);
 
-      expect(sgCodeTitleHtmlStateAfter.classList).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateAfter.classList).to.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateAfter.classArray).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateAfter.classArray).to.include('sg-code-title-active');
       expect(sgCodeFillStateAfter.innerHTML).to.equal('mustache');
     });
   });
@@ -276,8 +276,8 @@ describe('codeViewer', function () {
       expect(sgCodeFillStateBefore.innerHTML).to.not.equal(sgCodeFillStateAfter.innerHTML);
 
       expect(codeViewer.tabActive).to.equal('e');
-      expect(sgCodeTitleHtmlStateAfter.classList).to.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateAfter.classList).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateAfter.classArray).to.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateAfter.classArray).to.not.include('sg-code-title-active');
       expect(sgCodeFillStateAfter.innerHTML).to.equal('encoded');
     });
 
@@ -295,8 +295,8 @@ describe('codeViewer', function () {
       expect(sgCodeFillStateBefore.innerHTML).to.not.equal(sgCodeFillStateAfter.innerHTML);
 
       expect(codeViewer.tabActive).to.equal('m');
-      expect(sgCodeTitleHtmlStateAfter.classList).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateAfter.classList).to.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateAfter.classArray).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateAfter.classArray).to.include('sg-code-title-active');
       expect(sgCodeFillStateAfter.innerHTML).to.equal('mustache');
     });
 
@@ -317,13 +317,13 @@ describe('codeViewer', function () {
       const sgCodeTitleMustacheStateAfter = $orgs['#sg-code-title-mustache'].getState();
       const sgCodeFillStateAfter = $orgs['#sg-code-fill'].getState();
 
-      expect(sgCodeTitleHtmlStateBefore.classList).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateBefore.classList).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateBefore.classArray).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateBefore.classArray).to.not.include('sg-code-title-active');
       expect(sgCodeFillStateBefore.innerHTML).to.equal(sgCodeFillStateAfter.innerHTML);
 
       expect(codeViewer.tabActive).to.equal('');
-      expect(sgCodeTitleHtmlStateAfter.classList).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateAfter.classList).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateAfter.classArray).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateAfter.classArray).to.not.include('sg-code-title-active');
     });
   });
 
@@ -340,8 +340,8 @@ describe('codeViewer', function () {
 
       const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
-      expect(sgTCodeStateBefore.classList).to.not.include('active');
-      expect(sgTCodeStateAfter.classList).to.not.include('active');
+      expect(sgTCodeStateBefore.classArray).to.not.include('active');
+      expect(sgTCodeStateAfter.classArray).to.not.include('active');
 
       codeViewer.mustacheBrowser = false;
     });
@@ -364,16 +364,16 @@ describe('codeViewer', function () {
       const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
       const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
-      expect(sgTAnnotationsStateBefore.classList).to.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.include('active');
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgTCodeStateBefore.classList).to.not.include('active');
+      expect(sgTCodeStateBefore.classArray).to.not.include('active');
 
-      expect(sgTAnnotationsStateAfter.classList).to.not.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('-384px');
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('0px');
-      expect(sgTCodeStateAfter.classList).to.include('active');
+      expect(sgTCodeStateAfter.classArray).to.include('active');
       expect(annotationsViewer.annotationsActive).to.be.false;
       expect(codeViewer.codeActive).to.be.true;
     });
@@ -388,10 +388,10 @@ describe('codeViewer', function () {
       const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgTCodeStateBefore.classList).to.include('active');
+      expect(sgTCodeStateBefore.classArray).to.include('active');
 
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTCodeStateAfter.classList).to.not.include('active');
+      expect(sgTCodeStateAfter.classArray).to.not.include('active');
       expect(codeViewer.codeActive).to.be.false;
     });
   });
@@ -596,12 +596,12 @@ describe('codeViewer', function () {
       const sgCodeTitleMustacheStateAfter = $orgs['#sg-code-title-mustache'].getState();
       const sgCodeFillStateAfter = $orgs['#sg-code-fill'].getState();
 
-      expect(sgCodeTitleHtmlStateBefore.classList).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateBefore.classList).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateBefore.classArray).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateBefore.classArray).to.not.include('sg-code-title-active');
       expect(sgCodeFillStateBefore.innerHTML).to.not.equal(sgCodeFillStateAfter.innerHTML);
 
-      expect(sgCodeTitleHtmlStateAfter.classList).to.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateAfter.classList).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateAfter.classArray).to.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateAfter.classArray).to.not.include('sg-code-title-active');
       expect(sgCodeFillStateAfter.innerHTML).to.equal('Status 418: I&apos;m a teapot');
     });
 
@@ -625,12 +625,12 @@ describe('codeViewer', function () {
       const sgCodeTitleMustacheStateAfter = $orgs['#sg-code-title-mustache'].getState();
       const sgCodeFillStateAfter = $orgs['#sg-code-fill'].getState();
 
-      expect(sgCodeTitleHtmlStateBefore.classList).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateBefore.classList).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateBefore.classArray).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateBefore.classArray).to.not.include('sg-code-title-active');
       expect(sgCodeFillStateBefore.innerHTML).to.not.equal(sgCodeFillStateAfter.innerHTML);
 
-      expect(sgCodeTitleHtmlStateAfter.classList).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateAfter.classList).to.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateAfter.classArray).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateAfter.classArray).to.include('sg-code-title-active');
       expect(sgCodeFillStateAfter.innerHTML)
         .to.equal('Access to XMLHttpRequest with the file protocol scheme has been blocked by CORS policy.');
     });
@@ -822,10 +822,10 @@ describe('codeViewer', function () {
       const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgTCodeStateBefore.classList).to.include('active');
+      expect(sgTCodeStateBefore.classArray).to.include('active');
 
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTCodeStateAfter.classList).to.not.include('active');
+      expect(sgTCodeStateAfter.classArray).to.not.include('active');
       expect(codeViewer.codeActive).to.be.false;
     });
 
@@ -893,14 +893,14 @@ describe('codeViewer', function () {
       const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
       const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
-      expect(sgTAnnotationsStateBefore.classList).to.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.include('active');
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
-      expect(sgTCodeStateBefore.classList).to.not.include('active');
+      expect(sgTCodeStateBefore.classArray).to.not.include('active');
 
-      expect(sgTAnnotationsStateAfter.classList).to.not.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTCodeStateAfter.classList).to.include('active');
+      expect(sgTCodeStateAfter.classArray).to.include('active');
       expect(annotationsViewer.annotationsActive).to.be.false;
       expect(codeViewer.codeActive).to.be.true;
     });
@@ -917,9 +917,9 @@ describe('codeViewer', function () {
 
       const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
-      expect(sgTCodeStateBefore.classList).to.include('active');
+      expect(sgTCodeStateBefore.classArray).to.include('active');
 
-      expect(sgTCodeStateAfter.classList).to.not.include('active');
+      expect(sgTCodeStateAfter.classArray).to.not.include('active');
       expect(codeViewer.codeActive).to.be.false;
     });
 
@@ -944,8 +944,8 @@ describe('codeViewer', function () {
       expect(sgCodeFillStateBefore.innerHTML).to.not.equal(sgCodeFillStateAfter.innerHTML);
 
       expect(codeViewer.tabActive).to.equal('e');
-      expect(sgCodeTitleHtmlStateAfter.classList).to.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateAfter.classList).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateAfter.classArray).to.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateAfter.classArray).to.not.include('sg-code-title-active');
       expect(sgCodeFillStateAfter.innerHTML).to.equal('encoded');
     });
 
@@ -970,8 +970,8 @@ describe('codeViewer', function () {
       expect(sgCodeFillStateBefore.innerHTML).to.not.equal(sgCodeFillStateAfter.innerHTML);
 
       expect(codeViewer.tabActive).to.equal('e');
-      expect(sgCodeTitleHtmlStateAfter.classList).to.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateAfter.classList).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateAfter.classArray).to.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateAfter.classArray).to.not.include('sg-code-title-active');
       expect(sgCodeFillStateAfter.innerHTML).to.equal('encoded');
     });
 
@@ -996,8 +996,8 @@ describe('codeViewer', function () {
       expect(sgCodeFillStateBefore.innerHTML).to.not.equal(sgCodeFillStateAfter.innerHTML);
 
       expect(codeViewer.tabActive).to.equal('m');
-      expect(sgCodeTitleHtmlStateAfter.classList).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateAfter.classList).to.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateAfter.classArray).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateAfter.classArray).to.include('sg-code-title-active');
       expect(sgCodeFillStateAfter.innerHTML).to.equal('mustache');
     });
 
@@ -1022,8 +1022,8 @@ describe('codeViewer', function () {
       expect(sgCodeFillStateBefore.innerHTML).to.not.equal(sgCodeFillStateAfter.innerHTML);
 
       expect(codeViewer.tabActive).to.equal('m');
-      expect(sgCodeTitleHtmlStateAfter.classList).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheStateAfter.classList).to.include('sg-code-title-active');
+      expect(sgCodeTitleHtmlStateAfter.classArray).to.not.include('sg-code-title-active');
+      expect(sgCodeTitleMustacheStateAfter.classArray).to.include('sg-code-title-active');
       expect(sgCodeFillStateAfter.innerHTML).to.equal('mustache');
     });
 
@@ -1045,11 +1045,11 @@ describe('codeViewer', function () {
       const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
       const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
-      expect(sgTCodeStateBefore.classList).to.include('active');
+      expect(sgTCodeStateBefore.classArray).to.include('active');
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
 
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTCodeStateAfter.classList).to.not.include('active');
+      expect(sgTCodeStateAfter.classArray).to.not.include('active');
       expect(codeViewer.codeActive).to.be.false;
     });
   });

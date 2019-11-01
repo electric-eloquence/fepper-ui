@@ -156,11 +156,11 @@ describe('patternlabViewer', function () {
       /* eslint-enable max-len */
 
       it('removes is-vishidden classes from nav target and controls', function () {
-        expect(sgNavTargetStateBefore.classList).to.include('is-vishidden');
-        expect(sgControlsStateBefore.classList).to.include('is-vishidden');
+        expect(sgNavTargetStateBefore.classArray).to.include('is-vishidden');
+        expect(sgControlsStateBefore.classArray).to.include('is-vishidden');
 
-        expect(sgNavTargetStateAfter.classList).to.not.include('is-vishidden');
-        expect(sgControlsStateAfter.classList).to.not.include('is-vishidden');
+        expect(sgNavTargetStateAfter.classArray).to.not.include('is-vishidden');
+        expect(sgControlsStateAfter.classArray).to.not.include('is-vishidden');
       });
 
       it('does not leave behind Feplet tag artifacts', function () {
@@ -174,9 +174,9 @@ describe('patternlabViewer', function () {
       });
 
       it('adds a class identifying the protocol to the html element', function () {
-        expect(patternlabHtmlStateBefore.classList).to.not.include('protocol-http');
+        expect(patternlabHtmlStateBefore.classArray).to.not.include('protocol-http');
 
-        expect(patternlabHtmlStateAfter.classList).to.include('protocol-http');
+        expect(patternlabHtmlStateAfter.classArray).to.include('protocol-http');
       });
     });
 
@@ -599,9 +599,9 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
       expect(sgGenContainerStateBefore.style.width).to.not.equal('1351px');
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal('1337px');
       expect(sgSizeEmStateBefore.value).to.not.equal('83.56');
       expect(sgSizePxStateBefore.value).to.not.equal(1337);
@@ -611,9 +611,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('1351px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('1337px');
       expect(sgSizeEmStateAfter.value).to.equal('83.56');
       expect(sgSizePxStateAfter.value).to.equal('1337');
@@ -656,9 +656,9 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
       expect(sgGenContainerStateBefore.style.width).to.not.equal(sgGenContainerStateAfter.style.width);
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal(sgViewportStateAfter.style.width);
       expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
       expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
@@ -669,9 +669,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('334px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('320px');
       expect(sgSizeEmStateAfter.value).to.equal('20.00');
       expect(sgSizePxStateAfter.value).to.equal('320');
@@ -714,9 +714,9 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
       expect(sgGenContainerStateBefore.style.width).to.not.equal(sgGenContainerStateAfter.style.width);
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal(sgViewportStateAfter.style.width);
       expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
       expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
@@ -727,9 +727,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('494px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('480px');
       expect(sgSizeEmStateAfter.value).to.equal('30.00');
       expect(sgSizePxStateAfter.value).to.equal('480');
@@ -772,9 +772,9 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
       expect(sgGenContainerStateBefore.style.width).to.not.equal(sgGenContainerStateAfter.style.width);
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal(sgViewportStateAfter.style.width);
       expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
       expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
@@ -785,9 +785,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('781px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('767px');
       expect(sgSizeEmStateAfter.value).to.equal('47.94');
       expect(sgSizePxStateAfter.value).to.equal('767');
@@ -830,9 +830,9 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
       expect(sgGenContainerStateBefore.style.width).to.not.equal(sgGenContainerStateAfter.style.width);
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal(sgViewportStateAfter.style.width);
       expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
       expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
@@ -843,9 +843,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('1038px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('1024px');
       expect(sgSizeEmStateAfter.value).to.equal('64.00');
       expect(sgSizePxStateAfter.value).to.equal('1024');
@@ -888,9 +888,9 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
       expect(sgGenContainerStateBefore.style.width).to.not.equal(sgGenContainerStateAfter.style.width);
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal(sgViewportStateAfter.style.width);
       expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
       expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
@@ -901,9 +901,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('1294px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('1280px');
       expect(sgSizeEmStateAfter.value).to.equal('80.00');
       expect(sgSizePxStateAfter.value).to.equal('1280');
@@ -946,9 +946,9 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
       expect(sgGenContainerStateBefore.style.width).to.not.equal(sgGenContainerStateAfter.style.width);
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal(sgViewportStateAfter.style.width);
       expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
       expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
@@ -959,9 +959,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('1038px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('1024px');
       expect(sgSizeEmStateAfter.value).to.equal('64.00');
       expect(sgSizePxStateAfter.value).to.equal('1024');
@@ -1007,16 +1007,16 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-random');
       expect(discoModeAfter).to.be.false;
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
 
       // Compare before and after to test randomness.
       expect(sgGenContainerStateBefore.style.width).to.not.equal(sgGenContainerStateAfter.style.width);
@@ -1059,13 +1059,13 @@ describe('patternlabViewer', function () {
       const sgAccHandleStateAfter = $orgs['.sg-acc-handle'].getState();
       const sgAccPanelStateAfter = $orgs['.sg-acc-panel'].getState();
 
-      expect(sgNavTargetStateBefore.classList).to.include('active');
-      expect(sgAccHandleStateBefore.classList).to.include('active');
-      expect(sgAccPanelStateBefore.classList).to.include('active');
+      expect(sgNavTargetStateBefore.classArray).to.include('active');
+      expect(sgAccHandleStateBefore.classArray).to.include('active');
+      expect(sgAccPanelStateBefore.classArray).to.include('active');
 
-      expect(sgNavTargetStateAfter.classList).to.not.include('active');
-      expect(sgAccHandleStateAfter.classList).to.not.include('active');
-      expect(sgAccPanelStateAfter.classList).to.not.include('active');
+      expect(sgNavTargetStateAfter.classArray).to.not.include('active');
+      expect(sgAccHandleStateAfter.classArray).to.not.include('active');
+      expect(sgAccPanelStateAfter.classArray).to.not.include('active');
     });
 
     it('runs .goXXSmall() on patternlab.keyPress "ctrl+alt+0"', function () {
@@ -1107,9 +1107,9 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
       expect(sgGenContainerStateBefore.style.width).to.not.equal(sgGenContainerStateAfter.style.width);
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal(sgViewportStateAfter.style.width);
       expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
       expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
@@ -1120,9 +1120,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('334px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('320px');
       expect(sgSizeEmStateAfter.value).to.equal('20.00');
       expect(sgSizePxStateAfter.value).to.equal('320');
@@ -1168,9 +1168,9 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
       expect(sgGenContainerStateBefore.style.width).to.not.equal(sgGenContainerStateAfter.style.width);
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal(sgViewportStateAfter.style.width);
       expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
       expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
@@ -1181,9 +1181,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('494px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('480px');
       expect(sgSizeEmStateAfter.value).to.equal('30.00');
       expect(sgSizePxStateAfter.value).to.equal('480');
@@ -1229,9 +1229,9 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
       expect(sgGenContainerStateBefore.style.width).to.not.equal(sgGenContainerStateAfter.style.width);
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal(sgViewportStateAfter.style.width);
       expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
       expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
@@ -1242,9 +1242,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('334px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('320px');
       expect(sgSizeEmStateAfter.value).to.equal('20.00');
       expect(sgSizePxStateAfter.value).to.equal('320');
@@ -1290,9 +1290,9 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
       expect(sgGenContainerStateBefore.style.width).to.not.equal(sgGenContainerStateAfter.style.width);
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal(sgViewportStateAfter.style.width);
       expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
       expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
@@ -1303,9 +1303,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('781px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('767px');
       expect(sgSizeEmStateAfter.value).to.equal('47.94');
       expect(sgSizePxStateAfter.value).to.equal('767');
@@ -1351,9 +1351,9 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
       expect(sgGenContainerStateBefore.style.width).to.not.equal(sgGenContainerStateAfter.style.width);
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal(sgViewportStateAfter.style.width);
       expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
       expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
@@ -1364,9 +1364,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('1038px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('1024px');
       expect(sgSizeEmStateAfter.value).to.equal('64.00');
       expect(sgSizePxStateAfter.value).to.equal('1024');
@@ -1401,7 +1401,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateAfter = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthAfter = fepperUi.dataSaver.findValue('vpWidth');
 
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal(sgViewportStateAfter.style.width);
       expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
       expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
@@ -1412,9 +1412,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('1294px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('1280px');
       expect(sgSizeEmStateAfter.value).to.equal('80.00');
       expect(sgSizePxStateAfter.value).to.equal('1280');
@@ -1460,9 +1460,9 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
       expect(sgGenContainerStateBefore.style.width).to.not.equal(sgGenContainerStateAfter.style.width);
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal(sgViewportStateAfter.style.width);
       expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
       expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
@@ -1473,9 +1473,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('1038px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('1024px');
       expect(sgSizeEmStateAfter.value).to.equal('64.00');
       expect(sgSizePxStateAfter.value).to.equal('1024');
@@ -1513,7 +1513,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateAfter = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthAfter = fepperUi.dataSaver.findValue('vpWidth');
 
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal(sgViewportStateAfter.style.width);
       expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
       expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
@@ -1524,9 +1524,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('1294px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('1280px');
       expect(sgSizeEmStateAfter.value).to.equal('80.00');
       expect(sgSizePxStateAfter.value).to.equal('1280');
@@ -1572,9 +1572,9 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
       expect(sgGenContainerStateBefore.style.width).to.not.equal(sgGenContainerStateAfter.style.width);
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.style.width).to.not.equal(sgViewportStateAfter.style.width);
       expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
       expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
@@ -1585,9 +1585,9 @@ describe('patternlabViewer', function () {
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
       expect(sgGenContainerStateAfter.style.width).to.equal('1038px');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.style.width).to.equal('1024px');
       expect(sgSizeEmStateAfter.value).to.equal('64.00');
       expect(sgSizePxStateAfter.value).to.equal('1024');
@@ -1636,16 +1636,16 @@ describe('patternlabViewer', function () {
       expect(discoIdBefore).to.equal(1);
       expect(growModeBefore).to.be.true;
       expect(growIdBefore).to.equal(2);
-      expect(sgGenContainerStateBefore.classList).to.not.include('vp-animate');
-      expect(sgViewportStateBefore.classList).to.not.include('vp-animate');
+      expect(sgGenContainerStateBefore.classArray).to.not.include('vp-animate');
+      expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-random');
       expect(discoModeAfter).to.be.false;
       expect(discoIdAfter).to.be.undefined;
       expect(growModeAfter).to.be.false;
       expect(growIdAfter).to.be.undefined;
-      expect(sgGenContainerStateAfter.classList).to.include('vp-animate');
-      expect(sgViewportStateAfter.classList).to.include('vp-animate');
+      expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
+      expect(sgViewportStateAfter.classArray).to.include('vp-animate');
 
       // Compare before and after to test randomness.
       expect(sgGenContainerStateBefore.style.width).to.not.equal(sgGenContainerStateAfter.style.width);
@@ -1683,14 +1683,14 @@ describe('patternlabViewer', function () {
         expect(documentStateBefore.activeOrganism).to.not.equal('#sg-size-grow');
         expect(growModeBefore).to.be.false;
         expect(growIdBefore).to.not.be.ok;
-        expect(sgGenContainerStateBefore.classList).to.include('vp-animate');
-        expect(sgViewportStateBefore.classList).to.include('vp-animate');
+        expect(sgGenContainerStateBefore.classArray).to.include('vp-animate');
+        expect(sgViewportStateBefore.classArray).to.include('vp-animate');
 
         expect(documentStateAfter.activeOrganism).to.equal('#sg-size-grow');
         expect(growModeAfter).to.be.true;
         expect(growIdAfter).to.be.ok;
-        expect(sgGenContainerStateAfter.classList).to.not.include('vp-animate');
-        expect(sgViewportStateAfter.classList).to.not.include('vp-animate');
+        expect(sgGenContainerStateAfter.classArray).to.not.include('vp-animate');
+        expect(sgViewportStateAfter.classArray).to.not.include('vp-animate');
 
         uiFns.stopGrow();
         done();

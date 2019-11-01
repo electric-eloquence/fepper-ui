@@ -112,7 +112,7 @@ export default function (fepperUiInst, root) {
 
       const sgFToggleState = this.$orgs['#sg-f-toggle'].getState();
 
-      if (sgFToggleState.classList.includes('active')) {
+      if (sgFToggleState.classArray.includes('active')) {
         this.$orgs['#typeahead'].dispatchAction('focus');
       }
     }
