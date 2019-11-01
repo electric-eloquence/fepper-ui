@@ -15,8 +15,8 @@ export default function (fepperUiInst, root) {
       // Measurements.
       this.bodyFontSize = this.bodyFontSize || 16;
       this.bpObj = this.uiFns.getBreakpointsSorted(root.FEPPER || {});
-      this.maxViewportWidth = root.config ? parseInt(root.config.ishMaximum, 10) : 2600; // Maxiumum Size for Viewport.
-      this.minViewportWidth = root.config ? parseInt(root.config.ishMinimum, 10) : 240; // Minimum Size for Viewport.
+      this.maxViewportWidth = root.config ? parseInt(root.config.ishMaximum) : 2600; // Maxiumum Size for Viewport.
+      this.minViewportWidth = root.config ? parseInt(root.config.ishMinimum) : 240; // Minimum Size for Viewport.
       // Any change to sgRightpullWidth needs to be replicated in ui/core/styleguide/index/html/01-body/40-main/main.css
       // in fepper-npm in order to be compiled into styles/ui.css with a consistent width.
       this.sgRightpullWidth = 14;

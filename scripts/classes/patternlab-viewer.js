@@ -175,7 +175,7 @@ export default function (fepperUiInst, root) {
             vpWidth = Math.round(parseFloat(vpWidthParam) * this.uiProps.bodyFontSize);
           }
           else {
-            vpWidth = parseInt(vpWidthParam, 10);
+            vpWidth = parseInt(vpWidthParam);
           }
 
           if (!Number.isNaN(vpWidth)) {

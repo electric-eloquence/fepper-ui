@@ -100,7 +100,7 @@ export default function (fepperUiInst, root) {
         this.openAnnotations();
 
         if (typeof searchParams.number !== 'undefined') {
-          this.moveToNumber = parseInt(searchParams.number, 10);
+          this.moveToNumber = parseInt(searchParams.number);
         }
       }
     }

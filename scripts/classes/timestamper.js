@@ -16,7 +16,7 @@ export default function (fepperUiInst, root) {
 
       if (paramsStr) {
         const paramsObj = new URLSearchParams(paramsStr.slice(1));
-        timestamp = parseInt(paramsObj.get('ts'), 10);
+        timestamp = parseInt(paramsObj.get('ts'));
       }
 
       /* istanbul ignore if */
