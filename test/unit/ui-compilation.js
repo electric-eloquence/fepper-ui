@@ -32,20 +32,20 @@ describe('uiComp', function () {
       const $sgAccPanelMemberAfter = sgAccPanelStateAfter.$members[i];
 
       if (i === 0) {
-        expect($sgAccHandleMemberBefore.classList).to.not.include('active');
-        expect($sgAccPanelMemberBefore.classList).to.not.include('active');
+        expect($sgAccHandleMemberBefore.classArray).to.not.include('active');
+        expect($sgAccPanelMemberBefore.classArray).to.not.include('active');
 
-        expect($sgAccHandleMemberAfter.classList).to.include('active');
-        expect($sgAccPanelMemberAfter.classList).to.include('active');
+        expect($sgAccHandleMemberAfter.classArray).to.include('active');
+        expect($sgAccPanelMemberAfter.classArray).to.include('active');
       }
       else {
         if (i > 1) {
-          expect($sgAccHandleMemberBefore.classList).to.include('active');
-          expect($sgAccPanelMemberBefore.classList).to.include('active');
+          expect($sgAccHandleMemberBefore.classArray).to.include('active');
+          expect($sgAccPanelMemberBefore.classArray).to.include('active');
         }
 
-        expect($sgAccHandleMemberAfter.classList).to.not.include('active');
-        expect($sgAccPanelMemberAfter.classList).to.not.include('active');
+        expect($sgAccHandleMemberAfter.classArray).to.not.include('active');
+        expect($sgAccPanelMemberAfter.classArray).to.not.include('active');
       }
     }
   });
@@ -68,12 +68,12 @@ describe('uiComp', function () {
       const $sgAccPanelMemberAfter = sgAccPanelStateAfter.$members[i];
 
       if (i === 0) {
-        expect($sgAccHandleMemberBefore.classList).to.include('active');
-        expect($sgAccPanelMemberBefore.classList).to.include('active');
+        expect($sgAccHandleMemberBefore.classArray).to.include('active');
+        expect($sgAccPanelMemberBefore.classArray).to.include('active');
       }
 
-      expect($sgAccHandleMemberAfter.classList).to.not.include('active');
-      expect($sgAccPanelMemberAfter.classList).to.not.include('active');
+      expect($sgAccHandleMemberAfter.classArray).to.not.include('active');
+      expect($sgAccPanelMemberAfter.classArray).to.not.include('active');
     }
   });
 
@@ -84,9 +84,9 @@ describe('uiComp', function () {
 
     const sgNavTargetStateAfter = $orgs['#sg-nav-target'].getState();
 
-    expect(sgNavTargetStateBefore.classList).to.not.include('active');
+    expect(sgNavTargetStateBefore.classArray).to.not.include('active');
 
-    expect(sgNavTargetStateAfter.classList).to.include('active');
+    expect(sgNavTargetStateAfter.classArray).to.include('active');
   });
 
   it('.sgNavToggleClick() toggles off', function () {
@@ -96,9 +96,9 @@ describe('uiComp', function () {
 
     const sgNavTargetStateAfter = $orgs['#sg-nav-target'].getState();
 
-    expect(sgNavTargetStateBefore.classList).to.include('active');
+    expect(sgNavTargetStateBefore.classArray).to.include('active');
 
-    expect(sgNavTargetStateAfter.classList).to.not.include('active');
+    expect(sgNavTargetStateAfter.classArray).to.not.include('active');
   });
 
   it('.sgTAnnotationsClick() toggles on', function () {
@@ -116,13 +116,13 @@ describe('uiComp', function () {
     const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
     const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-    expect(sgTCodeStateBefore.classList).to.include('active');
+    expect(sgTCodeStateBefore.classArray).to.include('active');
     expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-    expect(sgTAnnotationsStateBefore.classList).to.not.include('active');
+    expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
 
-    expect(sgTCodeStateAfter.classList).to.not.include('active');
+    expect(sgTCodeStateAfter.classArray).to.not.include('active');
     expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
-    expect(sgTAnnotationsStateAfter.classList).to.include('active');
+    expect(sgTAnnotationsStateAfter.classArray).to.include('active');
   });
 
   it('.sgTAnnotationsClick() toggles off', function () {
@@ -137,10 +137,10 @@ describe('uiComp', function () {
     const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
     expect(sgAnnotationsContainerStateBefore.style.bottom).to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
-    expect(sgTAnnotationsStateBefore.classList).to.include('active');
+    expect(sgTAnnotationsStateBefore.classArray).to.include('active');
 
     expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('-384px');
-    expect(sgTAnnotationsStateAfter.classList).to.not.include('active');
+    expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
   });
 
   it('.sgTAnnotationsClick() does nothing if annotationsViewer.mustacheBrowser is true', function () {
@@ -156,11 +156,11 @@ describe('uiComp', function () {
     const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
     const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-    expect(JSON.stringify(sgTCodeStateBefore.classList))
-      .to.equal(JSON.stringify(sgTCodeStateAfter.classList));
+    expect(JSON.stringify(sgTCodeStateBefore.classArray))
+      .to.equal(JSON.stringify(sgTCodeStateAfter.classArray));
     expect(sgAnnotationsContainerStateBefore.style.bottom).to.equal(sgAnnotationsContainerStateAfter.style.bottom);
-    expect(JSON.stringify(sgTAnnotationsStateBefore.classList))
-      .to.equal(JSON.stringify(sgTAnnotationsStateAfter.classList));
+    expect(JSON.stringify(sgTAnnotationsStateBefore.classArray))
+      .to.equal(JSON.stringify(sgTAnnotationsStateAfter.classArray));
   });
 
   it('.sgTCodeClick() toggles on', function () {
@@ -181,13 +181,13 @@ describe('uiComp', function () {
     const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
     const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
-    expect(sgTAnnotationsStateBefore.classList).to.include('active');
+    expect(sgTAnnotationsStateBefore.classArray).to.include('active');
     expect(sgAnnotationsContainerStateBefore.style.bottom).to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
-    expect(sgTCodeStateBefore.classList).to.not.include('active');
+    expect(sgTCodeStateBefore.classArray).to.not.include('active');
 
-    expect(sgTAnnotationsStateAfter.classList).to.not.include('active');
+    expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
     expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('-384px');
-    expect(sgTCodeStateAfter.classList).to.include('active');
+    expect(sgTCodeStateAfter.classArray).to.include('active');
     expect(fepperUi.annotationsViewer.annotationsActive).to.be.false;
     expect(fepperUi.codeViewer.codeActive).to.be.true;
   });
@@ -204,10 +204,10 @@ describe('uiComp', function () {
     const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
     expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-    expect(sgTCodeStateBefore.classList).to.include('active');
+    expect(sgTCodeStateBefore.classArray).to.include('active');
 
     expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
-    expect(sgTCodeStateAfter.classList).to.not.include('active');
+    expect(sgTCodeStateAfter.classArray).to.not.include('active');
     expect(fepperUi.codeViewer.codeActive).to.be.false;
   });
 
@@ -224,9 +224,9 @@ describe('uiComp', function () {
     const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
     const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
-    expect(JSON.stringify(sgTAnnotationsStateBefore.classList))
-      .to.equal(JSON.stringify(sgTAnnotationsStateAfter.classList));
+    expect(JSON.stringify(sgTAnnotationsStateBefore.classArray))
+      .to.equal(JSON.stringify(sgTAnnotationsStateAfter.classArray));
     expect(sgCodeContainerStateBefore.style.bottom).to.equal(sgCodeContainerStateAfter.style.bottom);
-    expect(JSON.stringify(sgTCodeStateBefore.classList)).to.equal(JSON.stringify(sgTCodeStateAfter.classList));
+    expect(JSON.stringify(sgTCodeStateBefore.classArray)).to.equal(JSON.stringify(sgTCodeStateAfter.classArray));
   });
 });

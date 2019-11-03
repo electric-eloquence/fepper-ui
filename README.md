@@ -32,14 +32,14 @@ not directly relevant to this package.
 See the [Fepper README](https://github.com/electric-eloquence/fepper#ui-customization) 
 for more information.
 
-[snyk-image]: https://snyk.io//test/github/electric-eloquence/fepper-ui/master/badge.svg
-[snyk-url]: https://snyk.io//test/github/electric-eloquence/fepper-ui/master
+[snyk-image]: https://snyk.io//test/github/electric-eloquence/fepper-ui/release/badge.svg
+[snyk-url]: https://snyk.io//test/github/electric-eloquence/fepper-ui/release
 
-[travis-image]: https://img.shields.io/travis/electric-eloquence/fepper-npm.svg
+[travis-image]: https://img.shields.io/travis/electric-eloquence/fepper-npm/release.svg
 [travis-url]: https://travis-ci.org/electric-eloquence/fepper-ui
 
-[coveralls-image]: https://img.shields.io/coveralls/electric-eloquence/fepper-ui/master.svg
+[coveralls-image]: https://img.shields.io/coveralls/electric-eloquence/fepper-ui/release.svg
 [coveralls-url]: https://coveralls.io/r/electric-eloquence/fepper-ui
 
 [license-image]: https://img.shields.io/github/license/electric-eloquence/fepper-ui.svg
-[license-url]: https://raw.githubusercontent.com/electric-eloquence/fepper-ui/master/LICENSE
+[license-url]: https://raw.githubusercontent.com/electric-eloquence/fepper-ui/release/LICENSE

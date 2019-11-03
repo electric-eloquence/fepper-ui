@@ -1,6 +1,5 @@
 import {expect} from 'chai';
 
-import AnnotationsViewer from '../../scripts/classes/annotations-viewer';
 import fepperUi from '../unit';
 
 const $orgs = fepperUi.requerio.$orgs;
@@ -24,10 +23,9 @@ menu anchor.</p>
 describe('annotationsViewer', function () {
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
-      expect(annotationsViewer).to.be.an.instanceof(AnnotationsViewer);
-      expect(Object.keys(annotationsViewer).length).to.equal(10);
+      expect(annotationsViewer.constructor.name).to.equal('AnnotationsViewer');
+      expect(Object.keys(annotationsViewer).length).to.equal(6);
       expect(annotationsViewer).to.have.property('receiveIframeMessage');
-      expect(annotationsViewer).to.have.property('fepperUi');
       expect(annotationsViewer).to.have.property('$orgs');
       expect(annotationsViewer).to.have.property('uiFns');
       expect(annotationsViewer).to.have.property('uiProps');
@@ -43,10 +41,10 @@ describe('annotationsViewer', function () {
     beforeEach(function () {
       annotationsViewer.moveToNumber = 0;
 
-      $orgs['#sg-code-container'].dispatchAction('css', {bottom: 'auto'});
-      $orgs['#sg-t-annotations'].dispatchAction('removeClass', 'active');
-      $orgs['#sg-annotations-container'].dispatchAction('css', {bottom: 'auto'});
-      $orgs['#sg-annotations-container'].dispatchAction('removeClass', 'anim-ready');
+      annotationsViewer.closeAnnotations();
+      $orgs['#sg-annotations-container']
+        .dispatchAction('css', {bottom: 'auto'})
+        .dispatchAction('removeClass', 'anim-ready');
     });
 
     it('opens annotations viewer with a "view=annotations" param', function () {
@@ -54,26 +52,22 @@ describe('annotationsViewer', function () {
         search: '?view=annotations'
       };
 
-      const sgCodeContainerStateBefore = $orgs['#sg-code-container'].getState();
-      const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
       const sgAnnotationsContainerStateBefore = $orgs['#sg-annotations-container'].getState();
+      const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
 
       annotationsViewer.stoke();
 
-      const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
-      const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
       const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
+      const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-      expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgTAnnotationsStateBefore.classList).to.not.include('active');
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
-      expect(sgAnnotationsContainerStateBefore.classList).to.not.include('anim-ready');
+      expect(sgAnnotationsContainerStateBefore.classArray).to.not.include('anim-ready');
+      expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
 
-      expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTAnnotationsStateAfter.classList).to.include('active');
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('0px');
-      expect(sgAnnotationsContainerStateAfter.classList).to.include('anim-ready');
+      expect(sgAnnotationsContainerStateAfter.classArray).to.include('anim-ready');
+      expect(sgTAnnotationsStateAfter.classArray).to.include('active');
       expect(annotationsViewer.moveToNumber).to.equal(0);
     });
 
@@ -82,26 +76,22 @@ describe('annotationsViewer', function () {
         search: '?view=a'
       };
 
-      const sgCodeContainerStateBefore = $orgs['#sg-code-container'].getState();
-      const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
       const sgAnnotationsContainerStateBefore = $orgs['#sg-annotations-container'].getState();
+      const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
 
       annotationsViewer.stoke();
 
-      const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
-      const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
       const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
+      const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-      expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgTAnnotationsStateBefore.classList).to.not.include('active');
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
-      expect(sgAnnotationsContainerStateBefore.classList).to.not.include('anim-ready');
+      expect(sgAnnotationsContainerStateBefore.classArray).to.not.include('anim-ready');
+      expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
 
-      expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTAnnotationsStateAfter.classList).to.include('active');
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('0px');
-      expect(sgAnnotationsContainerStateAfter.classList).to.include('anim-ready');
+      expect(sgAnnotationsContainerStateAfter.classArray).to.include('anim-ready');
+      expect(sgTAnnotationsStateAfter.classArray).to.include('active');
       expect(annotationsViewer.moveToNumber).to.equal(0);
     });
 
@@ -110,27 +100,22 @@ describe('annotationsViewer', function () {
         search: '?view=annotations&number=2'
       };
 
-      const sgCodeContainerStateBefore = $orgs['#sg-code-container'].getState();
-      const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
       const sgAnnotationsContainerStateBefore = $orgs['#sg-annotations-container'].getState();
+      const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
 
       annotationsViewer.stoke();
 
-      const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
-      const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
       const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
+      const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-      expect(sgCodeContainerStateBefore.style.bottom)
-        .to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgTAnnotationsStateBefore.classList).to.not.include('active');
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
-      expect(sgAnnotationsContainerStateBefore.classList).to.not.include('anim-ready');
+      expect(sgAnnotationsContainerStateBefore.classArray).to.not.include('anim-ready');
+      expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
 
-      expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTAnnotationsStateAfter.classList).to.include('active');
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('0px');
-      expect(sgAnnotationsContainerStateAfter.classList).to.include('anim-ready');
+      expect(sgAnnotationsContainerStateAfter.classArray).to.include('anim-ready');
+      expect(sgTAnnotationsStateAfter.classArray).to.include('active');
       expect(annotationsViewer.moveToNumber).to.equal(2);
     });
   });
@@ -200,41 +185,40 @@ describe('annotationsViewer', function () {
 
       const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-      expect(sgTAnnotationsStateBefore.classList).to.not.include('active');
-      expect(sgTAnnotationsStateAfter.classList).to.not.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
+
+      annotationsViewer.mustacheBrowser = false;
     });
 
-    it('toggles on - also tests .openAnnotations()', function () {
-      codeViewer.codeActive = true;
-      annotationsViewer.mustacheBrowser = false;
+    it('toggles on - also tests .openAnnotations() - also closes code viewer', function () {
+      codeViewer.openCode();
 
-      $orgs['#sg-t-code'].dispatchAction('addClass', 'active');
-      $orgs['#sg-code-container'].dispatchAction('css', {bottom: 'auto'});
       $orgs['#sg-t-annotations'].dispatchAction('removeClass', 'active');
       $orgs['#sg-annotations-container'].dispatchAction('css', {bottom: 'auto'});
 
       const sgTCodeStateBefore = $orgs['#sg-t-code'].getState();
       const sgCodeContainerStateBefore = $orgs['#sg-code-container'].getState();
-      const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
       const sgAnnotationsContainerStateBefore = $orgs['#sg-annotations-container'].getState();
+      const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
 
       annotationsViewer.toggleAnnotations();
 
       const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
       const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
-      const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
       const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
+      const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-      expect(sgTCodeStateBefore.classList).to.include('active');
+      expect(sgTCodeStateBefore.classArray).to.include('active');
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgTAnnotationsStateBefore.classList).to.not.include('active');
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
+      expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
 
-      expect(sgTCodeStateAfter.classList).to.not.include('active');
+      expect(sgTCodeStateAfter.classArray).to.not.include('active');
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTAnnotationsStateAfter.classList).to.include('active');
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('0px');
+      expect(sgTAnnotationsStateAfter.classArray).to.include('active');
       expect(annotationsViewer.annotationsActive).to.be.true;
       expect(codeViewer.codeActive).to.be.false;
     });
@@ -250,10 +234,10 @@ describe('annotationsViewer', function () {
 
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
-      expect(sgTAnnotationsStateBefore.classList).to.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.include('active');
 
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTAnnotationsStateAfter.classList).to.not.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
       expect(annotationsViewer.annotationsActive).to.be.false;
     });
   });
@@ -451,10 +435,10 @@ menu anchor.</p>
 
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
-      expect(sgTAnnotationsStateBefore.classList).to.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.include('active');
 
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTAnnotationsStateAfter.classList).to.not.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
       expect(annotationsViewer.annotationsActive).to.be.false;
     });
 
@@ -536,13 +520,13 @@ menu anchor.</p>
       const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
       const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-      expect(sgTCodeStateBefore.classList).to.include('active');
+      expect(sgTCodeStateBefore.classArray).to.include('active');
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgTAnnotationsStateBefore.classList).to.not.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
 
-      expect(sgTCodeStateAfter.classList).to.not.include('active');
+      expect(sgTCodeStateAfter.classArray).to.not.include('active');
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTAnnotationsStateAfter.classList).to.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.include('active');
       expect(annotationsViewer.annotationsActive).to.be.true;
       expect(codeViewer.codeActive).to.be.false;
     });
@@ -571,13 +555,13 @@ menu anchor.</p>
       const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
       const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-      expect(sgTCodeStateBefore.classList).to.include('active');
+      expect(sgTCodeStateBefore.classArray).to.include('active');
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgTAnnotationsStateBefore.classList).to.not.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
 
-      expect(sgTCodeStateAfter.classList).to.not.include('active');
+      expect(sgTCodeStateAfter.classArray).to.not.include('active');
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTAnnotationsStateAfter.classList).to.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.include('active');
       expect(annotationsViewer.annotationsActive).to.be.true;
       expect(codeViewer.codeActive).to.be.false;
     });
@@ -594,9 +578,9 @@ menu anchor.</p>
 
       const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-      expect(sgTAnnotationsStateBefore.classList).to.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.include('active');
 
-      expect(sgTAnnotationsStateAfter.classList).to.not.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
       expect(annotationsViewer.annotationsActive).to.be.false;
     });
 
@@ -618,12 +602,12 @@ menu anchor.</p>
       const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
       const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-      expect(sgTAnnotationsStateBefore.classList).to.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.include('active');
       expect(sgAnnotationsContainerStateBefore.style.bottom)
         .to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
 
       expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTAnnotationsStateAfter.classList).to.not.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
       expect(annotationsViewer.annotationsActive).to.be.false;
     });
   });

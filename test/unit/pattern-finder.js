@@ -1,7 +1,6 @@
 import {expect} from 'chai';
 import sinon from 'sinon';
 
-import PatternFinder from '../../scripts/classes/pattern-finder';
 import fepperUi from '../unit';
 
 const sandbox = sinon.createSandbox();
@@ -20,21 +19,21 @@ describe('patternFinder', function () {
 
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
-      expect(patternFinder).to.be.an.instanceof(PatternFinder);
-      expect(Object.keys(patternFinder).length).to.equal(7);
+      expect(patternFinder.constructor.name).to.equal('PatternFinder');
+      expect(Object.keys(patternFinder).length).to.equal(4);
       expect(patternFinder).to.have.property('receiveIframeMessage');
       expect(patternFinder).to.have.property('data');
       expect(patternFinder).to.have.property('$orgs');
-      expect(patternFinder).to.have.property('patternPaths');
+      expect(patternFinder).to.have.property('uiData');
       expect(patternFinder).to.have.property('uiFns');
       expect(patternFinder).to.have.property('uiProps');
       expect(patternFinder).to.have.property('patterns');
     });
 
     it('initializes correctly', function () {
-      Object.keys(patternFinder.patternPaths).forEach((patternPartial, i) => {
+      Object.keys(patternFinder.uiData.patternPaths).forEach((patternPartial, i) => {
         expect(patternFinder.data[i].patternPartial).to.equal(patternPartial);
-        expect(patternFinder.data[i].patternPath).to.equal(patternFinder.patternPaths[patternPartial]);
+        expect(patternFinder.data[i].patternPath).to.equal(patternFinder.uiData.patternPaths[patternPartial]);
       });
 
       expect(patternFinder.patterns).to.be.an.instanceof(global.Bloodhound);
@@ -57,12 +56,12 @@ describe('patternFinder', function () {
       const sgFindStateAfter = $orgs['#sg-find'].getState();
       const documentStateAfter = $orgs['document'].getState();
 
-      expect(sgFToggleStateBefore.classList).to.include('active');
-      expect(sgFindStateBefore.classList).to.include('active');
+      expect(sgFToggleStateBefore.classArray).to.include('active');
+      expect(sgFindStateBefore.classArray).to.include('active');
       expect(documentStateBefore.activeOrganism).to.equal('#typeahead');
 
-      expect(sgFToggleStateAfter.classList).to.not.include('active');
-      expect(sgFindStateAfter.classList).to.not.include('active');
+      expect(sgFToggleStateAfter.classArray).to.not.include('active');
+      expect(sgFindStateAfter.classArray).to.not.include('active');
       expect(documentStateAfter.activeOrganism).to.be.null;
     });
   });
@@ -85,12 +84,12 @@ describe('patternFinder', function () {
       const sgFindStateAfter = $orgs['#sg-find'].getState();
       const documentStateAfter = $orgs['document'].getState();
 
-      expect(sgFToggleStateBefore.classList).to.include('active');
-      expect(sgFindStateBefore.classList).to.include('active');
+      expect(sgFToggleStateBefore.classArray).to.include('active');
+      expect(sgFindStateBefore.classArray).to.include('active');
       expect(documentStateBefore.activeOrganism).to.equal('#typeahead');
 
-      expect(sgFToggleStateAfter.classList).to.not.include('active');
-      expect(sgFindStateAfter.classList).to.not.include('active');
+      expect(sgFToggleStateAfter.classArray).to.not.include('active');
+      expect(sgFindStateAfter.classArray).to.not.include('active');
       expect(documentStateAfter.activeOrganism).to.be.null;
       expect($orgs['#sg-viewport'][0].contentWindow.postMessage.calledOnce).to.be.true;
 
@@ -116,12 +115,12 @@ describe('patternFinder', function () {
       const sgFindStateAfter = $orgs['#sg-find'].getState();
       const documentStateAfter = $orgs['document'].getState();
 
-      expect(sgFToggleStateBefore.classList).to.include('active');
-      expect(sgFindStateBefore.classList).to.include('active');
+      expect(sgFToggleStateBefore.classArray).to.include('active');
+      expect(sgFindStateBefore.classArray).to.include('active');
       expect(documentStateBefore.activeOrganism).to.equal('#typeahead');
 
-      expect(sgFToggleStateAfter.classList).to.not.include('active');
-      expect(sgFindStateAfter.classList).to.not.include('active');
+      expect(sgFToggleStateAfter.classArray).to.not.include('active');
+      expect(sgFindStateAfter.classArray).to.not.include('active');
       expect(documentStateAfter.activeOrganism).to.be.null;
       expect($orgs['#sg-viewport'][0].contentWindow.postMessage.calledOnce).to.be.true;
 
@@ -147,12 +146,12 @@ describe('patternFinder', function () {
       const sgFindStateAfter = $orgs['#sg-find'].getState();
       const documentStateAfter = $orgs['document'].getState();
 
-      expect(sgFToggleStateBefore.classList).to.include('active');
-      expect(sgFindStateBefore.classList).to.include('active');
+      expect(sgFToggleStateBefore.classArray).to.include('active');
+      expect(sgFindStateBefore.classArray).to.include('active');
       expect(documentStateBefore.activeOrganism).to.equal('#typeahead');
 
-      expect(sgFToggleStateAfter.classList).to.not.include('active');
-      expect(sgFindStateAfter.classList).to.not.include('active');
+      expect(sgFToggleStateAfter.classArray).to.not.include('active');
+      expect(sgFindStateAfter.classArray).to.not.include('active');
       expect(documentStateAfter.activeOrganism).to.be.null;
       expect($orgs['#sg-viewport'][0].contentWindow.postMessage.calledOnce).to.be.true;
 
@@ -174,12 +173,12 @@ describe('patternFinder', function () {
       const sgFindStateAfter = $orgs['#sg-find'].getState();
       const documentStateAfter = $orgs['document'].getState();
 
-      expect(sgFToggleStateBefore.classList).to.not.include('active');
-      expect(sgFindStateBefore.classList).to.not.include('active');
+      expect(sgFToggleStateBefore.classArray).to.not.include('active');
+      expect(sgFindStateBefore.classArray).to.not.include('active');
       expect(documentStateBefore.activeOrganism).to.be.null;
 
-      expect(sgFToggleStateAfter.classList).to.include('active');
-      expect(sgFindStateAfter.classList).to.include('active');
+      expect(sgFToggleStateAfter.classArray).to.include('active');
+      expect(sgFindStateAfter.classArray).to.include('active');
       expect(documentStateAfter.activeOrganism).to.equal('#typeahead');
     });
 
@@ -192,11 +191,11 @@ describe('patternFinder', function () {
       const sgFToggleStateAfter = $orgs['#sg-f-toggle'].getState();
       const sgFindStateAfter = $orgs['#sg-find'].getState();
 
-      expect(sgFToggleStateBefore.classList).to.include('active');
-      expect(sgFindStateBefore.classList).to.include('active');
+      expect(sgFToggleStateBefore.classArray).to.include('active');
+      expect(sgFindStateBefore.classArray).to.include('active');
 
-      expect(sgFToggleStateAfter.classList).to.not.include('active');
-      expect(sgFindStateAfter.classList).to.not.include('active');
+      expect(sgFToggleStateAfter.classArray).to.not.include('active');
+      expect(sgFindStateAfter.classArray).to.not.include('active');
     });
   });
 
@@ -226,12 +225,12 @@ describe('patternFinder', function () {
       const sgFindStateAfter = $orgs['#sg-find'].getState();
       const documentStateAfter = $orgs['document'].getState();
 
-      expect(sgFToggleStateBefore.classList).to.not.include('active');
-      expect(sgFindStateBefore.classList).to.not.include('active');
+      expect(sgFToggleStateBefore.classArray).to.not.include('active');
+      expect(sgFindStateBefore.classArray).to.not.include('active');
       expect(documentStateBefore.activeOrganism).to.be.null;
 
-      expect(sgFToggleStateAfter.classList).to.include('active');
-      expect(sgFindStateAfter.classList).to.include('active');
+      expect(sgFToggleStateAfter.classArray).to.include('active');
+      expect(sgFindStateAfter.classArray).to.include('active');
       expect(documentStateAfter.activeOrganism).to.equal('#typeahead');
     });
 
@@ -256,11 +255,11 @@ describe('patternFinder', function () {
       const sgFToggleStateAfter = $orgs['#sg-f-toggle'].getState();
       const sgFindStateAfter = $orgs['#sg-find'].getState();
 
-      expect(sgFToggleStateBefore.classList).to.include('active');
-      expect(sgFindStateBefore.classList).to.include('active');
+      expect(sgFToggleStateBefore.classArray).to.include('active');
+      expect(sgFindStateBefore.classArray).to.include('active');
 
-      expect(sgFToggleStateAfter.classList).to.not.include('active');
-      expect(sgFindStateAfter.classList).to.not.include('active');
+      expect(sgFToggleStateAfter.classArray).to.not.include('active');
+      expect(sgFindStateAfter.classArray).to.not.include('active');
     });
 
     it('invokes closeFinder for keyPress "esc"', function () {
@@ -290,12 +289,12 @@ describe('patternFinder', function () {
       const sgFindStateAfter = $orgs['#sg-find'].getState();
       const documentStateAfter = $orgs['document'].getState();
 
-      expect(sgFToggleStateBefore.classList).to.include('active');
-      expect(sgFindStateBefore.classList).to.include('active');
+      expect(sgFToggleStateBefore.classArray).to.include('active');
+      expect(sgFindStateBefore.classArray).to.include('active');
       expect(documentStateBefore.activeOrganism).to.equal('#typeahead');
 
-      expect(sgFToggleStateAfter.classList).to.not.include('active');
-      expect(sgFindStateAfter.classList).to.not.include('active');
+      expect(sgFToggleStateAfter.classArray).to.not.include('active');
+      expect(sgFindStateAfter.classArray).to.not.include('active');
       expect(documentStateAfter.activeOrganism).to.be.null;
     });
 
@@ -322,12 +321,12 @@ describe('patternFinder', function () {
       const sgFindStateAfter = $orgs['#sg-find'].getState();
       const documentStateAfter = $orgs['document'].getState();
 
-      expect(sgFToggleStateBefore.classList).to.not.include('active');
-      expect(sgFindStateBefore.classList).to.not.include('active');
+      expect(sgFToggleStateBefore.classArray).to.not.include('active');
+      expect(sgFindStateBefore.classArray).to.not.include('active');
       expect(documentStateBefore.activeOrganism).to.be.null;
 
-      expect(sgFindStateAfter.classList).to.not.include('active');
-      expect(sgFToggleStateAfter.classList).to.not.include('active');
+      expect(sgFindStateAfter.classArray).to.not.include('active');
+      expect(sgFToggleStateAfter.classArray).to.not.include('active');
       expect(documentStateAfter.activeOrganism).to.be.null;
     });
   });
