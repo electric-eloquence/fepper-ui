@@ -86,7 +86,7 @@ function receiveIframeMessage(event) {
         });
 
         // If none of the toggles are focused, get the data from the first one.
-        if (!patternData) {
+        if (!patternData && sgPatterns[0]) {
           const patternDataEl = sgPatterns[0].querySelector('.sg-pattern-data');
 
           if (patternDataEl) {

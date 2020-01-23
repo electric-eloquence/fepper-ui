@@ -90,6 +90,12 @@ function scrollViewall() {
     focusedEl.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
   }
   else {
+    if (!sgPatternFirst) {
+      parent.postMessage({annotationsViewall: false, codeViewall: false, targetOrigin});
+
+      return;
+    }
+
     sgPatternFirst.querySelector('.sg-pattern-toggle-annotations').classList.add('focused');
     window.scrollTo({top: 0, behavior: 'smooth'});
   }
@@ -148,7 +154,7 @@ function receiveIframeMessage(event) {
             }
           }
 
-          if (!els) {
+          if (!els && sgPatternFirst) {
             els = sgPatternFirst.querySelectorAll(annotation.el);
           }
         }
@@ -262,7 +268,7 @@ window.addEventListener('resize', () => {
 
         if (viewall) {
           const sgPattern = d.getElementById(viewallFocus);
-          els = sgPattern.querySelectorAll(annotation.el);
+          els = sgPattern ? sgPattern.querySelectorAll(annotation.el) : [];
         }
 
         // Pattern.
