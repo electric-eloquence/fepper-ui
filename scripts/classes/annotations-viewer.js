@@ -109,11 +109,21 @@ export default function (fepperUiInst, root) {
       const obj = {annotationsToggle: 'off'};
       this.annotationsActive = false;
 
+      /* istanbul ignore if */
+      if (typeof getComputedStyle === 'function') {
+        this.$orgs['#sg-annotations-container'].dispatchAction('addClass', 'close');
+      }
+
       this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, this.uiProps.targetOrigin);
       this.slideAnnotations(
         Number(this.$orgs['#sg-annotations-container'].getState().innerHeight)
       );
       this.$orgs['#sg-t-annotations'].dispatchAction('removeClass', 'active');
+
+      // Remove padding from bottom of viewport if appropriate.
+      if (!this.codeViewer.codeActive) {
+        this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: '0px'});
+      }
 
       /* istanbul ignore if */
       if (typeof getComputedStyle === 'function') {
@@ -129,7 +139,9 @@ export default function (fepperUiInst, root) {
         }
 
         setTimeout(() => {
-          this.$orgs['#sg-annotations-container'].dispatchAction('removeClass', 'anim-ready');
+          this.$orgs['#sg-annotations-container']
+            .dispatchAction('removeClass', 'close')
+            .dispatchAction('removeClass', 'anim-ready');
         }, transitionDurationNum);
       }
     }
@@ -158,9 +170,16 @@ export default function (fepperUiInst, root) {
         return;
       }
 
-      this.$orgs['#sg-annotations-container'] // Has class sg-view-container.
-        .dispatchAction('css', {bottom: -this.uiProps.sh + 'px'})
-        .dispatchAction('addClass', 'anim-ready');
+      // Flag that viewer is active.
+      this.annotationsActive = true;
+
+      this.$orgs['#sg-t-annotations'].dispatchAction('addClass', 'active');
+      this.$orgs['#sg-annotations-container'].dispatchAction('css', {bottom: -this.uiProps.sh + 'px'});
+
+      /* istanbul ignore if */
+      if (typeof getComputedStyle === 'function') {
+        this.$orgs['#sg-annotations-container'].dispatchAction('addClass', 'anim-ready');
+      }
 
       // Make sure the code viewer is off before showing annotations.
       this.codeViewer.closeCode();
@@ -170,13 +189,11 @@ export default function (fepperUiInst, root) {
 
       this.$orgs['#sg-viewport'][0].contentWindow.postMessage(objAnnotationsToggle, this.uiProps.targetOrigin);
 
-      // Flag that viewer is active.
-      this.annotationsActive = true;
-
-      this.$orgs['#sg-t-annotations'].dispatchAction('addClass', 'active');
-
       // Slide the annotation section into view.
       this.slideAnnotations(0);
+
+      // Add padding to bottom of viewport.
+      this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: (this.uiProps.sh / 2) + 'px'});
 
       if (this.moveToNumber !== 0) {
         this.moveTo(this.moveToNumber);

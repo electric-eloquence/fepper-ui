@@ -11,6 +11,7 @@ describe('Pattern end-to-end tests', function () {
         $('#sg-pattern-toggle-annotations-components-region').click();
         browser.pause(700);
         browser.switchToParentFrame();
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-annotations').getHTML(false)).to.equal(`<div id="annotation-1">
 <h2>1. Navigation</h2>
@@ -26,6 +27,7 @@ menu anchor.</p>
         $('#sg-pattern-toggle-annotations-components-region').click();
         browser.pause(700);
         browser.switchToParentFrame();
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
     });
@@ -40,6 +42,7 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'a']);
         browser.pause(700);
         browser.switchToParentFrame();
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-annotations').getHTML(false)).to.equal(`<div id="annotation-1">
 <h2>1. Navigation</h2>
@@ -55,6 +58,7 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'a']);
         browser.pause(700);
         browser.switchToParentFrame();
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
     });
@@ -72,12 +76,14 @@ menu anchor.</p>
         $('#sg-pattern-toggle-code-components-region').click();
         browser.pause(700);
         browser.switchToParentFrame();
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-code-fill').getText()).to.equal('{{> 01-compounds/block }}');
         browser.switchToFrame($('#sg-viewport'));
         $('#sg-pattern-toggle-code-components-region').click();
         browser.pause(700);
         browser.switchToParentFrame();
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
     });
@@ -92,12 +98,14 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
         browser.switchToParentFrame();
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
         browser.switchToFrame($('#sg-viewport'));
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
         browser.switchToParentFrame();
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
 

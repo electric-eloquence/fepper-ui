@@ -338,6 +338,7 @@ describe('UI compilation of index page js', function () {
         $('#sg-t-annotations').click();
         browser.pause(700);
         expect($('#sg-t-code').getAttribute('class')).to.not.have.string('active');
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
         expect($('#sg-t-annotations').getAttribute('class')).to.have.string('active');
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
@@ -347,6 +348,7 @@ describe('UI compilation of index page js', function () {
         browser.pause(100);
         $('#sg-t-annotations').click();
         browser.pause(700);
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
         expect($('#sg-t-annotations').getAttribute('class')).to.not.have.string('active');
         expect($('#sg-view').getAttribute('class')).to.not.have.string('active');
@@ -370,6 +372,7 @@ describe('UI compilation of index page js', function () {
         $('#sg-t-code').click();
         browser.pause(700);
         expect($('#sg-t-annotations').getAttribute('class')).to.not.have.string('active');
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
         expect($('#sg-t-code').getAttribute('class')).to.have.string('active');
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
@@ -379,6 +382,7 @@ describe('UI compilation of index page js', function () {
         browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
         expect($('#sg-t-code').getAttribute('class')).to.not.have.string('active');
         expect($('#sg-view').getAttribute('class')).to.not.have.string('active');

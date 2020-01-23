@@ -187,7 +187,7 @@
             // Parse xhr.responseText as DOM. Create an object consumable by the html2json library.
             const parser = new DOMParser();
             const doc = parser.parseFromString(xhr.responseText, 'text/html');
-            const selection = doc.querySelectorAll(selectorName);
+            const selection = doc ? doc.querySelectorAll(selectorName) : [];
             const html2json = {node: 'root', child: []};
 
             for (let i = 0, l = selection.length; i < l; i++) {

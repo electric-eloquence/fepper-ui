@@ -233,7 +233,6 @@ export default function (fepperUiInst, root) {
         );
         this.$orgs['#sg-nav-target'].dispatchAction('html', templateRenderedNav);
         this.$orgs['#sg-nav-target'].dispatchAction('removeClass', 'is-vishidden');
-        this.$orgs['.sg-acc-handle'].getState();
 
         // Render UI controls. "Ish" is apparently the pre-patternlab name for the viewport resizer.
         // http://bradfrost.com/blog/post/ish/

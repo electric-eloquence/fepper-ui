@@ -538,6 +538,9 @@ body {
   right: 0;
   z-index: 0;
 }
+#sg-vp-wrap.anim-ready {
+  transition: padding-bottom 0.3s linear 0.1s;
+}
 
 /**
  * This is an invisible div that sits above the iframe and is used in JS for manual viewport resizing purposes.
@@ -555,7 +558,7 @@ body {
  * This is the iframe container.
  */
 #sg-gen-container {
-  width: calc(100% + 14px);
+  width: calc(100% + 14px); /* 14px also hard-coded below and in fepper-ui. Changes here must be made there. */
   height: 100%;
   position: relative;
   margin: 0 auto;
@@ -568,6 +571,7 @@ body {
 
 /**
  * This is the actual iframe.
+ * It is IMPERATIVE to never give this padding, border, or margin.
  */
 #sg-viewport {
   position: absolute;
@@ -585,9 +589,10 @@ body {
 
 /**
  * Container used for manual resizing.
+ * It is IMPERATIVE to never give this padding, border, or margin.
  */
 #sg-rightpull-container {
-  width: 14px;
+  width: 14px; /* Also hard-coded in fepper-ui. Changes here must be made there. Not meant to be user-configured. */
   float: right;
   margin: 0;
   height: 100%;
@@ -622,23 +627,19 @@ body {
   transition: width 0.8s ease-out;
 }
 .sg-view-container {
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  display: none;
-  font-family: Helvetica, "Nimbus Sans L", "Liberation Sans", Roboto, sans-serif;
-  line-height: 1.4;
-  font-size: 1.4rem;
   background: #222;
   color: #808080;
-  position: fixed;
-  top: auto;
+  display: none;
+  font-family: Helvetica, "Nimbus Sans L", "Liberation Sans", Roboto, sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.4;
+  overflow-x: hidden;
+  overflow-y: auto;
   padding: 1.4rem;
-  bottom: 0;
+  position: fixed;
   left: 0;
   width: 100%;
   height: 50%;
-  overflow-y: auto;
-  overflow-x: hidden;
   z-index: 3;
 }
 .sg-view-container a {
@@ -650,6 +651,9 @@ body {
 .sg-view-container.anim-ready {
   display: block;
   transition: bottom 0.3s ease-out;
+}
+.sg-view-container.anim-ready.close {
+  transition: bottom 0.5s ease-out 0.2s;
 }
 
 .sg-view-close {

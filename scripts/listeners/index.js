@@ -48,6 +48,16 @@ export default function (fepperUiInst) {
           fepperUiInst.uiFns.updateViewportWidth(Number(vpWidth));
         }
 
+        this.$orgs.window.on('resize', () => {
+          // Adjust viewport padding if annotations or code viewer is active.
+          if (fepperUiInst.annotationsViewer.annotationsActive || fepperUiInst.codeViewer.codeActive) {
+            this.$orgs['#sg-vp-wrap']
+              .dispatchAction('removeClass', 'anim-ready')
+              .dispatchAction('css', {paddingBottom: (fepperUiInst.uiProps.sh / 2) + 'px'})
+              .dispatchAction('addClass', 'anim-ready');
+          }
+        });
+
         this.$orgs.window.on('resize', fepperUiInst.uiFns.debounce(() => {
           // Update iframe width if in wholeMode.
           if (

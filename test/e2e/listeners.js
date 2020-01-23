@@ -10,9 +10,11 @@ describe('Listeners end-to-end tests', function () {
         browser.pause(100);
         $('#sg-t-annotations').click();
         browser.pause(700);
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
         $('#sg-annotations-close-btn').click();
         browser.pause(700);
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
     });
@@ -25,6 +27,7 @@ describe('Listeners end-to-end tests', function () {
       it('"ctrl+shift+a" toggles annotations viewer', function () {
         browser.keys(['Control', 'Shift', 'a']);
         browser.pause(700);
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-annotations').getHTML(false)).to.equal(`<div id="annotation-1">
 <h2>1. Navigation</h2>
@@ -38,6 +41,7 @@ menu anchor.</p>
 </div>`);
         browser.keys(['Control', 'Shift', 'a']);
         browser.pause(700);
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
         expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
     });
@@ -54,9 +58,11 @@ menu anchor.</p>
         browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
         $('#sg-code-close-btn').click();
         browser.pause(700);
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
 
@@ -94,10 +100,12 @@ menu anchor.</p>
       it('"ctrl+shift+c" toggles code viewer', function () {
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
         expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
       });
 

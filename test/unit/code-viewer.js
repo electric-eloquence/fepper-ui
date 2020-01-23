@@ -35,9 +35,7 @@ describe('codeViewer', function () {
       codeViewer.selectForCopy = false;
 
       codeViewer.closeCode();
-      $orgs['#sg-code-container']
-        .dispatchAction('css', {bottom: 'auto'})
-        .dispatchAction('removeClass', 'anim-ready');
+      $orgs['#sg-code-container'].dispatchAction('css', {bottom: 'auto'});
     });
 
     it('opens code viewer with a "view=code" param', function () {
@@ -54,11 +52,9 @@ describe('codeViewer', function () {
       const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgCodeContainerStateBefore.classArray).to.not.include('anim-ready');
       expect(sgTCodeStateBefore.classArray).to.not.include('active');
 
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('0px');
-      expect(sgCodeContainerStateAfter.classArray).to.include('anim-ready');
       expect(sgTCodeStateAfter.classArray).to.include('active');
       expect(codeViewer.selectForCopy).to.be.false;
     });
@@ -77,11 +73,9 @@ describe('codeViewer', function () {
       const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgCodeContainerStateBefore.classArray).to.not.include('anim-ready');
       expect(sgTCodeStateBefore.classArray).to.not.include('active');
 
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('0px');
-      expect(sgCodeContainerStateAfter.classArray).to.include('anim-ready');
       expect(sgTCodeStateAfter.classArray).to.include('active');
       expect(codeViewer.selectForCopy).to.be.false;
     });
@@ -101,11 +95,9 @@ describe('codeViewer', function () {
       const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgCodeContainerStateBefore.classArray).to.not.include('anim-ready');
       expect(sgTCodeStateBefore.classArray).to.not.include('active');
 
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('0px');
-      expect(sgCodeContainerStateAfter.classArray).to.include('anim-ready');
       expect(sgTCodeStateAfter.classArray).to.include('active');
       expect(codeViewer.selectForCopy).to.be.false;
 
@@ -126,11 +118,9 @@ describe('codeViewer', function () {
       const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
       expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgCodeContainerStateBefore.classArray).to.not.include('anim-ready');
       expect(sgTCodeStateBefore.classArray).to.not.include('active');
 
       expect(sgCodeContainerStateAfter.style.bottom).to.equal('0px');
-      expect(sgCodeContainerStateAfter.classArray).to.include('anim-ready');
       expect(sgTCodeStateAfter.classArray).to.include('active');
       expect(codeViewer.selectForCopy).to.be.true;
     });
@@ -328,6 +318,10 @@ describe('codeViewer', function () {
   });
 
   describe('.toggleCode()', function () {
+    after(function () {
+      codeViewer.closeCode();
+    });
+
     it('does nothing if .mustacheBrowser is true', function () {
       codeViewer.codeActive = false;
       codeViewer.mustacheBrowser = true;
@@ -346,7 +340,54 @@ describe('codeViewer', function () {
       codeViewer.mustacheBrowser = false;
     });
 
-    it('toggles on - also tests .openCode() - also closes annotations viewer', function () {
+    it('toggles on - also tests .openCode()', function () {
+      codeViewer.closeCode();
+
+      $orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
+      $orgs['#sg-code-container'].dispatchAction('css', {bottom: 'auto'});
+
+      const sgCodeContainerStateBefore = $orgs['#sg-code-container'].getState();
+      const sgTCodeStateBefore = $orgs['#sg-t-code'].getState();
+      const sgVpWrapStateBefore = $orgs['#sg-vp-wrap'].getState();
+
+      codeViewer.toggleCode();
+
+      const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
+      const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
+      const sgVpWrapStateAfter = $orgs['#sg-vp-wrap'].getState();
+
+      expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
+      expect(sgTCodeStateBefore.classArray).to.not.include('active');
+      expect(sgVpWrapStateBefore.style.paddingBottom).to.equal('0px');
+
+      expect(sgCodeContainerStateAfter.style.bottom).to.equal('0px');
+      expect(sgTCodeStateAfter.classArray).to.include('active');
+      expect(sgVpWrapStateAfter.style.paddingBottom).to.equal('384px');
+      expect(codeViewer.codeActive).to.be.true;
+    });
+
+    it('toggles off - also tests .closeCode()', function () {
+      const sgCodeContainerStateBefore = $orgs['#sg-code-container'].getState();
+      const sgTCodeStateBefore = $orgs['#sg-t-code'].getState();
+      const sgVpWrapStateBefore = $orgs['#sg-vp-wrap'].getState();
+
+      codeViewer.toggleCode();
+
+      const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
+      const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
+      const sgVpWrapStateAfter = $orgs['#sg-vp-wrap'].getState();
+
+      expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
+      expect(sgTCodeStateBefore.classArray).to.include('active');
+      expect(sgVpWrapStateBefore.style.paddingBottom).to.equal('384px');
+
+      expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
+      expect(sgTCodeStateAfter.classArray).to.not.include('active');
+      expect(sgVpWrapStateAfter.style.paddingBottom).to.equal('0px');
+      expect(codeViewer.codeActive).to.be.false;
+    });
+
+    it('toggles on - also closes annotations viewer', function () {
       annotationsViewer.openAnnotations();
 
       $orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
@@ -376,23 +417,6 @@ describe('codeViewer', function () {
       expect(sgTCodeStateAfter.classArray).to.include('active');
       expect(annotationsViewer.annotationsActive).to.be.false;
       expect(codeViewer.codeActive).to.be.true;
-    });
-
-    it('toggles off - also tests .closeCode()', function () {
-      const sgCodeContainerStateBefore = $orgs['#sg-code-container'].getState();
-      const sgTCodeStateBefore = $orgs['#sg-t-code'].getState();
-
-      codeViewer.toggleCode();
-
-      const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
-      const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
-
-      expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
-      expect(sgTCodeStateBefore.classArray).to.include('active');
-
-      expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
-      expect(sgTCodeStateAfter.classArray).to.not.include('active');
-      expect(codeViewer.codeActive).to.be.false;
     });
   });
 

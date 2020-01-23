@@ -11,7 +11,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="test/fixtures/styles/ui.css" media="all">
-<link rel="stylesheet" href="styles/prism-typeahead.css" media="all">
+<link rel="stylesheet" href="test/fixtures/styles/pattern-scaffolding.css" media="all">
+<link rel="stylesheet" href="test/fixtures/styles/prism-typeahead.css" media="all">
 
 <script>window.FEPPER_UI = {};</script>
 
@@ -100,21 +101,21 @@
   </ul>
 {{/ ishControlsHide.tools-all }}
 </li></ul></header><main>
-<div id="sg-vp-wrap">
+<div id="sg-vp-wrap" class="anim-ready">
   <div id="sg-cover"></div>
   <div id="sg-gen-container">
-    <iframe id="sg-viewport" name="sg-viewport" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals"></iframe>
+    <iframe id="sg-viewport" name="sg-viewport" sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
     <div id="sg-rightpull-container">
       <div id="sg-rightpull"></div>
     </div>
   </div>
 </div>
-</main><aside><div class="sg-view-container" id="sg-annotations-container" style="bottom: auto;">
+</main><aside><div class="sg-view-container" id="sg-annotations-container" style="bottom:auto">
 <div id="sg-annotations-close" class="sg-view-close">
   <a href="#" id="sg-annotations-close-btn" class="sg-view-close-btn">&#x2715;</a>
 </div>
 <div id="sg-annotations"></div>
-</div><div class="sg-view-container" id="sg-code-container" style="bottom: auto;">
+</div><div class="sg-view-container" id="sg-code-container" style="bottom:auto">
 <div id="sg-code-close" class="sg-view-close">
   <a href="#" id="sg-code-close-btn" class="sg-view-close-btn">&#x2715;</a>
 </div>
