@@ -71,11 +71,11 @@
     "chromedriver": "^78.0.1",
     "coveralls": "3.x",
     "eslint": "6.x",
-    "husky": "1.x",
-    "mocha": "6.x",
-    "nyc": "14.x",
+    "husky": "4.x",
+    "mocha": "7.x",
+    "nyc": "15.x",
     "rollup": "^1.16.7",
-    "sinon": "7.x",
+    "sinon": "8.x",
     "wdio-chromedriver-service": "^5.0.2",
     "webdriverio": "5.13.2"
   }
