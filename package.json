@@ -41,7 +41,7 @@
   },
   "homepage": "https://github.com/electric-eloquence/fepper-ui#readme",
   "dependencies": {
-    "feplet": "^1.2.0-rc.0",
+    "feplet": "^1.2.0",
     "he": "1.1.0",
     "jquery": "3.4.1",
     "js-beautify": "1.9.0",
