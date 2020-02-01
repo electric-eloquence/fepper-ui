@@ -16,24 +16,29 @@ describe('uiFns', function () {
       $orgs['#sg-nav-target'].dispatchAction('addClass', 'active');
       $orgs['.sg-acc-handle'].dispatchAction('addClass', 'active');
       $orgs['.sg-acc-panel'].dispatchAction('addClass', 'active');
+      $orgs['.sg-size'].dispatchAction('addClass', 'active');
 
       const sgNavTargetStateBefore = $orgs['#sg-nav-target'].getState();
       const sgAccHandleStateBefore = $orgs['.sg-acc-handle'].getState();
       const sgAccPanelStateBefore = $orgs['.sg-acc-panel'].getState();
+      const sgSizeStateBefore = $orgs['.sg-size'].getState();
 
       uiFns.closeAllPanels();
 
       const sgNavTargetStateAfter = $orgs['#sg-nav-target'].getState();
       const sgAccHandleStateAfter = $orgs['.sg-acc-handle'].getState();
       const sgAccPanelStateAfter = $orgs['.sg-acc-panel'].getState();
+      const sgSizeStateAfter = $orgs['.sg-size'].getState();
 
       expect(sgNavTargetStateBefore.classArray).to.include('active');
       expect(sgAccHandleStateBefore.classArray).to.include('active');
       expect(sgAccPanelStateBefore.classArray).to.include('active');
+      expect(sgSizeStateBefore.classArray).to.include('active');
 
       expect(sgNavTargetStateAfter.classArray).to.not.include('active');
       expect(sgAccHandleStateAfter.classArray).to.not.include('active');
       expect(sgAccPanelStateAfter.classArray).to.not.include('active');
+      expect(sgSizeStateAfter.classArray).to.not.include('active');
     });
   });
 

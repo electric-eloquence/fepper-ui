@@ -31,6 +31,7 @@ export default function (fepperUiInst, root) {
       this.$orgs['#sg-nav-target'].dispatchAction('removeClass', 'active');
       this.$orgs['.sg-acc-handle'].dispatchAction('removeClass', 'active');
       this.$orgs['.sg-acc-panel'].dispatchAction('removeClass', 'active');
+      this.$orgs['.sg-size'].dispatchAction('removeClass', 'active');
     }
 
     /**

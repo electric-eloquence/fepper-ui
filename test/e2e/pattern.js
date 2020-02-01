@@ -441,6 +441,15 @@ menu anchor.</p>
         expect($('.sg-nav-elements').$('.sg-acc-panel').getAttribute('class')).to.not.have.string('active');
       });
 
+      it('bodyClick closes size panel', function () {
+        $('#sg-form-label').click();
+        expect($('#sg-form-label').getAttribute('class')).to.have.string('active');
+        browser.switchToFrame($('#sg-viewport'));
+        $('body').click();
+        browser.switchToParentFrame();
+        expect($('#sg-form-label').getAttribute('class')).to.not.have.string('active');
+      });
+
       it('pattern anchor clicks switch the pattern in the iframe', function () {
         $('.sg-nav-compounds').$('.sg-acc-handle').click();
         browser.pause(100);
