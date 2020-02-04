@@ -141,7 +141,7 @@
 
         if (node4insert) {
           const script2insert = d.createElement('script');
-          script2insert.src = '../../scripts/pattern/html-scraper-dhtml.js';
+          script2insert.src = '../../node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js';
 
           node4insert.parentNode.insertBefore(script2insert, node4insert);
         }
