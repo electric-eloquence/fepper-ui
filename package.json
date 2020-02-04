@@ -73,6 +73,7 @@
     "coveralls": "3.x",
     "eslint": "6.x",
     "husky": "4.x",
+    "mkdirp": "^0.5.1",
     "mocha": "7.x",
     "nyc": "15.x",
     "rollup": "^1.16.7",
