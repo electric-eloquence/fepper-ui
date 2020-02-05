@@ -43,7 +43,7 @@
   if (importer) {
     importer.addEventListener('submit', (e) => {
       // eslint-disable-next-line no-useless-escape
-      if (!/^[0-9a-z][\w\-\.]*$/i.test(importer.filename.value)) {
+      if (!/^[0-9a-z][\w\-\.]*$/i.test(importer.filename.value) || importer.filename.value === '00-html-scraper') {
         e.preventDefault();
 
         const message = d.getElementById('message');
