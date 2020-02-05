@@ -178,19 +178,12 @@ menu anchor.</p>
       browser.setWindowSize(1024, 640);
     });
 
-    beforeEach(function () {
+    /* eslint-disable max-len */
+    it('pre-import submit button posts correctly', function () {
       $('.sg-nav-scrape').$('.sg-acc-handle').click();
       browser.pause(100);
       $('.sg-nav-scrape').$('.sg-pop').click();
       browser.switchToFrame($('#sg-viewport'));
-    });
-
-    afterEach(function () {
-      browser.switchToParentFrame();
-    });
-
-    /* eslint-disable max-len */
-    it('pre-import submit button posts correctly', function () {
       $('[name="url"]').click();
       $('[name="url"]').setValue('/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
       $('[name="selector"]').click();
@@ -254,6 +247,10 @@ menu anchor.</p>
     });
 
     it('import-form submit button posts correctly', function () {
+      $('.sg-nav-scrape').$('.sg-acc-handle').click();
+      browser.pause(100);
+      $('.sg-nav-scrape').$('.sg-pop').click();
+      browser.switchToFrame($('#sg-viewport'));
       $('[name="url"]').click();
       $('[name="url"]').setValue('/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
       $('[name="selector"]').click();
@@ -301,6 +298,10 @@ menu anchor.</p>
     });
 
     it('post-import targeter submit button posts correctly', function () {
+      $('.sg-nav-scrape').$('.sg-acc-handle').click();
+      browser.pause(100);
+      $('.sg-nav-scrape').$('.sg-pop').click();
+      browser.switchToFrame($('#sg-viewport'));
       $('[name="url"]').click();
       $('[name="url"]').setValue('/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
       $('[name="selector"]').click();
@@ -352,18 +353,11 @@ menu anchor.</p>
       browser.setWindowSize(1024, 640);
     });
 
-    beforeEach(function () {
+    it('targeter submit button posts correctly', function () {
       $('.sg-nav-scrape').$('.sg-acc-handle').click();
       browser.pause(100);
       $('.sg-nav-scrape').$('.sg-pop').click();
       browser.switchToFrame($('#sg-viewport'));
-    });
-
-    afterEach(function () {
-      browser.switchToParentFrame();
-    });
-
-    it('targeter submit button posts correctly', function () {
       $('[name="url"]').click();
       $('[name="url"]').setValue('/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
       $('[name="selector"]').click();
@@ -428,6 +422,10 @@ menu anchor.</p>
     /* eslint-enable max-len */
 
     it('help button shows and hides help text correctly', function () {
+      $('.sg-nav-scrape').$('.sg-acc-handle').click();
+      browser.pause(100);
+      $('.sg-nav-scrape').$('.sg-pop').click();
+      browser.switchToFrame($('#sg-viewport'));
       expect($('#help-button').getText()).to.equal('Help');
       expect($('#help-text').getCSSProperty('visibility').value).to.equal('hidden');
       $('#help-button').click();
@@ -438,14 +436,37 @@ menu anchor.</p>
       expect($('#help-text').getCSSProperty('visibility').value).to.equal('hidden');
     });
 
-    it('importer submit button posts correctly', function () {
+    it('importer submit button errors on filename with invalid characters', function () {
       // Just testing error case because that is the only client-side JS logic driven by the listener.
       // A success case will request the Express app which will respond independent of client-side JS.
+      $('.sg-nav-scrape').$('.sg-acc-handle').click();
+      browser.pause(100);
+      $('.sg-nav-scrape').$('.sg-pop').click();
+      browser.switchToFrame($('#sg-viewport'));
       $('[name="url"]').click();
       $('[name="url"]').setValue('/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
       $('[name="selector"]').click();
       $('[name="selector"]').setValue('p');
       $('[name="url-form"]').click();
+      $('[name="import-form"]').click();
+      expect($('#message').getAttribute('class')).to.equal('message error');
+      expect($('#message').getText()).to.equal('Error! Please enter a valid filename.');
+    });
+
+    it('importer submit button errors on filename named "00-html-scraper"', function () {
+      // Just testing error case because that is the only client-side JS logic driven by the listener.
+      // A success case will request the Express app which will respond independent of client-side JS.
+      $('.sg-nav-scrape').$('.sg-acc-handle').click();
+      browser.pause(100);
+      $('.sg-nav-scrape').$('.sg-pop').click();
+      browser.switchToFrame($('#sg-viewport'));
+      $('[name="url"]').click();
+      $('[name="url"]').setValue('/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
+      $('[name="selector"]').click();
+      $('[name="selector"]').setValue('p');
+      $('[name="url-form"]').click();
+      $('[name="filename"]').click();
+      $('[name="filename"]').setValue('00-html-scraper');
       $('[name="import-form"]').click();
       expect($('#message').getAttribute('class')).to.equal('message error');
       expect($('#message').getText()).to.equal('Error! Please enter a valid filename.');
