@@ -98,6 +98,12 @@ export default function (fepperUiInst, root_) {
             case 'ctrl+shift+c':
               this.toggleCode();
 
+              // If viewall, scroll to the focused pattern.
+              /* istanbul ignore if */
+              if (this.viewall && this.codeActive) {
+                this.scrollViewall();
+              }
+
               break;
 
             case 'ctrl+alt+h':

@@ -52,6 +52,12 @@ export default function (fepperUiInst, root) {
             case 'ctrl+shift+a':
               this.toggleAnnotations();
 
+              // If viewall, scroll to the focused pattern.
+              /* istanbul ignore if */
+              if (this.viewall && this.annotationsActive) {
+                this.scrollViewall();
+              }
+
               break;
 
             case 'esc':
