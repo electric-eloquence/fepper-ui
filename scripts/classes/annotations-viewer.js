@@ -6,8 +6,11 @@
 // TODO: Replace closure with private class field when there is greater browser support.
 export default function (fepperUiInst, root) {
   class AnnotationsViewer {
+
+    /* CLASS FIELDS */
     // Declared as a class field to retain the Event function prototype while keeping the class constructor tidy.
     // Exposed as a property on the instance so it can be unit tested.
+
     receiveIframeMessage = (event) => {
       const data = this.uiFns.receiveIframeMessageBoilerplate(event);
 
@@ -49,6 +52,12 @@ export default function (fepperUiInst, root) {
             case 'ctrl+shift+a':
               this.toggleAnnotations();
 
+              // If viewall, scroll to the focused pattern.
+              /* istanbul ignore if */
+              if (this.viewall && this.annotationsActive) {
+                this.scrollViewall();
+              }
+
               break;
 
             case 'esc':
@@ -63,6 +72,8 @@ export default function (fepperUiInst, root) {
       }
     };
 
+    /* CONSTRUCTOR */
+
     constructor(fepperUi) {
       this.annotationsActive = false;
       this.moveToNumber = 0;
@@ -71,7 +82,7 @@ export default function (fepperUiInst, root) {
       this.viewall = false;
     }
 
-    // Getters for fepperUi instance props in case they are undefined at instantiation.
+    /* GETTERS for fepperUi instance props in case they are undefined at instantiation. */
 
     get codeViewer() {
       return fepperUiInst.codeViewer;
@@ -89,7 +100,7 @@ export default function (fepperUiInst, root) {
       return fepperUiInst.urlHandler;
     }
 
-    // Methods.
+    /* METHODS */
 
     // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
     stoke() {
@@ -151,7 +162,6 @@ export default function (fepperUiInst, root) {
      *
      * @param {number} number - Human-friendly annotation id number.
      */
-
     moveTo(number) {
       const $annotation = root.$('#annotation-' + number);
       this.moveToNumber = number || this.moveToNumber;

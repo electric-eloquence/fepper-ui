@@ -28,6 +28,11 @@ export default function (fepperUiInst) {
       Mousetrap.bind('ctrl+shift+a', (e) => {
         fepperUiInst.annotationsViewer.toggleAnnotations();
 
+        // If viewall, scroll to the focused pattern.
+        if (fepperUiInst.annotationsViewer.viewall && fepperUiInst.annotationsViewer.annotationsActive) {
+          fepperUiInst.annotationsViewer.scrollViewall();
+        }
+
         e.preventDefault();
         return false;
       });

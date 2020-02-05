@@ -12,7 +12,7 @@ export default function (fepperUiInst, root) {
       this.$orgs = fepperUi.requerio.$orgs;
     }
 
-    // Getters for fepperUi instance props in case they are undefined at instantiation.
+    /* GETTERS for fepperUi instance props in case they are undefined at instantiation. */
 
     get dataSaver() {
       return fepperUiInst.dataSaver;
@@ -22,7 +22,7 @@ export default function (fepperUiInst, root) {
       return fepperUiInst.uiProps;
     }
 
-    // Methods.
+    /* METHODS */
 
     /**
      * Close all panels. Remove "active" class. No params.

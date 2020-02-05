@@ -35,13 +35,13 @@ export default function (fepperUiInst, root) {
       this.warnCtrlShiftLEdge = '"ctrl+shift+l" is unpredictable on Microsoft Edge.\nTry "ctrl+alt+l" instead.';
     }
 
-    // In case .uiFns is undefined at instantiation.
+    /* GETTER for fepperUi.uiFns in case it is undefined at instantiation. */
 
     get uiFns() {
       return fepperUiInst.uiFns;
     }
 
-    // Additional getters.
+    /* ADDITIONAL GETTERS */
 
     get sw() {
       if (typeof window === 'object') {

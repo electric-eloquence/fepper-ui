@@ -133,7 +133,7 @@ describe('UI compilation of index page js', function () {
         sgSizeEm.click();
         sgSizeEm.doubleClick();
         browser.elementSendKeys(sgSizeEm.elementId, '64.00\uE007');
-        browser.pause(700);
+        browser.pause(1000);
         expect($('#sg-viewport').getSize().width).to.equal(1024);
       });
 

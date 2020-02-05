@@ -153,7 +153,7 @@ function receiveIframeMessage(event) {
   }
 }
 
-// END DECLARATIONS. BEGIN LISTENERS.
+/* END DECLARATIONS. BEGIN LISTENERS. */
 
 window.addEventListener('message', receiveIframeMessage);
 

@@ -13,7 +13,7 @@ export default function (fepperUiInst, root) {
       this.skipBack = false;
     }
 
-    // Getters for fepperUi instance props in case they are undefined at instantiation.
+    /* GETTERS for fepperUi instance props in case they are undefined at instantiation. */
 
     get uiData() {
       return fepperUiInst.uiData;
@@ -27,7 +27,7 @@ export default function (fepperUiInst, root) {
       return fepperUiInst.uiProps;
     }
 
-    // Methods.
+    /* METHODS */
 
     /**
      * Get the URL to display a pattern in the viewer. Use this to replace the existing URL in the browser address bar.

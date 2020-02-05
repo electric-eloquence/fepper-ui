@@ -42,6 +42,11 @@ export default function (fepperUiInst) {
       Mousetrap.bind('ctrl+shift+c', (e) => {
         fepperUiInst.codeViewer.toggleCode();
 
+        // If viewall, scroll to the focused pattern.
+        if (fepperUiInst.codeViewer.viewall && fepperUiInst.codeViewer.codeActive) {
+          fepperUiInst.codeViewer.scrollViewall();
+        }
+
         e.preventDefault();
         return false;
       });
