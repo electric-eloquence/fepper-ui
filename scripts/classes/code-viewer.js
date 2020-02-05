@@ -30,8 +30,11 @@ export default function (fepperUiInst, root_) {
   root = root_;
 
   class CodeViewer {
-    // Declared as a class field to retain function-scoped `this` context while keeping the class constructor tidy.
-    // Exposed as property on the instance so it can be unit tested.
+
+    /* CLASS FIELDS */
+    // Declared as class fields to retain function-scoped `this` context while keeping the class constructor tidy.
+    // Exposed as properties on the instance so they can be unit tested.
+
     getPrintXHRErrorFunction = (codeViewer) => {
       return function () {
         let error;
@@ -56,8 +59,6 @@ export default function (fepperUiInst, root_) {
       };
     };
 
-    // Declared as a class field to retain the Event function prototype while keeping the class constructor tidy.
-    // Exposed as a property on the instance so it can be unit tested.
     receiveIframeMessage = (event) => {
       const data = this.uiFns.receiveIframeMessageBoilerplate(event);
 
@@ -131,8 +132,6 @@ export default function (fepperUiInst, root_) {
 
     // This runs once the AJAX request for the encoded markup is finished.
     // If the encoded tab is the current active tab, it adds the content to the default code container.
-    // Declared as a class field to retain function-scoped `this` context while keeping the class constructor tidy.
-    // Exposed as property on the instance so it can be unit tested.
     getSaveEncodedFunction = (codeViewer) => {
       return function () {
         let encoded = this.responseText;
@@ -172,8 +171,6 @@ export default function (fepperUiInst, root_) {
 
     // Run this once the AJAX request for the mustache markup has finished.
     // If the mustache tab is the current active tab, add the content to the default code container.
-    // Declared as a class field to retain function-scoped `this` context while keeping the class constructor tidy.
-    // Exposed as property on the instance so it can be unit tested.
     getSaveMustacheFunction = (codeViewer) => {
       return function () {
         let mustache = this.responseText;
@@ -185,6 +182,8 @@ export default function (fepperUiInst, root_) {
         }
       };
     };
+
+    /* CONSTRUCTOR */
 
     constructor(fepperUi) {
       this.codeActive = false;
@@ -219,7 +218,7 @@ export default function (fepperUiInst, root_) {
       return fepperUiInst.urlHandler;
     }
 
-    // Methods.
+    /* METHODS */
 
     // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
     stoke() {

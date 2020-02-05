@@ -3,7 +3,7 @@ export default function (cookieName, fepperUiInst) {
   class DataSaver {
 
     /**
-     * Data Saver. Namespaced cookie-handling methods.
+     * Instantiate a namespaced cookie-handler.
      *
      * @param {string} cookieName - The name of the cookie to store the data in.
      * @param {object} fepperUi - The Fepper UI instance.
@@ -12,12 +12,13 @@ export default function (cookieName, fepperUiInst) {
       this.cookieName = cookieName;
     }
 
-    // In case fepperUi.cookies is undefined at instantiation.
+    /* GETTER for fepperUi.cookies in case it is undefined at instantiation. */
+
     get cookies() {
       return fepperUiInst.cookies;
     }
 
-    // Methods.
+    /* METHODS */
 
     /**
      * Add a given value to the cookie. Do not update if it already exists.

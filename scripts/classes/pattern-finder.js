@@ -6,8 +6,11 @@
 // TODO: Replace closure with private class field when there is greater browser support.
 export default function (fepperUiInst, root) {
   class PatternFinder {
+
+    /* CLASS FIELD */
     // Declared as a class field to retain the Event function prototype while keeping the class constructor tidy.
     // Exposed as a property on the instance so it can be unit tested.
+
     receiveIframeMessage = (event) => {
       const data = this.uiFns.receiveIframeMessageBoilerplate(event);
 
@@ -30,6 +33,8 @@ export default function (fepperUiInst, root) {
           }
       }
     };
+
+    /* CONSTRUCTOR */
 
     constructor(fepperUi) {
       this.data = [];
@@ -61,7 +66,7 @@ export default function (fepperUiInst, root) {
       this.patterns.initialize();
     }
 
-    // Getters for fepperUi instance props in case they are undefined at instantiation.
+    /* GETTERS for fepperUi instance props in case they are undefined at instantiation. */
 
     get uiData() {
       return fepperUiInst.uiData;
@@ -75,7 +80,7 @@ export default function (fepperUiInst, root) {
       return fepperUiInst.uiProps;
     }
 
-    // Methods
+    /* METHODS */
 
     closeFinder() {
       this.$orgs['#sg-f-toggle'].dispatchAction('removeClass', 'active');

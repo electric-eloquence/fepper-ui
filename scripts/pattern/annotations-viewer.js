@@ -20,7 +20,7 @@ let annotationsActive = false;
 let bodyWidth = d.body.clientWidth;
 let viewallFocus = '';
 
-// BEGIN FUNCTION DECLARATIONS. */
+/* BEGIN FUNCTION DECLARATIONS. */
 
 function activateAnnotationTips() {
   let count = 0;
@@ -240,7 +240,7 @@ function receiveIframeMessage(event) {
   }
 }
 
-// END DECLARATIONS. BEGIN LISTENERS.
+/* END DECLARATIONS. BEGIN LISTENERS. */
 
 window.addEventListener('message', receiveIframeMessage);
 

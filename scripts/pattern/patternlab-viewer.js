@@ -59,7 +59,7 @@ if (patternData) {
   parent.postMessage(obj, targetOrigin);
 }
 
-// BEGIN FUNCTION DECLARATIONS. */
+/* BEGIN FUNCTION DECLARATIONS. */
 
 function receiveIframeMessage(event) {
   // Return if the origin sending the message does not match the current host.
@@ -89,7 +89,7 @@ function receiveIframeMessage(event) {
   }
 }
 
-// END DECLARATIONS. BEGIN LISTENERS.
+/* END DECLARATIONS. BEGIN LISTENERS. */
 
 window.addEventListener('message', receiveIframeMessage);
 

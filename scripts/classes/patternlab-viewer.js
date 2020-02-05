@@ -9,8 +9,10 @@ export default function (fepperUiInst, root) {
    */
   class PatternlabViewer {
 
+    /* CLASS FIELD */
     // Declared as a class field to retain the Event function prototype while keeping the class constructor tidy.
     // Exposed as a property on the instance so it can be unit tested.
+
     receiveIframeMessage = (event) => {
       const data = this.uiFns.receiveIframeMessageBoilerplate(event);
 
@@ -112,12 +114,14 @@ export default function (fepperUiInst, root) {
       }
     };
 
+    /* CONSTRUCTOR */
+
     constructor(fepperUi) {
       this.$orgs = fepperUi.requerio.$orgs;
       this.requerio = fepperUi.requerio;
     }
 
-    // Getters for fepperUi instance props in case they are undefined at instantiation.
+    /* GETTERS for fepperUi instance props in case they are undefined at instantiation. */
 
     get dataSaver() {
       return fepperUiInst.dataSaver;
@@ -139,7 +143,7 @@ export default function (fepperUiInst, root) {
       return fepperUiInst.urlHandler;
     }
 
-    // Methods.
+    /* METHODS */
 
     // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
     stoke() {
