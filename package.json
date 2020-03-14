@@ -42,8 +42,8 @@
   "dependencies": {
     "feplet": "*",
     "he": "1.2.0",
-    "jquery": "3.4.1",
-    "js-beautify": "^1.10.3",
+    "jquery": "^3.4.1",
+    "js-beautify": "1.10.3",
     "mousetrap": "1.6.5",
     "prismjs": "1.19.0",
     "redux": "^4.0.5",
