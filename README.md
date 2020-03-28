@@ -35,8 +35,8 @@ for more information.
 [snyk-image]: https://snyk.io//test/github/electric-eloquence/fepper-ui/release/badge.svg
 [snyk-url]: https://snyk.io//test/github/electric-eloquence/fepper-ui/release
 
-[build-image]: https://github.com/electric-eloquence/fepper-npm/workflows/build/badge.svg?branch=release
-[build-url]: https://github.com/electric-eloquence/fepper-npm/actions?query=workflow%3A"build"
+[build-image]: https://github.com/electric-eloquence/fepper-ui/workflows/build/badge.svg?branch=release
+[build-url]: https://github.com/electric-eloquence/fepper-ui/actions?query=workflow%3A"build"
 
 [coveralls-image]: https://img.shields.io/coveralls/electric-eloquence/fepper-ui/release.svg
 [coveralls-url]: https://coveralls.io/r/electric-eloquence/fepper-ui
