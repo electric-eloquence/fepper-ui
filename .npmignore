@@ -1,4 +1,5 @@
 *.log
 .*
+!.gitkeep
 /patterns
 /test
