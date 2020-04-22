@@ -221,6 +221,7 @@ export default function (fepperUiInst, root) {
 
       const iframePath = this.uiData.patternPaths[patternPartial];
 
+      /* istanbul ignore if */
       if (!iframePath) {
         this.$orgs['#sg-nav-message'].dispatchAction('removeClass', 'is-vishidden');
 
