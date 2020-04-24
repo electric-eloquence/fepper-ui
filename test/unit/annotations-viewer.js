@@ -297,26 +297,6 @@ menu anchor.</p>
 </div>
 </div>`);
     });
-
-    it('fills HTML for no annotations', function () {
-      const sgAnnotationsContainerStateBefore = $orgs['#sg-annotations-container'].getState();
-      const sgAnnotationsStateBefore = $orgs['#sg-annotations'].getState();
-
-      annotationsViewer.updateAnnotations([], 'compounds-block');
-
-      const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
-      const sgAnnotationsStateAfter = $orgs['#sg-annotations'].getState();
-
-      expect(sgAnnotationsContainerStateBefore.attribs['data-patternpartial'])
-        .to.not.equal(sgAnnotationsContainerStateAfter.attribs['data-patternpartial']);
-      expect(sgAnnotationsStateBefore.innerHTML).to.equal('');
-
-      expect(sgAnnotationsContainerStateAfter.attribs['data-patternpartial']).to.equal('compounds-block');
-      expect(sgAnnotationsStateAfter.innerHTML).to.equal(`<div class="sg-annotation">
-<h2>No Annotations</h2>
-<div>There are no annotations for this pattern.</div>
-</div>`);
-    });
   });
 
   describe('.receiveIframeMessage()', function () {

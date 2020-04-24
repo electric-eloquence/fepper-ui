@@ -220,6 +220,14 @@ export default function (fepperUiInst, root) {
       }
 
       const iframePath = this.uiData.patternPaths[patternPartial];
+
+      /* istanbul ignore if */
+      if (!iframePath) {
+        this.$orgs['#sg-nav-message'].dispatchAction('removeClass', 'is-vishidden');
+
+        throw new Error(`${patternPartial} undefined`);
+      }
+
       this.urlHandler.skipBack = true;
 
       // Update DOM with pattern info.
@@ -246,11 +254,14 @@ export default function (fepperUiInst, root) {
         );
         this.$orgs['#sg-controls'].dispatchAction('html', templateRenderedIsh);
         this.$orgs['#sg-controls'].dispatchAction('removeClass', 'is-vishidden');
+
+        // Erase preemptive warning message.
+        this.$orgs['#sg-nav-message'].dispatchAction('empty');
       }
       catch (err) /* istanbul ignore next */ {
-        // TODO: Internationalize this.
-        const message = '<h1>Nothing here yet!</h1><p>Please build the UI before trying to view it.</p>';
-        this.$orgs['#sg-nav-target'].dispatchAction('html', message);
+        this.$orgs['#sg-nav-message'].dispatchAction('removeClass', 'is-vishidden');
+
+        throw err;
       }
 
       // Render resize buttons.

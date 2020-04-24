@@ -27,6 +27,7 @@ jobs:
           brew update-reset
           brew cask install google-chrome
           npm ci
+          npm run lint
           npm test
           npx nyc report --reporter=text-lcov > ./lcov.info
 

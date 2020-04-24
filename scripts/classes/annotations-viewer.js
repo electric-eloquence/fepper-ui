@@ -271,15 +271,6 @@ export default function (fepperUiInst, root) {
 
         this.$orgs['#sg-annotations'].dispatchAction('html', html);
       }
-      else {
-        // TODO: Internationalize this.
-        const html = `<div class="sg-annotation">
-<h2>No Annotations</h2>
-<div>There are no annotations for this pattern.</div>
-</div>`;
-
-        this.$orgs['#sg-annotations'].dispatchAction('html', html);
-      }
     }
   }
 

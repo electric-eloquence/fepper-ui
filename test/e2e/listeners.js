@@ -168,7 +168,8 @@ menu anchor.</p>
         $('#sg-code-title-html').click();
         expect($('#sg-code-fill').getCSSProperty('cursor').value).to.equal('auto');
         $('#sg-code-fill').moveTo(10, 10);
-        expect($('#sg-code-fill').getCSSProperty('cursor').value).to.equal('default');
+        // Was "default" for WebdriverIO 5. Is "auto" for WebdriverIO 6.
+        expect($('#sg-code-fill').getCSSProperty('cursor').value).to.equal('auto');
       });
     });
 

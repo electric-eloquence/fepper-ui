@@ -39,9 +39,10 @@ export default function (fepperUiInst, root_) {
       return function () {
         let error;
 
-        // TODO: Internationalize this.
         /* istanbul ignore else */
         if (root.location.protocol === 'file:' && !this.status) {
+          // While it would be nice to offer internationalization of this error message, users shouldn't be using the
+          // file protocol scheme in the first place!
           error = 'Access to XMLHttpRequest with the file protocol scheme has been blocked by CORS policy.';
         }
         else {

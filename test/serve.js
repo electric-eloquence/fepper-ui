@@ -192,9 +192,6 @@ module.exports = new Promise((resolve) => {
         case '.html':
           contentType = 'text/html';
           break;
-        case '.ico':
-          contentType = 'image/x-icon';
-          break;
         case '.js':
           contentType = 'application/javascript';
           break;

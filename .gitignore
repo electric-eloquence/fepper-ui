@@ -5,7 +5,6 @@
 .DS_Store
 .coveralls.yml
 .nyc_output/
-/data/*
 /scripts/ui/compilation.js
 /scripts/ui/data.js
 /styles/ui.css

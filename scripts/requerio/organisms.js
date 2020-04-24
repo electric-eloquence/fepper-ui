@@ -30,6 +30,7 @@ export default {
   '#sg-find': null,
   '#sg-form-label': null,
   '#sg-gen-container': null,
+  '#sg-nav-message': null,
   '#sg-nav-target': null,
   '#sg-raw': null,
   '#sg-resize-btns': null,
