@@ -26,7 +26,7 @@ export default function (fepperUiInst, root) {
 
       // Only write timestamp to cookie if the cookie doesn't exist or if timestamp > cookie value.
       if (timestamp > fepperTs) {
-        this.cookies.set('fepper_ts', timestamp, {maxAge: 31536000, path: '/'});
+        this.cookies.set('fepper_ts', timestamp, {maxAge: 31536000, path: '/', sameSite: 'strict'});
       }
     }
   }

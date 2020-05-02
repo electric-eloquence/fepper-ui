@@ -34,7 +34,7 @@ export default function (cookieName, fepperUiInst) {
         cookieValNew = cookieValOrig + '|' + cookieValNew;
       }
 
-      this.cookies.set(this.cookieName, cookieValNew);
+      this.cookies.set(this.cookieName, cookieValNew, {sameSite: 'strict'});
     }
 
     /**
@@ -63,7 +63,7 @@ export default function (cookieName, fepperUiInst) {
           cookieValNew += fieldVals[0] + '~' + fieldVals[1];
         }
 
-        this.cookies.set(this.cookieName, cookieValNew);
+        this.cookies.set(this.cookieName, cookieValNew, {sameSite: 'strict'});
       }
       else {
         this.addValue(name, val);
@@ -94,7 +94,7 @@ export default function (cookieName, fepperUiInst) {
         }
       }
 
-      this.cookies.set(this.cookieName, cookieValNew);
+      this.cookies.set(this.cookieName, cookieValNew, {sameSite: 'strict'});
     }
 
     /**
