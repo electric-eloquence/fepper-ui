@@ -93,7 +93,7 @@ module.exports = new Promise((resolve) => {
           res.writeHead(200, {'Content-Type': 'text/plain'});
           res.end('1234567890');
 
-          break;
+          return;
 
         case '/html-scraper-xhr':
           res.writeHead(200, {'Content-Type': 'text/html'});
@@ -126,7 +126,7 @@ module.exports = new Promise((resolve) => {
 </html>`);
           /* eslint-enable max-len */
 
-          break;
+          return;
 
         case '/html-scraper-xhr/cors':
           if (urlObj.query.url) {
