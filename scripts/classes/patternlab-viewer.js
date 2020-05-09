@@ -219,22 +219,37 @@ export default function (fepperUiInst, root) {
         patternPartial = 'viewall';
       }
 
-      const iframePath = this.uiData.patternPaths[patternPartial];
+      try {
+        /* istanbul ignore if */
+        if (Object.keys(this.uiData.patternPaths).length <= 1) {
+          this.$orgs['#sg-nav-message'].dispatchAction('removeClass', 'is-vishidden');
 
-      /* istanbul ignore if */
-      if (!iframePath) {
+          // Returning instead of throwing because #sg-nav-message tells to check the console for errors.
+          // Throwing an explicit error here would likely be a red herring.
+          return;
+        }
+      }
+      catch (err) /* istanbul ignore next */ {
         this.$orgs['#sg-nav-message'].dispatchAction('removeClass', 'is-vishidden');
 
-        throw new Error(`${patternPartial} undefined`);
+        throw err;
       }
 
-      this.urlHandler.skipBack = true;
+      let iframePath = this.uiData.patternPaths[patternPartial];
 
-      // Update DOM with pattern info.
-      this.uiFns.updatePatternInfo(patternPartial, iframePath);
+      /* istanbul ignore else */
+      if (iframePath) {
+        this.urlHandler.skipBack = true;
 
-      // Update history. Need to do this so urlHandler.popPattern has an Event.state.pattern to work with.
-      root.history.replaceState({pattern: patternPartial}, null, null);
+        // Update DOM with pattern info.
+        this.uiFns.updatePatternInfo(patternPartial, iframePath);
+
+        // Update history. Need to do this so urlHandler.popPattern has an Event.state.pattern to work with.
+        root.history.replaceState({pattern: patternPartial}, null, null);
+      }
+      else {
+        iframePath = `&quest;p=${patternPartial}`;
+      }
 
       // Render Feplet templates.
       try {
