@@ -22,23 +22,20 @@
   // Show/hide help text.
   const helpButton = d.getElementById('help-button');
   const hideButton = d.getElementById('hide-button');
+  const helpText = d.getElementById('help-text');
 
   helpButton.addEventListener('click', (e) => {
     e.preventDefault();
+
     helpButton.style.display = 'none';
-
-    const helpText = d.getElementById('help-text');
-
     helpText.style.visibility = 'visible';
     hideButton.style.display = 'block';
   });
 
   hideButton.addEventListener('click', (e) => {
     e.preventDefault();
+
     hideButton.style.display = 'none';
-
-    const helpText = d.getElementById('help-text');
-
     helpText.style.visibility = 'hidden';
     helpButton.style.display = 'block';
   });
