@@ -119,22 +119,19 @@
         // Parse xhr.responseText into DOM object.
         const parser = new DOMParser();
         const doc = parser.parseFromString(xhr.responseText, 'text/html');
+        const heading = doc.getElementById('scraper-heading');
         const helpText = doc.getElementById('help-text');
-        const messageToRender = doc.getElementById('message');
+        const message = doc.getElementById('message');
         // Get last form on page. Older Fepper versions didn't identify it by name.
-        const scraperTargeter = doc.forms[doc.forms.length - 1];
+        const targeter = doc.forms[doc.forms.length - 1];
 
-        // Write out any messaging.
-        const messageSlug = d.getElementById('message');
-
-        if (messageSlug && messageToRender.innerHTML) {
-          messageSlug.outerHTML = messageToRender.outerHTML;
-        }
-
-        // Append targeter form and help text.
+        // Write out main content.
         const main = d.getElementsByTagName('main')[0];
-        main.innerHTML += scraperTargeter.outerHTML;
-        main.innerHTML += helpText.outerHTML;
+
+        main.appendChild(message);
+        main.appendChild(heading);
+        main.appendChild(targeter);
+        main.appendChild(helpText);
 
         // Insert new script element such that it fires on load.
         const node4insert = d.getElementById('help-text');
@@ -154,17 +151,17 @@
 
   .then(() => {
     // Get last form on page. Older Fepper versions didn't identify it by name.
-    const scraperTargeter = d.forms[d.forms.length - 1];
+    const targeter = d.forms[d.forms.length - 1];
 
-    scraperTargeter.addEventListener(
+    targeter.addEventListener(
       'submit',
       function (e) {
         e.preventDefault();
 
         const message = d.getElementById('message');
         const xhr = new XMLHttpRequest();
-        const selectorRaw = scraperTargeter.selector.value;
-        let url = scraperTargeter.url.value;
+        const selectorRaw = targeter.selector.value;
+        let url = targeter.url.value;
 
         if (url[0] === '/') {
           url = baseUrl + url;
@@ -178,7 +175,7 @@
 
             if (!selectorName) {
               message.className = 'message error';
-              message.innerHTML = 'Error! Please enter correctly syntaxed selector.';
+              message.innerHTML = 'ERROR! Please enter correctly syntaxed selector.';
               d.body.scrollTop = d.documentElement.scrollTop = 0;
 
               return;
@@ -198,12 +195,12 @@
             message.className = 'message';
             message.innerHTML = '';
 
-            scraperTargeter.html2json.value = JSON.stringify(html2json);
-            scraperTargeter.submit();
+            targeter.html2json.value = JSON.stringify(html2json);
+            targeter.submit();
           }
           else {
             message.className = 'message error';
-            message.innerHTML = 'Error! Please enter a valid, reachable URL.';
+            message.innerHTML = 'ERROR! Please enter a valid, reachable URL.';
             d.body.scrollTop = d.documentElement.scrollTop = 0;
           }
         };

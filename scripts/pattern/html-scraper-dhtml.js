@@ -50,7 +50,7 @@
 
         const message = d.getElementById('message');
         message.className = 'message error';
-        message.innerHTML = 'Error! Please enter a valid filename.';
+        message.innerHTML = 'ERROR! Please enter a valid filename.';
         d.body.scrollTop = d.documentElement.scrollTop = 0;
       }
     });
