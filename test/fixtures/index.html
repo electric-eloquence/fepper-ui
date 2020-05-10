@@ -11,8 +11,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="test/fixtures/styles/ui.css" media="all">
-<link rel="stylesheet" href="test/fixtures/styles/pattern-scaffolding.css" media="all">
 <link rel="stylesheet" href="test/fixtures/styles/prism-typeahead.css" media="all">
+<link rel="stylesheet" href="test/fixtures/styles/pattern-scaffolding.css" media="all">
 
 <script>window.FEPPER_UI = {};</script>
 
@@ -28,7 +28,15 @@
 <script src="node_modules/wolfy87-eventemitter/EventEmitter.min.js"></script>
 <script src="test/fixtures/_scripts/src/variables.styl" type="text/javascript"></script>
 <script src="test/fixtures/_scripts/src/fepper-obj.js"></script>
-</head><body id="patternlab-body"><header class="sg-header" role="banner"><div class="sg-nav-container" id="sg-nav-container"><a href="#" class="sg-nav-toggle">Menu</a><ul class="sg-nav is-vishidden" id="sg-nav-target">
+</head><body id="patternlab-body"><header class="sg-header" role="banner"><div class="sg-nav-container" id="sg-nav-container"><a href="#" class="sg-nav-toggle">Menu</a><div class="is-vishidden" id="sg-nav-message">
+<h1>Nothing here yet!</h1>
+<ul>
+  <li>Make sure there are patterns in source/_patterns</li>
+  <li>Run fp ui:compile</li>
+  <li>Run fp restart</li>
+  <li>Check the console for JavaScript errors</li>
+</ul>
+</div><ul class="sg-nav is-vishidden" id="sg-nav-target">
 {{# patternTypes }}
   <li class="sg-nav-{{ patternTypeLC }}"><a class="sg-acc-handle">{{ patternTypeUC }}</a><ul class="sg-acc-panel sg-sub-nav">
   {{# patternSubTypes }}
@@ -79,25 +87,25 @@
 {{^ ishControlsHide.find }}
   <a href="#" class="sg-control-trigger sg-icon sg-icon-search" id="sg-f-toggle" title="Search Patterns"><span class="is-vishidden">Search Patterns</span></a>
   <ul class="sg-acc-panel sg-right sg-checklist" id="sg-find" style="top: 32px;">
-    <li><input class="typeahead" id="typeahead" type="text" placeholder="search for a pattern..."></li>
+    <li><input class="typeahead" id="typeahead" type="text" placeholder="Search Patterns"></li>
   </ul>
 {{/ ishControlsHide.find }}
 </li><li class="sg-view">
 {{^ ishControlsHide.views-all }}
   <a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-eye" id="sg-t-toggle" title="View"><span class="is-vishidden">View</span></a>
   <ul class="sg-acc-panel sg-right sg-checklist" id="sg-view">
-    {{^ ishControlsHide.views-annotations }}<li><a href="#" class="sg-checklist-icon sg-checkbox" id="sg-t-annotations">Annotations</a></li>{{/ ishControlsHide.views-annotations }}
-    {{^ ishControlsHide.views-code }}<li><a href="#" class="sg-checklist-icon sg-checkbox" id="sg-t-code">Code</a></li>{{/ ishControlsHide.views-code }}
-    {{^ ishControlsHide.views-new }}<li><a href="#" target="_blank" id="sg-raw" class="sg-checklist-icon sg-icon-link">Open in new window</a></li>{{/ ishControlsHide.views-new }}
+    {{^ ishControlsHide.views-annotations }}<li><a href="#" class="sg-checklist-icon sg-icon sg-icon-radio" id="sg-t-annotations">Annotations</a></li>{{/ ishControlsHide.views-annotations }}
+    {{^ ishControlsHide.views-code }}<li><a href="#" class="sg-checklist-icon sg-icon sg-icon-radio" id="sg-t-code">Code</a></li>{{/ ishControlsHide.views-code }}
+    {{^ ishControlsHide.views-new }}<li><a href="#" target="_blank" id="sg-raw" class="sg-checklist-icon sg-icon sg-icon-link">Open in new window</a></li>{{/ ishControlsHide.views-new }}
   </ul>
 {{/ ishControlsHide.views-all }}
 </li><li class="sg-tools">
 {{^ ishControlsHide.tools-all }}
   <a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-cog" id="sg-tools-toggle" title="Tools"><span class="is-vishidden">Tools</span></a>
   <ul class="sg-acc-panel sg-right sg-checklist" id="sg-tools">
-    {{^ ishControlsHide.tools-fpdocs }}<li><a href="/readme" class="sg-tool sg-checklist-icon sg-icon-file" target="_blank">Fepper Docs</a>{{/ ishControlsHide.tools-fpdocs }}
-    {{^ ishControlsHide.tools-docs }}<li><a href="https://patternlab.io/docs/" class="sg-tool sg-checklist-icon sg-icon-file" target="_blank">Pattern Lab Docs</a>{{/ ishControlsHide.tools-docs }}
-    {{^ ishControlsHide.tools-shortcuts }}<li><a href="/readme#keyboard-shortcuts" class="sg-tool sg-checklist-icon sg-icon-keyboard" target="_blank">Keyboard Shortcuts</a>{{/ ishControlsHide.tools-shortcuts }}
+    {{^ ishControlsHide.tools-fpdocs }}<li><a href="/readme" class="sg-tool sg-checklist-icon sg-icon sg-icon-file" target="_blank">Fepper Docs</a>{{/ ishControlsHide.tools-fpdocs }}
+    {{^ ishControlsHide.tools-docs }}<li><a href="https://patternlab.io/docs/" class="sg-tool sg-checklist-icon sg-icon sg-icon-file" target="_blank">Pattern Lab Docs</a>{{/ ishControlsHide.tools-docs }}
+    {{^ ishControlsHide.tools-shortcuts }}<li><a href="/readme#keyboard-shortcuts" class="sg-tool sg-checklist-icon sg-icon sg-icon-keyboard" target="_blank">Keyboard Shortcuts</a>{{/ ishControlsHide.tools-shortcuts }}
   </ul>
 {{/ ishControlsHide.tools-all }}
 </li></ul></header><main>
@@ -114,24 +122,29 @@
 <div id="sg-annotations-close" class="sg-view-close">
   <a href="#" id="sg-annotations-close-btn" class="sg-view-close-btn">&#x2715;</a>
 </div>
-<div id="sg-annotations"></div>
+<div id="sg-annotations">
+  <div class="sg-annotation">
+    <h2>No Annotations</h2>
+    <div>There are no annotations for this pattern</div>
+  </div>
+</div>
 </div><div class="sg-view-container" id="sg-code-container" style="bottom:auto">
 <div id="sg-code-close" class="sg-view-close">
   <a href="#" id="sg-code-close-btn" class="sg-view-close-btn">&#x2715;</a>
 </div>
 <div id="sg-code-pattern-state" style="display: none;">
   <p>
-    The state of the <span id="sg-code-pattern-state-pattern-name" class="sg-code-pattern-name"></span> pattern is: <span id="sg-code-pattern-state-fill"></span>
+    The state of <span id="sg-code-pattern-state-pattern-name" class="sg-code-pattern-name"></span>: <span id="sg-code-pattern-state-fill"></span>
   </p>
 </div>
 <div id="sg-code-lineage" style="display: none;">
   <p>
-    The <span id="sg-code-lineage-pattern-name" class="sg-code-pattern-name"></span> pattern includes the following patterns: <span id="sg-code-lineage-fill"></span>
+    <span id="sg-code-lineage-pattern-name" class="sg-code-pattern-name"></span> includes the following patterns: <span id="sg-code-lineage-fill"></span>
   </p>
 </div>
 <div id="sg-code-lineager" style="display: none;">
   <p>
-    The <span id="sg-code-lineager-pattern-name" class="sg-code-pattern-name"></span> pattern is included by the following patterns: <span id="sg-code-lineager-fill"></span>
+    <span id="sg-code-lineager-pattern-name" class="sg-code-pattern-name"></span> is included by the following patterns: <span id="sg-code-lineager-fill"></span>
   </p>
 </div>
 <div id="sg-code-markup">
