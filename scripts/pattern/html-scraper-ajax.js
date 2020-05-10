@@ -129,7 +129,11 @@
         const main = d.getElementsByTagName('main')[0];
 
         main.appendChild(message);
-        main.appendChild(heading);
+
+        if (!main.getElementsByClassName('scraper-heading').length) {
+          main.appendChild(heading);
+        }
+
         main.appendChild(targeter);
         main.appendChild(helpText);
 

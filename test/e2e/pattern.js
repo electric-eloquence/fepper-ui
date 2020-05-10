@@ -223,25 +223,26 @@ menu anchor.</p>
         <input name="import-form" type="submit" value="Submit" style="margin-top: 10px;">
       </form>
       <h3>Otherwise, correct the URL and Target Selector and submit again.</h3><script src="/scripts/pattern/html-scraper-ajax.js"></script>
-    <form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
-          <div>
-            <label for="url">URL:</label>
-            <input name="url" type="text" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html" style="width: 100%;">
-          </div>
-          <div>
-            <label for="selector">Target Selector:</label>
-            <input name="selector" type="text" value="p" style="width: 100%;">
-          </div>
-          <textarea name="html2json" style="display: none;"></textarea>
-          <div class="cf" style="padding-top: 10px;">
-            <input name="url-form" type="submit" value="Submit" style="float: left;">
-            <button id="help-button" style="float: right;">Help</button>
-          </div>
-        </form><script src="../../node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js"></script><div id="help-text" style="border: 1px solid black;visibility: hidden;margin-top: 5.50px;padding: 0 20px;width: 100%">
-          <p></p>
-          <p>Use this tool to scrape and import Mustache templates and JSON data files from actual web pages, preferably the actual backend CMS that Fepper is prototyping for. Simply enter the URL of the page you wish to scrape. Then, enter the CSS selector you wish to target (prepended with "#" for IDs and "." for classes). Classnames and tagnames may be appended with array index notation ([n]). Otherwise, the Scraper will scrape all elements of that class or tag sequentially. Such a loosely targeted scrape will save many of the targeted fields to the JSON file, but will only save the first instance of the target to a Mustache template.</p>
-    <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save Mustache and JSON files by that name in your patterns' scrape directory, also viewable under the Scrape menu of the toolbar. The Scraper will correctly indent the Mustache code. However, the JSON parsing requires a conversion from HTML to XHTML, so don't expect an exact copy of the HTML structure of the source HTML.</p>
-        </div></main>
+    <div id="message" class="message "></div><form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
+        <div>
+          <label for="url">URL:</label>
+          <input name="url" type="text" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html" style="width: 100%;">
+        </div>
+        <div>
+          <label for="selector">Target Selector:</label>
+          <input name="selector" type="text" value="p" style="width: 100%;">
+        </div>
+        <textarea name="html2json" style="display: none;"></textarea>
+        <div class="cf" style="padding-top: 10px;">
+          <input name="url-form" type="submit" value="Submit" style="float: left;">
+          <button id="help-button" style="float: right;">Help</button>
+          <button id="hide-button" style="float: right;display: none;">Hide</button>
+        </div>
+      </form><script src="../../node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js"></script><div id="help-text" style="border: 1px solid black;visibility: hidden;margin-top: 5.50px;padding: 0 20px;width: 100%">
+        <p></p>
+        <p>Use this tool to scrape and import Mustache templates and JSON data files from actual web pages, preferably the actual backend CMS that Fepper is prototyping for. Simply enter the URL of the page you wish to scrape. Then, enter the CSS selector you wish to target (prepended with "#" for IDs and "." for classes). Classnames and tagnames may be appended with array index notation ([n]). Otherwise, the Scraper will scrape all elements of that class or tag sequentially. Such a loosely targeted scrape will save many of the targeted fields to the JSON file, but will only save the first instance of the target to a Mustache template.</p>
+  <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save Mustache and JSON files by that name in your patterns' scrape directory, also viewable under the Scrape menu of the toolbar. The Scraper will correctly indent the Mustache code. However, the JSON parsing requires a conversion from HTML to XHTML, so don't expect an exact copy of the HTML structure of the source HTML.</p>
+      </div></main>
   
 </body>`);
     });
@@ -274,25 +275,26 @@ menu anchor.</p>
     <main id="scraper" class="scraper">
       <div id="message" class="message success">Success! Refresh the browser to check that your template appears under the "Scrape" menu.</div>
       <h1 id="scraper-heading" class="scraper-heading">Fepper HTML Scraper</h1><script src="/scripts/pattern/html-scraper-ajax.js"></script>
-    <form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
-          <div>
-            <label for="url">URL:</label>
-            <input name="url" type="text" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html" style="width: 100%;">
-          </div>
-          <div>
-            <label for="selector">Target Selector:</label>
-            <input name="selector" type="text" value="p" style="width: 100%;">
-          </div>
-          <textarea name="html2json" style="display: none;"></textarea>
-          <div class="cf" style="padding-top: 10px;">
-            <input name="url-form" type="submit" value="Submit" style="float: left;">
-            <button id="help-button" style="float: right;">Help</button>
-          </div>
-        </form><script src="../../node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js"></script><div id="help-text" style="border: 1px solid black;visibility: hidden;margin-top: 5.50px;padding: 0 20px;width: 100%">
-          <p></p>
-          <p>Use this tool to scrape and import Mustache templates and JSON data files from actual web pages, preferably the actual backend CMS that Fepper is prototyping for. Simply enter the URL of the page you wish to scrape. Then, enter the CSS selector you wish to target (prepended with "#" for IDs and "." for classes). Classnames and tagnames may be appended with array index notation ([n]). Otherwise, the Scraper will scrape all elements of that class or tag sequentially. Such a loosely targeted scrape will save many of the targeted fields to the JSON file, but will only save the first instance of the target to a Mustache template.</p>
-    <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save Mustache and JSON files by that name in your patterns' scrape directory, also viewable under the Scrape menu of the toolbar. The Scraper will correctly indent the Mustache code. However, the JSON parsing requires a conversion from HTML to XHTML, so don't expect an exact copy of the HTML structure of the source HTML.</p>
-        </div></main>
+    <div id="message" class="message "></div><form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
+        <div>
+          <label for="url">URL:</label>
+          <input name="url" type="text" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html" style="width: 100%;">
+        </div>
+        <div>
+          <label for="selector">Target Selector:</label>
+          <input name="selector" type="text" value="p" style="width: 100%;">
+        </div>
+        <textarea name="html2json" style="display: none;"></textarea>
+        <div class="cf" style="padding-top: 10px;">
+          <input name="url-form" type="submit" value="Submit" style="float: left;">
+          <button id="help-button" style="float: right;">Help</button>
+          <button id="hide-button" style="float: right;display: none;">Hide</button>
+        </div>
+      </form><script src="../../node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js"></script><div id="help-text" style="border: 1px solid black;visibility: hidden;margin-top: 5.50px;padding: 0 20px;width: 100%">
+        <p></p>
+        <p>Use this tool to scrape and import Mustache templates and JSON data files from actual web pages, preferably the actual backend CMS that Fepper is prototyping for. Simply enter the URL of the page you wish to scrape. Then, enter the CSS selector you wish to target (prepended with "#" for IDs and "." for classes). Classnames and tagnames may be appended with array index notation ([n]). Otherwise, the Scraper will scrape all elements of that class or tag sequentially. Such a loosely targeted scrape will save many of the targeted fields to the JSON file, but will only save the first instance of the target to a Mustache template.</p>
+  <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save Mustache and JSON files by that name in your patterns' scrape directory, also viewable under the Scrape menu of the toolbar. The Scraper will correctly indent the Mustache code. However, the JSON parsing requires a conversion from HTML to XHTML, so don't expect an exact copy of the HTML structure of the source HTML.</p>
+      </div></main>
   
 </body>`);
     });
@@ -324,25 +326,26 @@ menu anchor.</p>
     <main id="scraper" class="scraper">
       <div id="message" class="message success">Success! Refresh the browser to check that your template appears under the "Scrape" menu.</div>
       <h1 id="scraper-heading" class="scraper-heading">Fepper HTML Scraper</h1><script src="/scripts/pattern/html-scraper-ajax.js"></script>
-    <form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
-          <div>
-            <label for="url">URL:</label>
-            <input name="url" type="text" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html" style="width: 100%;">
-          </div>
-          <div>
-            <label for="selector">Target Selector:</label>
-            <input name="selector" type="text" value="p" style="width: 100%;">
-          </div>
-          <textarea name="html2json" style="display: none;"></textarea>
-          <div class="cf" style="padding-top: 10px;">
-            <input name="url-form" type="submit" value="Submit" style="float: left;">
-            <button id="help-button" style="float: right;">Help</button>
-          </div>
-        </form><script src="../../node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js"></script><div id="help-text" style="border: 1px solid black;visibility: hidden;margin-top: 5.50px;padding: 0 20px;width: 100%">
-          <p></p>
-          <p>Use this tool to scrape and import Mustache templates and JSON data files from actual web pages, preferably the actual backend CMS that Fepper is prototyping for. Simply enter the URL of the page you wish to scrape. Then, enter the CSS selector you wish to target (prepended with "#" for IDs and "." for classes). Classnames and tagnames may be appended with array index notation ([n]). Otherwise, the Scraper will scrape all elements of that class or tag sequentially. Such a loosely targeted scrape will save many of the targeted fields to the JSON file, but will only save the first instance of the target to a Mustache template.</p>
-    <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save Mustache and JSON files by that name in your patterns' scrape directory, also viewable under the Scrape menu of the toolbar. The Scraper will correctly indent the Mustache code. However, the JSON parsing requires a conversion from HTML to XHTML, so don't expect an exact copy of the HTML structure of the source HTML.</p>
-        </div></main>
+    <div id="message" class="message "></div><form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
+        <div>
+          <label for="url">URL:</label>
+          <input name="url" type="text" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html" style="width: 100%;">
+        </div>
+        <div>
+          <label for="selector">Target Selector:</label>
+          <input name="selector" type="text" value="p" style="width: 100%;">
+        </div>
+        <textarea name="html2json" style="display: none;"></textarea>
+        <div class="cf" style="padding-top: 10px;">
+          <input name="url-form" type="submit" value="Submit" style="float: left;">
+          <button id="help-button" style="float: right;">Help</button>
+          <button id="hide-button" style="float: right;display: none;">Hide</button>
+        </div>
+      </form><script src="../../node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js"></script><div id="help-text" style="border: 1px solid black;visibility: hidden;margin-top: 5.50px;padding: 0 20px;width: 100%">
+        <p></p>
+        <p>Use this tool to scrape and import Mustache templates and JSON data files from actual web pages, preferably the actual backend CMS that Fepper is prototyping for. Simply enter the URL of the page you wish to scrape. Then, enter the CSS selector you wish to target (prepended with "#" for IDs and "." for classes). Classnames and tagnames may be appended with array index notation ([n]). Otherwise, the Scraper will scrape all elements of that class or tag sequentially. Such a loosely targeted scrape will save many of the targeted fields to the JSON file, but will only save the first instance of the target to a Mustache template.</p>
+  <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save Mustache and JSON files by that name in your patterns' scrape directory, also viewable under the Scrape menu of the toolbar. The Scraper will correctly indent the Mustache code. However, the JSON parsing requires a conversion from HTML to XHTML, so don't expect an exact copy of the HTML structure of the source HTML.</p>
+      </div></main>
   
 </body>`);
     });
@@ -397,25 +400,26 @@ menu anchor.</p>
         <input name="import-form" type="submit" value="Submit" style="margin-top: 10px;">
       </form>
       <h3>Otherwise, correct the URL and Target Selector and submit again.</h3><script src="/scripts/pattern/html-scraper-ajax.js"></script>
-    <form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
-          <div>
-            <label for="url">URL:</label>
-            <input name="url" type="text" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html" style="width: 100%;">
-          </div>
-          <div>
-            <label for="selector">Target Selector:</label>
-            <input name="selector" type="text" value="p" style="width: 100%;">
-          </div>
-          <textarea name="html2json" style="display: none;"></textarea>
-          <div class="cf" style="padding-top: 10px;">
-            <input name="url-form" type="submit" value="Submit" style="float: left;">
-            <button id="help-button" style="float: right;">Help</button>
-          </div>
-        </form><script src="../../node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js"></script><div id="help-text" style="border: 1px solid black;visibility: hidden;margin-top: 5.50px;padding: 0 20px;width: 100%">
-          <p></p>
-          <p>Use this tool to scrape and import Mustache templates and JSON data files from actual web pages, preferably the actual backend CMS that Fepper is prototyping for. Simply enter the URL of the page you wish to scrape. Then, enter the CSS selector you wish to target (prepended with "#" for IDs and "." for classes). Classnames and tagnames may be appended with array index notation ([n]). Otherwise, the Scraper will scrape all elements of that class or tag sequentially. Such a loosely targeted scrape will save many of the targeted fields to the JSON file, but will only save the first instance of the target to a Mustache template.</p>
-    <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save Mustache and JSON files by that name in your patterns' scrape directory, also viewable under the Scrape menu of the toolbar. The Scraper will correctly indent the Mustache code. However, the JSON parsing requires a conversion from HTML to XHTML, so don't expect an exact copy of the HTML structure of the source HTML.</p>
-        </div></main>
+    <div id="message" class="message "></div><form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
+        <div>
+          <label for="url">URL:</label>
+          <input name="url" type="text" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html" style="width: 100%;">
+        </div>
+        <div>
+          <label for="selector">Target Selector:</label>
+          <input name="selector" type="text" value="p" style="width: 100%;">
+        </div>
+        <textarea name="html2json" style="display: none;"></textarea>
+        <div class="cf" style="padding-top: 10px;">
+          <input name="url-form" type="submit" value="Submit" style="float: left;">
+          <button id="help-button" style="float: right;">Help</button>
+          <button id="hide-button" style="float: right;display: none;">Hide</button>
+        </div>
+      </form><script src="../../node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js"></script><div id="help-text" style="border: 1px solid black;visibility: hidden;margin-top: 5.50px;padding: 0 20px;width: 100%">
+        <p></p>
+        <p>Use this tool to scrape and import Mustache templates and JSON data files from actual web pages, preferably the actual backend CMS that Fepper is prototyping for. Simply enter the URL of the page you wish to scrape. Then, enter the CSS selector you wish to target (prepended with "#" for IDs and "." for classes). Classnames and tagnames may be appended with array index notation ([n]). Otherwise, the Scraper will scrape all elements of that class or tag sequentially. Such a loosely targeted scrape will save many of the targeted fields to the JSON file, but will only save the first instance of the target to a Mustache template.</p>
+  <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save Mustache and JSON files by that name in your patterns' scrape directory, also viewable under the Scrape menu of the toolbar. The Scraper will correctly indent the Mustache code. However, the JSON parsing requires a conversion from HTML to XHTML, so don't expect an exact copy of the HTML structure of the source HTML.</p>
+      </div></main>
   
 </body>`);
     });
@@ -426,14 +430,18 @@ menu anchor.</p>
       browser.pause(100);
       $('.sg-nav-scrape').$('.sg-pop').click();
       browser.switchToFrame($('#sg-viewport'));
-      expect($('#help-button').getText()).to.equal('Help');
+      expect($('#help-button').getCSSProperty('display').value).to.equal('block');
       expect($('#help-text').getCSSProperty('visibility').value).to.equal('hidden');
+      expect($('#hide-button').getCSSProperty('display').value).to.equal('none');
       $('#help-button').click();
-      expect($('#help-button').getText()).to.equal('Hide');
+      expect($('#help-button').getCSSProperty('display').value).to.equal('none');
       expect($('#help-text').getCSSProperty('visibility').value).to.equal('visible');
-      $('#help-button').click();
-      expect($('#help-button').getText()).to.equal('Help');
+      expect($('#hide-button').getCSSProperty('display').value).to.equal('block');
+      $('#hide-button').click();
+      browser.pause(100);
+      expect($('#help-button').getCSSProperty('display').value).to.equal('block');
       expect($('#help-text').getCSSProperty('visibility').value).to.equal('hidden');
+      expect($('#hide-button').getCSSProperty('display').value).to.equal('none');
     });
 
     it('importer submit button errors on filename with invalid characters', function () {
@@ -450,7 +458,7 @@ menu anchor.</p>
       $('[name="url-form"]').click();
       $('[name="import-form"]').click();
       expect($('#message').getAttribute('class')).to.equal('message error');
-      expect($('#message').getText()).to.equal('Error! Please enter a valid filename.');
+      expect($('#message').getText()).to.equal('ERROR! Please enter a valid filename.');
     });
 
     it('importer submit button errors on filename named "00-html-scraper"', function () {
@@ -469,7 +477,7 @@ menu anchor.</p>
       $('[name="filename"]').setValue('00-html-scraper');
       $('[name="import-form"]').click();
       expect($('#message').getAttribute('class')).to.equal('message error');
-      expect($('#message').getText()).to.equal('Error! Please enter a valid filename.');
+      expect($('#message').getText()).to.equal('ERROR! Please enter a valid filename.');
     });
   });
 
