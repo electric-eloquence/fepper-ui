@@ -133,23 +133,23 @@ describe('patternlabViewer', function () {
   </ul>
 </div>
 </li><li class="sg-find">
-  <a href="#" class="sg-control-trigger sg-icon sg-icon-search" id="sg-f-toggle" title="Search Patterns"><span class="is-vishidden">Search Patterns</span></a>
+  <a href="#" class="sg-control-trigger sg-icon sg-icon-search" id="sg-f-toggle" title="Search patterns"><span class="is-vishidden">Search patterns</span></a>
   <ul class="sg-acc-panel sg-right sg-checklist" id="sg-find" style="top: 32px;">
-    <li><input class="typeahead" id="typeahead" type="text" placeholder="search for a pattern..."></li>
+    <li><input class="typeahead" id="typeahead" type="text" placeholder="Search patterns"></li>
   </ul>
 </li><li class="sg-view">
   <a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-eye" id="sg-t-toggle" title="View"><span class="is-vishidden">View</span></a>
   <ul class="sg-acc-panel sg-right sg-checklist" id="sg-view">
-    <li><a href="#" class="sg-checklist-icon sg-checkbox" id="sg-t-annotations">Annotations</a></li>
-    <li><a href="#" class="sg-checklist-icon sg-checkbox" id="sg-t-code">Code</a></li>
-    <li><a href="patterns/04-pages-00-homepage/04-pages-00-homepage.html" target="_blank" id="sg-raw" class="sg-checklist-icon sg-icon-link">Open in new window</a></li>
+    <li><a href="#" class="sg-checklist-icon sg-icon sg-icon-radio" id="sg-t-annotations">Annotations</a></li>
+    <li><a href="#" class="sg-checklist-icon sg-icon sg-icon-radio" id="sg-t-code">Code</a></li>
+    <li><a href="patterns/04-pages-00-homepage/04-pages-00-homepage.html" target="_blank" id="sg-raw" class="sg-checklist-icon sg-icon sg-icon-link">Open in new window</a></li>
   </ul>
 </li><li class="sg-tools">
   <a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-cog" id="sg-tools-toggle" title="Tools"><span class="is-vishidden">Tools</span></a>
   <ul class="sg-acc-panel sg-right sg-checklist" id="sg-tools">
-    <li><a href="/readme" class="sg-tool sg-checklist-icon sg-icon-file" target="_blank">Fepper Docs</a>
-    </li><li><a href="https://patternlab.io/docs/" class="sg-tool sg-checklist-icon sg-icon-file" target="_blank">Pattern Lab Docs</a>
-    </li><li><a href="/readme#keyboard-shortcuts" class="sg-tool sg-checklist-icon sg-icon-keyboard" target="_blank">Keyboard Shortcuts</a>
+    <li><a href="/readme" class="sg-tool sg-checklist-icon sg-icon sg-icon-file" target="_blank">Fepper docs</a>
+    </li><li><a href="https://patternlab.io/docs/" class="sg-tool sg-checklist-icon sg-icon sg-icon-file" target="_blank">Pattern Lab docs</a>
+    </li><li><a href="/readme#keyboard-shortcuts" class="sg-tool sg-checklist-icon sg-icon sg-icon-keyboard" target="_blank">Keyboard shortcuts</a>
   </li></ul>
 </li>`);
       });

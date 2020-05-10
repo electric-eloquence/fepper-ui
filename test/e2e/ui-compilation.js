@@ -419,7 +419,7 @@ describe('UI compilation of index page js', function () {
         browser.setWindowSize(1024, 640);
       });
 
-      it('Fepper Docs opens in new tab and menu closes', function () {
+      it('Fepper docs opens in new tab and menu closes', function () {
         $('#sg-tools-toggle').click();
         browser.pause(100);
         $$('.sg-tool')[0].click();
@@ -434,9 +434,9 @@ describe('UI compilation of index page js', function () {
         expect($('#sg-tools-toggle').getAttribute('class')).to.not.have.string('active');
       });
 
-      // Skip clicking Pattern Lab Docs to avoid hitting their website during automated tests.
+      // Skip clicking Pattern Lab docs to avoid hitting their website during automated tests.
 
-      it('Keyboard Shortcuts opens in new tab and menu closes', function () {
+      it('Keyboard shortcuts opens in new tab and menu closes', function () {
         $('#sg-tools-toggle').click();
         browser.pause(100);
         $$('.sg-tool')[2].click();
