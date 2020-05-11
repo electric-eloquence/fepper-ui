@@ -21,20 +21,25 @@
 
   // Show/hide help text.
   const helpButton = d.getElementById('help-button');
+  const hideButton = d.getElementById('hide-button');
+  let helpText;
 
   helpButton.addEventListener('click', (e) => {
     e.preventDefault();
 
-    const helpText = d.getElementById('help-text');
+    helpText = helpText || d.getElementById('help-text');
+    helpText.style.visibility = 'visible';
+    helpButton.style.display = 'none';
+    hideButton.style.display = 'block';
+  });
 
-    if (helpButton.innerHTML === 'Help') {
-      helpButton.innerHTML = 'Hide';
-      helpText.style.visibility = 'visible';
-    }
-    else {
-      helpButton.innerHTML = 'Help';
-      helpText.style.visibility = 'hidden';
-    }
+  hideButton.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    helpText = helpText || d.getElementById('help-text');
+    helpText.style.visibility = 'hidden';
+    hideButton.style.display = 'none';
+    helpButton.style.display = 'block';
   });
 
   // Validate importer form.
@@ -50,7 +55,7 @@
 
         const message = d.getElementById('message');
         message.className = 'message error';
-        message.innerHTML = 'Error! Please enter a valid filename.';
+        message.innerHTML = 'ERROR! Please enter a valid filename.';
         d.body.scrollTop = d.documentElement.scrollTop = 0;
       }
     });

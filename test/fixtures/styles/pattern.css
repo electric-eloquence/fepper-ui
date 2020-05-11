@@ -1,19 +1,6 @@
 /**
  * Copyright (c) 2013 Brad Frost, http://bradfrostweb.com & Dave Olsen, http://dmolsen.com
  */
-html {
-  box-sizing: border-box;
-  font-size: 62.5%;
-}
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-body {
-  font-size: 1.6em;
-}
-
 .sg-main {
   margin: 0 auto;
   max-width: 1152px;
