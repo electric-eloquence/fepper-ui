@@ -6,13 +6,10 @@ on:
       - master
       - release
 
+# fepper-ui is for the browser, not Node.js. Just test on GitHub Actions' default Node.js version.
 jobs:
   build:
     runs-on: macos-latest
-    strategy:
-      matrix:
-        node-version:
-          - 12.x # fepper-ui is for the browser, not Node.js. Just test in the oldest supported LTS version.
     steps:
       - uses: actions/checkout@v2
 
