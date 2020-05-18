@@ -42,7 +42,7 @@
   "dependencies": {
     "feplet": "*",
     "he": "1.2.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.1",
     "js-beautify": "1.11.0",
     "mousetrap": "1.6.5",
     "prismjs": "1.19.0",
@@ -59,11 +59,11 @@
     "@babel/preset-env": "^7.5.4",
     "@babel/register": "^7.4.4",
     "@babel/runtime": "^7.5.4",
-    "@wdio/cli": "6.1.7",
-    "@wdio/local-runner": "6.1.7",
-    "@wdio/mocha-framework": "6.1.6",
-    "@wdio/spec-reporter": "6.1.5",
-    "@wdio/sync": "6.1.7",
+    "@wdio/cli": "6.1.12",
+    "@wdio/local-runner": "6.1.12",
+    "@wdio/mocha-framework": "6.1.8",
+    "@wdio/spec-reporter": "6.1.12",
+    "@wdio/sync": "6.1.8",
     "babel-eslint": "^10.0.2",
     "chai": "4.0.1",
     "chai-webdriverio": "^1.0.0",
@@ -78,6 +78,6 @@
     "rollup": "^1.16.7",
     "sinon": "8.x",
     "wdio-chromedriver-service": "6.0.3",
-    "webdriverio": "6.1.7"
+    "webdriverio": "6.1.12"
   }
 }
