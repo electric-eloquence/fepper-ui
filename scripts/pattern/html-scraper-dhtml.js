@@ -1,11 +1,16 @@
 ((d) => {
   'use strict'; // eslint-disable-line strict
 
-  // Append search params to target.
   // Targeter is the last form on the HTML Scraper page. Older Fepper versions didn't identify it by name.
   const targeter = d.forms[d.forms.length - 1];
 
   targeter.addEventListener('submit', () => {
+    const message = doc.getElementById('message');
+
+    // First show loading animation.
+    d.getElementById('load-anim').style.display = 'block';
+
+    // Then, append search params to target.
     const baseUrl = window.location.protocol + '//' + window.location.host;
     let url = targeter.url.value;
     targeter.action = '/html-scraper?url=';
