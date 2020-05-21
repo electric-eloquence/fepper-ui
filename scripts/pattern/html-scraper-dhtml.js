@@ -5,8 +5,6 @@
   const targeter = d.forms[d.forms.length - 1];
 
   targeter.addEventListener('submit', () => {
-    const message = doc.getElementById('message');
-
     // First show loading animation.
     d.getElementById('load-anim').style.display = 'block';
 
