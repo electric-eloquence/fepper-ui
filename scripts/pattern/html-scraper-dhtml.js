@@ -6,7 +6,8 @@
 
   targeter.addEventListener('submit', () => {
     // First show loading animation.
-    d.getElementById('load-anim').style.display = 'block';
+    const loadAnim = d.getElementById('load-anim') || {style: {}};
+    loadAnim.style.display = 'block';
 
     // Then, append search params to target.
     const baseUrl = window.location.protocol + '//' + window.location.host;
@@ -27,23 +28,27 @@
   const hideButton = d.getElementById('hide-button');
   let helpText;
 
-  helpButton.addEventListener('click', (e) => {
-    e.preventDefault();
+  if (helpButton) {
+    helpButton.addEventListener('click', (e) => {
+      e.preventDefault();
 
-    helpText = helpText || d.getElementById('help-text');
-    helpText.style.visibility = 'visible';
-    helpButton.style.display = 'none';
-    hideButton.style.display = 'block';
-  });
+      helpText = helpText || d.getElementById('help-text') || {style: {}};
+      helpText.style.visibility = 'visible';
+      helpButton.style.display = 'none';
+      hideButton.style.display = 'block';
+    });
+  }
 
-  hideButton.addEventListener('click', (e) => {
-    e.preventDefault();
+  if (hideButton) {
+    hideButton.addEventListener('click', (e) => {
+      e.preventDefault();
 
-    helpText = helpText || d.getElementById('help-text');
-    helpText.style.visibility = 'hidden';
-    hideButton.style.display = 'none';
-    helpButton.style.display = 'block';
-  });
+      helpText = helpText || d.getElementById('help-text') || {style: {}};
+      helpText.style.visibility = 'hidden';
+      hideButton.style.display = 'none';
+      helpButton.style.display = 'block';
+    });
+  }
 
   // Validate importer form.
   const importer = d.forms.importer;
@@ -56,7 +61,7 @@
       ) {
         e.preventDefault();
 
-        const message = d.getElementById('message');
+        const message = d.getElementById('message') || {style: {}};
         message.className = 'message error';
         message.innerHTML = 'ERROR! Please enter a valid filename.';
         d.body.scrollTop = d.documentElement.scrollTop = 0;

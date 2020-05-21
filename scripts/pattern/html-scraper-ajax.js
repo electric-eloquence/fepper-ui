@@ -130,7 +130,10 @@
         // Write out main content.
         const main = d.getElementsByTagName('main')[0];
 
-        main.appendChild(message);
+        if (!main.getElementsByClassName('message').length) {
+          main.appendChild(message);
+        }
+
         main.appendChild(loadAnim);
 
         if (!main.getElementsByClassName('scraper-heading').length) {
