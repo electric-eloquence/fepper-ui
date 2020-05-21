@@ -223,7 +223,7 @@ menu anchor.</p>
         <input name="import-form" type="submit" value="Submit" style="margin-top: 10px;">
       </form>
       <h3>Otherwise, correct the URL and Target Selector and submit again.</h3><script src="/scripts/pattern/html-scraper-ajax.js"></script>
-    <div id="message" class="message "></div><form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
+    <form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
         <div>
           <label for="url">URL:</label>
           <input name="url" type="text" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html" style="width: 100%;">
@@ -275,7 +275,7 @@ menu anchor.</p>
     <main id="scraper" class="scraper">
       <div id="message" class="message success">Success! Refresh the browser to check that your template appears under the "Scrape" menu.</div>
       <h1 id="scraper-heading" class="scraper-heading">Fepper HTML Scraper</h1><script src="/scripts/pattern/html-scraper-ajax.js"></script>
-    <div id="message" class="message "></div><form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
+    <form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
         <div>
           <label for="url">URL:</label>
           <input name="url" type="text" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html" style="width: 100%;">
@@ -326,7 +326,7 @@ menu anchor.</p>
     <main id="scraper" class="scraper">
       <div id="message" class="message success">Success! Refresh the browser to check that your template appears under the "Scrape" menu.</div>
       <h1 id="scraper-heading" class="scraper-heading">Fepper HTML Scraper</h1><script src="/scripts/pattern/html-scraper-ajax.js"></script>
-    <div id="message" class="message "></div><form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
+    <form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
         <div>
           <label for="url">URL:</label>
           <input name="url" type="text" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html" style="width: 100%;">
@@ -400,7 +400,7 @@ menu anchor.</p>
         <input name="import-form" type="submit" value="Submit" style="margin-top: 10px;">
       </form>
       <h3>Otherwise, correct the URL and Target Selector and submit again.</h3><script src="/scripts/pattern/html-scraper-ajax.js"></script>
-    <div id="message" class="message "></div><form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
+    <form id="html-scraper-targeter" action="/html-scraper" method="post" name="targeter">
         <div>
           <label for="url">URL:</label>
           <input name="url" type="text" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html" style="width: 100%;">

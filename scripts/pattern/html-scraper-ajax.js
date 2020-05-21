@@ -93,6 +93,7 @@
   // Since the HTML scraper won't work on any non-Express served environment, we can safely assume that Fepper will be
   // served from the document root.
   const baseUrl = window.location.protocol + '//' + window.location.host;
+  const emptyFrag = new DocumentFragment();
 
   // First, make sure the HTML scraper is being requested from the same machine that's running the Express app.
   new Promise((resolve, reject) => {
@@ -119,16 +120,21 @@
         // Parse xhr.responseText into DOM object.
         const parser = new DOMParser();
         const doc = parser.parseFromString(xhr.responseText, 'text/html');
-        const heading = doc.getElementById('scraper-heading');
-        const helpText = doc.getElementById('help-text');
-        const message = doc.getElementById('message');
+        const heading = doc.getElementById('scraper-heading') || emptyFrag;
+        const helpText = doc.getElementById('help-text') || emptyFrag;
+        const loadAnim = doc.getElementById('load-anim') || emptyFrag;
+        const message = doc.getElementById('message') || emptyFrag;
         // Get last form on page. Older Fepper versions didn't identify it by name.
-        const targeter = doc.forms[doc.forms.length - 1];
+        const targeter = doc.forms[doc.forms.length - 1]; // Allow fully logged failure if this returns null.
 
         // Write out main content.
         const main = d.getElementsByTagName('main')[0];
 
-        main.appendChild(message);
+        if (!main.getElementsByClassName('message').length) {
+          main.appendChild(message);
+        }
+
+        main.appendChild(loadAnim);
 
         if (!main.getElementsByClassName('scraper-heading').length) {
           main.appendChild(heading);
@@ -162,7 +168,8 @@
       function (e) {
         e.preventDefault();
 
-        const message = d.getElementById('message');
+        const loadAnim = d.getElementById('load-anim') || {style: {}};
+        const message = d.getElementById('message'); // Allow fully logged failure if this returns null.
         const xhr = new XMLHttpRequest();
         const selectorRaw = targeter.selector.value;
         let url = targeter.url.value;
@@ -181,6 +188,7 @@
               message.className = 'message error';
               message.innerHTML = 'ERROR! Please enter correctly syntaxed selector.';
               d.body.scrollTop = d.documentElement.scrollTop = 0;
+              loadAnim.style.display = 'none';
 
               return;
             }
@@ -206,6 +214,7 @@
             message.className = 'message error';
             message.innerHTML = 'ERROR! Please enter a valid, reachable URL.';
             d.body.scrollTop = d.documentElement.scrollTop = 0;
+            loadAnim.style.display = 'none';
           }
         };
         xhr.send();
