@@ -222,7 +222,7 @@ export default function (fepperUiInst, root) {
       try {
         /* istanbul ignore if */
         if (Object.keys(this.uiData.patternPaths).length <= 1) {
-          this.$orgs['#sg-nav-message'].dispatchAction('removeClass', 'is-vishidden');
+          this.$orgs['#sg-nav-message'].dispatchAction('removeClass', 'visually-hidden');
 
           // Returning instead of throwing because #sg-nav-message tells to check the console for errors.
           // Throwing an explicit error here would likely be a red herring.
@@ -230,7 +230,7 @@ export default function (fepperUiInst, root) {
         }
       }
       catch (err) /* istanbul ignore next */ {
-        this.$orgs['#sg-nav-message'].dispatchAction('removeClass', 'is-vishidden');
+        this.$orgs['#sg-nav-message'].dispatchAction('removeClass', 'visually-hidden');
 
         throw err;
       }
@@ -259,7 +259,7 @@ export default function (fepperUiInst, root) {
           {patternTypes: this.uiData.navItems.patternTypes, pathsPublic: this.uiData.config.pathsPublic}
         );
         this.$orgs['#sg-nav-target'].dispatchAction('html', templateRenderedNav);
-        this.$orgs['#sg-nav-target'].dispatchAction('removeClass', 'is-vishidden');
+        this.$orgs['#sg-nav-target'].dispatchAction('removeClass', 'visually-hidden');
 
         // Render UI controls. "Ish" is apparently the pre-patternlab name for the viewport resizer.
         // http://bradfrost.com/blog/post/ish/
@@ -268,13 +268,13 @@ export default function (fepperUiInst, root) {
           this.uiData.ishControls
         );
         this.$orgs['#sg-controls'].dispatchAction('html', templateRenderedIsh);
-        this.$orgs['#sg-controls'].dispatchAction('removeClass', 'is-vishidden');
+        this.$orgs['#sg-controls'].dispatchAction('removeClass', 'visually-hidden');
 
         // Erase preemptive warning message.
         this.$orgs['#sg-nav-message'].dispatchAction('empty');
       }
       catch (err) /* istanbul ignore next */ {
-        this.$orgs['#sg-nav-message'].dispatchAction('removeClass', 'is-vishidden');
+        this.$orgs['#sg-nav-message'].dispatchAction('removeClass', 'visually-hidden');
 
         throw err;
       }

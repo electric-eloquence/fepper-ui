@@ -133,19 +133,19 @@ describe('patternlabViewer', function () {
   </ul>
 </div>
 </li><li class="sg-find">
-  <a href="#" class="sg-control-trigger sg-icon sg-icon-search" id="sg-f-toggle" title="Search patterns"><span class="is-vishidden">Search patterns</span></a>
+  <a href="#" class="sg-control-trigger sg-icon sg-icon-search" id="sg-f-toggle" title="Search patterns"><span class="visually-hidden">Search patterns</span></a>
   <ul class="sg-acc-panel sg-right sg-checklist" id="sg-find" style="top: 32px;">
     <li><input class="typeahead" id="typeahead" type="text" placeholder="Search patterns"></li>
   </ul>
 </li><li class="sg-view">
-  <a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-eye" id="sg-t-toggle" title="View"><span class="is-vishidden">View</span></a>
+  <a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-eye" id="sg-t-toggle" title="View"><span class="visually-hidden">View</span></a>
   <ul class="sg-acc-panel sg-right sg-checklist" id="sg-view">
     <li><a href="#" class="sg-checklist-icon sg-icon sg-icon-radio" id="sg-t-annotations">Annotations</a></li>
     <li><a href="#" class="sg-checklist-icon sg-icon sg-icon-radio" id="sg-t-code">Code</a></li>
     <li><a href="patterns/04-pages-00-homepage/04-pages-00-homepage.html" target="_blank" id="sg-raw" class="sg-checklist-icon sg-icon sg-icon-link">Open in new window</a></li>
   </ul>
 </li><li class="sg-tools">
-  <a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-cog" id="sg-tools-toggle" title="Tools"><span class="is-vishidden">Tools</span></a>
+  <a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-cog" id="sg-tools-toggle" title="Tools"><span class="visually-hidden">Tools</span></a>
   <ul class="sg-acc-panel sg-right sg-checklist" id="sg-tools">
     <li><a href="/readme" class="sg-tool sg-checklist-icon sg-icon sg-icon-file" target="_blank">Fepper docs</a>
     </li><li><a href="https://patternlab.io/docs/" class="sg-tool sg-checklist-icon sg-icon sg-icon-file" target="_blank">Pattern Lab docs</a>
@@ -155,12 +155,12 @@ describe('patternlabViewer', function () {
       });
       /* eslint-enable max-len */
 
-      it('removes is-vishidden classes from nav target and controls', function () {
-        expect(sgNavTargetStateBefore.classArray).to.include('is-vishidden');
-        expect(sgControlsStateBefore.classArray).to.include('is-vishidden');
+      it('removes visually-hidden classes from nav target and controls', function () {
+        expect(sgNavTargetStateBefore.classArray).to.include('visually-hidden');
+        expect(sgControlsStateBefore.classArray).to.include('visually-hidden');
 
-        expect(sgNavTargetStateAfter.classArray).to.not.include('is-vishidden');
-        expect(sgControlsStateAfter.classArray).to.not.include('is-vishidden');
+        expect(sgNavTargetStateAfter.classArray).to.not.include('visually-hidden');
+        expect(sgControlsStateAfter.classArray).to.not.include('visually-hidden');
       });
 
       it('does not leave behind Feplet tag artifacts', function () {
