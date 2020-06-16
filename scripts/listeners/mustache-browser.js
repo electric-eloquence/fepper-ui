@@ -10,7 +10,7 @@ export default function (fepperUiInst) {
     listen() {
       document.addEventListener('DOMContentLoaded', () => {
         // These css actions are here instead of in the CodeViewer class to abstract away Mustache Browser behavior.
-        this.$orgs['#sg-code-fill'].on('mouseover', () => {
+        this.$orgs['#sg-code-fill'].on('mouseenter', () => {
           const titleState = this.$orgs['#sg-code-title-mustache'].getState();
 
           if (titleState.classArray.includes('sg-code-title-active')) {

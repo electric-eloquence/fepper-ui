@@ -26,6 +26,13 @@ export default function (fepperUiInst, root) {
       this.growMode = false;
       this.wholeMode = null; // Set later.
 
+      // Right pullbar drag state.
+      this.sgRightpull = {
+        dragOn: false,
+        posX: null,
+        viewportWidth: null
+      };
+
       // Other.
       this.discoId = 0;
       this.growId = 0;
