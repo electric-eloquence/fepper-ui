@@ -35,7 +35,6 @@ export default {
   '#sg-raw': null,
   '#sg-resize-btns': null,
   '#sg-rightpull': null,
-  '#sg-rightpull-container': null,
   '#sg-size-disco': null,
   '#sg-size-em': null,
   '#sg-size-grow': null,
