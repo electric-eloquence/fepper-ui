@@ -103,6 +103,7 @@ export default function (fepperUiInst) {
       Mousetrap.bind('ctrl+shift+l', (e) => {
         fepperUiInst.patternlabViewer.goLarge();
 
+        // TODO: The following is DEPRECATED since it only applies to pre-Chromium Edge.
         if (navigator.userAgent.indexOf('Edge') > -1) {
           alert(fepperUiInst.uiProps.warnCtrlShiftLEdge);
         }

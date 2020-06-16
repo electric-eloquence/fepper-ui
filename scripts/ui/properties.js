@@ -39,6 +39,7 @@ export default function (fepperUiInst, root) {
       this.isMobile = 'ontouchstart' in root && this.sw <= 1024;
       this.timeoutDefault = 200;
       this.titleSeparator = ' : ';
+      // TODO: The following is DEPRECATED since it only applies to pre-Chromium Edge.
       this.warnCtrlShiftLEdge = '"ctrl+shift+l" is unpredictable on Microsoft Edge.\nTry "ctrl+alt+l" instead.';
     }
 
