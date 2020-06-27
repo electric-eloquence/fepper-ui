@@ -86,15 +86,18 @@ describe('uiFns', function () {
       const debounced = uiFns.debounce(mock.callback, 20);
       debounced(() => {});
 
-      new Promise((resolve) => {
-        setTimeout(() => debounced(resolve), 10);
-      })
-      .then(() => {
-        expect(mock.callback.calledOnce).to.be.true;
+      new Promise(
+        (resolve) => {
+          setTimeout(() => debounced(resolve), 10);
+        }
+      ).then(
+        () => {
+          expect(mock.callback.calledOnce).to.be.true;
 
-        sandbox.restore();
-        done();
-      });
+          sandbox.restore();
+          done();
+        }
+      );
     });
   });
 
