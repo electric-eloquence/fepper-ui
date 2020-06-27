@@ -2,242 +2,244 @@
  * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license.
  */
-const d = document;
-const sgPatternFirst = d.querySelector('.sg-pattern');
-const sgPatternToggleAnnotations = d.querySelectorAll('.sg-pattern-toggle-annotations');
-const sgPatternToggleCode = d.querySelectorAll('.sg-pattern-toggle-code');
-const targetOrigin =
-  (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
-const viewall = Boolean(sgPatternToggleCode.length);
+if (parent !== window) {
+  const d = document;
+  const sgPatternFirst = d.querySelector('.sg-pattern');
+  const sgPatternToggleAnnotations = d.querySelectorAll('.sg-pattern-toggle-annotations');
+  const sgPatternToggleCode = d.querySelectorAll('.sg-pattern-toggle-code');
+  const targetOrigin =
+    (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
+  const viewall = Boolean(sgPatternToggleCode.length);
 
-// Before declaring and running anything else, postMessage to the UI.
-if (viewall) {
-  parent.postMessage({codeViewall: viewall}, targetOrigin);
-}
-
-let codeActive = false;
-
-function scrollViewall() {
-  const focusedEl = d.querySelector('.sg-pattern-toggle-code.focused');
-
-  if (focusedEl) {
-    focusedEl.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
+  // Before declaring and running anything else, postMessage to the UI.
+  if (viewall) {
+    parent.postMessage({codeViewall: viewall}, targetOrigin);
   }
-  else {
-    if (!sgPatternFirst) {
-      parent.postMessage({annotationsViewall: false, codeViewall: false, targetOrigin});
 
+  let codeActive = false;
+
+  function scrollViewall() {
+    const focusedEl = d.querySelector('.sg-pattern-toggle-code.focused');
+
+    if (focusedEl) {
+      focusedEl.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
+    }
+    else {
+      if (!sgPatternFirst) {
+        parent.postMessage({annotationsViewall: false, codeViewall: false, targetOrigin});
+
+        return;
+      }
+
+      sgPatternFirst.querySelector('.sg-pattern-toggle-code').classList.add('focused');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+  }
+
+  function receiveIframeMessage(event) {
+    // Does the origin sending the message match the current host? If not, dev/null the request.
+    if (
+      window.location.protocol !== 'file:' &&
+      event.origin !== window.location.protocol + '//' + window.location.host
+    ) {
       return;
     }
 
-    sgPatternFirst.querySelector('.sg-pattern-toggle-code').classList.add('focused');
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
-}
+    let data = {};
 
-function receiveIframeMessage(event) {
-  // Does the origin sending the message match the current host? If not, dev/null the request.
-  if (
-    window.location.protocol !== 'file:' &&
-    event.origin !== window.location.protocol + '//' + window.location.host
-  ) {
-    return;
-  }
+    try {
+      data = (typeof event.data === 'string') ? JSON.parse(event.data) : event.data;
+    }
+    catch (err) {
+      // Fail gracefully.
+    }
 
-  let data = {};
+    if (data.codeToggle) {
 
-  try {
-    data = (typeof event.data === 'string') ? JSON.parse(event.data) : event.data;
-  }
-  catch (err) {
-    // Fail gracefully.
-  }
+      // Get and post data for selected pattern.
+      if (data.codeToggle === 'on') {
+        codeActive = true;
 
-  if (data.codeToggle) {
+        const sgPatterns = d.querySelectorAll('.sg-pattern');
+        let obj;
 
-    // Get and post data for selected pattern.
-    if (data.codeToggle === 'on') {
-      codeActive = true;
+        // Viewall.
+        if (viewall) {
+          let patternData;
 
-      const sgPatterns = d.querySelectorAll('.sg-pattern');
-      let obj;
+          sgPatterns.forEach((el) => {
+            const sgPatternToggle = el.querySelector('.sg-pattern-toggle-code');
 
-      // Viewall.
-      if (viewall) {
-        let patternData;
+            if (!sgPatternToggle || !sgPatternToggle.classList.contains('focused')) {
+              return;
+            }
 
-        sgPatterns.forEach((el) => {
-          const sgPatternToggle = el.querySelector('.sg-pattern-toggle-code');
+            const patternDataEl = el.querySelector('.sg-pattern-data');
 
-          if (!sgPatternToggle || !sgPatternToggle.classList.contains('focused')) {
-            return;
+            if (patternDataEl) {
+              try {
+                patternData = JSON.parse(patternDataEl.innerHTML);
+              }
+              catch (err) {
+                // Fail gracefully.
+              }
+            }
+          });
+
+          // If none of the toggles are focused, get the data from the first one.
+          if (!patternData && sgPatterns[0]) {
+            const patternDataEl = sgPatterns[0].querySelector('.sg-pattern-data');
+
+            if (patternDataEl) {
+              try {
+                patternData = JSON.parse(patternDataEl.innerHTML);
+              }
+              catch (err) {
+                // Fail gracefully.
+              }
+            }
           }
 
-          const patternDataEl = el.querySelector('.sg-pattern-data');
-
-          if (patternDataEl) {
-            try {
-              patternData = JSON.parse(patternDataEl.innerHTML);
-            }
-            catch (err) {
-              // Fail gracefully.
-            }
-          }
-        });
-
-        // If none of the toggles are focused, get the data from the first one.
-        if (!patternData && sgPatterns[0]) {
-          const patternDataEl = sgPatterns[0].querySelector('.sg-pattern-data');
-
-          if (patternDataEl) {
-            try {
-              patternData = JSON.parse(patternDataEl.innerHTML);
-            }
-            catch (err) {
-              // Fail gracefully.
-            }
+          if (patternData) {
+            obj = {
+              codeOverlay: 'on',
+              lineage: patternData.lineage,
+              lineageR: patternData.lineageR,
+              patternPartial: patternData.patternPartial,
+              patternState: patternData.patternState,
+              viewall: true
+            };
           }
         }
 
-        if (patternData) {
+        // Pattern.
+        else {
+          const patternDataEl = d.querySelector('.sg-pattern-data');
+          let patternData = {};
+
+          if (patternDataEl) {
+            try {
+              patternData = JSON.parse(patternDataEl.innerHTML);
+            }
+            catch (err) {
+              // Fail gracefully.
+            }
+          }
+
           obj = {
             codeOverlay: 'on',
             lineage: patternData.lineage,
             lineageR: patternData.lineageR,
             patternPartial: patternData.patternPartial,
-            patternState: patternData.patternState,
-            viewall: true
+            patternState: patternData.patternState
           };
+        }
+
+        if (obj) {
+          parent.postMessage(obj, targetOrigin);
         }
       }
 
-      // Pattern.
+      // data.codeToggle off.
       else {
-        const patternDataEl = d.querySelector('.sg-pattern-data');
+        codeActive = false;
+
+        sgPatternToggleCode.forEach((el) => {
+          el.classList.remove('active');
+        });
+      }
+    }
+    else if (data.codeScrollViewall) {
+      scrollViewall();
+    }
+  }
+
+  /* END DECLARATIONS. BEGIN LISTENERS. */
+
+  window.addEventListener('message', receiveIframeMessage);
+
+  sgPatternToggleCode.forEach((el) => {
+    el.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      sgPatternToggleCode.forEach((el1) => {
+        el1.classList.remove('focused');
+      });
+
+      this.classList.add('focused');
+
+      if (this.classList.contains('active')) {
+        this.classList.remove('active');
+        parent.postMessage({codeOverlay: 'off'}, targetOrigin);
+      }
+      else {
+        sgPatternToggleAnnotations.forEach((el1) => {
+          el1.classList.remove('active');
+        });
+        sgPatternToggleCode.forEach((el1) => {
+          el1.classList.remove('active');
+        });
+
+        this.classList.add('active');
+
+        const patternPartial = this.dataset.patternpartial;
+        const patternDataEl = d.getElementById(`sg-pattern-data-${patternPartial}`);
         let patternData = {};
 
-        if (patternDataEl) {
-          try {
-            patternData = JSON.parse(patternDataEl.innerHTML);
-          }
-          catch (err) {
-            // Fail gracefully.
-          }
+        try {
+          patternData = JSON.parse(patternDataEl.innerHTML);
+        }
+        catch (err) {
+          // Fail gracefully.
         }
 
-        obj = {
+        const obj = {
           codeOverlay: 'on',
           lineage: patternData.lineage,
           lineageR: patternData.lineageR,
+          openCode: true,
           patternPartial: patternData.patternPartial,
-          patternState: patternData.patternState
+          patternState: patternData.patternState,
+          viewall: true
         };
-      }
 
-      if (obj) {
         parent.postMessage(obj, targetOrigin);
+
+        scrollViewall();
       }
-    }
-
-    // data.codeToggle off.
-    else {
-      codeActive = false;
-
-      sgPatternToggleCode.forEach((el) => {
-        el.classList.remove('active');
-      });
-    }
-  }
-  else if (data.codeScrollViewall) {
-    scrollViewall();
-  }
-}
-
-/* END DECLARATIONS. BEGIN LISTENERS. */
-
-window.addEventListener('message', receiveIframeMessage);
-
-sgPatternToggleCode.forEach((el) => {
-  el.addEventListener('click', function (e) {
-    e.preventDefault();
-
-    sgPatternToggleCode.forEach((el1) => {
-      el1.classList.remove('focused');
     });
+  });
 
-    this.classList.add('focused');
+  const Mousetrap = window.Mousetrap;
 
-    if (this.classList.contains('active')) {
-      this.classList.remove('active');
-      parent.postMessage({codeOverlay: 'off'}, targetOrigin);
-    }
-    else {
-      sgPatternToggleAnnotations.forEach((el1) => {
-        el1.classList.remove('active');
-      });
-      sgPatternToggleCode.forEach((el1) => {
-        el1.classList.remove('active');
-      });
+  // Bind Mousetrap keyboard shortcuts using ctrl+shift.
+  const keys = [
+    'shift+c', // Toggle the code panel.
+    'shift+u', // Select the mustache tab.
+    'alt+m', // Select the mustache tab.
+    'shift+y', // Select the html tab.
+    'alt+h' // Select the html tab.
+  ];
 
-      this.classList.add('active');
+  for (let key of keys) {
+    Mousetrap.bind('ctrl+' + key, (e) => {
+      const obj = {event: 'patternlab.keyPress', keyPress: 'ctrl+' + key};
+      parent.postMessage(obj, targetOrigin);
 
-      const patternPartial = this.dataset.patternpartial;
-      const patternDataEl = d.getElementById(`sg-pattern-data-${patternPartial}`);
-      let patternData = {};
+      e.preventDefault();
+      return false;
+    });
+  }
 
-      try {
-        patternData = JSON.parse(patternDataEl.innerHTML);
-      }
-      catch (err) {
-        // Fail gracefully.
-      }
-
-      const obj = {
-        codeOverlay: 'on',
-        lineage: patternData.lineage,
-        lineageR: patternData.lineageR,
-        openCode: true,
-        patternPartial: patternData.patternPartial,
-        patternState: patternData.patternState,
-        viewall: true
-      };
+  // When the code panel is open, hijack cmd+a/ctrl+a so that it only selects the code view.
+  Mousetrap.bind('mod+a', (e) => {
+    if (codeActive) {
+      const obj = {event: 'patternlab.keyPress', keyPress: 'mod+a'};
 
       parent.postMessage(obj, targetOrigin);
 
-      scrollViewall();
+      e.preventDefault();
+      return false;
     }
   });
-});
-
-const Mousetrap = window.Mousetrap;
-
-// Bind Mousetrap keyboard shortcuts using ctrl+shift.
-const keys = [
-  'shift+c', // Toggle the code panel.
-  'shift+u', // Select the mustache tab.
-  'alt+m', // Select the mustache tab.
-  'shift+y', // Select the html tab.
-  'alt+h' // Select the html tab.
-];
-
-for (let key of keys) {
-  Mousetrap.bind('ctrl+' + key, (e) => {
-    const obj = {event: 'patternlab.keyPress', keyPress: 'ctrl+' + key};
-    parent.postMessage(obj, targetOrigin);
-
-    e.preventDefault();
-    return false;
-  });
 }
-
-// When the code panel is open, hijack cmd+a/ctrl+a so that it only selects the code view.
-Mousetrap.bind('mod+a', (e) => {
-  if (codeActive) {
-    const obj = {event: 'patternlab.keyPress', keyPress: 'mod+a'};
-
-    parent.postMessage(obj, targetOrigin);
-
-    e.preventDefault();
-    return false;
-  }
-});

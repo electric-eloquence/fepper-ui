@@ -5,12 +5,14 @@ import './code-viewer.js';
 import './pattern-finder.js';
 import './patternlab-viewer.js';
 
-const Mousetrap = window.Mousetrap;
-const targetOrigin =
-  (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
+if (parent !== window) {
+  const Mousetrap = window.Mousetrap;
+  const targetOrigin =
+    (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
 
-Mousetrap.bind('esc', () => {
-  const obj = {event: 'patternlab.keyPress', keyPress: 'esc'};
+  Mousetrap.bind('esc', () => {
+    const obj = {event: 'patternlab.keyPress', keyPress: 'esc'};
 
-  parent.postMessage(obj, targetOrigin);
-});
+    parent.postMessage(obj, targetOrigin);
+  });
+}
