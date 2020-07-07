@@ -110,9 +110,8 @@
         }
       };
       xhr.send();
-    }
-  ).then(
-    () => {
+    })
+    .then(() => {
       return new Promise((resolve) => {
         const xhr = new XMLHttpRequest();
 
@@ -158,9 +157,8 @@
         };
         xhr.send();
       });
-    }
-  ).then(
-    () => {
+    })
+    .then(() => {
       // Get last form on page. Older Fepper versions didn't identify it by name.
       const targeter = d.forms[d.forms.length - 1];
 
@@ -222,9 +220,8 @@
         },
         false
       );
-    }
-  ).catch(
-    () => {
+    })
+    .catch(() => {
       const xhr = new XMLHttpRequest();
 
       xhr.open('GET', baseUrl + '/html-scraper-xhr/forbidden' + window.location.search, true);
@@ -236,6 +233,5 @@
         main.innerHTML = forbidden.outerHTML;
       };
       xhr.send();
-    }
-  );
+    });
 })(document);

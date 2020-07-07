@@ -89,15 +89,13 @@ describe('uiFns', function () {
       new Promise(
         (resolve) => {
           setTimeout(() => debounced(resolve), 10);
-        }
-      ).then(
-        () => {
+        })
+        .then(() => {
           expect(mock.callback.calledOnce).to.be.true;
 
           sandbox.restore();
           done();
-        }
-      );
+        });
     });
   });
 
