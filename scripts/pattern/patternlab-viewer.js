@@ -2,8 +2,12 @@
  * Copyright (c) 2013-2016 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license.
  */
-if (parent !== window) {
-  const d = document;
+((d) => {
+  // Only run when loaded from within the iframe.
+  if (parent === window) {
+    return;
+  }
+
   const targetOrigin =
     (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
 
@@ -23,7 +27,7 @@ if (parent !== window) {
     const parts = window.location.href.split('?');
     let obj;
 
-    // This if condition requires clicks within the iframe. WebdriverIO cannot test the back and forward buttons for this.
+    // This if condition requires clicks within the iframe. WebdriverIO cannot test back and forward buttons for this.
 
     // When navigating back to a pattern from the Mustache Browser, invoke patternlab.updatePatternInfo for its
     // special treatment of browser history in this instance.
@@ -167,4 +171,4 @@ if (parent !== window) {
       return false;
     });
   }
-}
+})(document);

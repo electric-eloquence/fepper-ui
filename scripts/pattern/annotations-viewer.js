@@ -2,8 +2,12 @@
  * Copyright (c) 2013-2014 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license.
  */
-if (parent !== window) {
-  const d = document;
+((d) => {
+  // Only run when loaded from within the iframe.
+  if (parent === window) {
+    return;
+  }
+
   const sgPatternFirst = d.querySelector('.sg-pattern');
   const sgPatternToggleAnnotations = d.querySelectorAll('.sg-pattern-toggle-annotations');
   const sgPatternToggleCode = d.querySelectorAll('.sg-pattern-toggle-code');
@@ -345,4 +349,4 @@ if (parent !== window) {
     e.preventDefault();
     return false;
   });
-}
+})(document);
