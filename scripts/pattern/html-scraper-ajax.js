@@ -112,51 +112,52 @@
       xhr.send();
     })
     .then(() => {
-      return new Promise((resolve) => {
-        const xhr = new XMLHttpRequest();
+      return new Promise(
+        (resolve) => {
+          const xhr = new XMLHttpRequest();
 
-        xhr.open('GET', baseUrl + '/html-scraper-xhr' + window.location.search, true);
-        xhr.onload = () => {
-          // Parse xhr.responseText into DOM object.
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(xhr.responseText, 'text/html');
-          const heading = doc.getElementById('scraper-heading') || emptyFrag;
-          const helpText = doc.getElementById('help-text') || emptyFrag;
-          const loadAnim = doc.getElementById('load-anim') || emptyFrag;
-          const message = doc.getElementById('message') || emptyFrag;
-          // Get last form on page. Older Fepper versions didn't identify it by name.
-          const targeter = doc.forms[doc.forms.length - 1]; // Allow fully logged failure if this returns null.
+          xhr.open('GET', baseUrl + '/html-scraper-xhr' + window.location.search, true);
+          xhr.onload = () => {
+            // Parse xhr.responseText into DOM object.
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(xhr.responseText, 'text/html');
+            const heading = doc.getElementById('scraper-heading') || emptyFrag;
+            const helpText = doc.getElementById('help-text') || emptyFrag;
+            const loadAnim = doc.getElementById('load-anim') || emptyFrag;
+            const message = doc.getElementById('message') || emptyFrag;
+            // Get last form on page. Older Fepper versions didn't identify it by name.
+            const targeter = doc.forms[doc.forms.length - 1]; // Allow fully logged failure if this returns null.
 
-          // Write out main content.
-          const main = d.getElementsByTagName('main')[0];
+            // Write out main content.
+            const main = d.getElementsByTagName('main')[0];
 
-          if (!main.getElementsByClassName('message').length) {
-            main.appendChild(message);
-          }
+            if (!main.getElementsByClassName('message').length) {
+              main.appendChild(message);
+            }
 
-          main.appendChild(loadAnim);
+            main.appendChild(loadAnim);
 
-          if (!main.getElementsByClassName('scraper-heading').length) {
-            main.appendChild(heading);
-          }
+            if (!main.getElementsByClassName('scraper-heading').length) {
+              main.appendChild(heading);
+            }
 
-          main.appendChild(targeter);
-          main.appendChild(helpText);
+            main.appendChild(targeter);
+            main.appendChild(helpText);
 
-          // Insert new script element such that it fires on load.
-          const node4insert = d.getElementById('help-text');
+            // Insert new script element such that it fires on load.
+            const node4insert = d.getElementById('help-text');
 
-          if (node4insert) {
-            const script2insert = d.createElement('script');
-            script2insert.src = '../../node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js';
+            if (node4insert) {
+              const script2insert = d.createElement('script');
+              script2insert.src = '../../node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js';
 
-            node4insert.parentNode.insertBefore(script2insert, node4insert);
-          }
+              node4insert.parentNode.insertBefore(script2insert, node4insert);
+            }
 
-          resolve();
-        };
-        xhr.send();
-      });
+            resolve();
+          };
+          xhr.send();
+        });
     })
     .then(() => {
       // Get last form on page. Older Fepper versions didn't identify it by name.
