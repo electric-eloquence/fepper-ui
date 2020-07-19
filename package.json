@@ -70,13 +70,13 @@
     "cheerio": "^1.0.0-rc.3",
     "chromedriver": "^84.0.0",
     "coveralls": "3.x",
-    "eslint": "6.x",
+    "eslint": "7.x",
     "husky": "4.x",
     "mkdirp": "^1.0.3",
-    "mocha": "7.x",
+    "mocha": "8.x",
     "nyc": "15.x",
-    "rollup": "^1.16.7",
-    "sinon": "8.x",
+    "rollup": "^2.21.0",
+    "sinon": "9.x",
     "wdio-chromedriver-service": "6.0.3",
     "webdriverio": "6.3.3"
   }
