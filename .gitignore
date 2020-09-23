@@ -9,3 +9,4 @@
 /scripts/ui/data.js
 /styles/ui.css
 node_modules/
+package-lock.json
