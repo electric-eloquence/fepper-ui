@@ -24,7 +24,7 @@ module.exports = new Promise((resolve) => {
 <html>
   <head>
     <title id="title">Fepper HTML Scraper</title>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <!-- Disable cache -->
     <meta http-equiv="cache-control" content="max-age=0">
     <meta http-equiv="cache-control" content="no-cache">
@@ -160,7 +160,7 @@ module.exports = new Promise((resolve) => {
 <html>
   <head>
     <title id="title">Fepper Mustache Browser</title>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <!-- Disable cache -->
     <meta http-equiv="cache-control" content="max-age=0">
     <meta http-equiv="cache-control" content="no-cache">
