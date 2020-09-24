@@ -85,11 +85,10 @@ export default function (fepperUiInst, root) {
     /**
      * Takes breakpoint configurations from customizable sources and returns a sorted object of key-value pairs.
      *
-     * @param {object} FEPPER - The customizable FEPPER configuration object.
      * @returns {object} Breakpoints sorted from largest to smallest.
      */
-    getBreakpointsSorted(FEPPER) {
-      // Get breakpoint customations made to EITHER variables.styl or fepper-obj.js, priority given to fepper-obj.js.
+    getBreakpointsSorted() {
+      // Get breakpoint customations made to variables.styl.
       const bpObj = {};
       const bpObjTmp = {};
       const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER;
@@ -104,25 +103,6 @@ export default function (fepperUiInst, root) {
           }
           else {
             bpObjTmp[globalVar.slice(3, globalVar.length - 4)] = root[globalVar];
-          }
-        }
-      }
-
-      // Do same thing with fepper-obj.js, overriding any values conflicting with those in variables.styl.
-      if (FEPPER.breakpoints instanceof Object) {
-        for (let i in FEPPER.breakpoints) {
-          /* istanbul ignore if */
-          if (!(FEPPER.breakpoints[i] instanceof Object) || typeof FEPPER.breakpoints[i].maxWidth !== 'number') {
-            continue;
-          }
-
-          const bpName = i;
-
-          if (FEPPER.breakpoints[bpName].maxWidth < 0) {
-            bpObjTmp[bpName] = MAX_SAFE_INTEGER;
-          }
-          else {
-            bpObjTmp[bpName] = FEPPER.breakpoints[bpName].maxWidth;
           }
         }
       }

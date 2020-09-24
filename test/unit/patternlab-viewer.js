@@ -566,12 +566,20 @@ describe('patternlabViewer', function () {
   });
 
   describe('.goResize()', function () {
+    const bpObjOrig = fepperUi.uiProps.bpObj;
+
+    before(function () {
+      fepperUi.uiProps.bpObj.foo = 1337;
+    });
+
+    after(function () {
+      fepperUi.uiProps.bpObj = bpObjOrig;
+    });
+
     it('resizes to a custom size', function () {
       fepperUi.dataSaver.removeValue('vpWidth');
       $orgs['#sg-gen-container'].dispatchAction('removeClass', 'vp-animate');
       $orgs['#sg-viewport'].dispatchAction('removeClass', 'vp-animate');
-
-      fepperUi.uiProps.bpObj.foo = 1337;
 
       const discoModeBefore = fepperUi.uiProps.discoMode = true;
       const discoIdBefore = fepperUi.uiProps.discoId = 1;
