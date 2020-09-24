@@ -103,16 +103,11 @@ export default function (fepperUiInst) {
       Mousetrap.bind('ctrl+shift+l', (e) => {
         fepperUiInst.patternlabViewer.goLarge();
 
-        // TODO: The following is DEPRECATED since it only applies to pre-Chromium Edge.
-        if (navigator.userAgent.indexOf('Edge') > -1) {
-          alert(fepperUiInst.uiProps.warnCtrlShiftLEdge);
-        }
-
         e.preventDefault();
         return false;
       });
 
-      // Large for Microsoft Edge.
+      // TODO: The following is DEPRECATED since it was a workaround for pre-Chromium Microsoft Edge.
       Mousetrap.bind('ctrl+alt+l', (e) => {
         fepperUiInst.patternlabViewer.goLarge();
 
@@ -120,9 +115,9 @@ export default function (fepperUiInst) {
         return false;
       });
 
-      // Allowing ctrl+shift+w to go whole viewport on MacOS and Microsoft Edge since this shortcut can be easily
-      // intuited from the other shortcuts. However, ctrl+shift+w cannot be publicly documented since browser behavior
-      // may change without warning in the future.
+      // Allowing ctrl+shift+w to go whole viewport on MacOS since this shortcut can be easily intuited from the other
+      // shortcuts. However, ctrl+shift+w cannot be publicly documented since browser behavior may change without
+      // warning in the future (however unlikely).
       Mousetrap.bind(['ctrl+alt+w', 'ctrl+shift+w'], (e) => {
         fepperUiInst.patternlabViewer.goWhole();
 
