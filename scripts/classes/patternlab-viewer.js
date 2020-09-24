@@ -50,6 +50,7 @@ export default function (fepperUiInst, root) {
 
               break;
 
+            // TODO: The following is DEPRECATED since it was a workaround for pre-Chromium Microsoft Edge.
             case 'ctrl+alt+l':
               this.goLarge();
 
@@ -57,12 +58,6 @@ export default function (fepperUiInst, root) {
 
             case 'ctrl+shift+l':
               this.goLarge();
-
-              // TODO: The following is DEPRECATED since it only applies to pre-Chromium Edge.
-              /* istanbul ignore if */
-              if (root.navigator.userAgent.indexOf('Edge') > -1) {
-                alert(this.uiProps.warnCtrlShiftLEdge);
-              }
 
               break;
 

@@ -14,7 +14,7 @@ export default function (fepperUiInst, root) {
 
       // Measurements.
       this.bodyFontSize = this.bodyFontSize || 16;
-      this.bpObj = this.uiFns.getBreakpointsSorted(root.FEPPER || {});
+      this.bpObj = this.uiFns.getBreakpointsSorted();
       this.maxViewportWidth = root.config ? parseInt(root.config.ishMaximum) : 2600; // Maxiumum Size for Viewport.
       this.minViewportWidth = root.config ? parseInt(root.config.ishMinimum) : 240; // Minimum Size for Viewport.
       // Any change to sgRightpullWidth needs to be replicated in ui/core/styleguide/index/html/01-body/40-main/main.css
@@ -39,8 +39,6 @@ export default function (fepperUiInst, root) {
       this.isMobile = 'ontouchstart' in root && this.sw <= 1024;
       this.timeoutDefault = 200;
       this.titleSeparator = ' : ';
-      // TODO: The following is DEPRECATED since it only applies to pre-Chromium Edge.
-      this.warnCtrlShiftLEdge = '"ctrl+shift+l" is unpredictable on Microsoft Edge.\nTry "ctrl+alt+l" instead.';
     }
 
     /* GETTER for fepperUi.uiFns in case it is undefined at instantiation. */

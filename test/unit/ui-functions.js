@@ -2,6 +2,7 @@ import {expect} from 'chai';
 import sinon from 'sinon';
 
 import fepperUi from '../unit';
+import '../fixtures/_scripts/src/variables.styl';
 
 const sandbox = sinon.createSandbox();
 
@@ -100,86 +101,15 @@ describe('uiFns', function () {
   });
 
   describe('.getBreakpointsSorted()', function () {
-    it('sorts unsorted FEPPER breakpoints from the .js file', function () {
-      const bpsUnsorted = global.FEPPER.breakpoints;
-
-      expect(Object.keys(bpsUnsorted)[0]).to.equal('md');
-      expect(Object.values(bpsUnsorted)[0].maxWidth).to.equal(1024);
-      expect(Object.values(bpsUnsorted)[0].minWidth).to.equal(768);
-      expect(Object.keys(bpsUnsorted)[1]).to.equal('lg');
-      expect(Object.values(bpsUnsorted)[1].maxWidth).to.equal(-1);
-      expect(Object.values(bpsUnsorted)[1].minWidth).to.equal(1025);
-      expect(Object.keys(bpsUnsorted)[2]).to.equal('xs');
-      expect(Object.values(bpsUnsorted)[2].maxWidth).to.equal(480);
-      expect(Object.values(bpsUnsorted)[2].minWidth).to.equal(321);
-      expect(Object.keys(bpsUnsorted)[3]).to.equal('xx');
-      expect(Object.values(bpsUnsorted)[3].maxWidth).to.equal(320);
-      expect(Object.values(bpsUnsorted)[3].minWidth).to.equal(0);
-      expect(Object.keys(bpsUnsorted)[4]).to.equal('sm');
-      expect(Object.values(bpsUnsorted)[4].maxWidth).to.equal(767);
-      expect(Object.values(bpsUnsorted)[4].minWidth).to.equal(481);
-
-      const bpsSorted = uiFns.getBreakpointsSorted(global.FEPPER);
-
-      expect(Object.values(bpsSorted)[0]).to.equal(1280);
-      expect(Object.values(bpsSorted)[0]).to.be.above(Object.values(bpsSorted)[1]);
-      expect(Object.values(bpsSorted)[1]).to.equal(bpsUnsorted.md.maxWidth);
-      expect(Object.values(bpsSorted)[1]).to.be.above(Object.values(bpsSorted)[2]);
-      expect(Object.values(bpsSorted)[2]).to.equal(bpsUnsorted.sm.maxWidth);
-      expect(Object.values(bpsSorted)[2]).to.be.above(Object.values(bpsSorted)[3]);
-      expect(Object.values(bpsSorted)[3]).to.equal(bpsUnsorted.xs.maxWidth);
-      expect(Object.values(bpsSorted)[3]).to.be.above(Object.values(bpsSorted)[4]);
-      expect(Object.values(bpsSorted)[4]).to.equal(bpsUnsorted.xx.maxWidth);
-    });
-
     it('sorts unsorted breakpoints from variables.styl', function () {
-      global.FEPPER.breakpoints = {};
-      global.bp_md_max = 1025;
-      global.bp_lg_max = -2;
-      global.bp_xs_max = 481;
-      global.bp_xx_min = 1;
-      global.bp_xx_max = 321;
-      global.bp_sm_max = 768;
+      const bpsSorted = uiFns.getBreakpointsSorted();
 
-      const bpsSorted = uiFns.getBreakpointsSorted(global.FEPPER);
-
-      expect(Object.values(bpsSorted)[0]).to.equal(1281);
-      expect(Object.values(bpsSorted)[0]).to.be.above(Object.values(bpsSorted)[1]);
-      expect(Object.values(bpsSorted)[1]).to.equal(global.bp_md_max);
-      expect(Object.values(bpsSorted)[1]).to.be.above(Object.values(bpsSorted)[2]);
-      expect(Object.values(bpsSorted)[2]).to.equal(global.bp_sm_max);
-      expect(Object.values(bpsSorted)[2]).to.be.above(Object.values(bpsSorted)[3]);
-      expect(Object.values(bpsSorted)[3]).to.equal(global.bp_xs_max);
-      expect(Object.values(bpsSorted)[3]).to.be.above(Object.values(bpsSorted)[4]);
-      expect(Object.values(bpsSorted)[4]).to.equal(global.bp_xx_max);
-    });
-
-    it('gives priority to bps in FEPPER object from .js file vs. variables.styl', function () {
-      global.FEPPER.breakpoints = {
-        md: {
-          maxWidth: 1337,
-          minWidth: 768
-        }
-      };
-      global.bp_md_max = 1024;
-      global.bp_lg_max = -1;
-      global.bp_xs_max = 480;
-      global.bp_xx_min = 0;
-      global.bp_xx_max = 320;
-      global.bp_sm_max = 767;
-
-      const bpsSorted = uiFns.getBreakpointsSorted(global.FEPPER);
-
-      expect(Object.values(bpsSorted)[0]).to.equal(1906);
-      expect(Object.values(bpsSorted)[0]).to.be.above(Object.values(bpsSorted)[1]);
-      expect(Object.values(bpsSorted)[1]).to.not.equal(global.bp_md_max);
-      expect(Object.values(bpsSorted)[1]).to.equal(1337);
-      expect(Object.values(bpsSorted)[1]).to.be.above(Object.values(bpsSorted)[2]);
-      expect(Object.values(bpsSorted)[2]).to.equal(global.bp_sm_max);
-      expect(Object.values(bpsSorted)[2]).to.be.above(Object.values(bpsSorted)[3]);
-      expect(Object.values(bpsSorted)[3]).to.equal(global.bp_xs_max);
-      expect(Object.values(bpsSorted)[3]).to.be.above(Object.values(bpsSorted)[4]);
-      expect(Object.values(bpsSorted)[4]).to.equal(global.bp_xx_max);
+      expect(global.bp_lg_max).to.equal(-1);
+      expect(bpsSorted.lg).to.equal(1280);
+      expect(bpsSorted.md).to.equal(global.bp_md_max);
+      expect(bpsSorted.sm).to.equal(global.bp_sm_max);
+      expect(bpsSorted.xs).to.equal(global.bp_xs_max);
+      expect(bpsSorted.xx).to.equal(global.bp_xx_max);
     });
   });
 
