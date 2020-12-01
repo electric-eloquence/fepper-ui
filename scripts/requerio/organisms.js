@@ -6,8 +6,8 @@
  * @returns {object} Keyed by organism ID.
  */
 export default {
-  'window': null,
-  'document': null,
+  window: null,
+  document: null,
   '#patternlab-html': null,
   '#patternlab-body': null,
   '#sg-annotations': null,
