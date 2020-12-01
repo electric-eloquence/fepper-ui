@@ -68,7 +68,7 @@
     "chai": "4.x",
     "chai-webdriverio": "^1.0.0",
     "cheerio": "^1.0.0-rc.3",
-    "chromedriver": "^85.0.1",
+    "chromedriver": "^87.0.0",
     "coveralls": "3.x",
     "eslint": "7.x",
     "husky": "4.x",
