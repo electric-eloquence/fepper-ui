@@ -1,31 +1,169 @@
 ((d) => {
   'use strict'; // eslint-disable-line strict
 
+  const baseUrl = window.location.protocol + '//' + window.location.host;
+  const message = d.getElementById('message') || {style: {}};
+  const stage = d.getElementById('scraper__stage');
   // Targeter is the last form on the HTML Scraper page. Older Fepper versions didn't identify it by name.
-  const targeter = d.forms[d.forms.length - 1];
+  // DEPRECATED as of 2020-12-08: anonymous form.
+  const targeter = d.forms.targeter || d.forms[d.forms.length - 1];
 
-  targeter.addEventListener('submit', () => {
-    // First show loading animation.
-    const loadAnim = d.getElementById('load-anim') || {style: {}};
-    loadAnim.style.display = 'block';
+  function fetchCors(url_) {
+    let url;
 
-    // Then, append search params to target.
-    const baseUrl = window.location.protocol + '//' + window.location.host;
-    let url = targeter.url.value;
-    targeter.action = '/html-scraper?url=';
-
-    if (url[0] === '/') {
-      url = baseUrl + url;
+    if (url_[0] === '/') {
+      url = baseUrl + url_;
+    }
+    else {
+      url = url_;
     }
 
-    targeter.action += encodeURIComponent(url);
-    targeter.action += '&selector=';
-    targeter.action += encodeURIComponent(targeter.selector.value);
+    return fetch(baseUrl + '/html-scraper-xhr/cors?url=' + encodeURIComponent(url))
+      .then((response) => {
+        return new Promise((resolve, reject) => {
+          if (response.ok) {
+            stage.src = baseUrl + '/html-scraper-xhr/cors?url=' + encodeURIComponent(url);
+
+            resolve();
+          }
+          else {
+            message.className = 'message error';
+            message.innerHTML = 'ERROR! Please enter a valid, reachable URL.';
+            d.body.scrollTop = d.documentElement.scrollTop = 0;
+
+            reject(response.statusText);
+          }
+        });
+      })
+      .catch((err) => void console.error(err)); // eslint-disable-line no-console
+  }
+
+  function nodeListToJson(nodeItem, jsonToRecurse) {
+    switch (nodeItem.nodeType) {
+      case 1:
+        jsonToRecurse.node = 'element';
+
+        if (typeof nodeItem.nodeName === 'string') {
+          jsonToRecurse.tag = nodeItem.nodeName.toLowerCase();
+        }
+
+        if (nodeItem.attributes.length) {
+          jsonToRecurse.attr = {};
+
+          for (let i = 0, l = nodeItem.attributes.length; i < l; i++) {
+            const attribute = nodeItem.attributes[i];
+            jsonToRecurse.attr[attribute.name] = attribute.value;
+          }
+        }
+
+        break;
+
+      case 3:
+        jsonToRecurse.node = 'text';
+        jsonToRecurse.text = nodeItem.textContent;
+
+        break;
+
+      case 8:
+        jsonToRecurse.node = 'comment';
+        jsonToRecurse.text = nodeItem.textContent;
+
+        break;
+
+      default:
+        jsonToRecurse.node = '';
+    }
+
+    if (nodeItem.childNodes.length) {
+      jsonToRecurse.child = [];
+
+      for (let i = 0, l = nodeItem.childNodes.length; i < l; i++) {
+        jsonToRecurse.child.push({});
+        nodeListToJson(nodeItem.childNodes[i], jsonToRecurse.child[i]);
+      }
+    }
+  }
+
+  function validateAndParseSelector(selectorRaw) {
+    const selectorSplit = selectorRaw.trim().split('[');
+    const selector = selectorSplit[0];
+    let index;
+    let retVal;
+
+    // Validate.
+    // eslint-disable-next-line no-useless-escape
+    if (!/^(#|\.)?[_a-z][\w#\-\.]*$/i.test(selector)) {
+      retVal = null;
+    }
+
+    if (selectorSplit[1]) {
+      if (/^\d+\]$/.test(selectorSplit[1])) {
+        index = selectorSplit[1].slice(0, -1);
+      }
+      else {
+        retVal = null;
+      }
+    }
+
+    if (retVal === null) {
+      message.className = 'message error';
+      message.innerHTML = 'ERROR! Please enter a correctly syntaxed selector.';
+      d.body.scrollTop = d.documentElement.scrollTop = 0;
+    }
+    else {
+      message.className = 'message';
+      message.innerHTML = '';
+      targeter.selector.value = selector;
+      targeter.index.value = index;
+      retVal = {selector, index};
+    }
+
+    return retVal;
+  }
+
+  targeter.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const validatedSelector = validateAndParseSelector(targeter.selectorRaw.value);
+
+    if (validatedSelector) {
+      const {selector, index} = validatedSelector;
+
+      stage.setAttribute('data-selector', selector);
+      stage.setAttribute('data-index', index || '');
+
+      fetchCors(targeter.url.value);
+    }
+  });
+
+  stage.addEventListener('load', () => {
+    const innerHTML = stage.contentWindow.document.body.innerHTML;
+
+    if (innerHTML) {
+      // Parse xhr.responseText as DOM. Create an object consumable by the html2json library.
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(innerHTML, 'text/html');
+      const selector = stage.getAttribute('data-selector');
+      const selection = doc ? doc.querySelectorAll(selector) : [];
+      const html2json = {node: 'root', child: []};
+
+      for (let i = 0, l = selection.length; i < l; i++) {
+        html2json.child.push({});
+        nodeListToJson(selection[i], html2json.child[i]);
+      }
+
+      message.className = 'message';
+      message.innerHTML = '';
+
+      targeter.html2json.value = JSON.stringify(html2json);
+      targeter.submit();
+    }
   });
 
   // Show/hide help text.
-  const helpButton = d.getElementById('help-button');
-  const hideButton = d.getElementById('hide-button');
+  // DEPRECATED as of 2020-12-08: #help-button and #hide-button selectors.
+  const helpButton = d.getElementById('help-button') || d.getElementById('help-show');
+  const hideButton = d.getElementById('hide-button') || d.getElementById('help-hide');
   let helpText;
 
   if (helpButton) {
@@ -61,7 +199,6 @@
       ) {
         e.preventDefault();
 
-        const message = d.getElementById('message') || {style: {}};
         message.className = 'message error';
         message.innerHTML = 'ERROR! Please enter a valid filename.';
         d.body.scrollTop = d.documentElement.scrollTop = 0;
