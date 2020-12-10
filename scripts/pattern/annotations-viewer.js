@@ -338,6 +338,10 @@
     });
   });
 
+  if (!window.Mousetrap) {
+    return;
+  }
+
   const Mousetrap = window.Mousetrap;
 
   // Toggle the annotations panel with keyboard shortcut.

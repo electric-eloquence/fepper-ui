@@ -214,6 +214,10 @@
     });
   });
 
+  if (!window.Mousetrap) {
+    return;
+  }
+
   const Mousetrap = window.Mousetrap;
 
   // Bind Mousetrap keyboard shortcuts using ctrl+shift.

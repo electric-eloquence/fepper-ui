@@ -1,4 +1,4 @@
-if (parent !== window) {
+if (parent !== window && window.Mousetrap) {
   const Mousetrap = window.Mousetrap;
   const targetOrigin =
     (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
