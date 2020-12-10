@@ -1,7 +1,7 @@
 const fs = require('fs');
 const http = require('http');
 const path = require('path');
-const url = require('url');
+const urlParse = require('url').parse;
 
 let port = 8080;
 
@@ -42,10 +42,11 @@ module.exports = new Promise((resolve) => {
       /* eslint-enable max-len */
 
       req.on('data', (chunk) => {
-        const urlObj = url.parse(req.url + '?' + chunk.toString(), true);
+        const urlObj = urlParse(req.url + '?' + chunk.toString(), true);
+        const {filename, url, selector_raw} = urlObj.query;
 
         if (req.url === '/html-scraper') {
-          if (!urlObj.query.filename) {
+          if (!filename) {
             /* eslint-disable max-len */
             responseData += `
       <div id="message" class="message "></div>
@@ -60,10 +61,10 @@ module.exports = new Promise((resolve) => {
         <div>Yes, import into Fepper.</div>
         <label for="filename">Enter a filename to save this under (extension not necessary):</label>
         <input name="filename" type="text" value="">
-        <input name="url" type="hidden" value="http://localhost:3006/patterns/00-styleguide-colors/00-styleguide-colors.html">
-        <input name="selector" type="hidden" value="">
+        <input name="url" type="hidden" value="${url}">
+        <input name="selector_raw" type="hidden" value="${selector_raw}">
         <textarea name="html2json"></textarea>
-        <textarea name="mustache">&lt;p&gt;{{ p }}&lt;/p&gt;
+        <textarea name="mustache">&lt;${selector_raw}&gt;{{ ${selector_raw} }}&lt;/${selector_raw}&gt;
         </textarea>
         <textarea name="json">{
   "p": "Fepper Base"
@@ -75,12 +76,12 @@ module.exports = new Promise((resolve) => {
       <form id="scraper__targeter" action="/html-scraper" method="post" name="targeter">
         <div>
           <label for="url">URL:</label>
-          <input name="url" type="text" value="http://localhost:3006/patterns/00-styleguide-colors/00-styleguide-colors.html">
+          <input name="url" type="text" value="${url}">
         </div>
         <div>
           <label for="selector_raw">Selector:</label>
-          <input name="selector_raw" type="text" value=".colors__row[0]">
-          <input name="selector" type="hidden" value="">
+          <input name="selector_raw" type="text" value="${selector_raw}">
+          <input name="selector" type="hidden" value="${selector_raw}">
           <input name="index" type="hidden" value="">
         </div>
         <textarea name="html2json"></textarea>
@@ -119,7 +120,7 @@ module.exports = new Promise((resolve) => {
     }
 
     else {
-      const urlObj = url.parse(req.url, true);
+      const urlObj = urlParse(req.url, true);
       let filePath = urlObj.pathname;
 
       switch (filePath) {

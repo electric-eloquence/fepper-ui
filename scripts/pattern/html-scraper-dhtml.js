@@ -115,7 +115,7 @@
       message.className = 'message';
       message.innerHTML = '';
       targeter.selector.value = selector;
-      targeter.index.value = index;
+      targeter.index.value = index = index || '';
       retVal = {selector, index};
     }
 
@@ -132,7 +132,7 @@
 
       loadAnim.style.display = 'block';
       stage.setAttribute('data-selector', selector);
-      stage.setAttribute('data-index', index || '');
+      stage.setAttribute('data-index', index);
       fetchCors(targeter.url.value);
     }
   });

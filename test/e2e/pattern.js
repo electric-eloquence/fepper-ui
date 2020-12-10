@@ -220,8 +220,8 @@ menu anchor.</p>
         <div>Yes, import into Fepper.</div>
         <label for="filename">Enter a filename to save this under (extension not necessary):</label>
         <input name="filename" type="text" value="">
-        <input name="url" type="hidden" value="http://localhost:3006/patterns/00-styleguide-colors/00-styleguide-colors.html">
-        <input name="selector" type="hidden" value="">
+        <input name="url" type="hidden" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html">
+        <input name="selector_raw" type="hidden" value="p">
         <textarea name="html2json"></textarea>
         <textarea name="mustache">&lt;p&gt;{{ p }}&lt;/p&gt;
         </textarea>
@@ -235,12 +235,12 @@ menu anchor.</p>
       <form id="scraper__targeter" action="/html-scraper" method="post" name="targeter">
         <div>
           <label for="url">URL:</label>
-          <input name="url" type="text" value="http://localhost:3006/patterns/00-styleguide-colors/00-styleguide-colors.html">
+          <input name="url" type="text" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html">
         </div>
         <div>
           <label for="selector_raw">Selector:</label>
-          <input name="selector_raw" type="text" value=".colors__row[0]">
-          <input name="selector" type="hidden" value="">
+          <input name="selector_raw" type="text" value="p">
+          <input name="selector" type="hidden" value="p">
           <input name="index" type="hidden" value="">
         </div>
         <textarea name="html2json"></textarea>
@@ -365,10 +365,10 @@ menu anchor.</p>
         <div>Yes, import into Fepper.</div>
         <label for="filename">Enter a filename to save this under (extension not necessary):</label>
         <input name="filename" type="text" value="">
-        <input name="url" type="hidden" value="http://localhost:3006/patterns/00-styleguide-colors/00-styleguide-colors.html">
-        <input name="selector" type="hidden" value="">
+        <input name="url" type="hidden" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html">
+        <input name="selector_raw" type="hidden" value="h1">
         <textarea name="html2json"></textarea>
-        <textarea name="mustache">&lt;p&gt;{{ p }}&lt;/p&gt;
+        <textarea name="mustache">&lt;h1&gt;{{ h1 }}&lt;/h1&gt;
         </textarea>
         <textarea name="json">{
   "p": "Fepper Base"
@@ -380,12 +380,12 @@ menu anchor.</p>
       <form id="scraper__targeter" action="/html-scraper" method="post" name="targeter">
         <div>
           <label for="url">URL:</label>
-          <input name="url" type="text" value="http://localhost:3006/patterns/00-styleguide-colors/00-styleguide-colors.html">
+          <input name="url" type="text" value="/patterns/04-pages-00-homepage/04-pages-00-homepage.html">
         </div>
         <div>
           <label for="selector_raw">Selector:</label>
-          <input name="selector_raw" type="text" value=".colors__row[0]">
-          <input name="selector" type="hidden" value="">
+          <input name="selector_raw" type="text" value="h1">
+          <input name="selector" type="hidden" value="h1">
           <input name="index" type="hidden" value="">
         </div>
         <textarea name="html2json"></textarea>
