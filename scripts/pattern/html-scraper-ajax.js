@@ -1,5 +1,3 @@
-// DEPRECATED.
-// All operations herein will be moved to html-scraper.js.
 ((d) => {
   'use strict'; // eslint-disable-line strict
 
@@ -17,6 +15,14 @@
 
   /* MAIN EXECUTION */
 
+  // First, load styles. We don't want these styles to be applied to any viewall.
+  // Since CSS can't perform such negative logic, we'll use this sandboxed stylesheet.
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = '/fepper-core/html-scraper.css';
+  link.media = 'all';
+  document.getElementsByTagName('head')[0].appendChild(link);
+
   // Since the HTML scraper won't work on any non-Express served environment, we can safely assume that Fepper will be
   // served from the document root.
   const baseUrl = window.location.protocol + '//' + window.location.host;
@@ -31,16 +37,17 @@
         // Parse xhr.responseText into DOM object.
         const parser = new DOMParser();
         const doc = parser.parseFromString(responseText, 'text/html');
-        let main = d.getElementById('main');
+        let main = d.getElementById('fepper-html-scraper');
 
         if (main) {
-          // DEPRECATED as of 2020-12-08. To be removed.
-          const heading = doc.getElementById('scraper-heading') || emptyFrag;
-          const helpText = doc.getElementById('help-text') || emptyFrag;
-          const loadAnim = doc.getElementById('load-anim') || emptyFrag;
+          // DEPRECATED as of 2020-12-08. To be replaced.
           const message = doc.getElementById('message') || emptyFrag;
+          const loadAnim = doc.getElementById('load-anim') || emptyFrag;
+          const heading = doc.getElementById('scraper-heading');
           // Get last form on page. Older Fepper versions didn't identify it by name.
           const targeter = doc.forms[doc.forms.length - 1]; // Allow fully logged failure if this returns null.
+          const helpText = doc.getElementById('help-text') || emptyFrag;
+          const stage = doc.getElementById('scraper__stage') || emptyFrag;
 
           // Write out main content.
           if (!main.getElementsByClassName('message').length) {
@@ -50,25 +57,35 @@
           main.appendChild(loadAnim);
 
           if (!main.getElementsByClassName('scraper-heading').length) {
-            main.appendChild(heading);
+            if (heading) {
+              main.appendChild(heading);
+            }
+            else {
+              const heading = d.createElement('h1');
+              heading.id = 'scraper__heading';
+              heading.innerHTML = 'Fepper HTML Scraper';
+
+              main.appendChild(heading);
+            }
           }
 
           main.appendChild(targeter);
           main.appendChild(helpText);
+          main.appendChild(stage);
 
           // Insert new script element such that it fires on load.
           const node4insert = d.getElementById('help-text');
 
           if (node4insert) {
             const script2insert = d.createElement('script');
-            script2insert.src = '../../node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js';
+            script2insert.src = '/node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js';
 
             node4insert.parentNode.insertBefore(script2insert, node4insert);
           }
         }
         else {
           const scraperDhtml = d.createElement('script');
-          scraperDhtml.src = '../../node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js';
+          scraperDhtml.src = '/node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js';
           main = createMain();
           main.innerHTML = doc.body.innerHTML;
 

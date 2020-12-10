@@ -2,7 +2,8 @@
   'use strict'; // eslint-disable-line strict
 
   const baseUrl = window.location.protocol + '//' + window.location.host;
-  const message = d.getElementById('message') || {style: {}};
+  const loadAnim = d.getElementById('load-anim');
+  const message = d.getElementById('message');
   const stage = d.getElementById('scraper__stage');
   // Targeter is the last form on the HTML Scraper page. Older Fepper versions didn't identify it by name.
   // DEPRECATED as of 2020-12-08: anonymous form.
@@ -124,14 +125,14 @@
   targeter.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const validatedSelector = validateAndParseSelector(targeter.selectorRaw.value);
+    const validatedSelector = validateAndParseSelector(targeter.selector_raw.value);
 
     if (validatedSelector) {
       const {selector, index} = validatedSelector;
 
+      loadAnim.style.display = 'block';
       stage.setAttribute('data-selector', selector);
       stage.setAttribute('data-index', index || '');
-
       fetchCors(targeter.url.value);
     }
   });
