@@ -20,7 +20,6 @@
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = '/fepper-core/html-scraper.css';
-  link.media = 'all';
   document.getElementsByTagName('head')[0].appendChild(link);
 
   // Since the HTML scraper won't work on any non-Express served environment, we can safely assume that Fepper will be

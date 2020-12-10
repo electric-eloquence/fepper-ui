@@ -34,7 +34,6 @@ module.exports = new Promise((resolve) => {
 
     
     <link rel="stylesheet" href="/fepper-core/html-scraper.css" media="all">
-    <script src="/node_modules/mousetrap/mousetrap.min.js"></script>
     
   </head>
 
@@ -212,7 +211,6 @@ module.exports = new Promise((resolve) => {
 
     
     <link rel="stylesheet" href="/fepper-core/style.css" media="all">
-    <script src="/node_modules/mousetrap/mousetrap.min.js"></script>
     
   </head>
 

@@ -203,7 +203,6 @@ menu anchor.</p>
 
     
     <link rel="stylesheet" href="/fepper-core/html-scraper.css" media="all">
-    <script src="/node_modules/mousetrap/mousetrap.min.js"></script>
     
   </head>
 
@@ -289,7 +288,6 @@ menu anchor.</p>
 
     
     <link rel="stylesheet" href="/fepper-core/html-scraper.css" media="all">
-    <script src="/node_modules/mousetrap/mousetrap.min.js"></script>
     
   <link rel="stylesheet" href="/fepper-core/html-scraper.css" media="all"></head>
 
@@ -350,7 +348,6 @@ menu anchor.</p>
 
     
     <link rel="stylesheet" href="/fepper-core/html-scraper.css" media="all">
-    <script src="/node_modules/mousetrap/mousetrap.min.js"></script>
     
   </head>
 
