@@ -33,7 +33,7 @@ module.exports = new Promise((resolve) => {
     <meta http-equiv="pragma" content="no-cache">
 
     
-    <link rel="stylesheet" href="/fepper-core/html-scraper.css" media="all">
+    <link rel="stylesheet" href="/fepper-core/html-scraper.css">
     
   </head>
 
@@ -210,7 +210,7 @@ module.exports = new Promise((resolve) => {
     <meta http-equiv="pragma" content="no-cache">
 
     
-    <link rel="stylesheet" href="/fepper-core/style.css" media="all">
+    <link rel="stylesheet" href="/fepper-core/mustache-browser.css">
     
   </head>
 
