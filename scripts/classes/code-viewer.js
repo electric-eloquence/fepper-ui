@@ -510,8 +510,10 @@ export default function (fepperUiInst, root_) {
       if (patternState) {
         const patternStateItem = '<span class=\'sg-pattern-state ' + patternState + '\'>' + patternState + '</span>';
 
-        this.$orgs['#sg-code-pattern-state'].dispatchAction('css', {display: 'block'});
         this.$orgs['#sg-code-pattern-state-fill'].dispatchAction('html', patternStateItem);
+      }
+      else {
+        this.$orgs['#sg-code-pattern-state-fill'].dispatchAction('html', '');
       }
 
       // Fill in the name of the pattern.
