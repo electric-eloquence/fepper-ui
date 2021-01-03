@@ -513,11 +513,9 @@ export default function (fepperUiInst, root_) {
         this.$orgs['#sg-code-pattern-state'].dispatchAction('css', {display: 'block'});
         this.$orgs['#sg-code-pattern-state-fill'].dispatchAction('html', patternStateItem);
       }
-      else {
-        this.$orgs['#sg-code-pattern-state'].dispatchAction('css', {display: 'none'});
-      }
 
       // Fill in the name of the pattern.
+      root.$('#sg-code-pattern-state-rel-path').html(this.uiData.sourceFiles[patternPartial]);
       root.$('#sg-code-lineage-pattern-name, #sg-code-lineager-pattern-name, #sg-code-pattern-state-pattern-name')
         .html(patternPartial);
 

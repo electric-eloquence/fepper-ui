@@ -21,6 +21,7 @@ export default {
   '#sg-code-lineager': null,
   '#sg-code-lineager-fill': null,
   '#sg-code-pattern-state': null,
+  '#sg-code-pattern-state-rel-path': null,
   '#sg-code-pattern-state-fill': null,
   '#sg-code-title-html': null,
   '#sg-code-title-mustache': null,
