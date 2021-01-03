@@ -25,6 +25,7 @@ export default {
   '#sg-code-pattern-state-fill': null,
   '#sg-code-title-html': null,
   '#sg-code-title-mustache': null,
+  '#sg-code-copy-path': null,
   '#sg-controls': null,
   '#sg-cover': null,
   '#sg-f-toggle': null,

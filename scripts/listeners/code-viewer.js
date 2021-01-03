@@ -34,6 +34,52 @@ export default function (fepperUiInst) {
 
           fepperUiInst.codeViewer.swapCode('m');
         });
+
+        // Select and copy the relative path to the pattern.
+        this.$orgs['#sg-code-copy-path'].on('click', () => {
+          let range;
+          let selection;
+
+          try {
+            range = document.createRange();
+            selection = window.getSelection();
+
+            range.selectNodeContents(this.$orgs['#sg-code-pattern-state-rel-path'][0]);
+            selection.removeAllRanges();
+          }
+          catch (err) {
+            /* eslint-disable no-console */
+            console.error(err);
+            console.error('Selection failed!');
+
+            return;
+          }
+
+          try {
+            const copyPathState = this.$orgs['#sg-code-copy-path'].getState();
+            const origMsg = this.$orgs['#sg-code-copy-path'][0].innerHTML;
+            const origWidth = copyPathState.width;
+            const copiedMsg = copyPathState.attribs['data-copied-msg'];
+
+            selection.addRange(range);
+            document.execCommand('copy');
+
+            this.$orgs['#sg-code-copy-path'].dispatchAction('width', origWidth);
+            this.$orgs['#sg-code-copy-path'].dispatchAction('html', copiedMsg);
+
+            setTimeout(() => {
+              selection.removeAllRanges();
+              this.$orgs['#sg-code-copy-path'].dispatchAction('html', origMsg);
+            }, 5000);
+          }
+          catch (err) {
+            console.error(err);
+            console.error('Copy failed!');
+            /* eslint-enable no-console */
+
+            return;
+          }
+        });
       });
 
       const Mousetrap = window.Mousetrap;
