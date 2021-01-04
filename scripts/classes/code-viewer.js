@@ -510,15 +510,15 @@ export default function (fepperUiInst, root_) {
       if (patternState) {
         const patternStateItem = '<span class=\'sg-pattern-state ' + patternState + '\'>' + patternState + '</span>';
 
-        this.$orgs['#sg-code-pattern-state-fill'].dispatchAction('html', patternStateItem);
+        this.$orgs['#sg-code-pattern-info-state'].dispatchAction('html', patternStateItem);
       }
       else {
-        this.$orgs['#sg-code-pattern-state-fill'].dispatchAction('html', '');
+        this.$orgs['#sg-code-pattern-info-state'].dispatchAction('html', '');
       }
 
       // Fill in the name of the pattern.
-      root.$('#sg-code-pattern-state-rel-path').html(this.uiData.sourceFiles[patternPartial]);
-      root.$('#sg-code-lineage-pattern-name, #sg-code-lineager-pattern-name, #sg-code-pattern-state-pattern-name')
+      root.$('#sg-code-pattern-info-rel-path').html(this.uiData.sourceFiles[patternPartial]);
+      root.$('#sg-code-lineage-pattern-name, #sg-code-lineager-pattern-name, #sg-code-pattern-info-pattern-name')
         .html(patternPartial);
 
       // Get the file name of the pattern so we can update the tabs of code that show in the viewer.

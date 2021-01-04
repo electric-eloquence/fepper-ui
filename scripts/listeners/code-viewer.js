@@ -44,7 +44,7 @@ export default function (fepperUiInst) {
             range = document.createRange();
             selection = window.getSelection();
 
-            range.selectNodeContents(this.$orgs['#sg-code-pattern-state-rel-path'][0]);
+            range.selectNodeContents(this.$orgs['#sg-code-pattern-info-rel-path'][0]);
             selection.removeAllRanges();
           }
           catch (err) {

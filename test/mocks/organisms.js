@@ -6,6 +6,7 @@ $orgs['#sg-viewport'][0].contentWindow = {
   },
   postMessage: () => {}
 };
+$orgs['#sg-annotations-container'].animate = () => {};
 
 $orgs.window.dispatchAction('innerWidth', 1024);
 $orgs.window.dispatchAction('innerHeight', 768);

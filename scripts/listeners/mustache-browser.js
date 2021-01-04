@@ -22,7 +22,7 @@ export default function (fepperUiInst) {
         });
 
         // Redirect to Fepper's Mustache browser when clicking the rel-path link.
-        this.$orgs['#sg-code-pattern-state-rel-path'].on('click', this.mustacheBrowse.bind(this));
+        this.$orgs['#sg-code-pattern-info-rel-path'].on('click', this.mustacheBrowse.bind(this));
 
         // Redirect to Fepper's Mustache browser when clicking the viewer's Mustache code.
         this.$orgs['#sg-code-fill'].on('click', this.mustacheBrowse.bind(this));
