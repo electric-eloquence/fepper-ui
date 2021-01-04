@@ -42,7 +42,7 @@
       return;
     }
 
-    for (let annotation of window.annotations) {
+    for (const annotation of window.annotations) {
       const els = context.querySelectorAll(annotation.el);
 
       if (els.length) {
@@ -132,13 +132,13 @@
         let count = 0;
         let patternPartial = '';
 
-        for (let annotation of window.annotations) {
+        for (const annotation of window.annotations) {
           let els;
           let state = false;
 
           // Viewall.
           if (viewall) {
-            for (let el of sgPatternToggleAnnotations) {
+            for (const el of sgPatternToggleAnnotations) {
               if (el.classList.contains('focused')) {
                 patternPartial = el.dataset.patternpartial || '';
 
@@ -184,7 +184,7 @@
           if (els.length) {
             count++;
 
-            for (let el of els) {
+            for (const el of els) {
               // Display tips within the scoped element.
               const annotationTip = el.querySelector('.annotation-tip');
 
@@ -268,7 +268,7 @@
 
         bodyWidth = d.body.clientWidth;
 
-        for (let annotation of annotations) {
+        for (const annotation of annotations) {
           let els;
 
           if (viewall) {
@@ -286,7 +286,7 @@
           annotation.state = false;
 
           if (els.length) {
-            for (let el of els) {
+            for (const el of els) {
               if (window.getComputedStyle(el, null).getPropertyValue('max-height') !== '0px') {
                 annotation.state = true;
               }

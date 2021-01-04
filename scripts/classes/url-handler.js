@@ -59,7 +59,7 @@ export default function (fepperUiInst, root) {
       const paramsObj = {};
       const paramsItr = new URLSearchParams(root.location.search);
 
-      for (let param of paramsItr) {
+      for (const param of paramsItr) {
         paramsObj[param[0]] = param[1];
       }
 

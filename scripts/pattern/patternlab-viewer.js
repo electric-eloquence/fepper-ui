@@ -106,7 +106,7 @@
   // Find all links and add a click handler for replacing the address so the history works.
   const aTags = d.querySelectorAll('a');
 
-  for (let aTag of aTags) {
+  for (const aTag of aTags) {
     aTag.addEventListener('click', function (e) {
       if (this.classList.contains('fp-express')) {
         return;
@@ -145,7 +145,7 @@
     'w'  // Whole.
   ];
 
-  for (let key of keysAlt) {
+  for (const key of keysAlt) {
     Mousetrap.bind('ctrl+alt+' + key, (e) => {
       const obj = {event: 'patternlab.keyPress', keyPress: 'ctrl+alt+' + key};
       parent.postMessage(obj, targetOrigin);
@@ -166,7 +166,7 @@
     'x'  // XSmall.
   ];
 
-  for (let key of keysShift) {
+  for (const key of keysShift) {
     Mousetrap.bind('ctrl+shift+' + key, (e) => {
       const obj = {event: 'patternlab.keyPress', keyPress: 'ctrl+shift+' + key};
       parent.postMessage(obj, targetOrigin);

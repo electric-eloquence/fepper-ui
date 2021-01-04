@@ -229,7 +229,7 @@
     'alt+h' // Select the html tab.
   ];
 
-  for (let key of keys) {
+  for (const key of keys) {
     Mousetrap.bind('ctrl+' + key, (e) => {
       const obj = {event: 'patternlab.keyPress', keyPress: 'ctrl+' + key};
       parent.postMessage(obj, targetOrigin);

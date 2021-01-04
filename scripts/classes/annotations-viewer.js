@@ -258,7 +258,7 @@ export default function (fepperUiInst, root) {
       if (annotations.length) {
         let html = '';
 
-        for (let annotation of annotations) {
+        for (const annotation of annotations) {
           html += `<div id="annotation-${annotation.number}">
 <h2>${annotation.number}. ${annotation.title}`;
 

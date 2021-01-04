@@ -22,7 +22,7 @@ export default function (fepperUiInst) {
     }
 
     listen() {
-      for (let classKey of Object.keys(this)) {
+      for (const classKey of Object.keys(this)) {
         if (this[classKey] instanceof Object && typeof this[classKey].listen === 'function') {
           this[classKey].listen();
         }

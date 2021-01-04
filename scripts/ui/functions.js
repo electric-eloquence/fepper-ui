@@ -96,7 +96,7 @@ export default function (fepperUiInst, root) {
       // Iterate through `window` or `global` to check for properties set by variables.styl.
       // If found, populate the tmp object for sorting.
       // Replace -1 (or any negative value) with MAX_SAFE_INTEGER.
-      for (let globalVar in root) {
+      for (const globalVar in root) {
         if (globalVar.indexOf('bp_') === 0 && globalVar.indexOf('_max') === globalVar.length - 4) {
           if (root[globalVar] < 0) {
             bpObjTmp[globalVar.slice(3, globalVar.length - 4)] = MAX_SAFE_INTEGER;
@@ -128,7 +128,7 @@ export default function (fepperUiInst, root) {
       let gapAdded = false;
 
       // Construct bpObj with sorted breakpoints.
-      for (let bp of bpArr) {
+      for (const bp of bpArr) {
         const indexOfBp = Object.values(bpObjTmp).indexOf(bp);
 
         if (indexOfBp > -1) {
