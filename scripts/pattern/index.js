@@ -2,6 +2,7 @@
 
 import './annotations-viewer.js';
 import './code-viewer.js';
+import './mustache-browser.js';
 import './pattern-finder.js';
 import './patternlab-viewer.js';
 
