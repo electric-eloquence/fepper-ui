@@ -1,9 +1,4 @@
 ((d) => {
-  // Only run when loaded from within the iframe.
-  if (parent === window) {
-    return;
-  }
-
   // Only run in Mustache Browser.
   if (!d.documentElement.classList.contains('mustache-browser')) {
     return;
@@ -14,7 +9,7 @@
     let selection;
 
     try {
-      range = document.createRange();
+      range = d.createRange();
       selection = window.getSelection();
 
       range.selectNodeContents(node);
@@ -34,7 +29,7 @@
       const copiedMsg = button.dataset.copiedMsg;
 
       selection.addRange(range);
-      document.execCommand('copy');
+      d.execCommand('copy');
 
       button.style.width = origWidth + 'px';
       button.innerHTML = copiedMsg;
@@ -59,14 +54,14 @@
   const pathButtonAbs = d.getElementById('mustache-browser__button--absolute');
   const pathButtonRel = d.getElementById('mustache-browser__button--relative');
 
-  // Select and copy the absolute path to the pattern.
+  // Select the absolute path to the pattern and copy it to the clipboard.
   pathButtonAbs.addEventListener('click', () => {
     pathAbs.style.visibility = 'visible';
     pathRel.style.display = 'none';
     selectAndCopy(pathAbs, pathButtonAbs);
   });
 
-  // Select and copy the relative path to the pattern.
+  // Select the relative path to the pattern and copy it to the clipboard.
   pathButtonRel.addEventListener('click', () => {
     pathAbs.style.visibility = 'hidden';
     pathRel.style.display = 'block';

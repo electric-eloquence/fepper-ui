@@ -108,11 +108,11 @@ export default function (fepperUiInst, root) {
       const searchParams = this.urlHandler.getSearchParams();
 
       if (searchParams.view && (searchParams.view === 'annotations' || searchParams.view === 'a')) {
-        this.openAnnotations();
-
         if (typeof searchParams.number !== 'undefined') {
           this.moveToNumber = parseInt(searchParams.number);
         }
+
+        this.openAnnotations();
       }
     }
 
@@ -163,8 +163,8 @@ export default function (fepperUiInst, root) {
      * @param {number} number - Human-friendly annotation id number.
      */
     moveTo(number) {
-      const $annotation = root.$('#annotation-' + number);
       this.moveToNumber = number || this.moveToNumber;
+      const $annotation = root.$('#annotation-' + this.moveToNumber);
 
       /* istanbul ignore if */
       if ($annotation.length) {
@@ -208,7 +208,10 @@ export default function (fepperUiInst, root) {
       if (this.moveToNumber !== 0) {
         this.moveTo(this.moveToNumber);
 
-        this.moveToNumber = 0;
+        // Only unset this.moveToNumber if annotations html has been loaded.
+        if (this.$orgs['#sg-annotations'].getState().html) {
+          this.moveToNumber = 0;
+        }
       }
     }
 
@@ -270,6 +273,12 @@ export default function (fepperUiInst, root) {
         }
 
         this.$orgs['#sg-annotations'].dispatchAction('html', html);
+
+        if (this.annotationsActive && this.moveToNumber !== 0) {
+          this.moveTo(this.moveToNumber);
+
+          this.moveToNumber = 0;
+        }
       }
     }
   }
