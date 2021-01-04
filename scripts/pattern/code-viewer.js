@@ -239,6 +239,7 @@
     });
   }
 
+  // DEPRECATED! Will be removed.
   // When the code panel is open, hijack cmd+a/ctrl+a so that it only selects the code view.
   Mousetrap.bind('mod+a', (e) => {
     if (codeActive) {

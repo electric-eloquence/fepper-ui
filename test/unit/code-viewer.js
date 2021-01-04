@@ -21,7 +21,6 @@ describe('codeViewer', function () {
       expect(codeViewer).to.have.property('uiProps');
       expect(codeViewer).to.have.property('annotationsViewer');
       expect(codeViewer).to.have.property('codeActive');
-      expect(codeViewer).to.have.property('selectForCopy');
       expect(codeViewer).to.have.property('encoded');
       expect(codeViewer).to.have.property('mustache');
       expect(codeViewer).to.have.property('mustacheBrowser');
@@ -32,8 +31,6 @@ describe('codeViewer', function () {
 
   describe('.stoke()', function () {
     beforeEach(function () {
-      codeViewer.selectForCopy = false;
-
       codeViewer.closeCode();
       $orgs['#sg-code-container'].dispatchAction('css', {bottom: 'auto'});
     });
@@ -56,7 +53,6 @@ describe('codeViewer', function () {
 
       expect(sgCodeContainerAfter.style.bottom).to.equal('0px');
       expect(sgTCodeAfter.classArray).to.include('active');
-      expect(codeViewer.selectForCopy).to.be.false;
     });
 
     it('opens code viewer with a "view=c" param', function () {
@@ -77,7 +73,6 @@ describe('codeViewer', function () {
 
       expect(sgCodeContainerAfter.style.bottom).to.equal('0px');
       expect(sgTCodeAfter.classArray).to.include('active');
-      expect(codeViewer.selectForCopy).to.be.false;
     });
 
     it('opens code viewer with a "defaultShowPatternInfo": true config', function () {
@@ -99,11 +94,11 @@ describe('codeViewer', function () {
 
       expect(sgCodeContainerAfter.style.bottom).to.equal('0px');
       expect(sgTCodeAfter.classArray).to.include('active');
-      expect(codeViewer.selectForCopy).to.be.false;
 
       codeViewer.uiData.config.defaultShowPatternInfo = false;
     });
 
+    // DEPRECATED! Will be removed.
     it('sets .selectForCopy = true with a "view=code&copy=true" param', function () {
       global.location = {
         search: '?view=code&copy=true'

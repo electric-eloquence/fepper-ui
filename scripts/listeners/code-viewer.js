@@ -97,8 +97,8 @@ export default function (fepperUiInst) {
         return false;
       });
 
+      // DEPRECATED! Will be removed.
       // When the code panel is open hijack, cmd+a/ctrl+a so that it only selects the code view.
-      // Can't e2e test selection.
       Mousetrap.bind('mod+a', (e) => {
         if (fepperUiInst.codeViewer.codeActive) {
           fepperUiInst.codeViewer.selectCode();
