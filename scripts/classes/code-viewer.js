@@ -126,6 +126,7 @@ export default function (fepperUiInst, root_) {
 
               break;
 
+            // DEPRECATED! Will be removed.
             /* istanbul ignore next */
             case 'mod+a':
               this.selectCode();
@@ -195,7 +196,7 @@ export default function (fepperUiInst, root_) {
     constructor(fepperUi) {
       this.codeActive = false;
       this.$orgs = fepperUi.requerio.$orgs;
-      this.selectForCopy = false;
+      this.selectForCopy = false; // DEPRECATED! Will be removed.
       this.encoded = '';
       this.mustache = '';
       this.mustacheBrowser = false;
@@ -233,7 +234,7 @@ export default function (fepperUiInst, root_) {
       const searchParams = this.urlHandler.getSearchParams();
 
       if (searchParams.view === 'code' || searchParams.view === 'c') {
-        this.selectForCopy = (searchParams.copy === 'true') ? true : false;
+        this.selectForCopy = (searchParams.copy === 'true') ? true : false; // DEPRECATED! Will be removed.
         this.openCode();
       }
 
@@ -267,6 +268,7 @@ export default function (fepperUiInst, root_) {
       this.$orgs['#sg-code-fill'].dispatchAction('html', code);
       root.Prism.highlightElement(this.$orgs['#sg-code-fill'][0]);
 
+      // DEPRECATED! Will be removed.
       if (this.selectForCopy) {
         /* istanbul ignore if */
         if (typeof window === 'object') {
@@ -370,6 +372,7 @@ export default function (fepperUiInst, root_) {
       this.$orgs['#sg-viewport'][0].contentWindow.postMessage({codeScrollViewall: true}, this.uiProps.targetOrigin);
     }
 
+    // DEPRECATED! Will be removed.
     /**
      * Select the code where using cmd+a/ctrl+a.
      */
@@ -510,15 +513,15 @@ export default function (fepperUiInst, root_) {
       if (patternState) {
         const patternStateItem = '<span class=\'sg-pattern-state ' + patternState + '\'>' + patternState + '</span>';
 
-        this.$orgs['#sg-code-pattern-state'].dispatchAction('css', {display: 'block'});
-        this.$orgs['#sg-code-pattern-state-fill'].dispatchAction('html', patternStateItem);
+        this.$orgs['#sg-code-pattern-info-state'].dispatchAction('html', patternStateItem);
       }
       else {
-        this.$orgs['#sg-code-pattern-state'].dispatchAction('css', {display: 'none'});
+        this.$orgs['#sg-code-pattern-info-state'].dispatchAction('html', '');
       }
 
       // Fill in the name of the pattern.
-      root.$('#sg-code-lineage-pattern-name, #sg-code-lineager-pattern-name, #sg-code-pattern-state-pattern-name')
+      root.$('#sg-code-pattern-info-rel-path').html(this.uiData.sourceFiles[patternPartial]);
+      root.$('#sg-code-lineage-pattern-name, #sg-code-lineager-pattern-name, #sg-code-pattern-info-pattern-name')
         .html(patternPartial);
 
       // Get the file name of the pattern so we can update the tabs of code that show in the viewer.

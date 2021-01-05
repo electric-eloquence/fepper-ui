@@ -31,7 +31,7 @@ export default function (fepperUiInst) {
         );
 
         // Click handlers for viewport resize buttons.
-        for (let bp of Object.keys(fepperUiInst.uiProps.bpObj)) {
+        for (const bp of Object.keys(fepperUiInst.uiProps.bpObj)) {
           if (!this.$orgs['#sg-size-' + bp]) {
             continue;
           }

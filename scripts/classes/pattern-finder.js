@@ -40,7 +40,7 @@ export default function (fepperUiInst, root) {
       this.data = [];
       this.$orgs = fepperUi.requerio.$orgs;
 
-      for (let patternPartial of Object.keys(this.uiData.patternPaths)) {
+      for (const patternPartial of Object.keys(this.uiData.patternPaths)) {
         const obj = {
           patternPartial,
           patternPath: this.uiData.patternPaths[patternPartial]

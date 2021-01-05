@@ -283,19 +283,31 @@ describe('annotationsViewer', function () {
 
       expect(sgAnnotationsContainerStateBefore.attribs['data-patternpartial'])
         .to.not.equal(sgAnnotationsContainerStateAfter.attribs['data-patternpartial']);
-      expect(sgAnnotationsStateBefore.innerHTML).to.equal('');
+      expect(sgAnnotationsStateBefore.html).to.equal('');
 
       expect(sgAnnotationsContainerStateAfter.attribs['data-patternpartial']).to.equal('compounds-block');
-      expect(sgAnnotationsStateAfter.innerHTML).to.equal(`<div id="annotation-1">
+      expect(sgAnnotationsStateAfter.html).to.equal(`<div id="annotation-1">
 <h2>1. Navigation</h2>
 <div><p>Navigation for responsive web experiences can be tricky. Large navigation menus 
-are typical on desktop sites, but mobile screen sizes don&apos;t give us the luxury 
-of space. We&apos;re dealing with this situation by creating a simple menu anchor 
+are typical on desktop sites, but mobile screen sizes don't give us the luxury 
+of space. We're dealing with this situation by creating a simple menu anchor 
 that toggles the main navigation on small screens. Once the screen size is large 
 enough to accommodate the nav, we show the main navigation links and hide the 
 menu anchor.</p>
 </div>
 </div>`);
+    });
+
+    it('unsets .moveToNumber after moving to number', function () {
+      const moveToNumberBefore = annotationsViewer.moveToNumber = 1;
+      annotationsViewer.annotationsActive = true;
+
+      annotationsViewer.updateAnnotations(annotations, 'compounds-block');
+
+      const moveToNumberAfter = annotationsViewer.moveToNumber;
+
+      expect(moveToNumberBefore).to.equal(1);
+      expect(moveToNumberAfter).to.equal(0);
     });
   });
 
@@ -333,14 +345,14 @@ menu anchor.</p>
 
       expect(sgAnnotationsContainerStateBefore.attribs['data-patternpartial'])
         .to.not.equal(sgAnnotationsContainerStateAfter.attribs['data-patternpartial']);
-      expect(sgAnnotationsStateBefore.innerHTML).to.equal('');
+      expect(sgAnnotationsStateBefore.html).to.equal('');
 
       expect(sgAnnotationsContainerStateAfter.attribs['data-patternpartial']).to.equal('compounds-block');
-      expect(sgAnnotationsStateAfter.innerHTML).to.equal(`<div id="annotation-1">
+      expect(sgAnnotationsStateAfter.html).to.equal(`<div id="annotation-1">
 <h2>1. Navigation</h2>
 <div><p>Navigation for responsive web experiences can be tricky. Large navigation menus 
-are typical on desktop sites, but mobile screen sizes don&apos;t give us the luxury 
-of space. We&apos;re dealing with this situation by creating a simple menu anchor 
+are typical on desktop sites, but mobile screen sizes don't give us the luxury 
+of space. We're dealing with this situation by creating a simple menu anchor 
 that toggles the main navigation on small screens. Once the screen size is large 
 enough to accommodate the nav, we show the main navigation links and hide the 
 menu anchor.</p>
@@ -376,10 +388,10 @@ menu anchor.</p>
 
       expect(sgAnnotationsContainerStateBefore.attribs['data-patternpartial'])
         .to.not.equal(sgAnnotationsContainerStateAfter.attribs['data-patternpartial']);
-      expect(sgAnnotationsStateBefore.innerHTML).to.equal('');
+      expect(sgAnnotationsStateBefore.html).to.equal('');
 
       expect(sgAnnotationsContainerStateAfter.attribs['data-patternpartial']).to.equal('compounds-block');
-      expect(sgAnnotationsStateAfter.innerHTML).to.have.string(`<div id="annotation-2">
+      expect(sgAnnotationsStateAfter.html).to.have.string(`<div id="annotation-2">
 <h2>2. Foo<span id="annotation-state-2" style="font-size: 0.8em;color: #666"> hidden</span></h2>
 <div><p>Foo.</p></div>
 </div>`);
@@ -406,14 +418,14 @@ menu anchor.</p>
 
       expect(sgAnnotationsContainerStateBefore.attribs['data-patternpartial'])
         .to.not.equal(sgAnnotationsContainerStateAfter.attribs['data-patternpartial']);
-      expect(sgAnnotationsStateBefore.innerHTML).to.equal('');
+      expect(sgAnnotationsStateBefore.html).to.equal('');
 
       expect(sgAnnotationsContainerStateAfter.attribs['data-patternpartial']).to.equal('compounds-block');
-      expect(sgAnnotationsStateAfter.innerHTML).to.equal(`<div id="annotation-1">
+      expect(sgAnnotationsStateAfter.html).to.equal(`<div id="annotation-1">
 <h2>1. Navigation</h2>
 <div><p>Navigation for responsive web experiences can be tricky. Large navigation menus 
-are typical on desktop sites, but mobile screen sizes don&apos;t give us the luxury 
-of space. We&apos;re dealing with this situation by creating a simple menu anchor 
+are typical on desktop sites, but mobile screen sizes don't give us the luxury 
+of space. We're dealing with this situation by creating a simple menu anchor 
 that toggles the main navigation on small screens. Once the screen size is large 
 enough to accommodate the nav, we show the main navigation links and hide the 
 menu anchor.</p>

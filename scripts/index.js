@@ -13,7 +13,7 @@ const listeners = new Listeners(fepperUi);
 // uiComp allows for UI customization. Defining after instantiation so tests can use a non-customized compilation.
 fepperUi.uiComp = uiComp;
 
-for (let classKey of Object.keys(fepperUi)) {
+for (const classKey of Object.keys(fepperUi)) {
   if (fepperUi[classKey] instanceof Object && typeof fepperUi[classKey].stoke === 'function') {
     fepperUi[classKey].stoke();
   }

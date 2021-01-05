@@ -44,7 +44,7 @@
     "feplet": "^1.2.3",
     "he": "1.2.0",
     "jquery": "^3.5.1",
-    "js-beautify": "1.11.0",
+    "js-beautify": "1.13.0",
     "mousetrap": "1.6.5",
     "prismjs": "1.21.0",
     "redux": "^4.0.5",

@@ -214,6 +214,10 @@
     });
   });
 
+  if (!window.Mousetrap) {
+    return;
+  }
+
   const Mousetrap = window.Mousetrap;
 
   // Bind Mousetrap keyboard shortcuts using ctrl+shift.
@@ -225,7 +229,7 @@
     'alt+h' // Select the html tab.
   ];
 
-  for (let key of keys) {
+  for (const key of keys) {
     Mousetrap.bind('ctrl+' + key, (e) => {
       const obj = {event: 'patternlab.keyPress', keyPress: 'ctrl+' + key};
       parent.postMessage(obj, targetOrigin);
@@ -235,6 +239,7 @@
     });
   }
 
+  // DEPRECATED! Will be removed.
   // When the code panel is open, hijack cmd+a/ctrl+a so that it only selects the code view.
   Mousetrap.bind('mod+a', (e) => {
     if (codeActive) {

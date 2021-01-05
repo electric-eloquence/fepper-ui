@@ -56,9 +56,9 @@ describe('patternlabViewer', function () {
 
       /* eslint-disable max-len */
       it('Feplet renders in nav target', function () {
-        expect(sgNavTargetStateBefore.innerHTML).to.not.equal(sgNavTargetStateAfter.innerHTML);
+        expect(sgNavTargetStateBefore.html).to.not.equal(sgNavTargetStateAfter.html);
 
-        expect(sgNavTargetStateAfter.innerHTML).to.equal(`
+        expect(sgNavTargetStateAfter.html).to.equal(`
   <li class="sg-nav-elements"><a class="sg-acc-handle">Elements</a><ul class="sg-acc-panel sg-sub-nav">
     <li class="sg-item-nav-elements-anchor">
       <a href="patterns/00-elements-anchor/00-elements-anchor.html" class="sg-pop " data-patternpartial="elements-anchor">Anchor</a>
@@ -115,9 +115,9 @@ describe('patternlabViewer', function () {
       });
 
       it('Feplet renders in controls', function () {
-        expect(sgControlsStateBefore.innerHTML).to.not.equal(sgControlsStateAfter.innerHTML);
+        expect(sgControlsStateBefore.html).to.not.equal(sgControlsStateAfter.html);
 
-        expect(sgControlsStateAfter.innerHTML).to.equal(`<li class="sg-size">
+        expect(sgControlsStateAfter.html).to.equal(`<li class="sg-size">
 <div class="sg-current-size">
   <form id="sg-form">
     <a class="sg-acc-handle sg-size-label" id="sg-form-label">Size</a><input type="text" class="sg-input" id="sg-size-px" value="---"><div class="sg-size-label">px /</div><input type="text" class="sg-input" id="sg-size-em" value="0.00"><div class="sg-size-label">em</div>
@@ -169,8 +169,8 @@ describe('patternlabViewer', function () {
 
         expect(templateBefore).to.match(regex);
 
-        expect(sgNavTargetStateAfter.innerHTML).to.not.match(regex);
-        expect(sgControlsStateAfter.innerHTML).to.not.match(regex);
+        expect(sgNavTargetStateAfter.html).to.not.match(regex);
+        expect(sgControlsStateAfter.html).to.not.match(regex);
       });
 
       it('adds a class identifying the protocol to the html element', function () {
@@ -557,10 +557,10 @@ describe('patternlabViewer', function () {
 
         const sgResizeBtnsStateAfter = $orgs['#sg-resize-btns'].getState();
 
-        expect(sgResizeBtnsStateBefore.innerHTML).to.not.equal(sgResizeBtnsStateAfter.innerHTML);
+        expect(sgResizeBtnsStateBefore.html).to.not.equal(sgResizeBtnsStateAfter.html);
 
         // eslint-disable-next-line max-len
-        expect(sgResizeBtnsStateAfter.innerHTML).to.equal('<li><a href="#" id="sg-size-xx">XX</a></li><li><a href="#" id="sg-size-xs">XS</a></li><li><a href="#" id="sg-size-sm">SM</a></li><li><a href="#" id="sg-size-md">MD</a></li><li><a href="#" id="sg-size-lg">LG</a></li>');
+        expect(sgResizeBtnsStateAfter.html).to.equal('<li><a href="#" id="sg-size-xx">XX</a></li><li><a href="#" id="sg-size-xs">XS</a></li><li><a href="#" id="sg-size-sm">SM</a></li><li><a href="#" id="sg-size-md">MD</a></li><li><a href="#" id="sg-size-lg">LG</a></li>');
       });
     });
   });
