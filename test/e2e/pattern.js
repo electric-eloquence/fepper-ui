@@ -274,7 +274,7 @@ menu anchor.</p>
       $('[name="filename"]').click();
       $('[name="filename"]').setValue('test');
       $('[name="submit_importer"]').click();
-      browser.pause(100);
+      browser.pause(200);
       expect($('html').getHTML(false)).to.equal(`<head>
     <title id="title">Fepper HTML Scraper</title>
     <meta charset="utf-8">
