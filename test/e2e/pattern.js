@@ -334,7 +334,7 @@ menu anchor.</p>
       browser.pause(100);
       $('#scraper__targeter').$('[name="selector_raw"]').setValue('h1');
       $('#scraper__targeter').$('[name="submit_targeter"]').click();
-      browser.pause(100);
+      browser.pause(200);
       expect($('html').getHTML(false)).to.equal(`<head>
     <title id="title">Fepper HTML Scraper</title>
     <meta charset="utf-8">
