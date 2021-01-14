@@ -546,6 +546,7 @@ export default function (fepperUiInst, root_) {
       // Do not copy. Let the user decide whether or not to copy.
       let selection;
 
+      /* istanbul ignore next */
       try {
         const range = root.document.createRange();
         selection = root.getSelection();
@@ -561,6 +562,7 @@ export default function (fepperUiInst, root_) {
       }
 
       // Deselect after 5 seconds.
+      /* istanbul ignore if */
       if (selection) {
         setTimeout(() => {
           selection.removeAllRanges();

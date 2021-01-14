@@ -90,6 +90,19 @@ menu anchor.</p>
         $('#sg-code-title-mustache').click();
         expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
       });
+
+      it('Copy path button reads "Copied!" when clicked', function () {
+        $('#sg-t-toggle').click();
+        browser.pause(100);
+        $('#sg-t-code').click();
+        browser.pause(700);
+        expect($('#sg-code-copy-path').getText())
+          .to.equal('Copy path');
+        $('#sg-code-copy-path').click();
+        browser.pause(100);
+        expect($('#sg-code-copy-path').getText())
+          .to.equal('Copied!');
+      });
     });
 
     describe('Mousetrap', function () {
