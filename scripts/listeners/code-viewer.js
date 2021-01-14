@@ -37,15 +37,15 @@ export default function (fepperUiInst) {
 
         // Select and copy the relative path to the pattern.
         this.$orgs['#sg-code-copy-path'].on('click', () => {
-          let range;
           let selection;
 
           try {
-            range = document.createRange();
+            const range = document.createRange();
             selection = window.getSelection();
 
             range.selectNodeContents(this.$orgs['#sg-code-pattern-info-rel-path'][0]);
             selection.removeAllRanges();
+            selection.addRange(range);
           }
           catch (err) {
             /* eslint-disable no-console */
@@ -55,13 +55,16 @@ export default function (fepperUiInst) {
             return;
           }
 
+          if (!selection) {
+            return;
+          }
+
           try {
             const copyPathState = this.$orgs['#sg-code-copy-path'].getState();
             const origMsg = this.$orgs['#sg-code-copy-path'][0].innerHTML;
             const origWidth = copyPathState.width;
             const copiedMsg = copyPathState.attribs['data-copied-msg'];
 
-            selection.addRange(range);
             document.execCommand('copy');
 
             this.$orgs['#sg-code-copy-path'].dispatchAction('width', origWidth);
