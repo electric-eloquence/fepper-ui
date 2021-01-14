@@ -117,11 +117,11 @@ describe('uiComp', function () {
     const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
     expect(sgTCodeStateBefore.classArray).to.include('active');
-    expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
+    expect(sgCodeContainerStateBefore.css.bottom).to.not.equal(sgCodeContainerStateAfter.css.bottom);
     expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
 
     expect(sgTCodeStateAfter.classArray).to.not.include('active');
-    expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
+    expect(sgCodeContainerStateAfter.css.bottom).to.equal('-384px');
     expect(sgTAnnotationsStateAfter.classArray).to.include('active');
   });
 
@@ -136,10 +136,10 @@ describe('uiComp', function () {
     const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
     const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
 
-    expect(sgAnnotationsContainerStateBefore.style.bottom).to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
+    expect(sgAnnotationsContainerStateBefore.css.bottom).to.not.equal(sgAnnotationsContainerStateAfter.css.bottom);
     expect(sgTAnnotationsStateBefore.classArray).to.include('active');
 
-    expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('-384px');
+    expect(sgAnnotationsContainerStateAfter.css.bottom).to.equal('-384px');
     expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
   });
 
@@ -158,7 +158,7 @@ describe('uiComp', function () {
 
     expect(JSON.stringify(sgTCodeStateBefore.classArray))
       .to.equal(JSON.stringify(sgTCodeStateAfter.classArray));
-    expect(sgAnnotationsContainerStateBefore.style.bottom).to.equal(sgAnnotationsContainerStateAfter.style.bottom);
+    expect(sgAnnotationsContainerStateBefore.css.bottom).to.equal(sgAnnotationsContainerStateAfter.css.bottom);
     expect(JSON.stringify(sgTAnnotationsStateBefore.classArray))
       .to.equal(JSON.stringify(sgTAnnotationsStateAfter.classArray));
   });
@@ -182,11 +182,11 @@ describe('uiComp', function () {
     const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
     expect(sgTAnnotationsStateBefore.classArray).to.include('active');
-    expect(sgAnnotationsContainerStateBefore.style.bottom).to.not.equal(sgAnnotationsContainerStateAfter.style.bottom);
+    expect(sgAnnotationsContainerStateBefore.css.bottom).to.not.equal(sgAnnotationsContainerStateAfter.css.bottom);
     expect(sgTCodeStateBefore.classArray).to.not.include('active');
 
     expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
-    expect(sgAnnotationsContainerStateAfter.style.bottom).to.equal('-384px');
+    expect(sgAnnotationsContainerStateAfter.css.bottom).to.equal('-384px');
     expect(sgTCodeStateAfter.classArray).to.include('active');
     expect(fepperUi.annotationsViewer.annotationsActive).to.be.false;
     expect(fepperUi.codeViewer.codeActive).to.be.true;
@@ -203,10 +203,10 @@ describe('uiComp', function () {
     const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
     const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
 
-    expect(sgCodeContainerStateBefore.style.bottom).to.not.equal(sgCodeContainerStateAfter.style.bottom);
+    expect(sgCodeContainerStateBefore.css.bottom).to.not.equal(sgCodeContainerStateAfter.css.bottom);
     expect(sgTCodeStateBefore.classArray).to.include('active');
 
-    expect(sgCodeContainerStateAfter.style.bottom).to.equal('-384px');
+    expect(sgCodeContainerStateAfter.css.bottom).to.equal('-384px');
     expect(sgTCodeStateAfter.classArray).to.not.include('active');
     expect(fepperUi.codeViewer.codeActive).to.be.false;
   });
@@ -226,7 +226,7 @@ describe('uiComp', function () {
 
     expect(JSON.stringify(sgTAnnotationsStateBefore.classArray))
       .to.equal(JSON.stringify(sgTAnnotationsStateAfter.classArray));
-    expect(sgCodeContainerStateBefore.style.bottom).to.equal(sgCodeContainerStateAfter.style.bottom);
+    expect(sgCodeContainerStateBefore.css.bottom).to.equal(sgCodeContainerStateAfter.css.bottom);
     expect(JSON.stringify(sgTCodeStateBefore.classArray)).to.equal(JSON.stringify(sgTCodeStateAfter.classArray));
   });
 });

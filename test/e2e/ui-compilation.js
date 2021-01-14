@@ -419,27 +419,12 @@ describe('UI compilation of index page js', function () {
         browser.setWindowSize(1024, 640);
       });
 
-      it('Fepper docs opens in new tab and menu closes', function () {
-        $('#sg-tools-toggle').click();
-        browser.pause(100);
-        $$('.sg-tool')[0].click();
-
-        const windowHandles = browser.getWindowHandles();
-
-        browser.switchToWindow(windowHandles[1]);
-        expect(browser.getUrl()).to.equal('http://localhost:8080/readme');
-        browser.closeWindow();
-        browser.switchToWindow(windowHandles[0]);
-        expect($('#sg-tools').getAttribute('class')).to.not.have.string('active');
-        expect($('#sg-tools-toggle').getAttribute('class')).to.not.have.string('active');
-      });
-
-      // Skip clicking Pattern Lab docs to avoid hitting their website during automated tests.
+      // Skip clicking Fepper docs to avoid hitting the website during automated tests.
 
       it('Keyboard shortcuts opens in new tab and menu closes', function () {
         $('#sg-tools-toggle').click();
         browser.pause(100);
-        $$('.sg-tool')[2].click();
+        $$('.sg-tool')[1].click();
 
         const windowHandles = browser.getWindowHandles();
 
