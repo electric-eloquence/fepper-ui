@@ -48,10 +48,10 @@ describe('codeViewer', function () {
       const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
       const sgTCodeAfter = $orgs['#sg-t-code'].getState();
 
-      expect(sgCodeContainerBefore.style.bottom).to.not.equal(sgCodeContainerAfter.style.bottom);
+      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
       expect(sgTCodeBefore.classArray).to.not.include('active');
 
-      expect(sgCodeContainerAfter.style.bottom).to.equal('0px');
+      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
       expect(sgTCodeAfter.classArray).to.include('active');
     });
 
@@ -68,10 +68,10 @@ describe('codeViewer', function () {
       const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
       const sgTCodeAfter = $orgs['#sg-t-code'].getState();
 
-      expect(sgCodeContainerBefore.style.bottom).to.not.equal(sgCodeContainerAfter.style.bottom);
+      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
       expect(sgTCodeBefore.classArray).to.not.include('active');
 
-      expect(sgCodeContainerAfter.style.bottom).to.equal('0px');
+      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
       expect(sgTCodeAfter.classArray).to.include('active');
     });
 
@@ -89,10 +89,10 @@ describe('codeViewer', function () {
       const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
       const sgTCodeAfter = $orgs['#sg-t-code'].getState();
 
-      expect(sgCodeContainerBefore.style.bottom).to.not.equal(sgCodeContainerAfter.style.bottom);
+      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
       expect(sgTCodeBefore.classArray).to.not.include('active');
 
-      expect(sgCodeContainerAfter.style.bottom).to.equal('0px');
+      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
       expect(sgTCodeAfter.classArray).to.include('active');
 
       codeViewer.uiData.config.defaultShowPatternInfo = false;
@@ -112,10 +112,10 @@ describe('codeViewer', function () {
       const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
       const sgTCodeAfter = $orgs['#sg-t-code'].getState();
 
-      expect(sgCodeContainerBefore.style.bottom).to.not.equal(sgCodeContainerAfter.style.bottom);
+      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
       expect(sgTCodeBefore.classArray).to.not.include('active');
 
-      expect(sgCodeContainerAfter.style.bottom).to.equal('0px');
+      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
       expect(sgTCodeAfter.classArray).to.include('active');
       expect(codeViewer.selectForCopy).to.be.true;
     });
@@ -220,9 +220,9 @@ describe('codeViewer', function () {
 
       const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
 
-      expect(sgCodeContainerBefore.style.bottom).to.not.equal(sgCodeContainerAfter.style.bottom);
+      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
 
-      expect(sgCodeContainerAfter.style.bottom).to.equal('-768px');
+      expect(sgCodeContainerAfter.css.bottom).to.equal('-768px');
     });
 
     it('slides up', function () {
@@ -232,9 +232,9 @@ describe('codeViewer', function () {
 
       const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
 
-      expect(sgCodeContainerBefore.style.bottom).to.not.equal(sgCodeContainerAfter.style.bottom);
+      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
 
-      expect(sgCodeContainerAfter.style.bottom).to.equal('0px');
+      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
     });
   });
 
@@ -351,13 +351,13 @@ describe('codeViewer', function () {
       const sgTCodeAfter = $orgs['#sg-t-code'].getState();
       const sgVpWrapAfter = $orgs['#sg-vp-wrap'].getState();
 
-      expect(sgCodeContainerBefore.style.bottom).to.not.equal(sgCodeContainerAfter.style.bottom);
+      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
       expect(sgTCodeBefore.classArray).to.not.include('active');
-      expect(sgVpWrapBefore.style.paddingBottom).to.equal('0px');
+      expect(sgVpWrapBefore.css.paddingBottom).to.equal('0px');
 
-      expect(sgCodeContainerAfter.style.bottom).to.equal('0px');
+      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
       expect(sgTCodeAfter.classArray).to.include('active');
-      expect(sgVpWrapAfter.style.paddingBottom).to.equal('384px');
+      expect(sgVpWrapAfter.css.paddingBottom).to.equal('384px');
       expect(codeViewer.codeActive).to.be.true;
     });
 
@@ -372,13 +372,13 @@ describe('codeViewer', function () {
       const sgTCodeAfter = $orgs['#sg-t-code'].getState();
       const sgVpWrapAfter = $orgs['#sg-vp-wrap'].getState();
 
-      expect(sgCodeContainerBefore.style.bottom).to.not.equal(sgCodeContainerAfter.style.bottom);
+      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
       expect(sgTCodeBefore.classArray).to.include('active');
-      expect(sgVpWrapBefore.style.paddingBottom).to.equal('384px');
+      expect(sgVpWrapBefore.css.paddingBottom).to.equal('384px');
 
-      expect(sgCodeContainerAfter.style.bottom).to.equal('-384px');
+      expect(sgCodeContainerAfter.css.bottom).to.equal('-384px');
       expect(sgTCodeAfter.classArray).to.not.include('active');
-      expect(sgVpWrapAfter.style.paddingBottom).to.equal('0px');
+      expect(sgVpWrapAfter.css.paddingBottom).to.equal('0px');
       expect(codeViewer.codeActive).to.be.false;
     });
 
@@ -401,14 +401,14 @@ describe('codeViewer', function () {
       const sgTCodeAfter = $orgs['#sg-t-code'].getState();
 
       expect(sgTAnnotationsBefore.classArray).to.include('active');
-      expect(sgAnnotationsContainerBefore.style.bottom)
-        .to.not.equal(sgAnnotationsContainerAfter.style.bottom);
-      expect(sgCodeContainerBefore.style.bottom).to.not.equal(sgCodeContainerAfter.style.bottom);
+      expect(sgAnnotationsContainerBefore.css.bottom)
+        .to.not.equal(sgAnnotationsContainerAfter.css.bottom);
+      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
       expect(sgTCodeBefore.classArray).to.not.include('active');
 
       expect(sgTAnnotationsAfter.classArray).to.not.include('active');
-      expect(sgAnnotationsContainerAfter.style.bottom).to.equal('-384px');
-      expect(sgCodeContainerAfter.style.bottom).to.equal('0px');
+      expect(sgAnnotationsContainerAfter.css.bottom).to.equal('-384px');
+      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
       expect(sgTCodeAfter.classArray).to.include('active');
       expect(annotationsViewer.annotationsActive).to.be.false;
       expect(codeViewer.codeActive).to.be.true;
@@ -449,15 +449,15 @@ describe('codeViewer', function () {
 
       expect(sgCodeContainerBefore.attribs['data-patternpartial'])
         .to.not.equal(sgCodeContainerAfter.attribs['data-patternpartial']);
-      expect(sgCodeLineageBefore.style.display).to.not.equal(sgCodeLineageAfter.style.display);
+      expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
       expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
-      expect(sgCodeLineagerBefore.style.display).to.not.equal(sgCodeLineagerAfter.style.display);
+      expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
       expect(sgCodePatternInfoStateBefore.html).to.equal(sgCodePatternInfoStateAfter.html);
 
       expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
       expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
-      expect(sgCodeLineageAfter.style.display).to.equal('none');
-      expect(sgCodeLineagerAfter.style.display).to.equal('none');
+      expect(sgCodeLineageAfter.css.display).to.equal('none');
+      expect(sgCodeLineagerAfter.css.display).to.equal('none');
     });
 
     /* eslint-disable comma-spacing, key-spacing, max-len, quote-props, quotes */
@@ -485,18 +485,18 @@ describe('codeViewer', function () {
 
       expect(sgCodeContainerBefore.attribs['data-patternpartial'])
         .to.not.equal(sgCodeContainerAfter.attribs['data-patternpartial']);
-      expect(sgCodeLineageBefore.style.display).to.not.equal(sgCodeLineageAfter.style.display);
+      expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
       expect(sgCodeLineageFillBefore.html).to.not.equal(sgCodeLineageFillAfter.html);
-      expect(sgCodeLineagerBefore.style.display).to.not.equal(sgCodeLineagerAfter.style.display);
+      expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
       expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
       expect(sgCodePatternInfoStateBefore.html).to.equal(sgCodePatternInfoStateAfter.html);
 
       expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
-      expect(sgCodeLineageAfter.style.display).to.equal('block');
+      expect(sgCodeLineageAfter.css.display).to.equal('block');
       expect(sgCodeLineageFillAfter.html).to.equal(
         '<a href="patterns/00-elements-paragraph/00-elements-paragraph.html" class="sg-pattern-state complete" data-patternpartial="elements-paragraph">elements-paragraph</a>'
       );
-      expect(sgCodeLineagerAfter.style.display).to.equal('none');
+      expect(sgCodeLineagerAfter.css.display).to.equal('none');
     });
 
     it('updates code with lineageR array', function () {
@@ -523,15 +523,15 @@ describe('codeViewer', function () {
 
       expect(sgCodeContainerBefore.attribs['data-patternpartial'])
         .to.not.equal(sgCodeContainerAfter.attribs['data-patternpartial']);
-      expect(sgCodeLineageBefore.style.display).to.not.equal(sgCodeLineageAfter.style.display);
+      expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
       expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
-      expect(sgCodeLineagerBefore.style.display).to.not.equal(sgCodeLineagerAfter.style.display);
+      expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
       expect(sgCodeLineagerFillBefore.html).to.not.equal(sgCodeLineagerFillAfter.html);
       expect(sgCodePatternInfoStateBefore.html).to.equal(sgCodePatternInfoStateAfter.html);
 
       expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
-      expect(sgCodeLineageAfter.style.display).to.equal('none');
-      expect(sgCodeLineagerAfter.style.display).to.equal('block');
+      expect(sgCodeLineageAfter.css.display).to.equal('none');
+      expect(sgCodeLineagerAfter.css.display).to.equal('block');
       expect(sgCodeLineagerFillAfter.html).to.equal(
         '<a href="patterns/02-components-region/02-components-region.html" class="sg-pattern-state inreview" data-patternpartial="components-region">components-region</a>'
       );
@@ -562,15 +562,15 @@ describe('codeViewer', function () {
 
       expect(sgCodeContainerBefore.attribs['data-patternpartial'])
         .to.not.equal(sgCodeContainerAfter.attribs['data-patternpartial']);
-      expect(sgCodeLineageBefore.style.display).to.not.equal(sgCodeLineageAfter.style.display);
+      expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
       expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
-      expect(sgCodeLineagerBefore.style.display).to.not.equal(sgCodeLineagerAfter.style.display);
+      expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
       expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
       expect(sgCodePatternInfoStateBefore.html).to.not.equal(sgCodePatternInfoStateAfter.html);
 
       expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
-      expect(sgCodeLineageAfter.style.display).to.equal('none');
-      expect(sgCodeLineagerAfter.style.display).to.equal('none');
+      expect(sgCodeLineageAfter.css.display).to.equal('none');
+      expect(sgCodeLineagerAfter.css.display).to.equal('none');
       expect(sgCodePatternInfoStateAfter.html)
         .to.equal('<span class="sg-pattern-state inprogress">inprogress</span>');
     });
@@ -686,14 +686,14 @@ describe('codeViewer', function () {
       expect(sgCodeContainerBefore.attribs['data-patternpartial'])
         .to.not.equal(sgCodeContainerAfter.attribs['data-patternpartial']);
       expect(sgCodePatternInfoStateBefore.html).to.equal(sgCodePatternInfoStateAfter.html);
-      expect(sgCodeLineageBefore.style.display).to.not.equal(sgCodeLineageAfter.style.display);
+      expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
       expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
-      expect(sgCodeLineagerBefore.style.display).to.not.equal(sgCodeLineagerAfter.style.display);
+      expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
 
       expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
       expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
-      expect(sgCodeLineageAfter.style.display).to.equal('none');
-      expect(sgCodeLineagerAfter.style.display).to.equal('none');
+      expect(sgCodeLineageAfter.css.display).to.equal('none');
+      expect(sgCodeLineagerAfter.css.display).to.equal('none');
     });
 
     it('updates code on data.codeOverlay = "on" and data.viewall = true', function () {
@@ -732,14 +732,14 @@ describe('codeViewer', function () {
       expect(sgCodeContainerBefore.attribs['data-patternpartial'])
         .to.not.equal(sgCodeContainerAfter.attribs['data-patternpartial']);
       expect(sgCodePatternInfoStateBefore.html).to.equal(sgCodePatternInfoStateAfter.html);
-      expect(sgCodeLineageBefore.style.display).to.not.equal(sgCodeLineageAfter.style.display);
+      expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
       expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
-      expect(sgCodeLineagerBefore.style.display).to.not.equal(sgCodeLineagerAfter.style.display);
+      expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
       expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
 
       expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
-      expect(sgCodeLineageAfter.style.display).to.equal('none');
-      expect(sgCodeLineagerAfter.style.display).to.equal('none');
+      expect(sgCodeLineageAfter.css.display).to.equal('none');
+      expect(sgCodeLineagerAfter.css.display).to.equal('none');
       expect(codeViewer.viewall).to.be.true;
     });
 
@@ -777,19 +777,19 @@ describe('codeViewer', function () {
       const sgCodeLineagerAfter = $orgs['#sg-code-lineager'].getState();
       const sgCodeLineagerFillAfter = $orgs['#sg-code-lineager-fill'].getState();
 
-      expect(sgCodeContainerBefore.style.bottom).to.not.equal(sgCodeContainerAfter.style.bottom);
+      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
       expect(sgCodeContainerBefore.attribs['data-patternpartial'])
         .to.not.equal(sgCodeContainerAfter.attribs['data-patternpartial']);
       expect(sgCodePatternInfoStateBefore.html).to.equal(sgCodePatternInfoStateAfter.html);
-      expect(sgCodeLineageBefore.style.display).to.not.equal(sgCodeLineageAfter.style.display);
+      expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
       expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
-      expect(sgCodeLineagerBefore.style.display).to.not.equal(sgCodeLineagerAfter.style.display);
+      expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
 
-      expect(sgCodeContainerAfter.style.bottom).to.equal('0px');
+      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
       expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
       expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
-      expect(sgCodeLineageAfter.style.display).to.equal('none');
-      expect(sgCodeLineagerAfter.style.display).to.equal('none');
+      expect(sgCodeLineageAfter.css.display).to.equal('none');
+      expect(sgCodeLineagerAfter.css.display).to.equal('none');
       expect(codeViewer.viewall).to.be.true;
     });
 
@@ -808,10 +808,10 @@ describe('codeViewer', function () {
       const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
       const sgTCodeAfter = $orgs['#sg-t-code'].getState();
 
-      expect(sgCodeContainerBefore.style.bottom).to.not.equal(sgCodeContainerAfter.style.bottom);
+      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
       expect(sgTCodeBefore.classArray).to.include('active');
 
-      expect(sgCodeContainerAfter.style.bottom).to.equal('-384px');
+      expect(sgCodeContainerAfter.css.bottom).to.equal('-384px');
       expect(sgTCodeAfter.classArray).to.not.include('active');
       expect(codeViewer.codeActive).to.be.false;
     });
@@ -881,12 +881,12 @@ describe('codeViewer', function () {
       const sgTCodeAfter = $orgs['#sg-t-code'].getState();
 
       expect(sgTAnnotationsBefore.classArray).to.include('active');
-      expect(sgAnnotationsContainerBefore.style.bottom)
-        .to.not.equal(sgAnnotationsContainerAfter.style.bottom);
+      expect(sgAnnotationsContainerBefore.css.bottom)
+        .to.not.equal(sgAnnotationsContainerAfter.css.bottom);
       expect(sgTCodeBefore.classArray).to.not.include('active');
 
       expect(sgTAnnotationsAfter.classArray).to.not.include('active');
-      expect(sgAnnotationsContainerAfter.style.bottom).to.equal('-384px');
+      expect(sgAnnotationsContainerAfter.css.bottom).to.equal('-384px');
       expect(sgTCodeAfter.classArray).to.include('active');
       expect(annotationsViewer.annotationsActive).to.be.false;
       expect(codeViewer.codeActive).to.be.true;
@@ -1033,9 +1033,9 @@ describe('codeViewer', function () {
       const sgTCodeAfter = $orgs['#sg-t-code'].getState();
 
       expect(sgTCodeBefore.classArray).to.include('active');
-      expect(sgCodeContainerBefore.style.bottom).to.not.equal(sgCodeContainerAfter.style.bottom);
+      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
 
-      expect(sgCodeContainerAfter.style.bottom).to.equal('-384px');
+      expect(sgCodeContainerAfter.css.bottom).to.equal('-384px');
       expect(sgTCodeAfter.classArray).to.not.include('active');
       expect(codeViewer.codeActive).to.be.false;
     });
