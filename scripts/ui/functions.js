@@ -70,15 +70,15 @@ export default function (fepperUiInst, root) {
      * @returns {function} The callback set to only run if does not get called back again within the debounce period.
      */
     debounce(callback, wait = this.uiProps.timeoutDefault, thisArg = null) {
-      let timeout = null;
+      let timeoutId = null;
       let callbackArgs = null;
 
       const later = () => callback.apply(thisArg, callbackArgs);
 
       return function () {
         callbackArgs = arguments;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(later, wait);
       };
     }
 
