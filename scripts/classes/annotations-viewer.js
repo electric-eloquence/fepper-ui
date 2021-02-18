@@ -260,7 +260,7 @@ export default function (fepperUiInst, root) {
 
         for (const annotation of annotations) {
           html += `<div id="annotation-${annotation.number}">
-<h2>${annotation.number}. ${annotation.title}`;
+<h2>${annotation.number}. ${annotation.title || ''}`;
 
           if (!annotation.state) {
             html += `<span id="annotation-state-${annotation.number}" style="font-size: 0.8em;color: #666">`;
