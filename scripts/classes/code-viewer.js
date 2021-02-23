@@ -31,12 +31,14 @@ export default class CodeViewer {
 
   // Declared as class fields to retain function-scoped `this` context while keeping the class constructor tidy.
   // Exposed as properties on the instance so they can be unit tested.
-  getPrintXHRErrorFunction = (codeViewer) => {
+  getPrintXHRErrorFunction = () => {
+    const codeViewer = this;
+
     return function () {
       let error;
 
       /* istanbul ignore else */
-      if (this.#root.location.protocol === 'file:' && !this.status) {
+      if (codeViewer.#root.location.protocol === 'file:' && !this.status) {
         // While it would be nice to offer internationalization of this error message, users shouldn't be using the
         // file protocol scheme in the first place!
         error = 'Access to XMLHttpRequest with the file protocol scheme has been blocked by CORS policy.';
@@ -136,7 +138,9 @@ export default class CodeViewer {
 
   // This runs once the AJAX request for the encoded markup is finished.
   // If the encoded tab is the current active tab, it adds the content to the default code container.
-  getSaveEncodedFunction = (codeViewer) => {
+  getSaveEncodedFunction = () => {
+    const codeViewer = this;
+
     return function () {
       let encoded = this.responseText;
 
@@ -148,7 +152,7 @@ export default class CodeViewer {
       encoded = encoded.replace(/(\{\{\^)(\s+)(\S+)/g, '$1$3$2\u00A0');
       encoded = encoded.replace(/(\{\{\/)(\s+)(\S+)/g, '$1$3$2\u00A0');
 
-      encoded = this.#root.html_beautify(encoded, {
+      encoded = codeViewer.#root.html_beautify(encoded, {
         indent_handlebars: true,
         indent_size: 2,
         wrap_line_length: 0
@@ -163,7 +167,7 @@ export default class CodeViewer {
       encoded = encoded.replace(/^\s*$\n/gm, '');
 
       // Encode with HTML entities.
-      encoded = this.#root.he.encode(encoded);
+      encoded = codeViewer.#root.he.encode(encoded);
 
       codeViewer.encoded = encoded;
 
@@ -175,10 +179,12 @@ export default class CodeViewer {
 
   // Run this once the AJAX request for the mustache markup has finished.
   // If the mustache tab is the current active tab, add the content to the default code container.
-  getSaveMustacheFunction = (codeViewer) => {
+  getSaveMustacheFunction = () => {
+    const codeViewer = this;
+
     return function () {
       let mustache = this.responseText;
-      mustache = this.#root.he.encode(mustache);
+      mustache = codeViewer.#root.he.encode(mustache);
       codeViewer.mustache = mustache;
 
       if (codeViewer.tabActive === 'm') {

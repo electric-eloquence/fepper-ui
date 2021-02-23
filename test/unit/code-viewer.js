@@ -150,7 +150,7 @@ describe('codeViewer', function () {
     it('returns a function that saves encoded HTML', function () {
       codeViewer.encoded = '';
       codeViewer.tabActive = 'e';
-      const saveEncoded = codeViewer.getSaveEncodedFunction(codeViewer).bind({responseText: 'encoded'});
+      const saveEncoded = codeViewer.getSaveEncodedFunction().bind({responseText: 'encoded'});
 
       $orgs['#sg-code-title-html'].dispatchAction('removeClass', 'sg-code-title-active');
       $orgs['#sg-code-title-mustache'].dispatchAction('removeClass', 'sg-code-title-active');
@@ -179,7 +179,7 @@ describe('codeViewer', function () {
     it('returns a function that saves Mustache-like Feplet', function () {
       codeViewer.mustache = '';
       codeViewer.tabActive = 'm';
-      const saveMustache = codeViewer.getSaveMustacheFunction(codeViewer).bind({responseText: 'mustache'});
+      const saveMustache = codeViewer.getSaveMustacheFunction().bind({responseText: 'mustache'});
 
       $orgs['#sg-code-title-html'].dispatchAction('removeClass', 'sg-code-title-active');
       $orgs['#sg-code-title-mustache'].dispatchAction('removeClass', 'sg-code-title-active');
