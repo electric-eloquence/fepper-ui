@@ -12,6 +12,8 @@ export default class PatternlabViewer {
     window.addEventListener('message', this.#fepperUi.patternlabViewer.receiveIframeMessage);
 
     document.addEventListener('DOMContentLoaded', () => {
+      const fepperUi = this.#fepperUi;
+
       // Click handler for elements in pull down menus. Update the iframe. Also close the menu.
       this.$orgs['.sg-pop'].on(
         'click',
@@ -25,8 +27,8 @@ export default class PatternlabViewer {
             path: window.$(this).attr('href')
           };
 
-          e.data.this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, this.#fepperUi.uiProps.targetOrigin);
-          this.#fepperUi.uiFns.closeAllPanels();
+          e.data.this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, fepperUi.uiProps.targetOrigin);
+          fepperUi.uiFns.closeAllPanels();
         }
       );
 
