@@ -219,7 +219,7 @@ export default function (fepperUiInst, root) {
         let html = '';
 
         for (const annotation of annotations) {
-          html += `<div id="annotation-${annotation.number}">
+          html += `<div id="annotation-${annotation.number}" class="sg-annotation">
 <h2>${annotation.number}. ${annotation.title || ''}`;
 
           if (!annotation.state) {
