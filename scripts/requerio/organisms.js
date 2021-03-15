@@ -49,6 +49,7 @@ export default {
   '#sg-tools': null,
   '#sg-tools-toggle': null,
   '#sg-view': null,
+  '#sg-view-container': null,
   '#sg-viewport': null,
   '#sg-vp-wrap': null,
   '#typeahead': null,

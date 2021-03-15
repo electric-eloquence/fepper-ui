@@ -7,6 +7,7 @@ import PatternFinder from '../classes/pattern-finder.js';
 import PatternViewport from '../classes/pattern-viewport.js';
 import Timestamper from '../classes/timestamper.js';
 import UrlHandler from '../classes/url-handler.js';
+import ViewerHandler from '../classes/viewer-handler.js';
 
 export default class FepperUi {
   constructor(Requerio, jQueryOrCheerio, Redux, $organisms, root, uiData) {
@@ -24,6 +25,7 @@ export default class FepperUi {
     this.patternViewport = new PatternViewport(this, root);
     this.timestamper = new Timestamper(this, root);
     this.urlHandler = new UrlHandler(this, root);
+    this.viewerHandler = new ViewerHandler(this, root);
 
     // uiComp depends on this global.
     root.FEPPER_UI = this;

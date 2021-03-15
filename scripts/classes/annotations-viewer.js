@@ -149,11 +149,13 @@ export default function (fepperUiInst, root) {
           transitionDurationNum = parseFloat(transitionDurationStr) * 1000;
         }
 
+/*
         setTimeout(() => {
           this.$orgs['#sg-annotations-container']
             .dispatchAction('removeClass', 'close')
             .dispatchAction('removeClass', 'anim-ready');
         }, transitionDurationNum);
+        */
       }
     }
 
@@ -187,9 +189,11 @@ export default function (fepperUiInst, root) {
       this.$orgs['#sg-annotations-container'].dispatchAction('css', {bottom: -this.uiProps.sh + 'px'});
 
       /* istanbul ignore if */
+      /*
       if (typeof getComputedStyle === 'function') {
         this.$orgs['#sg-annotations-container'].dispatchAction('addClass', 'anim-ready');
       }
+      */
 
       // Make sure the code viewer is off before showing annotations.
       this.codeViewer.closeCode();

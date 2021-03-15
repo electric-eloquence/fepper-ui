@@ -226,6 +226,10 @@ export default function (fepperUiInst, root_) {
       return fepperUiInst.urlHandler;
     }
 
+    get viewerHandler() {
+      return fepperUiInst.viewerHandler;
+    }
+
     /* METHODS */
 
     // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
@@ -296,44 +300,15 @@ export default function (fepperUiInst, root_) {
     }
 
     closeCode() {
+      // Tell the pattern that code viewer has been turned off.
       const obj = {codeToggle: 'off'};
+      // Flag that viewer is inactive.
       this.codeActive = false;
 
-      /* istanbul ignore if */
-      if (typeof getComputedStyle === 'function') {
-        this.$orgs['#sg-code-container'].dispatchAction('addClass', 'close');
-      }
-
+      this.viewerHandler.closeViewer();
       this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, this.uiProps.targetOrigin);
-      this.slideCode(
-        Number(this.$orgs['#sg-code-container'].getState().innerHeight)
-      );
       this.$orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
-
-      // Remove padding from bottom of viewport if appropriate.
-      if (!this.annotationsViewer.annotationsActive) {
-        this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: '0px'});
-      }
-
-      /* istanbul ignore if */
-      if (typeof getComputedStyle === 'function') {
-        const transitionDurationStr =
-          getComputedStyle(this.$orgs['#sg-code-container'][0]).getPropertyValue('transition-duration');
-        let transitionDurationNum;
-
-        if (transitionDurationStr.slice(-2) === 'ms') {
-          transitionDurationNum = parseFloat(transitionDurationStr);
-        }
-        else {
-          transitionDurationNum = parseFloat(transitionDurationStr) * 1000;
-        }
-
-        setTimeout(() => {
-          this.$orgs['#sg-code-container']
-            .dispatchAction('removeClass', 'close')
-            .dispatchAction('removeClass', 'anim-ready');
-        }, transitionDurationNum);
-      }
+      this.$orgs['#sg-code-container'].dispatchAction('removeClass', 'active');
     }
 
     openCode() {
@@ -342,30 +317,17 @@ export default function (fepperUiInst, root_) {
         return;
       }
 
+      // Tell the pattern that code viewer has been turned on.
+      const objCodeToggle = {codeToggle: 'on'};
       // Flag that viewer is active.
       this.codeActive = true;
 
-      this.$orgs['#sg-t-code'].dispatchAction('addClass', 'active');
-      this.$orgs['#sg-code-container'].dispatchAction('css', {bottom: -this.uiProps.sh + 'px'});
-
-      /* istanbul ignore if */
-      if (typeof getComputedStyle === 'function') {
-        this.$orgs['#sg-code-container'].dispatchAction('addClass', 'anim-ready');
-      }
-
       // Make sure the annotations viewer is off before showing code.
       this.annotationsViewer.closeAnnotations();
-
-      // Tell the pattern that code viewer has been turned on.
-      const objCodeToggle = {codeToggle: 'on'};
-
+      this.viewerHandler.openViewer();
       this.$orgs['#sg-viewport'][0].contentWindow.postMessage(objCodeToggle, this.uiProps.targetOrigin);
-
-      // Move the code into view.
-      this.slideCode(0);
-
-      // Add padding to bottom of viewport.
-      this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: (this.uiProps.sh / 2) + 'px'});
+      this.$orgs['#sg-t-code'].dispatchAction('addClass', 'active');
+      this.$orgs['#sg-code-container'].dispatchAction('addClass', 'active');
     }
 
     scrollViewall() {
@@ -391,7 +353,7 @@ export default function (fepperUiInst, root_) {
      * @param {number} pos - The distance to slide.
      */
     slideCode(pos) {
-      this.$orgs['#sg-code-container'].dispatchAction('css', {bottom: -pos + 'px'});
+      this.$orgs['#sg-view-container'].dispatchAction('css', {bottom: -pos + 'px'});
     }
 
     /**
