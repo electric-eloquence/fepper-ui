@@ -4,7 +4,7 @@ import DataSaver from '../classes/data-saver.js';
 import AnnotationsViewer from '../classes/annotations-viewer.js';
 import CodeViewer from '../classes/code-viewer.js';
 import PatternFinder from '../classes/pattern-finder.js';
-import PatternlabViewer from '../classes/patternlab-viewer.js';
+import PatternViewport from '../classes/pattern-viewport.js';
 import Timestamper from '../classes/timestamper.js';
 import UrlHandler from '../classes/url-handler.js';
 
@@ -21,7 +21,7 @@ export default class FepperUi {
     this.annotationsViewer = new AnnotationsViewer(this, root);
     this.codeViewer = new CodeViewer(this, root);
     this.patternFinder = new PatternFinder(this, root);
-    this.patternlabViewer = new PatternlabViewer(this, root);
+    this.patternViewport = new PatternViewport(this, root);
     this.timestamper = new Timestamper(this, root);
     this.urlHandler = new UrlHandler(this, root);
 

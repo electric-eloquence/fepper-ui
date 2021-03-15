@@ -4,7 +4,7 @@ import AnnotationsViewer from './annotations-viewer.js';
 import CodeViewer from './code-viewer.js';
 import MustacheBrowser from './mustache-browser.js';
 import PatternFinder from './pattern-finder.js';
-import PatternlabViewer from './patternlab-viewer.js';
+import PatternViewport from './pattern-viewport.js';
 import UrlHandler from './url-handler.js';
 
 // TODO: Replace closure with private class field when there is greater browser support.
@@ -17,7 +17,7 @@ export default function (fepperUiInst) {
       this.codeViewer = new CodeViewer(fepperUi);
       this.mustacheBrowser = new MustacheBrowser(fepperUi);
       this.patternFinder = new PatternFinder(fepperUi);
-      this.patternlabViewer = new PatternlabViewer(fepperUi);
+      this.patternViewport = new PatternViewport(fepperUi);
       this.urlHandler = new UrlHandler(fepperUi);
     }
 
