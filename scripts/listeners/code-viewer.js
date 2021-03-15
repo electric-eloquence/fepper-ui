@@ -14,13 +14,6 @@ export default function (fepperUiInst) {
       document.addEventListener('DOMContentLoaded', () => {
         this.$orgs['#sg-code-container'].dispatchAction('css', 'bottom'); // Set this measurement in state.
 
-        // Make sure the close button handles the click.
-        this.$orgs['#sg-code-close-btn'].on('click', (e) => {
-          e.preventDefault();
-
-          fepperUiInst.codeViewer.closeCode();
-        });
-
 /*
         this.$orgs['#sg-view-dock-bottom'].on('click', (e) => {
         });

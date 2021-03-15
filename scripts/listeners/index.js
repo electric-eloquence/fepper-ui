@@ -6,6 +6,7 @@ import MustacheBrowser from './mustache-browser.js';
 import PatternFinder from './pattern-finder.js';
 import PatternViewport from './pattern-viewport.js';
 import UrlHandler from './url-handler.js';
+import ViewerHandler from './viewer-handler.js';
 
 // TODO: Replace closure with private class field when there is greater browser support.
 export default function (fepperUiInst) {
@@ -19,6 +20,7 @@ export default function (fepperUiInst) {
       this.patternFinder = new PatternFinder(fepperUi);
       this.patternViewport = new PatternViewport(fepperUi);
       this.urlHandler = new UrlHandler(fepperUi);
+      this.viewerHandler = new ViewerHandler(fepperUi);
     }
 
     listen() {

@@ -13,13 +13,6 @@ export default function (fepperUiInst) {
 
       document.addEventListener('DOMContentLoaded', () => {
         this.$orgs['#sg-annotations-container'].dispatchAction('css', 'bottom'); // Set this measurement in state.
-
-        // Make sure the close button handles the click.
-        this.$orgs['#sg-annotations-close-btn'].on('click', (e) => {
-          e.preventDefault();
-
-          fepperUiInst.annotationsViewer.closeAnnotations();
-        });
       });
 
       const Mousetrap = window.Mousetrap;

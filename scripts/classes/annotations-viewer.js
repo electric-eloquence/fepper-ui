@@ -100,6 +100,10 @@ export default function (fepperUiInst, root) {
       return fepperUiInst.urlHandler;
     }
 
+    get viewerHandler() {
+      return fepperUiInst.viewerHandler;
+    }
+
     /* METHODS */
 
     // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
@@ -120,43 +124,10 @@ export default function (fepperUiInst, root) {
       const obj = {annotationsToggle: 'off'};
       this.annotationsActive = false;
 
-      /* istanbul ignore if */
-      if (typeof getComputedStyle === 'function') {
-        this.$orgs['#sg-annotations-container'].dispatchAction('addClass', 'close');
-      }
-
+      this.viewerHandler.closeViewer();
       this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, this.uiProps.targetOrigin);
-      this.slideAnnotations(
-        Number(this.$orgs['#sg-annotations-container'].getState().innerHeight)
-      );
       this.$orgs['#sg-t-annotations'].dispatchAction('removeClass', 'active');
-
-      // Remove padding from bottom of viewport if appropriate.
-      if (!this.codeViewer.codeActive) {
-        this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: '0px'});
-      }
-
-      /* istanbul ignore if */
-      if (typeof getComputedStyle === 'function') {
-        const transitionDurationStr =
-          getComputedStyle(this.$orgs['#sg-annotations-container'][0]).getPropertyValue('transition-duration');
-        let transitionDurationNum;
-
-        if (transitionDurationStr.slice(-2) === 'ms') {
-          transitionDurationNum = parseFloat(transitionDurationStr);
-        }
-        else {
-          transitionDurationNum = parseFloat(transitionDurationStr) * 1000;
-        }
-
-/*
-        setTimeout(() => {
-          this.$orgs['#sg-annotations-container']
-            .dispatchAction('removeClass', 'close')
-            .dispatchAction('removeClass', 'anim-ready');
-        }, transitionDurationNum);
-        */
-      }
+      this.$orgs['#sg-annotations-container'].dispatchAction('removeClass', 'active');
     }
 
     /**
@@ -182,32 +153,17 @@ export default function (fepperUiInst, root) {
         return;
       }
 
+      // Tell the pattern that annotations viewer has been turned on.
+      const objAnnotationsToggle = {annotationsToggle: 'on'};
       // Flag that viewer is active.
       this.annotationsActive = true;
 
-      this.$orgs['#sg-t-annotations'].dispatchAction('addClass', 'active');
-      this.$orgs['#sg-annotations-container'].dispatchAction('css', {bottom: -this.uiProps.sh + 'px'});
-
-      /* istanbul ignore if */
-      /*
-      if (typeof getComputedStyle === 'function') {
-        this.$orgs['#sg-annotations-container'].dispatchAction('addClass', 'anim-ready');
-      }
-      */
-
       // Make sure the code viewer is off before showing annotations.
       this.codeViewer.closeCode();
-
-      // Tell the pattern that annotations viewer has been turned on.
-      const objAnnotationsToggle = {annotationsToggle: 'on'};
-
+      this.viewerHandler.openViewer();
       this.$orgs['#sg-viewport'][0].contentWindow.postMessage(objAnnotationsToggle, this.uiProps.targetOrigin);
-
-      // Slide the annotation section into view.
-      this.slideAnnotations(0);
-
-      // Add padding to bottom of viewport.
-      this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: (this.uiProps.sh / 2) + 'px'});
+      this.$orgs['#sg-t-annotations'].dispatchAction('addClass', 'active');
+      this.$orgs['#sg-annotations-container'].dispatchAction('addClass', 'active');
 
       if (this.moveToNumber !== 0) {
         this.moveTo(this.moveToNumber);
