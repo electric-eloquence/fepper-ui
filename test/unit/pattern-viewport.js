@@ -1380,10 +1380,10 @@ describe('patternViewport', function () {
       expect(dataSaverVpWidthAfter).to.equal('1024');
     });
 
-    it('runs .goLarge() on patternlab.keyPress "ctrl+alt+l"', function () {
+    it('runs .goLarge() on patternlab.keyPress "ctrl+shift+l"', function () {
       event.data = {
         event: 'patternlab.keyPress',
-        keyPress: 'ctrl+alt+l'
+        keyPress: 'ctrl+shift+l'
       };
 
       fepperUi.dataSaver.removeValue('vpWidth');
