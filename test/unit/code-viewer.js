@@ -10,7 +10,7 @@ describe('codeViewer', function () {
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
       expect(codeViewer.constructor.name).to.equal('CodeViewer');
-      expect(Object.keys(codeViewer).length).to.equal(12);
+      expect(Object.keys(codeViewer).length).to.equal(11);
       expect(codeViewer).to.have.property('getPrintXHRErrorFunction');
       expect(codeViewer).to.have.property('receiveIframeMessage');
       expect(codeViewer).to.have.property('getSaveEncodedFunction');
@@ -346,17 +346,17 @@ describe('codeViewer', function () {
       const sgTCodeAfter = $orgs['#sg-t-code'].getState();
       const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
 
+      expect(sgAnnotationsContainerBefore.classArray).to.include('active');
+      expect(sgCodeContainerBefore.classArray).to.not.include('active');
       expect(sgTAnnotationsBefore.classArray).to.include('active');
       expect(sgTCodeBefore.classArray).to.not.include('active');
       expect(sgViewContainerBefore.css.bottom).to.equal('-384px');
-      expect(sgAnnotationsContainerBefore.classArray).to.include('active');
-      expect(sgCodeContainerBefore.classArray).to.not.include('active');
 
+      expect(sgAnnotationsContainerAfter.classArray).to.not.include('active');
+      expect(sgCodeContainerAfter.classArray).to.include('active');
       expect(sgTAnnotationsAfter.classArray).to.not.include('active');
       expect(sgTCodeAfter.classArray).to.include('active');
       expect(sgViewContainerAfter.css.bottom).to.equal('0px');
-      expect(sgAnnotationsContainerAfter.classArray).to.not.include('active');
-      expect(sgCodeContainerAfter.classArray).to.include('active');
       expect(annotationsViewer.annotationsActive).to.be.false;
       expect(codeViewer.codeActive).to.be.true;
     });
@@ -707,6 +707,7 @@ describe('codeViewer', function () {
       $orgs['#sg-code-lineage-fill'].dispatchAction('html', null);
       $orgs['#sg-code-lineager'].dispatchAction('css', {display: 'inline'});
       $orgs['#sg-code-lineager-fill'].dispatchAction('html', null);
+      $orgs['#sg-view-container'].dispatchAction('css', {bottom: '-384px'});
 
       const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
       const sgCodePatternInfoStateBefore = $orgs['#sg-code-pattern-info-state'].getState();
@@ -714,6 +715,7 @@ describe('codeViewer', function () {
       const sgCodeLineageFillBefore = $orgs['#sg-code-lineage-fill'].getState();
       const sgCodeLineagerBefore = $orgs['#sg-code-lineager'].getState();
       const sgCodeLineagerFillBefore = $orgs['#sg-code-lineager-fill'].getState();
+      const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
       codeViewer.receiveIframeMessage(event);
 
@@ -723,20 +725,21 @@ describe('codeViewer', function () {
       const sgCodeLineageFillAfter = $orgs['#sg-code-lineage-fill'].getState();
       const sgCodeLineagerAfter = $orgs['#sg-code-lineager'].getState();
       const sgCodeLineagerFillAfter = $orgs['#sg-code-lineager-fill'].getState();
+      const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
 
-      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
       expect(sgCodeContainerBefore.attribs['data-patternpartial'])
         .to.not.equal(sgCodeContainerAfter.attribs['data-patternpartial']);
       expect(sgCodePatternInfoStateBefore.html).to.equal(sgCodePatternInfoStateAfter.html);
       expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
       expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
       expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
+      expect(sgViewContainerBefore.css.bottom).to.equal('-384px');
 
-      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
-      expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
       expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
       expect(sgCodeLineageAfter.css.display).to.equal('none');
       expect(sgCodeLineagerAfter.css.display).to.equal('none');
+      expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
+      expect(sgViewContainerAfter.css.bottom).to.equal('0px');
       expect(codeViewer.viewall).to.be.true;
     });
 
@@ -747,19 +750,19 @@ describe('codeViewer', function () {
 
       codeViewer.openCode();
 
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
       const sgTCodeBefore = $orgs['#sg-t-code'].getState();
+      const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
       codeViewer.receiveIframeMessage(event);
 
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
       const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+      const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
 
-      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
       expect(sgTCodeBefore.classArray).to.include('active');
+      expect(sgViewContainerBefore.css.bottom).to.equal('0px');
 
-      expect(sgCodeContainerAfter.css.bottom).to.equal('-384px');
       expect(sgTCodeAfter.classArray).to.not.include('active');
+      expect(sgViewContainerAfter.css.bottom).to.equal('-384px');
       expect(codeViewer.codeActive).to.be.false;
     });
 
@@ -813,28 +816,32 @@ describe('codeViewer', function () {
       codeViewer.codeActive = false;
       codeViewer.mustacheBrowser = false;
 
+      $orgs['#sg-annotations-container'].dispatchAction('addClass', 'active');
       $orgs['#sg-t-annotations'].dispatchAction('addClass', 'active');
-      $orgs['#sg-annotations-container'].dispatchAction('css', {bottom: 'auto'});
       $orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
+      $orgs['#sg-view-container'].dispatchAction('css', {bottom: '-384px'});
 
-      const sgTAnnotationsBefore = $orgs['#sg-t-annotations'].getState();
       const sgAnnotationsContainerBefore = $orgs['#sg-annotations-container'].getState();
+      const sgTAnnotationsBefore = $orgs['#sg-t-annotations'].getState();
       const sgTCodeBefore = $orgs['#sg-t-code'].getState();
+      const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
       codeViewer.receiveIframeMessage(event);
 
-      const sgTAnnotationsAfter = $orgs['#sg-t-annotations'].getState();
       const sgAnnotationsContainerAfter = $orgs['#sg-annotations-container'].getState();
+      const sgTAnnotationsAfter = $orgs['#sg-t-annotations'].getState();
       const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+      const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
 
+      expect(sgAnnotationsContainerBefore.classArray).to.include('active');
       expect(sgTAnnotationsBefore.classArray).to.include('active');
-      expect(sgAnnotationsContainerBefore.css.bottom)
-        .to.not.equal(sgAnnotationsContainerAfter.css.bottom);
       expect(sgTCodeBefore.classArray).to.not.include('active');
+      expect(sgViewContainerBefore.css.bottom).to.equal('-384px');
 
+      expect(sgAnnotationsContainerAfter.classArray).to.not.include('active');
       expect(sgTAnnotationsAfter.classArray).to.not.include('active');
-      expect(sgAnnotationsContainerAfter.css.bottom).to.equal('-384px');
       expect(sgTCodeAfter.classArray).to.include('active');
+      expect(sgViewContainerAfter.css.bottom).to.equal('0px');
       expect(annotationsViewer.annotationsActive).to.be.false;
       expect(codeViewer.codeActive).to.be.true;
     });
@@ -968,22 +975,22 @@ describe('codeViewer', function () {
       };
       codeViewer.codeActive = true;
 
-      $orgs['#sg-code-container'].dispatchAction('css', {bottom: '0px'});
       $orgs['#sg-t-code'].dispatchAction('addClass', 'active');
+      $orgs['#sg-view-container'].dispatchAction('css', {bottom: '0px'});
 
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
       const sgTCodeBefore = $orgs['#sg-t-code'].getState();
+      const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
       codeViewer.receiveIframeMessage(event);
 
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
       const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+      const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
 
       expect(sgTCodeBefore.classArray).to.include('active');
-      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
+      expect(sgViewContainerBefore.css.bottom).to.equal('0px');
 
-      expect(sgCodeContainerAfter.css.bottom).to.equal('-384px');
       expect(sgTCodeAfter.classArray).to.not.include('active');
+      expect(sgViewContainerAfter.css.bottom).to.equal('-384px');
       expect(codeViewer.codeActive).to.be.false;
     });
   });
