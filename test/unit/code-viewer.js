@@ -637,10 +637,10 @@ describe('codeViewer', function () {
       expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
       expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
 
-      expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
       expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
       expect(sgCodeLineageAfter.css.display).to.equal('none');
       expect(sgCodeLineagerAfter.css.display).to.equal('none');
+      expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
     });
 
     it('updates code on data.codeOverlay = "on" and data.viewall = true', function () {
