@@ -50,12 +50,6 @@ export default function (fepperUiInst, root) {
 
               break;
 
-            // TODO: The following is DEPRECATED since it was a workaround for pre-Chromium Microsoft Edge.
-            case 'ctrl+alt+l':
-              this.goLarge();
-
-              break;
-
             case 'ctrl+shift+l':
               this.goLarge();
 

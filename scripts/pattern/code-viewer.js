@@ -238,17 +238,4 @@
       return false;
     });
   }
-
-  // DEPRECATED! Will be removed.
-  // When the code panel is open, hijack cmd+a/ctrl+a so that it only selects the code view.
-  Mousetrap.bind('mod+a', (e) => {
-    if (codeActive) {
-      const obj = {event: 'patternlab.keyPress', keyPress: 'mod+a'};
-
-      parent.postMessage(obj, targetOrigin);
-
-      e.preventDefault();
-      return false;
-    }
-  });
 })(document);

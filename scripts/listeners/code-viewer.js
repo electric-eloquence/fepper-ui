@@ -98,17 +98,6 @@ export default function (fepperUiInst) {
         return false;
       });
 
-      // DEPRECATED! Will be removed.
-      // When the code panel is open hijack, cmd+a/ctrl+a so that it only selects the code view.
-      Mousetrap.bind('mod+a', (e) => {
-        if (fepperUiInst.codeViewer.codeActive) {
-          fepperUiInst.codeViewer.selectCode();
-
-          e.preventDefault();
-          return false;
-        }
-      });
-
       // Select the mustache tab.
       // ctrl+shift+u is a Pattern Lab convention.
       Mousetrap.bind(['ctrl+alt+m', 'ctrl+shift+u'], (e) => {
