@@ -1,9 +1,5 @@
-let root;
-
 // TODO: Replace closure with private class field when there is greater browser support.
 export default function (fepperUiInst, root_) {
-  root = root_;
-
   class ViewerHandler {
 
     /* CONSTRUCTOR */

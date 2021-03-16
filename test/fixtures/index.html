@@ -84,9 +84,9 @@
 </div>
 </li><li class="sg-find">
 {{^ ishControlsHide.find }}
-  <a href="#" class="sg-control-trigger sg-icon sg-icon-search" id="sg-f-toggle" title="Search patterns"><span class="visually-hidden">Search patterns</span></a>
+  <a href="#" class="sg-control-trigger sg-icon sg-icon-search" id="sg-f-toggle" title="Pattern Search"><span class="visually-hidden">Pattern Search</span></a>
   <ul class="sg-acc-panel sg-right sg-checklist" id="sg-find" style="top: 32px;">
-    <li><input class="typeahead" id="typeahead" type="text" placeholder="Search patterns"></li>
+    <li><input class="typeahead" id="typeahead" type="text" placeholder="Pattern Search"></li>
   </ul>
 {{/ ishControlsHide.find }}
 </li><li class="sg-view">
@@ -114,45 +114,81 @@
     <div id="sg-rightpull"></div>
   </div>
 </div>
-</main><aside><div class="sg-view-container" id="sg-annotations-container" style="bottom:auto">
-<div id="sg-annotations-close" class="sg-view-close">
-  <a href="#" id="sg-annotations-close-btn" class="sg-view-close-btn">&#x2715;</a>
-</div>
-<div id="sg-annotations">
-  <div class="sg-annotation">
-    <h2>No Annotations</h2>
-    <div>There are no annotations for this pattern</div>
+</main><aside class="sg-view-container dock-bottom" id="sg-view-container"><div class="sg-view-scroll-container" id="sg-annotations-container">
+  <div id="sg-annotations">
+    <div class="sg-annotation">
+      <h2>No Annotations</h2>
+      <div>There are no annotations for this pattern</div>
+    </div>
   </div>
 </div>
-</div><div class="sg-view-container" id="sg-code-container" style="bottom:auto">
-<div id="sg-code-close" class="sg-view-close">
-  <a href="#" id="sg-code-close-btn" class="sg-view-close-btn">&#x2715;</a>
-</div>
-<div id="sg-code-pattern-info">
-  <p>
-    <span id="sg-code-pattern-info-pattern-name" class="sg-code-pattern-name"></span> at <code id="sg-code-pattern-info-rel-path"></code> &nbsp; <span id="sg-code-pattern-info-state"></span>
-  </p>
-</div>
-<div id="sg-code-lineage" style="display: none;">
-  <p>
-    includes: <span id="sg-code-lineage-fill"></span>
-  </p>
-</div>
-<div id="sg-code-lineager" style="display: none;">
-  <p>
-    included by: <span id="sg-code-lineager-fill"></span>
-  </p>
-</div>
-<div id="sg-code-markup">
-  <ul id="sg-code-tabs">
-    <li id="sg-code-title-html" class="sg-code-title">HTML</li>
-    <li id="sg-code-title-mustache" class="sg-code-title sg-code-title-active">Mustache</li>
-    <li><button id="sg-code-copy-path" class="sg-code-button" data-copied-msg="Copied!">Copy path</button></li>
-  </ul>
-  <div class="sg-language-markup-container">
-    <pre><code id="sg-code-fill" class="language-markup"></code></pre>
+</div><div class="sg-view-scroll-container" id="sg-code-container">
+  <div id="sg-code-pattern-info">
+    <p>
+      <span id="sg-code-pattern-info-pattern-name" class="sg-code-pattern-name"></span> at <code id="sg-code-pattern-info-rel-path"></code> &nbsp; <span id="sg-code-pattern-info-state"></span>
+    </p>
+  </div>
+  <div id="sg-code-lineage" style="display: none;">
+    <p>
+      includes: <span id="sg-code-lineage-fill"></span>
+    </p>
+  </div>
+  <div id="sg-code-lineager" style="display: none;">
+    <p>
+      included by: <span id="sg-code-lineager-fill"></span>
+    </p>
+  </div>
+  <div id="sg-code-markup">
+    <ul id="sg-code-tabs">
+      <li id="sg-code-title-html" class="sg-code-title">HTML</li>
+      <li id="sg-code-title-mustache" class="sg-code-title sg-code-title-active">Mustache</li>
+      <li><button id="sg-code-copy-path" class="sg-code-button" data-copied-msg="Copied!">Copy path</button></li>
+    </ul>
+    <div class="sg-language-markup-container">
+      <pre><code id="sg-code-fill" class="language-markup"></code></pre>
+    </div>
   </div>
 </div>
+</div><div class="sg-view-btns">
+<svg id="sg-view-dock-left-btn" class="sg-view-dock-left-btn sg-view-btn"
+  xmlns="http://www.w3.org/2000/svg"
+  width="72"
+  height="72"
+  viewBox="0 0 72 72"
+>
+  <rect x="4" y="-8" width="64" height="76" rx="8" ry="8" fill="transparent" stroke-width="8" />
+  <rect x="6" y="0" width="30" height="66" opacity="50%" />
+  <line x1="36" y1="0" x2="36" y2="72" stroke-width="8" />
+</svg>
+<svg id="sg-view-dock-bottom-btn" class="sg-view-dock-bottom-btn sg-view-btn"
+  xmlns="http://www.w3.org/2000/svg"
+  width="72"
+  height="72"
+  viewBox="0 0 72 72"
+>
+  <rect x="4" y="-8" width="64" height="76" rx="8" ry="8" fill="transparent" stroke-width="8" />
+  <rect x="0" y="32" width="72" height="8" />
+  <rect x="2" y="36" width="68" height="28" opacity="50%" />
+</svg>
+<svg id="sg-view-dock-right-btn" class="sg-view-dock-right-btn sg-view-btn"
+  xmlns="http://www.w3.org/2000/svg"
+  width="72"
+  height="72"
+  viewBox="0 0 72 72"
+>
+  <rect x="4" y="-8" width="64" height="76" rx="8" ry="8" fill="transparent" stroke-width="8" />
+  <line x1="36" y1="0" x2="36" y2="72" stroke-width="8" />
+  <rect x="36" y="0" width="30" height="66" opacity="50%" />
+</svg>
+<svg id="sg-view-close-btn" class="sg-view-close-btn sg-view-btn"
+  xmlns="http://www.w3.org/2000/svg"
+  width="72"
+  height="72"
+  viewBox="0 0 72 72"
+>
+  <line x1="3" y1="3" x2="69" y2="69" stroke-width="8" />
+  <line x1="69" y1="3" x2="3" y2="69" stroke-width="8" />
+</svg>
 </div></aside><footer id="patternlab-foot">
 <script src="test/fixtures/index.js" type="module"></script>
 

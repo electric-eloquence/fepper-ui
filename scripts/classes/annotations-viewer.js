@@ -182,15 +182,6 @@ export default function (fepperUiInst, root) {
     }
 
     /**
-     * Slide the annotations panel.
-     *
-     * @param {number} pos - Annotation container position from bottom.
-     */
-    slideAnnotations(pos) {
-      this.$orgs['#sg-annotations-container'].dispatchAction('css', {bottom: -pos + 'px'});
-    }
-
-    /**
      * Decide on whether the annotations panel should be open or closed.
      */
     toggleAnnotations() {

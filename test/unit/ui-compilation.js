@@ -103,44 +103,45 @@ describe('uiComp', function () {
 
   it('.sgTAnnotationsClick() toggles on', function () {
     fepperUi.annotationsViewer.stoke();
+    fepperUi.viewerHandler.stoke();
     $orgs['#sg-code-container'].dispatchAction('css', {bottom: 'auto'});
     $orgs['#sg-t-code'].dispatchAction('addClass', 'active');
 
     const sgTCodeStateBefore = $orgs['#sg-t-code'].getState();
-    const sgCodeContainerStateBefore = $orgs['#sg-code-container'].getState();
     const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
+    const sgViewContainerStateBefore = $orgs['#sg-view-container'].getState();
 
     uiComp.sgTAnnotationsClick({preventDefault: () => {}});
 
     const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
-    const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
     const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
+    const sgViewContainerStateAfter = $orgs['#sg-view-container'].getState();
 
     expect(sgTCodeStateBefore.classArray).to.include('active');
-    expect(sgCodeContainerStateBefore.css.bottom).to.not.equal(sgCodeContainerStateAfter.css.bottom);
     expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
+    expect(sgViewContainerStateBefore.css.bottom).to.equal('-384px');
 
     expect(sgTCodeStateAfter.classArray).to.not.include('active');
-    expect(sgCodeContainerStateAfter.css.bottom).to.equal('-384px');
     expect(sgTAnnotationsStateAfter.classArray).to.include('active');
+    expect(sgViewContainerStateAfter.css.bottom).to.equal('0px');
   });
 
   it('.sgTAnnotationsClick() toggles off', function () {
     fepperUi.annotationsViewer.viewall = true;
 
-    const sgAnnotationsContainerStateBefore = $orgs['#sg-annotations-container'].getState();
     const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
+    const sgViewContainerStateBefore = $orgs['#sg-view-container'].getState();
 
     uiComp.sgTAnnotationsClick({preventDefault: () => {}});
 
-    const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
     const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
+    const sgViewContainerStateAfter = $orgs['#sg-view-container'].getState();
 
-    expect(sgAnnotationsContainerStateBefore.css.bottom).to.not.equal(sgAnnotationsContainerStateAfter.css.bottom);
     expect(sgTAnnotationsStateBefore.classArray).to.include('active');
+    expect(sgViewContainerStateBefore.css.bottom).to.equal('0px');
 
-    expect(sgAnnotationsContainerStateAfter.css.bottom).to.equal('-384px');
     expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
+    expect(sgViewContainerStateAfter.css.bottom).to.equal('-384px');
   });
 
   it('.sgTAnnotationsClick() does nothing if annotationsViewer.mustacheBrowser is true', function () {
@@ -165,29 +166,29 @@ describe('uiComp', function () {
 
   it('.sgTCodeClick() toggles on', function () {
     fepperUi.codeViewer.stoke();
+    fepperUi.viewerHandler.stoke();
     $orgs['#sg-t-annotations'].dispatchAction('addClass', 'active');
-    $orgs['#sg-annotations-container'].dispatchAction('css', {bottom: 'auto'});
     $orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
 
     const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
-    const sgAnnotationsContainerStateBefore = $orgs['#sg-annotations-container'].getState();
     const sgTCodeStateBefore = $orgs['#sg-t-code'].getState();
+    const sgViewContainerStateBefore = $orgs['#sg-view-container'].getState();
     fepperUi.annotationsViewer.annotationsActive = true;
     fepperUi.codeViewer.codeActive = false;
 
     uiComp.sgTCodeClick({preventDefault: () => {}});
 
     const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
-    const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
     const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
+    const sgViewContainerStateAfter = $orgs['#sg-view-container'].getState();
 
     expect(sgTAnnotationsStateBefore.classArray).to.include('active');
-    expect(sgAnnotationsContainerStateBefore.css.bottom).to.not.equal(sgAnnotationsContainerStateAfter.css.bottom);
     expect(sgTCodeStateBefore.classArray).to.not.include('active');
+    expect(sgViewContainerStateBefore.css.bottom).to.equal('-384px');
 
     expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
-    expect(sgAnnotationsContainerStateAfter.css.bottom).to.equal('-384px');
     expect(sgTCodeStateAfter.classArray).to.include('active');
+    expect(sgViewContainerStateAfter.css.bottom).to.equal('0px');
     expect(fepperUi.annotationsViewer.annotationsActive).to.be.false;
     expect(fepperUi.codeViewer.codeActive).to.be.true;
   });
@@ -195,19 +196,19 @@ describe('uiComp', function () {
   it('.sgTCodeClick() toggles off', function () {
     fepperUi.codeViewer.viewall = true;
 
-    const sgCodeContainerStateBefore = $orgs['#sg-code-container'].getState();
     const sgTCodeStateBefore = $orgs['#sg-t-code'].getState();
+    const sgViewContainerStateBefore = $orgs['#sg-view-container'].getState();
 
     uiComp.sgTCodeClick({preventDefault: () => {}});
 
-    const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
     const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
+    const sgViewContainerStateAfter = $orgs['#sg-view-container'].getState();
 
-    expect(sgCodeContainerStateBefore.css.bottom).to.not.equal(sgCodeContainerStateAfter.css.bottom);
     expect(sgTCodeStateBefore.classArray).to.include('active');
+    expect(sgViewContainerStateBefore.css.bottom).to.equal('0px');
 
-    expect(sgCodeContainerStateAfter.css.bottom).to.equal('-384px');
     expect(sgTCodeStateAfter.classArray).to.not.include('active');
+    expect(sgViewContainerStateAfter.css.bottom).to.equal('-384px');
     expect(fepperUi.codeViewer.codeActive).to.be.false;
   });
 

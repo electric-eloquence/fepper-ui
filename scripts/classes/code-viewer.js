@@ -348,15 +348,6 @@ export default function (fepperUiInst, root_) {
     }
 
     /**
-     * Slide the panel.
-     *
-     * @param {number} pos - The distance to slide.
-     */
-    slideCode(pos) {
-      this.$orgs['#sg-view-container'].dispatchAction('css', {bottom: -pos + 'px'});
-    }
-
-    /**
      * Depending on what tab is clicked, swap out the code container. Make sure Prism highlight is added.
      *
      * @param {string} type - Single letter abbreviation of type.
@@ -508,19 +499,21 @@ export default function (fepperUiInst, root_) {
       // Do not copy. Let the user decide whether or not to copy.
       let selection;
 
-      /* istanbul ignore next */
-      try {
-        const range = root.document.createRange();
-        selection = root.getSelection();
+      /* istanbul ignore if */
+      if (typeof root.document.createRange === 'function') {
+        try {
+          const range = root.document.createRange();
+          selection = root.getSelection();
 
-        range.selectNodeContents(this.$orgs['#sg-code-pattern-info-rel-path'][0]);
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }
-      catch (err) {
-        /* eslint-disable no-console */
-        console.error(err);
-        console.error('Selection failed!');
+          range.selectNodeContents(this.$orgs['#sg-code-pattern-info-rel-path'][0]);
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
+        catch (err) {
+          /* eslint-disable no-console */
+          console.error(err);
+          console.error('Selection failed!');
+        }
       }
 
       // Deselect after 5 seconds.

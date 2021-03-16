@@ -7,22 +7,22 @@ import fepperUi from '../unit';
 const sandbox = sinon.createSandbox();
 
 const $orgs = fepperUi.requerio.$orgs;
-const patternlabViewer = fepperUi.patternlabViewer;
+const patternViewport = fepperUi.patternViewport;
 const uiFns = fepperUi.uiFns;
 const uiProps = fepperUi.uiProps;
 
-describe('patternlabViewer', function () {
+describe('patternViewport', function () {
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
-      expect(patternlabViewer.constructor.name).to.equal('PatternlabViewer');
-      expect(Object.keys(patternlabViewer).length).to.equal(3);
-      expect(patternlabViewer).to.have.property('receiveIframeMessage');
-      expect(patternlabViewer).to.have.property('$orgs');
-      expect(patternlabViewer).to.have.property('uiData');
-      expect(patternlabViewer).to.have.property('uiFns');
-      expect(patternlabViewer).to.have.property('uiProps');
-      expect(patternlabViewer).to.have.property('dataSaver');
-      expect(patternlabViewer).to.have.property('urlHandler');
+      expect(patternViewport.constructor.name).to.equal('PatternViewport');
+      expect(Object.keys(patternViewport).length).to.equal(3);
+      expect(patternViewport).to.have.property('receiveIframeMessage');
+      expect(patternViewport).to.have.property('$orgs');
+      expect(patternViewport).to.have.property('uiData');
+      expect(patternViewport).to.have.property('uiFns');
+      expect(patternViewport).to.have.property('uiProps');
+      expect(patternViewport).to.have.property('dataSaver');
+      expect(patternViewport).to.have.property('urlHandler');
     });
   });
 
@@ -47,7 +47,7 @@ describe('patternlabViewer', function () {
         sgControlsStateBefore = $orgs['#sg-controls'].getState();
         sgNavTargetStateBefore = $orgs['#sg-nav-target'].getState();
 
-        patternlabViewer.stoke();
+        patternViewport.stoke();
 
         patternlabHtmlStateAfter = $orgs['#patternlab-html'].getState();
         sgControlsStateAfter = $orgs['#sg-controls'].getState();
@@ -133,9 +133,9 @@ describe('patternlabViewer', function () {
   </ul>
 </div>
 </li><li class="sg-find">
-  <a href="#" class="sg-control-trigger sg-icon sg-icon-search" id="sg-f-toggle" title="Search patterns"><span class="visually-hidden">Search patterns</span></a>
+  <a href="#" class="sg-control-trigger sg-icon sg-icon-search" id="sg-f-toggle" title="Pattern Search"><span class="visually-hidden">Pattern Search</span></a>
   <ul class="sg-acc-panel sg-right sg-checklist" id="sg-find" style="top: 32px;">
-    <li><input class="typeahead" id="typeahead" type="text" placeholder="Search patterns"></li>
+    <li><input class="typeahead" id="typeahead" type="text" placeholder="Pattern Search"></li>
   </ul>
 </li><li class="sg-view">
   <a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-eye" id="sg-t-toggle" title="View"><span class="visually-hidden">View</span></a>
@@ -198,7 +198,7 @@ describe('patternlabViewer', function () {
         const growModeBefore = fepperUi.uiProps.growMode;
         const growIdBefore = fepperUi.uiProps.growId;
 
-        patternlabViewer.stoke();
+        patternViewport.stoke();
 
         const discoModeDuring = fepperUi.uiProps.discoMode;
         const discoIdDuring = fepperUi.uiProps.discoId;
@@ -237,7 +237,7 @@ describe('patternlabViewer', function () {
         const growModeBefore = fepperUi.uiProps.growMode;
         const growIdBefore = fepperUi.uiProps.growId;
 
-        patternlabViewer.stoke();
+        patternViewport.stoke();
 
         const discoModeDuring = fepperUi.uiProps.discoMode;
         const discoIdDuring = fepperUi.uiProps.discoId;
@@ -279,7 +279,7 @@ describe('patternlabViewer', function () {
         const growModeBefore = fepperUi.uiProps.growMode;
         const growIdBefore = fepperUi.uiProps.growId;
 
-        patternlabViewer.stoke();
+        patternViewport.stoke();
 
         const discoModeDuring = fepperUi.uiProps.discoMode;
         const discoIdDuring = fepperUi.uiProps.discoId;
@@ -321,7 +321,7 @@ describe('patternlabViewer', function () {
         const growModeBefore = fepperUi.uiProps.growMode;
         const growIdBefore = fepperUi.uiProps.growId;
 
-        patternlabViewer.stoke();
+        patternViewport.stoke();
 
         const discoModeDuring = fepperUi.uiProps.discoMode;
         const discoIdDuring = fepperUi.uiProps.discoId;
@@ -363,7 +363,7 @@ describe('patternlabViewer', function () {
         const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
         const sgSizeEmStateBefore = $orgs['#sg-size-em'].getState();
 
-        patternlabViewer.stoke();
+        patternViewport.stoke();
 
         const sgGenContainerStateAfter = $orgs['#sg-gen-container'].getState();
         const sgViewportStateAfter = $orgs['#sg-viewport'].getState();
@@ -396,7 +396,7 @@ describe('patternlabViewer', function () {
         const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
         const sgSizeEmStateBefore = $orgs['#sg-size-em'].getState();
 
-        patternlabViewer.stoke();
+        patternViewport.stoke();
 
         const sgGenContainerStateAfter = $orgs['#sg-gen-container'].getState();
         const sgViewportStateAfter = $orgs['#sg-viewport'].getState();
@@ -427,7 +427,7 @@ describe('patternlabViewer', function () {
         const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
         const sgSizeEmStateBefore = $orgs['#sg-size-em'].getState();
 
-        patternlabViewer.stoke();
+        patternViewport.stoke();
 
         const sgGenContainerStateAfter = $orgs['#sg-gen-container'].getState();
         const sgViewportStateAfter = $orgs['#sg-viewport'].getState();
@@ -456,7 +456,7 @@ describe('patternlabViewer', function () {
         const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
         const sgSizeEmStateBefore = $orgs['#sg-size-em'].getState();
 
-        patternlabViewer.stoke();
+        patternViewport.stoke();
 
         const sgViewportStateAfter = $orgs['#sg-viewport'].getState();
         const sgSizePxStateAfter = $orgs['#sg-size-px'].getState();
@@ -489,14 +489,14 @@ describe('patternlabViewer', function () {
 
       it('with a "p" search param', function () {
         global.location.search = '?p=elements-paragraph';
-        patternlabViewer.urlHandler.skipBack = false;
+        patternViewport.urlHandler.skipBack = false;
 
-        const skipBackBefore = patternlabViewer.urlHandler.skipBack;
+        const skipBackBefore = patternViewport.urlHandler.skipBack;
         const historyStateBefore = global.history.state;
 
-        patternlabViewer.stoke();
+        patternViewport.stoke();
 
-        const skipBackAfter = patternlabViewer.urlHandler.skipBack;
+        const skipBackAfter = patternViewport.urlHandler.skipBack;
         const historyStateAfter = global.history.state;
 
         expect(skipBackBefore).to.be.false;
@@ -508,14 +508,14 @@ describe('patternlabViewer', function () {
       });
 
       it('with config.defaultPattern', function () {
-        patternlabViewer.urlHandler.skipBack = false;
+        patternViewport.urlHandler.skipBack = false;
 
-        const skipBackBefore = patternlabViewer.urlHandler.skipBack;
+        const skipBackBefore = patternViewport.urlHandler.skipBack;
         const historyStateBefore = global.history.state;
 
-        patternlabViewer.stoke();
+        patternViewport.stoke();
 
-        const skipBackAfter = patternlabViewer.urlHandler.skipBack;
+        const skipBackAfter = patternViewport.urlHandler.skipBack;
         const historyStateAfter = global.history.state;
 
         expect(skipBackBefore).to.be.false;
@@ -526,15 +526,15 @@ describe('patternlabViewer', function () {
       });
 
       it('defaults to viewall', function () {
-        patternlabViewer.urlHandler.skipBack = false;
-        delete patternlabViewer.uiData.config.defaultPattern;
+        patternViewport.urlHandler.skipBack = false;
+        delete patternViewport.uiData.config.defaultPattern;
 
-        const skipBackBefore = patternlabViewer.urlHandler.skipBack;
+        const skipBackBefore = patternViewport.urlHandler.skipBack;
         const historyStateBefore = global.history.state;
 
-        patternlabViewer.stoke();
+        patternViewport.stoke();
 
-        const skipBackAfter = patternlabViewer.urlHandler.skipBack;
+        const skipBackAfter = patternViewport.urlHandler.skipBack;
         const historyStateAfter = global.history.state;
 
         expect(skipBackBefore).to.be.false;
@@ -552,7 +552,7 @@ describe('patternlabViewer', function () {
 
         const sgResizeBtnsStateBefore = $orgs['#sg-resize-btns'].getState();
 
-        patternlabViewer.renderResizeBtns();
+        patternViewport.renderResizeBtns();
 
         const sgResizeBtnsStateAfter = $orgs['#sg-resize-btns'].getState();
 
@@ -590,7 +590,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.goResize('foo');
+      patternViewport.goResize('foo');
 
       const discoModeAfter = fepperUi.uiProps.discoMode;
       const discoIdAfter = fepperUi.uiProps.discoId;
@@ -645,7 +645,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.goXXSmall();
+      patternViewport.goXXSmall();
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -703,7 +703,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.goXSmall();
+      patternViewport.goXSmall();
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -761,7 +761,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.goSmall();
+      patternViewport.goSmall();
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -819,7 +819,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.goMedium();
+      patternViewport.goMedium();
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -877,7 +877,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.goLarge();
+      patternViewport.goLarge();
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -935,7 +935,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.goWhole();
+      patternViewport.goWhole();
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -990,13 +990,13 @@ describe('patternlabViewer', function () {
       const sgGenContainerStateBefore = $orgs['#sg-gen-container'].getState();
       const sgViewportStateBefore = $orgs['#sg-viewport'].getState();
 
-      patternlabViewer.goRandom();
+      patternViewport.goRandom();
 
       const sgSizeEmStateBefore = $orgs['#sg-size-em'].getState();
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.goRandom();
+      patternViewport.goRandom();
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -1060,7 +1060,7 @@ describe('patternlabViewer', function () {
       const sgAccHandleStateBefore = $orgs['.sg-acc-handle'].getState();
       const sgAccPanelStateBefore = $orgs['.sg-acc-panel'].getState();
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       const sgNavTargetStateAfter = $orgs['#sg-nav-target'].getState();
       const sgAccHandleStateAfter = $orgs['.sg-acc-handle'].getState();
@@ -1096,7 +1096,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -1157,7 +1157,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -1218,7 +1218,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -1279,7 +1279,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -1340,7 +1340,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -1395,7 +1395,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -1449,7 +1449,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -1507,7 +1507,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -1561,7 +1561,7 @@ describe('patternlabViewer', function () {
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -1619,13 +1619,13 @@ describe('patternlabViewer', function () {
       const sgGenContainerStateBefore = $orgs['#sg-gen-container'].getState();
       const sgViewportStateBefore = $orgs['#sg-viewport'].getState();
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       const sgSizeEmStateBefore = $orgs['#sg-size-em'].getState();
       const sgSizePxStateBefore = $orgs['#sg-size-px'].getState();
       const dataSaverVpWidthBefore = fepperUi.dataSaver.findValue('vpWidth');
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       const documentStateAfter = $orgs.document.getState();
       const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -1678,7 +1678,7 @@ describe('patternlabViewer', function () {
       const sgGenContainerStateBefore = $orgs['#sg-gen-container'].getState();
       const sgViewportStateBefore = $orgs['#sg-viewport'].getState();
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       setTimeout(() => {
         const documentStateAfter = $orgs.document.getState();
@@ -1718,7 +1718,7 @@ describe('patternlabViewer', function () {
         const growModeBefore = fepperUi.uiProps.growMode;
         const growIdBefore = fepperUi.uiProps.growId;
 
-        patternlabViewer.receiveIframeMessage(event);
+        patternViewport.receiveIframeMessage(event);
 
         const documentStateAfter = $orgs.document.getState();
         const growModeAfter = fepperUi.uiProps.growMode;
@@ -1748,7 +1748,7 @@ describe('patternlabViewer', function () {
       const discoModeBefore = fepperUi.uiProps.discoMode;
       const discoIdBefore = fepperUi.uiProps.discoId;
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       setTimeout(() => {
         const documentStateAfter = $orgs.document.getState();
@@ -1775,14 +1775,14 @@ describe('patternlabViewer', function () {
       };
 
       $orgs['#sg-size-disco'].dispatchAction('focus');
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       setTimeout(() => {
         const documentStateBefore = $orgs.document.getState();
         const discoModeBefore = fepperUi.uiProps.discoMode;
         const discoIdBefore = fepperUi.uiProps.discoId;
 
-        patternlabViewer.receiveIframeMessage(event);
+        patternViewport.receiveIframeMessage(event);
 
         const documentStateAfter = $orgs.document.getState();
         const discoModeAfter = fepperUi.uiProps.discoMode;
@@ -1819,7 +1819,7 @@ describe('patternlabViewer', function () {
       const historyStateBefore = global.history.state;
       const sgRawAttribsBefore = $orgs['#sg-raw'].getState().attribs;
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       const documentTitleAfter = global.document.title;
       const historyStateAfter = global.history.state;
@@ -1853,7 +1853,7 @@ describe('patternlabViewer', function () {
       const sgRawAttribsBefore = $orgs['#sg-raw'].getState().attribs;
       const skipBackBefore = fepperUi.urlHandler.skipBack;
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       const documentTitleAfter = global.document.title;
       const historyStateAfter = global.history.state;
@@ -1888,7 +1888,7 @@ describe('patternlabViewer', function () {
         const historyStateBefore = global.history.state;
         const sgRawAttribsBefore = $orgs['#sg-raw'].getState().attribs;
 
-        patternlabViewer.receiveIframeMessage(event);
+        patternViewport.receiveIframeMessage(event);
 
         const documentTitleAfter = global.document.title;
         const historyStateAfter = global.history.state;
@@ -1915,7 +1915,7 @@ describe('patternlabViewer', function () {
       const historyStateBefore = global.history.state;
       const sgRawStateBefore = $orgs['#sg-raw'].getState();
 
-      patternlabViewer.receiveIframeMessage(event);
+      patternViewport.receiveIframeMessage(event);
 
       const documentTitleAfter = global.document.title;
       const historyStateAfter = global.history.state;
