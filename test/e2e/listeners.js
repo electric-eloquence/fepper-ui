@@ -11,11 +11,11 @@ describe('Listeners end-to-end tests', function () {
         $('#sg-t-annotations').click();
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
-        $('#sg-annotations-close-btn').click();
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
+        $('#sg-view-close-btn').click();
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
       });
     });
 
@@ -28,8 +28,8 @@ describe('Listeners end-to-end tests', function () {
         browser.keys(['Control', 'Shift', 'a']);
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
-        expect($('#sg-annotations').getHTML(false)).to.equal(`<div id="annotation-1">
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
+        expect($('#sg-annotations').getHTML(false)).to.equal(`<div id="annotation-1" class="sg-annotation">
 <h2>1. Navigation</h2>
 <div><p>Navigation for responsive web experiences can be tricky. Large navigation menus 
 are typical on desktop sites, but mobile screen sizes don't give us the luxury 
@@ -42,7 +42,7 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'a']);
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
       });
     });
   });
@@ -59,11 +59,11 @@ menu anchor.</p>
         $('#sg-t-code').click();
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
-        $('#sg-code-close-btn').click();
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
+        $('#sg-view-close-btn').click();
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
       });
 
       it('HTML button displays HTML code', function () {
@@ -114,12 +114,12 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
       });
 
       it('"ctrl+shift+y" selects the HTML tab in code viewer', function () {
@@ -209,7 +209,7 @@ menu anchor.</p>
         browser.pause(700);
         $('#sg-code-fill').click();
         browser.pause(700);
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
       });
 
       it('does nothing when clicking on HTML code in code viewer', function () {
@@ -279,7 +279,7 @@ menu anchor.</p>
     });
   });
 
-  describe('patternlabViewer', function () {
+  describe('patternViewport', function () {
     describe('window.resize', function () {
       before(function () {
         browser.setWindowSize(1200, 640);
@@ -372,12 +372,6 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'm']);
         browser.pause(1000);
         expect($('#sg-viewport').getSize().width).to.equal(1024);
-      });
-
-      it('"ctrl+alt+l" resizes to Large', function () {
-        browser.keys(['Control', 'Alt', 'l']);
-        browser.pause(1000);
-        expect($('#sg-viewport').getSize().width).to.equal(1280);
       });
 
       it('"ctrl+shift+s" resizes to Small', function () {

@@ -175,8 +175,8 @@ export default function (fepperUiInst, root) {
       }
     }
 
-    /* istanbul ignore next */
-    scrollViewall() {
+
+    scrollViewall() /* istanbul ignore next */ {
       this.$orgs['#sg-viewport'][0].contentWindow
         .postMessage({annotationsScrollViewall: true}, this.uiProps.targetOrigin);
     }

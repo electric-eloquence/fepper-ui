@@ -311,7 +311,7 @@ export default function (fepperUiInst, root_) {
       this.$orgs['#sg-code-container'].dispatchAction('addClass', 'active');
     }
 
-    scrollViewall() {
+    scrollViewall() /* istanbul ignore next */ {
       this.$orgs['#sg-viewport'][0].contentWindow.postMessage({codeScrollViewall: true}, this.uiProps.targetOrigin);
     }
 

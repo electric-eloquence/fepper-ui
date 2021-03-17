@@ -155,13 +155,13 @@ if (typeof window === 'object') {
     // Click whole width button.
     $orgs['#sg-size-w'].on('click', function (e) {
       e.preventDefault();
-      FEPPER_UI.patternlabViewer.goWhole();
+      FEPPER_UI.patternViewport.goWhole();
     });
 
     // Click Random Size Button.
     $orgs['#sg-size-random'].on('click', function (e) {
       e.preventDefault();
-      FEPPER_UI.patternlabViewer.goRandom();
+      FEPPER_UI.patternViewport.goRandom();
     });
 
     // Click for Disco Mode, which resizes the viewport randomly.
@@ -267,7 +267,7 @@ export function sgTAnnotationsClick(event) {
   annotationsViewer.toggleAnnotations();
 
   // If viewall, scroll to the focused pattern.
-  if (annotationsViewer.viewall) {
+  if (annotationsViewer.viewall && annotationsViewer.annotationsActive) {
     annotationsViewer.scrollViewall();
   }
 
@@ -289,7 +289,7 @@ export function sgTCodeClick(event) {
   codeViewer.toggleCode();
 
   // If viewall, scroll to the focused pattern.
-  if (codeViewer.viewall) {
+  if (codeViewer.viewall && codeViewer.codeActive) {
     codeViewer.scrollViewall();
   }
 
@@ -358,21 +358,30 @@ if (typeof window === 'object') {
       }
     });
 
-    // Handle widening the viewport.
+    $orgs['#sg-rightpull'].on('mouseenter', function () {
+      $orgs['#sg-cover'].dispatchAction('addClass', 'shown-by-rightpull-hover');
+    });
+
+    $orgs['#sg-rightpull'].on('mouseleave', function () {
+      $orgs['#sg-cover'].dispatchAction('removeClass', 'shown-by-rightpull-hover');
+    });
+
+    // Handle manually resizing the viewport.
     // 1. On "mousedown" store the click location.
-    // 2. Make a hidden div visible so that it can track mouse movements and make sure the pointer doesn't get lost
-    //    in the iframe.
+    // 2. Make a hidden div visible so that the cursor doesn't get lost in the iframe.
     // 3. On "mousemove" calculate the math, save the results to a cookie, and update the viewport.
     $orgs['#sg-rightpull'].on('mousedown', function (e) {
-      const origClientX = e.clientX;
-      const origViewportWidth = $orgs['#sg-viewport'].getState().innerWidth;
+      uiProps.sgRightpull.posX = e.pageX;
+      uiProps.sgRightpull.viewportWidth = $orgs['#sg-viewport'].getState().innerWidth;
 
       // Show the cover.
-      $orgs['#sg-cover'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-cover'].dispatchAction('addClass', 'shown-by-rightpull-drag');
+    });
 
-      // Add the mouse move event and capture data. Also update the viewport width.
-      $orgs['#sg-cover'].on('mousemove', function (e) {
-        const viewportWidth = origViewportWidth + 2 * (e.clientX - origClientX);
+    // Add the mouse move event and capture data. Also update the viewport width.
+    $orgs['#patternlab-body'].on('mousemove', function (e) {
+      if ($orgs['#sg-cover'].getState().classArray.includes('shown-by-rightpull-drag')) {
+        const viewportWidth = uiProps.sgRightpull.viewportWidth + 2 * (e.pageX - uiProps.sgRightpull.posX);
 
         if (viewportWidth > uiProps.minViewportWidth) {
           if (!dataSaver.findValue('vpWidth')) {
@@ -384,13 +393,13 @@ if (typeof window === 'object') {
 
           uiFns.sizeIframe(viewportWidth, false);
         }
-      });
+      }
     });
 
     // Handle letting go of rightpull bar after dragging to resize.
     $orgs['#patternlab-body'].on('mouseup', function () {
-      $orgs['#sg-cover'].off('mousemove');
-      $orgs['#sg-cover'].dispatchAction('css', {display: 'none'});
+      $orgs['#sg-cover'].dispatchAction('removeClass', 'shown-by-rightpull-hover');
+      $orgs['#sg-cover'].dispatchAction('removeClass', 'shown-by-rightpull-drag');
     });
   });
 }
