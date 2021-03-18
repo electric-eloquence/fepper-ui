@@ -1,5 +1,5 @@
 // TODO: Replace closure with private class field when there is greater browser support.
-export default function (fepperUiInst, root_) {
+export default function (fepperUiInst) {
   class ViewerHandler {
 
     /* CONSTRUCTOR */

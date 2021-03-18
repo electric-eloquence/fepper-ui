@@ -20,8 +20,6 @@
     parent.postMessage({codeViewall: viewall}, targetOrigin);
   }
 
-  let codeActive = false;
-
   function scrollViewall() {
     const focusedEl = d.querySelector('.sg-pattern-toggle-code.focused');
 
@@ -62,8 +60,6 @@
 
       // Get and post data for selected pattern.
       if (data.codeToggle === 'on') {
-        codeActive = true;
-
         const sgPatterns = d.querySelectorAll('.sg-pattern');
         let obj;
 
@@ -146,8 +142,6 @@
 
       // data.codeToggle off.
       else {
-        codeActive = false;
-
         sgPatternToggleCode.forEach((el) => {
           el.classList.remove('active');
         });

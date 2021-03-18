@@ -14,11 +14,6 @@ export default function (fepperUiInst) {
       document.addEventListener('DOMContentLoaded', () => {
         this.$orgs['#sg-code-container'].dispatchAction('css', 'bottom'); // Set this measurement in state.
 
-/*
-        this.$orgs['#sg-view-dock-bottom'].on('click', (e) => {
-        });
-        */
-
         // Make sure the click events are handled on the HTML tab.
         this.$orgs['#sg-code-title-html'].on('click', (e) => {
           e.preventDefault();

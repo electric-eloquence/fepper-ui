@@ -25,7 +25,7 @@ export default class FepperUi {
     this.patternViewport = new PatternViewport(this, root);
     this.timestamper = new Timestamper(this, root);
     this.urlHandler = new UrlHandler(this, root);
-    this.viewerHandler = new ViewerHandler(this, root);
+    this.viewerHandler = new ViewerHandler(this);
 
     // uiComp depends on this global.
     root.FEPPER_UI = this;
