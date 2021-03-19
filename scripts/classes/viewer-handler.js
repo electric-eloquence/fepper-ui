@@ -35,15 +35,17 @@ export default function (fepperUiInst) {
 
     // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
     stoke() {
-      const dockPosition = this.dataSaver.findValue('dockPosition') || 'bottom';
+      this.uiProps.dockPosition = this.dataSaver.findValue('dockPosition') || this.uiProps.dockPosition;
 
-      if (dockPosition !== 'bottom') {
+      if (this.uiProps.dockPosition === 'bottom') {
+        this.$orgs['#sg-view-container'].dispatchAction('css', {bottom: -(this.uiProps.sh / 2) + 'px'});
+      }
+      else {
         this.$orgs['#patternlab-body']
           .dispatchAction('removeClass', 'dock-bottom')
-          .dispatchAction('addClass', 'dock-' + dockPosition);
+          .dispatchAction('addClass', 'dock-' + this.uiProps.dockPosition);
+        this.codeViewer.openCode(false);
       }
-
-      this.$orgs['#sg-view-container'].dispatchAction('css', {bottom: -(this.uiProps.sh / 2) + 'px'});
     }
 
     closeViewer() {
@@ -62,17 +64,41 @@ export default function (fepperUiInst) {
       }, this.transitionDuration);
     }
 
+    dockBottom() {
+      const sgRightpullWidth = this.uiProps.isMobile ? 0 : this.uiProps.sgRightpullWidth;
+
+      if (this.uiProps.dockPosition === 'left') {
+        this.slideViewer(this.uiProps.sw / 2, null);
+      }
+      else if (this.uiProps.dockPosition === 'right') {
+        this.slideViewer(null, null, this.uiProps.sw / 2);
+      }
+
+      this.uiProps.dockPosition = 'bottom';
+      this.dataSaver.updateValue('dockPosition', 'bottom');
+
+      setTimeout(() => {
+        this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-left dock-right');
+        this.slideViewer(null, this.uiProps.sh / 2, null);
+        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-bottom');
+        setTimeout(() => {
+          this.slideViewer(null, 0);
+        }, this.transitionDuration / 2);
+      }, this.transitionDuration);
+    }
+
     dockRight() {
       const widthHalf = Math.floor(this.uiProps.sw / 2);
       const sgRightpullWidth = this.uiProps.isMobile ? 0 : this.uiProps.sgRightpullWidth;
 
-      this.dataSaver.updateValue('dockPosition', 'right');
       this.slideViewer(null, this.uiProps.sh / 2);
+      this.uiProps.dockPosition = 'right';
+      this.dataSaver.updateValue('dockPosition', 'right');
       this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-bottom');
       this.uiFns.sizeIframe(widthHalf - sgRightpullWidth);
 
       setTimeout(() => {
-        this.slideViewer(null, this.uiProps.sh / 2, widthHalf);
+        this.slideViewer(null, null, widthHalf);
         this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-right');
         setTimeout(() => {
           this.slideViewer(null, null, 0);
@@ -81,10 +107,10 @@ export default function (fepperUiInst) {
     }
 
     openViewer() {
+      this.$orgs['#sg-view-container'].dispatchAction('addClass', 'anim-ready');
+
       /* istanbul ignore if */
       if (typeof getComputedStyle === 'function') {
-        this.$orgs['#sg-view-container'].dispatchAction('addClass', 'anim-ready');
-
         if (this.transitionDuration === null) {
           const transitionDurationStr =
             getComputedStyle(this.$orgs['#sg-view-container'][0]).getPropertyValue('transition-duration');
@@ -99,7 +125,17 @@ export default function (fepperUiInst) {
       }
 
       // Move the code into view.
-      this.slideViewer(null, 0);
+      switch (this.uiProps.dockPosition) {
+        case 'left':
+          this.slideViewer(0);
+          break;
+        case 'bottom':
+          this.slideViewer(null, 0);
+          break;
+        case 'right':
+          this.slideViewer(null, null, 0);
+          break;
+      }
     }
 
     /**
@@ -116,6 +152,7 @@ export default function (fepperUiInst) {
 
       const paddingBottom = (bottom_ === 0) ? (this.uiProps.sh / 2) + 'px' : '';
 
+console.warn(left, bottom, right)
       this.$orgs['#sg-view-container'].dispatchAction('css', {left, bottom, right});
       this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom});
     }

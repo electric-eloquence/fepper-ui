@@ -35,6 +35,7 @@ export default function (fepperUiInst, root) {
 
       // Other.
       this.discoId = 0;
+      this.dockPosition = 'bottom';
       this.growId = 0;
       this.isMobile = 'ontouchstart' in root && this.sw <= 1024;
       this.timeoutDefault = 200;

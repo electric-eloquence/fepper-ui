@@ -22,6 +22,10 @@ export default function (fepperUiInst, root) {
       return fepperUiInst.uiProps;
     }
 
+    get viewerHandler() {
+      return fepperUiInst.viewerHandler;
+    }
+
     /* METHODS */
 
     /**
@@ -196,7 +200,6 @@ export default function (fepperUiInst, root) {
         return;
       }
 
-      const dockPosition = this.dataSaver.findValue('dockPosition');
       const maxViewportWidth = this.uiProps.maxViewportWidth;
       const minViewportWidth = this.uiProps.minViewportWidth;
       const widthHalf = this.uiProps.sw / 2;
@@ -220,14 +223,12 @@ export default function (fepperUiInst, root) {
 
       // If the submitted iframe viewport is larger than half the browser viewport, and the dock is positioned left or
       // right, reposition the dock to the bottom.
-      if (dockPosition === 'left' || dockPosition === 'right') {
+      if (this.uiProps.dockPosition === 'left' || this.uiProps.dockPosition === 'right') {
         if (
           (this.uiProps.isMobile && size > widthHalf) ||
           (!this.uiProps.isMobile && (size + this.uiProps.sgRightpullWidth) > widthHalf)
         ) {
-          this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-left dock-right');
-          this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-bottom');
-          this.dataSaver.updateValue('dockPosition', 'bottom');
+          this.viewerHandler.dockBottom();
         }
       }
 
