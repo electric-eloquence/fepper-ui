@@ -196,8 +196,10 @@ export default function (fepperUiInst, root) {
         return;
       }
 
+      const dockPosition = this.dataSaver.findValue('dockPosition');
       const maxViewportWidth = this.uiProps.maxViewportWidth;
       const minViewportWidth = this.uiProps.minViewportWidth;
+      const widthHalf = this.uiProps.sw / 2;
       this.uiProps.wholeMode = wholeMode;
 
       this.dataSaver.updateValue('wholeMode', wholeMode);
@@ -214,6 +216,19 @@ export default function (fepperUiInst, root) {
       }
       else {
         size = size_;
+      }
+
+      // If the submitted iframe viewport is larger than half the browser viewport, and the dock is positioned left or
+      // right, reposition the dock to the bottom.
+      if (dockPosition === 'left' || dockPosition === 'right') {
+        if (
+          (this.uiProps.isMobile && size > widthHalf) ||
+          (!this.uiProps.isMobile && (size + this.uiProps.sgRightpullWidth) > widthHalf)
+        ) {
+          this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-left dock-right');
+          this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-bottom');
+          this.dataSaver.updateValue('dockPosition', 'bottom');
+        }
       }
 
       // Conditionally remove CSS animation class from viewport.

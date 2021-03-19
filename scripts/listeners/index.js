@@ -21,6 +21,8 @@ export default function (fepperUiInst) {
       this.patternViewport = new PatternViewport(fepperUi);
       this.urlHandler = new UrlHandler(fepperUi);
       this.viewerHandler = new ViewerHandler(fepperUi);
+
+      this.windowResizing = false;
     }
 
     listen() {
@@ -52,17 +54,25 @@ export default function (fepperUiInst) {
 
         this.$orgs.window.on('resize', () => {
           // Adjust viewport padding if annotations or code viewer is active.
-          if (fepperUiInst.annotationsViewer.annotationsActive || fepperUiInst.codeViewer.codeActive) {
-            if (this.$orgs['#patternlab-body'].getState().classArray.includes('dack-bottom')) {
-              this.$orgs['#sg-vp-wrap']
-                .dispatchAction('removeClass', 'anim-ready')
-                .dispatchAction('css', {paddingBottom: (fepperUiInst.uiProps.sh / 2) + 'px'})
-                .dispatchAction('addClass', 'anim-ready');
+          if (!this.windowResizing) {
+            if (fepperUiInst.annotationsViewer.annotationsActive || fepperUiInst.codeViewer.codeActive) {
+              this.$orgs['#sg-vp-wrap'].dispatchAction('removeClass', 'anim-ready')
             }
+          }
+
+          this.windowResizing = true;
+
+          // Adjust viewport padding if annotations or code viewer is active.
+          if (fepperUiInst.annotationsViewer.annotationsActive || fepperUiInst.codeViewer.codeActive) {
+            // It's ok to add padding-bottom to dock-left and dock-right because they have !important css rules
+            // canceling it out.
+            this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: (fepperUiInst.uiProps.sh / 2) + 'px'})
           }
         });
 
         this.$orgs.window.on('resize', fepperUiInst.uiFns.debounce(() => {
+          this.windowResizing = false;
+
           // Update iframe width if in wholeMode.
           if (
             fepperUiInst.uiProps.wholeMode ||
@@ -70,6 +80,17 @@ export default function (fepperUiInst) {
           ) {
             // Set iframe width to window width and wholeMode = true.
             fepperUiInst.uiFns.sizeIframe(fepperUiInst.uiProps.sw, false, true);
+          }
+
+          // The previous resize listener would add padding-bottom regardless of the "dock-" class because it is
+          // expensive to get the state on each tick of the resize.
+          // However, we don't want the padding-bottom if the class is "dock-left" or "dock-right".
+          // So remove the padding-bottom in the debounce.
+          if (!this.$orgs['#patternlab-body'].getState().classArray.includes('dock-bottom')) {
+            this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: ''});
+          }
+          if (fepperUiInst.annotationsViewer.annotationsActive || fepperUiInst.codeViewer.codeActive) {
+            this.$orgs['#sg-vp-wrap'].dispatchAction('addClass', 'anim-ready');
           }
         }));
       });

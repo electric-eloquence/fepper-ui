@@ -19,6 +19,10 @@ export default function (fepperUiInst) {
       return fepperUiInst.codeViewer;
     }
 
+    get dataSaver() {
+      return fepperUiInst.dataSaver;
+    }
+
     get uiFns() {
       return fepperUiInst.uiFns;
     }
@@ -31,6 +35,14 @@ export default function (fepperUiInst) {
 
     // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
     stoke() {
+      const dockPosition = this.dataSaver.findValue('dockPosition') || 'bottom';
+
+      if (dockPosition !== 'bottom') {
+        this.$orgs['#patternlab-body']
+          .dispatchAction('removeClass', 'dock-bottom')
+          .dispatchAction('addClass', 'dock-' + dockPosition);
+      }
+
       this.$orgs['#sg-view-container'].dispatchAction('css', {bottom: -(this.uiProps.sh / 2) + 'px'});
     }
 
@@ -54,6 +66,7 @@ export default function (fepperUiInst) {
       const widthHalf = Math.floor(this.uiProps.sw / 2);
       const sgRightpullWidth = this.uiProps.isMobile ? 0 : this.uiProps.sgRightpullWidth;
 
+      this.dataSaver.updateValue('dockPosition', 'right');
       this.slideViewer(null, this.uiProps.sh / 2);
       this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-bottom');
       this.uiFns.sizeIframe(widthHalf - sgRightpullWidth);
@@ -92,18 +105,16 @@ export default function (fepperUiInst) {
     /**
      * Slide the viewer.
      *
-     * @param {number|null|undefined} left - The distance to slide out of view. 0 means it is fully in view.
-     * @param {number|null|undefined} bottom - The distance to slide out of view. 0 means it is fully in view.
-     * @param {number|null|undefined} right - The distance to slide out of view. 0 means it is fully in view.
+     * @param {number|null} left - The distance to slide out of view. 0 = fully in view; null = not this direction.
+     * @param {number|null} bottom - The distance to slide out of view. 0 = fully in view; null = not this direction.
+     * @param {number|null} right - The distance to slide out of view. 0 = fully in view; null = not this direction.
      */
-    slideViewer(left_, bottom_, right_) {
-      /* eslint-disable eqeqeq */
-      const left = (left_ == null) ? 'auto' : -left_ + 'px';
-      const bottom = (bottom_ == null) ? 'auto' : -bottom_ + 'px';
-      const right = (right_ == null) ? 'auto' : -right_ + 'px';
-      /* eslint-enable eqeqeq */
+    slideViewer(left_ = null, bottom_ = null, right_ = null) {
+      const left = (left_ === null) ? 'auto' : -left_ + 'px';
+      const bottom = (bottom_ === null) ? 'auto' : -bottom_ + 'px';
+      const right = (right_ === null) ? 'auto' : -right_ + 'px';
 
-      const paddingBottom = (bottom_ === 0) ? (this.uiProps.sh / 2) + 'px' : '0px';
+      const paddingBottom = (bottom_ === 0) ? (this.uiProps.sh / 2) + 'px' : '';
 
       this.$orgs['#sg-view-container'].dispatchAction('css', {left, bottom, right});
       this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom});
