@@ -6,6 +6,7 @@ export default function (fepperUiInst) {
 
     constructor(fepperUi) {
       this.$orgs = fepperUi.requerio.$orgs;
+      this.transitionDuration = null;
     }
 
     // Getters for fepperUi instance props in case they are undefined at instantiation.
@@ -16,6 +17,10 @@ export default function (fepperUiInst) {
 
     get codeViewer() {
       return fepperUiInst.codeViewer;
+    }
+
+    get uiFns() {
+      return fepperUiInst.uiFns;
     }
 
     get uiProps() {
@@ -36,51 +41,72 @@ export default function (fepperUiInst) {
       }
 
       this.slideViewer(
+        null,
         Number(this.$orgs['#sg-view-container'].getState().innerHeight)
       );
 
-      // Remove padding from bottom of viewport if appropriate.
-      this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: '0px'});
+      setTimeout(() => {
+        this.$orgs['#sg-view-container'].dispatchAction('removeClass', 'anim-ready');
+      }, this.transitionDuration);
+    }
 
-      /* istanbul ignore if */
-      if (typeof getComputedStyle === 'function') {
-        const transitionDurationStr =
-          getComputedStyle(this.$orgs['#sg-view-container'][0]).getPropertyValue('transition-duration');
-        let transitionDurationNum;
+    dockRight() {
+      const widthHalf = Math.floor(this.uiProps.sw / 2);
+      const sgRightpullWidth = this.uiProps.isMobile ? 0 : this.uiProps.sgRightpullWidth;
 
-        if (transitionDurationStr.slice(-2) === 'ms') {
-          transitionDurationNum = parseFloat(transitionDurationStr);
-        }
-        else {
-          transitionDurationNum = parseFloat(transitionDurationStr) * 1000;
-        }
+      this.slideViewer(null, this.uiProps.sh / 2);
+      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-bottom');
+      this.uiFns.sizeIframe(widthHalf - sgRightpullWidth);
 
+      setTimeout(() => {
+        this.slideViewer(null, this.uiProps.sh / 2, widthHalf);
+        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-right');
         setTimeout(() => {
-          this.$orgs['#sg-view-container'].dispatchAction('removeClass', 'anim-ready');
-        }, transitionDurationNum);
-      }
+          this.slideViewer(null, null, 0);
+        }, this.transitionDuration / 2);
+      }, this.transitionDuration);
     }
 
     openViewer() {
       /* istanbul ignore if */
       if (typeof getComputedStyle === 'function') {
         this.$orgs['#sg-view-container'].dispatchAction('addClass', 'anim-ready');
+
+        if (this.transitionDuration === null) {
+          const transitionDurationStr =
+            getComputedStyle(this.$orgs['#sg-view-container'][0]).getPropertyValue('transition-duration');
+
+          if (transitionDurationStr.slice(-2) === 'ms') {
+            this.transitionDuration = parseFloat(transitionDurationStr);
+          }
+          else {
+            this.transitionDuration = parseFloat(transitionDurationStr) * 1000;
+          }
+        }
       }
 
       // Move the code into view.
-      this.slideViewer(0);
-
-      // Add padding to bottom of viewport.
-      this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: (this.uiProps.sh / 2) + 'px'});
+      this.slideViewer(null, 0);
     }
 
     /**
-     * Slide the panel.
+     * Slide the viewer.
      *
-     * @param {number} pos - The distance to slide.
+     * @param {number|null|undefined} left - The distance to slide out of view. 0 means it is fully in view.
+     * @param {number|null|undefined} bottom - The distance to slide out of view. 0 means it is fully in view.
+     * @param {number|null|undefined} right - The distance to slide out of view. 0 means it is fully in view.
      */
-    slideViewer(pos) {
-      this.$orgs['#sg-view-container'].dispatchAction('css', {bottom: -pos + 'px'});
+    slideViewer(left_, bottom_, right_) {
+      /* eslint-disable eqeqeq */
+      const left = (left_ == null) ? 'auto' : -left_ + 'px';
+      const bottom = (bottom_ == null) ? 'auto' : -bottom_ + 'px';
+      const right = (right_ == null) ? 'auto' : -right_ + 'px';
+      /* eslint-enable eqeqeq */
+
+      const paddingBottom = (bottom_ === 0) ? (this.uiProps.sh / 2) + 'px' : '0px';
+
+      this.$orgs['#sg-view-container'].dispatchAction('css', {left, bottom, right});
+      this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom});
     }
   }
 

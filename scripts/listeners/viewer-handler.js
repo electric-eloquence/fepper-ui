@@ -9,11 +9,13 @@ export default function (fepperUiInst) {
 
     listen() {
       document.addEventListener('DOMContentLoaded', () => {
-        this.$orgs['#sg-view-close-btn'].on('click', (e) => {
-          e.preventDefault();
-
+        this.$orgs['#sg-view-btn-close'].on('click', () => {
           fepperUiInst.annotationsViewer.closeAnnotations();
           fepperUiInst.codeViewer.closeCode();
+        });
+
+        this.$orgs['#sg-view-btn-dock-right'].on('click', () => {
+          fepperUiInst.viewerHandler.dockRight();
         });
       });
     }

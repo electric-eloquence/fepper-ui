@@ -53,10 +53,12 @@ export default function (fepperUiInst) {
         this.$orgs.window.on('resize', () => {
           // Adjust viewport padding if annotations or code viewer is active.
           if (fepperUiInst.annotationsViewer.annotationsActive || fepperUiInst.codeViewer.codeActive) {
-            this.$orgs['#sg-vp-wrap']
-              .dispatchAction('removeClass', 'anim-ready')
-              .dispatchAction('css', {paddingBottom: (fepperUiInst.uiProps.sh / 2) + 'px'})
-              .dispatchAction('addClass', 'anim-ready');
+            if (this.$orgs['#patternlab-body'].getState().classArray.includes('dack-bottom')) {
+              this.$orgs['#sg-vp-wrap']
+                .dispatchAction('removeClass', 'anim-ready')
+                .dispatchAction('css', {paddingBottom: (fepperUiInst.uiProps.sh / 2) + 'px'})
+                .dispatchAction('addClass', 'anim-ready');
+            }
           }
         });
 

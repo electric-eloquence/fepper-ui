@@ -12,7 +12,7 @@ describe('Listeners end-to-end tests', function () {
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
         expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
-        $('#sg-view-close-btn').click();
+        $('#sg-view-btn-close').click();
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
         expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
@@ -60,7 +60,7 @@ menu anchor.</p>
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
         expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
-        $('#sg-view-close-btn').click();
+        $('#sg-view-btn-close').click();
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
         expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
