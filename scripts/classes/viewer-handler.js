@@ -94,21 +94,44 @@ export default function (fepperUiInst) {
       }, this.transitionDuration);
     }
 
+    dockLeft() {
+      const widthHalf = Math.floor(this.uiProps.sw / 2);
+      const heightHalf = Math.floor(this.uiProps.sh / 2);
+
+      this.slideViewer(null, heightHalf);
+      this.uiProps.dockPosition = 'left';
+      this.dataSaver.updateValue('dockPosition', this.uiProps.dockPosition);
+      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-bottom');
+      this.uiFns.sizeIframe(widthHalf - this.uiProps.sgRightpullWidth);
+
+      setTimeout(() => {
+        this.slideViewer(widthHalf);
+        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-' + this.uiProps.dockPosition);
+
+        setTimeout(() => {
+          this.slideViewer(0);
+        }, this.transitionDuration / 2);
+      }, this.transitionDuration);
+    }
+
     dockBottom() {
+      const widthHalf = Math.floor(this.uiProps.sw / 2);
+      const heightHalf = Math.floor(this.uiProps.sh / 2);
+
       if (this.uiProps.dockPosition === 'left') {
-        this.slideViewer(this.uiProps.sw / 2);
+        this.slideViewer(widthHalf);
       }
       else if (this.uiProps.dockPosition === 'right') {
-        this.slideViewer(null, null, this.uiProps.sw / 2);
+        this.slideViewer(null, null, widthHalf);
       }
 
       this.uiProps.dockPosition = 'bottom';
-      this.dataSaver.updateValue('dockPosition', 'bottom');
+      this.dataSaver.updateValue('dockPosition', this.uiProps.dockPosition);
+      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-left dock-right');
 
       setTimeout(() => {
-        this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-left dock-right');
-        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-bottom');
-        this.slideViewer(null, this.uiProps.sh / 2);
+        this.slideViewer(null, heightHalf);
+        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-' + this.uiProps.dockPosition);
 
         if (this.annotationsViewer.annotationsActive || this.codeViewer.codeActive) {
           setTimeout(() => {
@@ -120,16 +143,18 @@ export default function (fepperUiInst) {
 
     dockRight() {
       const widthHalf = Math.floor(this.uiProps.sw / 2);
+      const heightHalf = Math.floor(this.uiProps.sh / 2);
 
-      this.slideViewer(null, this.uiProps.sh / 2);
+      this.slideViewer(null, heightHalf);
       this.uiProps.dockPosition = 'right';
-      this.dataSaver.updateValue('dockPosition', 'right');
+      this.dataSaver.updateValue('dockPosition', this.uiProps.dockPosition);
       this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-bottom');
       this.uiFns.sizeIframe(widthHalf - this.uiProps.sgRightpullWidth);
 
       setTimeout(() => {
         this.slideViewer(null, null, widthHalf);
-        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-right');
+        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-' + this.uiProps.dockPosition);
+
         setTimeout(() => {
           this.slideViewer(null, null, 0);
         }, this.transitionDuration / 2);

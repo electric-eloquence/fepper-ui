@@ -14,6 +14,10 @@ export default function (fepperUiInst) {
           fepperUiInst.codeViewer.closeCode();
         });
 
+        this.$orgs['#sg-view-btn-dock-left'].on('click', () => {
+          fepperUiInst.viewerHandler.dockLeft();
+        });
+
         this.$orgs['#sg-view-btn-dock-bottom'].on('click', () => {
           fepperUiInst.viewerHandler.dockBottom();
         });
