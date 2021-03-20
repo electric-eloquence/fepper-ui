@@ -17,9 +17,6 @@ export default function (fepperUiInst, root) {
       this.bpObj = this.uiFns.getBreakpointsSorted();
       this.maxViewportWidth = root.config ? parseInt(root.config.ishMaximum) : 2600; // Maxiumum Size for Viewport.
       this.minViewportWidth = root.config ? parseInt(root.config.ishMinimum) : 240; // Minimum Size for Viewport.
-      // Any change to sgRightpullWidth needs to be replicated in ui/core/styleguide/index/html/01-body/40-main/main.css
-      // in fepper-npm in order to be compiled into styles/ui.css with a consistent width.
-      this.sgRightpullWidth = 14;
 
       // Modes.
       this.discoMode = false;
@@ -28,9 +25,8 @@ export default function (fepperUiInst, root) {
 
       // Right pullbar drag state.
       this.sgRightpull = {
-        dragOn: false,
         posX: null,
-        viewportWidth: null
+        vpWidth: null
       };
 
       // Other.
@@ -38,8 +34,12 @@ export default function (fepperUiInst, root) {
       this.dockPosition = 'bottom';
       this.growId = 0;
       this.isMobile = 'ontouchstart' in root && this.sw <= 1024;
+      // Any change to sgRightpullWidth needs to be replicated in ui/core/styleguide/index/html/01-body/40-main/main.css
+      // in fepper-npm in order to be compiled into styles/ui.css with a consistent width.
+      this.sgRightpullWidth = this.isMobile ? 0 : 14;
       this.timeoutDefault = 200;
       this.titleSeparator = ' : ';
+      this.vpWidth = null;
     }
 
     /* GETTER for fepperUi.uiFns in case it is undefined at instantiation. */

@@ -38,7 +38,21 @@ export default function (fepperUiInst) {
       this.uiProps.dockPosition = this.dataSaver.findValue('dockPosition') || this.uiProps.dockPosition;
 
       if (this.uiProps.dockPosition === 'bottom') {
-        this.$orgs['#sg-view-container'].dispatchAction('css', {bottom: -(this.uiProps.sh / 2) + 'px'});
+        if (!this.annotationsViewer.annotationsActive && !this.codeViewer.codeActive) {
+          this.$orgs['#sg-view-container'].dispatchAction('css', {bottom: -(this.uiProps.sh / 2) + 'px'});
+        }
+      }
+      else if (this.uiProps.sw < 768) {
+        this.uiProps.dockPosition = 'bottom';
+
+        this.dataSaver.updateValue('dockPosition', this.uiProps.dockPosition);
+        this.$orgs['#patternlab-body']
+          .dispatchAction('removeClass', 'dock-left dock-right')
+          .dispatchAction('addClass', 'dock-' + this.uiProps.dockPosition);
+
+        if (!this.annotationsViewer.annotationsActive && !this.codeViewer.codeActive) {
+          this.$orgs['#sg-view-container'].dispatchAction('css', {bottom: -(this.uiProps.sh / 2) + 'px'});
+        }
       }
       else {
         this.$orgs['#patternlab-body']
@@ -65,8 +79,6 @@ export default function (fepperUiInst) {
     }
 
     dockBottom() {
-      const sgRightpullWidth = this.uiProps.isMobile ? 0 : this.uiProps.sgRightpullWidth;
-
       if (this.uiProps.dockPosition === 'left') {
         this.slideViewer(this.uiProps.sw / 2, null);
       }
@@ -89,13 +101,12 @@ export default function (fepperUiInst) {
 
     dockRight() {
       const widthHalf = Math.floor(this.uiProps.sw / 2);
-      const sgRightpullWidth = this.uiProps.isMobile ? 0 : this.uiProps.sgRightpullWidth;
 
       this.slideViewer(null, this.uiProps.sh / 2);
       this.uiProps.dockPosition = 'right';
       this.dataSaver.updateValue('dockPosition', 'right');
       this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-bottom');
-      this.uiFns.sizeIframe(widthHalf - sgRightpullWidth);
+      this.uiFns.sizeIframe(widthHalf - this.uiProps.sgRightpullWidth);
 
       setTimeout(() => {
         this.slideViewer(null, null, widthHalf);
@@ -149,10 +160,8 @@ export default function (fepperUiInst) {
       const left = (left_ === null) ? 'auto' : -left_ + 'px';
       const bottom = (bottom_ === null) ? 'auto' : -bottom_ + 'px';
       const right = (right_ === null) ? 'auto' : -right_ + 'px';
-
       const paddingBottom = (bottom_ === 0) ? (this.uiProps.sh / 2) + 'px' : '';
 
-console.warn(left, bottom, right)
       this.$orgs['#sg-view-container'].dispatchAction('css', {left, bottom, right});
       this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom});
     }

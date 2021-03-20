@@ -173,6 +173,7 @@ export default function (fepperUiInst, root) {
           }
 
           if (!Number.isNaN(vpWidth)) {
+            this.uiProps.vpWidth = vpWidth;
             this.dataSaver.updateValue('vpWidth', vpWidth);
           }
         }

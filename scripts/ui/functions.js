@@ -195,39 +195,20 @@ export default function (fepperUiInst, root) {
      * @param {[boolean]} wholeMode - In wholeMode, the iframe will dynamically resize when #sg-rightpull is dragged.
      */
     sizeIframe(size_, animate = true, wholeMode = false) {
-      /* istanbul ignore if */
-      if (!size_ || typeof size_ !== 'number' || Number.isNaN(size_)) {
-        return;
-      }
-
-      const maxViewportWidth = this.uiProps.maxViewportWidth;
-      const minViewportWidth = this.uiProps.minViewportWidth;
+      const size = this.updateViewportWidth(size_);
       const widthHalf = this.uiProps.sw / 2;
       this.uiProps.wholeMode = wholeMode;
 
+      if (!size) {
+        return;
+      }
+
       this.dataSaver.updateValue('wholeMode', wholeMode);
-
-      let size;
-
-      // If the entered size is larger than the max allowed viewport size, cap value at max vp size.
-      if (size_ > maxViewportWidth) {
-        size = maxViewportWidth;
-      }
-      // If the entered size is less than the minimum allowed viewport size, cap value at min vp size.
-      else if (size_ < minViewportWidth) {
-        size = minViewportWidth;
-      }
-      else {
-        size = size_;
-      }
 
       // If the submitted iframe viewport is larger than half the browser viewport, and the dock is positioned left or
       // right, reposition the dock to the bottom.
       if (this.uiProps.dockPosition === 'left' || this.uiProps.dockPosition === 'right') {
-        if (
-          (this.uiProps.isMobile && size > widthHalf) ||
-          (!this.uiProps.isMobile && (size + this.uiProps.sgRightpullWidth) > widthHalf)
-        ) {
+        if ((size + this.uiProps.sgRightpullWidth) > widthHalf) {
           this.viewerHandler.dockBottom();
         }
       }
@@ -241,15 +222,6 @@ export default function (fepperUiInst, root) {
         this.$orgs['#sg-gen-container'].dispatchAction('addClass', 'vp-animate');
         this.$orgs['#sg-viewport'].dispatchAction('addClass', 'vp-animate');
       }
-
-      // Resize viewport wrapper to desired size + size of drag resize handler.
-      this.$orgs['#sg-gen-container']
-        .dispatchAction('css', {width: (size + this.uiProps.sgRightpullWidth) + 'px'});
-      // Resize viewport to desired size.
-      this.$orgs['#sg-viewport'].dispatchAction('css', {width: size + 'px'});
-
-      this.updateSizeReading(size); // Update values in toolbar.
-      this.dataSaver.updateValue('vpWidth', size); // Save current viewport to cookie.
     }
 
     startDisco() {
@@ -340,6 +312,9 @@ export default function (fepperUiInst, root) {
      */
     updateSizeReading(size, unit, target) {
       const bodyFontSize = this.uiProps.bodyFontSize;
+      this.uiProps.vpWidth = size;
+
+      this.dataSaver.updateValue('vpWidth', size); // Save current viewport to cookie.
 
       let emSize;
       let pxSize;
@@ -363,15 +338,40 @@ export default function (fepperUiInst, root) {
     }
 
     /**
-     * Update iframe width.
+     * Update iframe width. With fewer bells and whistles than sizeIframe().
      *
      * @param {number} size - The size in px.
+     * @returns {number} The size as constrained by minViewportWidth and maxViewportWidth.
      */
-    updateViewportWidth(size) {
+    updateViewportWidth(size_) {
+      /* istanbul ignore if */
+      if (!size_ || typeof size_ !== 'number' || Number.isNaN(size_)) {
+        return;
+      }
+
+      const maxViewportWidth = this.uiProps.maxViewportWidth;
+      const minViewportWidth = this.uiProps.minViewportWidth;
+
+      let size;
+
+      // If the entered size is larger than the max allowed viewport size, cap value at max vp size.
+      if (size_ > maxViewportWidth) {
+        size = maxViewportWidth;
+      }
+      // If the entered size is less than the minimum allowed viewport size, cap value at min vp size.
+      else if (size_ < minViewportWidth) {
+        size = minViewportWidth;
+      }
+      else {
+        size = size_;
+      }
+
       this.$orgs['#sg-gen-container']
         .dispatchAction('css', {width: (size + this.uiProps.sgRightpullWidth) + 'px'});
       this.$orgs['#sg-viewport'].dispatchAction('css', {width: size + 'px'});
       this.updateSizeReading(size);
+
+      return size;
     }
   }
 
