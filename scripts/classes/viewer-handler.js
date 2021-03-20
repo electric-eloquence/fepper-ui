@@ -68,10 +68,26 @@ export default function (fepperUiInst) {
         return;
       }
 
-      this.slideViewer(
-        null,
-        Number(this.$orgs['#sg-view-container'].getState().innerHeight)
-      );
+      switch (this.uiProps.dockPosition) {
+        case 'left':
+          this.slideViewer(
+            this.uiProps.sw / 2
+          );
+          break;
+        case 'bottom':
+          this.slideViewer(
+            null,
+            this.uiProps.sh / 2
+          );
+          break;
+        case 'right':
+          this.slideViewer(
+            null,
+            null,
+            this.uiProps.sw / 2
+          );
+          break;
+      }
 
       setTimeout(() => {
         this.$orgs['#sg-view-container'].dispatchAction('removeClass', 'anim-ready');
@@ -80,7 +96,7 @@ export default function (fepperUiInst) {
 
     dockBottom() {
       if (this.uiProps.dockPosition === 'left') {
-        this.slideViewer(this.uiProps.sw / 2, null);
+        this.slideViewer(this.uiProps.sw / 2);
       }
       else if (this.uiProps.dockPosition === 'right') {
         this.slideViewer(null, null, this.uiProps.sw / 2);
@@ -91,11 +107,14 @@ export default function (fepperUiInst) {
 
       setTimeout(() => {
         this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-left dock-right');
-        this.slideViewer(null, this.uiProps.sh / 2, null);
         this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-bottom');
-        setTimeout(() => {
-          this.slideViewer(null, 0);
-        }, this.transitionDuration / 2);
+        this.slideViewer(null, this.uiProps.sh / 2);
+
+        if (this.annotationsViewer.annotationsActive || this.codeViewer.codeActive) {
+          setTimeout(() => {
+            this.slideViewer(null, 0);
+          }, this.transitionDuration / 2);
+        }
       }, this.transitionDuration);
     }
 
