@@ -102,7 +102,7 @@ export default function (fepperUiInst) {
       this.uiProps.dockPosition = 'left';
       this.dataSaver.updateValue('dockPosition', this.uiProps.dockPosition);
       this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-bottom');
-      this.uiFns.sizeIframe(widthHalf - this.uiProps.sgRightpullWidth);
+      this.uiFns.sizeIframe(widthHalf - this.uiProps.sgRightpullWidth, true, false, true);
 
       setTimeout(() => {
         this.slideViewer(widthHalf);
@@ -149,7 +149,7 @@ export default function (fepperUiInst) {
       this.uiProps.dockPosition = 'right';
       this.dataSaver.updateValue('dockPosition', this.uiProps.dockPosition);
       this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-bottom');
-      this.uiFns.sizeIframe(widthHalf - this.uiProps.sgRightpullWidth);
+      this.uiFns.sizeIframe(widthHalf - this.uiProps.sgRightpullWidth, true, false, true);
 
       setTimeout(() => {
         this.slideViewer(null, null, widthHalf);

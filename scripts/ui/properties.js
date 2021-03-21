@@ -15,12 +15,15 @@ export default function (fepperUiInst, root) {
       // Measurements.
       this.bodyFontSize = this.bodyFontSize || 16;
       this.bpObj = this.uiFns.getBreakpointsSorted();
+      this.bpMd = 1024; // Not to be user-configured.
+      this.bpSm = 767; // Not to be user-configured.
       this.maxViewportWidth = root.config ? parseInt(root.config.ishMaximum) : 2600; // Maxiumum Size for Viewport.
       this.minViewportWidth = root.config ? parseInt(root.config.ishMinimum) : 240; // Minimum Size for Viewport.
 
       // Modes.
       this.discoMode = false;
       this.growMode = false;
+      this.halfMode = null; // Set later.
       this.wholeMode = null; // Set later.
 
       // Right pullbar drag state.

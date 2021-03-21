@@ -193,26 +193,9 @@ export default function (fepperUiInst, root) {
      * @param {number} size - The target size of the iframe.
      * @param {[boolean]} animate - For switching the CSS animation on or off.
      * @param {[boolean]} wholeMode - In wholeMode, the iframe will dynamically resize when #sg-rightpull is dragged.
+     * @param {[boolean]} halfMode - Like wholeMode, but half. wholeMode has priority in the case of conflict.
      */
-    sizeIframe(size_, animate = true, wholeMode = false) {
-      const size = this.updateViewportWidth(size_);
-      const widthHalf = this.uiProps.sw / 2;
-      this.uiProps.wholeMode = wholeMode;
-
-      if (!size) {
-        return;
-      }
-
-      this.dataSaver.updateValue('wholeMode', wholeMode);
-
-      // If the submitted iframe viewport is larger than half the browser viewport, and the dock is positioned left or
-      // right, reposition the dock to the bottom.
-      if (this.uiProps.dockPosition === 'left' || this.uiProps.dockPosition === 'right') {
-        if ((size + this.uiProps.sgRightpullWidth) > widthHalf) {
-          this.viewerHandler.dockBottom();
-        }
-      }
-
+    sizeIframe(size_, animate = true, wholeMode = false, halfMode = false) {
       // Conditionally remove CSS animation class from viewport.
       if (animate === false) {
         this.$orgs['#sg-gen-container'].dispatchAction('removeClass', 'vp-animate');
@@ -221,6 +204,30 @@ export default function (fepperUiInst, root) {
       else {
         this.$orgs['#sg-gen-container'].dispatchAction('addClass', 'vp-animate');
         this.$orgs['#sg-viewport'].dispatchAction('addClass', 'vp-animate');
+      }
+
+      const size = this.updateViewportWidth(size_);
+      const widthHalf = this.uiProps.sw / 2;
+      this.uiProps.wholeMode = wholeMode;
+
+      this.dataSaver.updateValue('wholeMode', wholeMode);
+
+      if (halfMode && !wholeMode) {
+        this.halfMode = halfMode;
+
+        this.dataSaver.updateValue('halfMode', halfMode);
+      }
+
+      if (!size) {
+        return;
+      }
+
+      // If the submitted iframe viewport is larger than half the browser viewport, and the dock is positioned left or
+      // right, reposition the dock to the bottom.
+      if (this.uiProps.dockPosition === 'left' || this.uiProps.dockPosition === 'right') {
+        if ((size + this.uiProps.sgRightpullWidth) > widthHalf) {
+          this.viewerHandler.dockBottom();
+        }
       }
     }
 

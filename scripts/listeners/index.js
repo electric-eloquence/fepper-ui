@@ -25,12 +25,6 @@ export default function (fepperUiInst) {
       this.windowResizing = false;
     }
 
-    // Getters for fepperUi instance props in case they are undefined at instantiation.
-
-    get uiProps() {
-      return fepperUiInst.uiProps;
-    }
-
     listen() {
       for (const classKey of Object.keys(this)) {
         if (this[classKey] instanceof Object && typeof this[classKey].listen === 'function') {
@@ -54,6 +48,18 @@ export default function (fepperUiInst) {
           // Set iframe width to window width and wholeMode = true.
           fepperUiInst.uiFns.sizeIframe(fepperUiInst.uiProps.sw, false, true);
         }
+        else if (
+          fepperUiInst.uiProps.halfMode ||
+          fepperUiInst.dataSaver.findValue('halfMode') === 'true' ||
+          (
+            (fepperUiInst.uiProps.dockPosition === 'left' || fepperUiInst.uiProps.dockPosition === 'right') &&
+            fepperUiInst.uiProps.vpWidth === (fepperUiInst.uiProps.sw / 2) - fepperUiInst.uiProps.sgRightpullWidth
+          )
+        ) {
+          // Set iframe width on halfMode === true.
+          fepperUiInst.uiFns
+            .sizeIframe((fepperUiInst.uiProps.sw / 2) - fepperUiInst.uiProps.sgRightpullWidth, false, false, true);
+        }
         else if (vpWidth) {
           // .updateViewportWidth() also sizes the iframe, but with fewer bells and whistles.
           fepperUiInst.uiFns.updateViewportWidth(Number(vpWidth));
@@ -65,27 +71,36 @@ export default function (fepperUiInst) {
             if (fepperUiInst.annotationsViewer.annotationsActive || fepperUiInst.codeViewer.codeActive) {
               this.$orgs['#sg-vp-wrap'].dispatchAction('removeClass', 'anim-ready');
             }
+
+            if (
+              fepperUiInst.uiProps.sw <= fepperUiInst.uiProps.bpSm ||
+              fepperUiInst.uiProps.sw > fepperUiInst.uiProps.bpMd
+            ) {
+              this.$orgs['.sg-size'].dispatchAction('removeClass', 'active');
+              this.$orgs['#sg-form-label'].dispatchAction('removeClass', 'active');
+            }
           }
 
+          // On each tick of resize.
           this.windowResizing = true;
 
-          // On each tick of resize.
-          if (fepperUiInst.annotationsViewer.annotationsActive || fepperUiInst.codeViewer.codeActive) {
-            if (this.uiProps.dockPosition === 'bottom') {
-              this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: (fepperUiInst.uiProps.sh / 2) + 'px'});
-            }
-            else {
-              if (this.uiProps.sw < 768) {
-                this.viewerHandler.dockBottom();
+          // Switch to dockPosition bottom if width is below threshold.
+          if (fepperUiInst.uiProps.dockPosition !== 'bottom') {
+            if (fepperUiInst.uiProps.sw <= fepperUiInst.uiProps.bpSm) {
+              if (fepperUiInst.annotationsViewer.annotationsActive || fepperUiInst.codeViewer.codeActive) {
+                fepperUiInst.viewerHandler.dockBottom();
+              }
+              else {
+                fepperUiInst.uiProps.dockPosition = 'bottom';
+                fepperUiInst.dataSaver.updateValue('dockPosition', fepperUiInst.uiProps.dockPosition);
+                fepperUiInst.$orgs['#patternlab-body']
+                  .dispatchAction('removeClass', 'dock-left dock-right')
+                  .dispatchAction('addClass', 'dock-' + fepperUiInst.uiProps.dockPosition);
               }
             }
           }
-        });
 
-        this.$orgs.window.on('resize', fepperUiInst.uiFns.debounce(() => {
-          this.windowResizing = false;
-
-          // Update iframe width if in wholeMode.
+          // Check if in wholeMode.
           if (
             fepperUiInst.uiProps.wholeMode ||
             fepperUiInst.dataSaver.findValue('wholeMode') === 'true'
@@ -93,6 +108,23 @@ export default function (fepperUiInst) {
             // Set iframe width to window width and wholeMode = true.
             fepperUiInst.uiFns.sizeIframe(fepperUiInst.uiProps.sw, false, true);
           }
+          // Check if in halfMode.
+          else if (
+            fepperUiInst.uiProps.halfMode ||
+            fepperUiInst.dataSaver.findValue('halfMode') === 'true'
+          ) {
+            // Set iframe width to half and halfMode = true.
+            fepperUiInst.uiFns
+              .sizeIframe((fepperUiInst.uiProps.sw / 2) - fepperUiInst.uiProps.sgRightpullWidth, false, false, true);
+          }
+
+          if (fepperUiInst.uiProps.dockPosition === 'bottom') {
+            this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: (fepperUiInst.uiProps.sh / 2) + 'px'});
+          }
+        });
+
+        this.$orgs.window.on('resize', fepperUiInst.uiFns.debounce(() => {
+          this.windowResizing = false;
 
           if (fepperUiInst.annotationsViewer.annotationsActive || fepperUiInst.codeViewer.codeActive) {
             this.$orgs['#sg-vp-wrap'].dispatchAction('addClass', 'anim-ready');
