@@ -39,7 +39,7 @@ export default function (fepperUiInst) {
 
       if (this.uiProps.dockPosition === 'bottom') {
         if (!this.annotationsViewer.annotationsActive && !this.codeViewer.codeActive) {
-          this.$orgs['#sg-view-container'].dispatchAction('css', {bottom: -(this.uiProps.sh / 2) + 'px'});
+          //this.$orgs['#sg-view-container'].dispatchAction('css', {bottom: -(this.uiProps.sh / 2) + 'px'});
         }
       }
       else if (this.uiProps.sw < 768) {
@@ -63,31 +63,12 @@ export default function (fepperUiInst) {
     }
 
     closeViewer() {
-      // Only close if both annotations and code are inactive.
+      // Only close if annotations and code are inactive.
       if (this.annotationsViewer.annotationsActive || this.codeViewer.codeActive) {
         return;
       }
 
-      switch (this.uiProps.dockPosition) {
-        case 'left':
-          this.slideViewer(
-            this.uiProps.sw / 2
-          );
-          break;
-        case 'bottom':
-          this.slideViewer(
-            null,
-            this.uiProps.sh / 2
-          );
-          break;
-        case 'right':
-          this.slideViewer(
-            null,
-            null,
-            this.uiProps.sw / 2
-          );
-          break;
-      }
+      this.slideViewer(0, this.uiProps.dockPosition);
 
       setTimeout(() => {
         this.$orgs['#sg-view-container'].dispatchAction('removeClass', 'anim-ready');
@@ -95,73 +76,70 @@ export default function (fepperUiInst) {
     }
 
     dockLeft() {
-      const widthHalf = Math.floor(this.uiProps.sw / 2);
-      const heightHalf = Math.floor(this.uiProps.sh / 2);
+      if (this.uiProps.dockPosition !== 'left') {
+        this.slideViewer(0, this.uiProps.dockPosition);
+      }
 
-      this.slideViewer(null, heightHalf);
-      this.uiProps.dockPosition = 'left';
-      this.dataSaver.updateValue('dockPosition', this.uiProps.dockPosition);
-      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-bottom');
+      const dockPosition = this.uiProps.dockPosition = 'left';
+      const widthHalf = Math.floor(this.uiProps.sw / 2);
+
+      this.dataSaver.updateValue('dockPosition', dockPosition);
+      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-right dock-bottom');
+      this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-' + dockPosition);
       this.uiFns.sizeIframe(widthHalf - this.uiProps.sgRightpullWidth, true, false, true);
 
       setTimeout(() => {
-        this.slideViewer(widthHalf);
-        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-' + this.uiProps.dockPosition);
-
-        setTimeout(() => {
-          this.slideViewer(0);
-        }, this.transitionDuration / 2);
-      }, this.transitionDuration);
+        if (this.annotationsViewer.annotationsActive || this.codeViewer.codeActive) {
+          this.slideViewer(1, dockPosition);
+        }
+      }, this.transitionDuration * 1.25);
     }
 
     dockBottom() {
-      const widthHalf = Math.floor(this.uiProps.sw / 2);
+      if (this.uiProps.dockPosition !== 'bottom') {
+        this.slideViewer(0, this.uiProps.dockPosition);
+      }
+
+      const dockPosition = this.uiProps.dockPosition = 'bottom';
       const heightHalf = Math.floor(this.uiProps.sh / 2);
 
-      if (this.uiProps.dockPosition === 'left') {
-        this.slideViewer(widthHalf);
-      }
-      else if (this.uiProps.dockPosition === 'right') {
-        this.slideViewer(null, null, widthHalf);
-      }
-
-      this.uiProps.dockPosition = 'bottom';
-      this.dataSaver.updateValue('dockPosition', this.uiProps.dockPosition);
+      this.dataSaver.updateValue('dockPosition', dockPosition);
       this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-left dock-right');
+      this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-' + dockPosition);
 
       setTimeout(() => {
-        this.slideViewer(null, heightHalf);
-        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-' + this.uiProps.dockPosition);
-
         if (this.annotationsViewer.annotationsActive || this.codeViewer.codeActive) {
-          setTimeout(() => {
-            this.slideViewer(null, 0);
-          }, this.transitionDuration / 2);
+          this.slideViewer(1, dockPosition);
         }
-      }, this.transitionDuration);
+      }, 0);
     }
 
     dockRight() {
-      const widthHalf = Math.floor(this.uiProps.sw / 2);
-      const heightHalf = Math.floor(this.uiProps.sh / 2);
+      if (this.uiProps.dockPosition !== 'right') {
+        this.slideViewer(0, this.uiProps.dockPosition);
+      }
 
-      this.slideViewer(null, heightHalf);
-      this.uiProps.dockPosition = 'right';
-      this.dataSaver.updateValue('dockPosition', this.uiProps.dockPosition);
-      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-bottom');
+      const dockPosition = this.uiProps.dockPosition = 'right';
+      const widthHalf = Math.floor(this.uiProps.sw / 2);
+
+      this.dataSaver.updateValue('dockPosition', dockPosition);
+      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-bottom dock-left');
+      this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-' + dockPosition);
       this.uiFns.sizeIframe(widthHalf - this.uiProps.sgRightpullWidth, true, false, true);
 
       setTimeout(() => {
-        this.slideViewer(null, null, widthHalf);
-        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-' + this.uiProps.dockPosition);
-
-        setTimeout(() => {
-          this.slideViewer(null, null, 0);
-        }, this.transitionDuration / 2);
-      }, this.transitionDuration);
+        if (this.annotationsViewer.annotationsActive || this.codeViewer.codeActive) {
+          this.slideViewer(1, dockPosition);
+        }
+      }, this.transitionDuration * 1.25);
     }
 
     openViewer() {
+      // Only open if annotations or code is active.
+      if (!this.annotationsViewer.annotationsActive && !this.codeViewer.codeActive) {
+        return;
+      }
+
       this.$orgs['#sg-view-container'].dispatchAction('addClass', 'anim-ready');
 
       /* istanbul ignore if */
@@ -180,34 +158,51 @@ export default function (fepperUiInst) {
       }
 
       // Move the code into view.
-      switch (this.uiProps.dockPosition) {
-        case 'left':
-          this.slideViewer(0);
-          break;
-        case 'bottom':
-          this.slideViewer(null, 0);
-          break;
-        case 'right':
-          this.slideViewer(null, null, 0);
-          break;
-      }
+      this.slideViewer(1, this.uiProps.dockPosition);
     }
 
     /**
      * Slide the viewer.
      *
-     * @param {number|null} left - The distance to slide out of view. 0 = fully in view; null = not this direction.
-     * @param {number|null} bottom - The distance to slide out of view. 0 = fully in view; null = not this direction.
-     * @param {number|null} right - The distance to slide out of view. 0 = fully in view; null = not this direction.
+     * @param {number} inOrOut - 1 = in; 0 = out.
+     * @param {string} dockPosition - Where on the viewport the annotations/code viewer is fixed.
      */
-    slideViewer(left_ = null, bottom_ = null, right_ = null) {
-      const left = (left_ === null) ? 'auto' : -left_ + 'px';
-      const bottom = (bottom_ === null) ? 'auto' : -bottom_ + 'px';
-      const right = (right_ === null) ? 'auto' : -right_ + 'px';
-      const paddingBottom = (bottom_ === 0) ? (this.uiProps.sh / 2) + 'px' : '';
+    slideViewer(inOrOut, dockPosition) {
+      let sgViewContainerCss;
+      let sgVpWrapCss;
 
-      this.$orgs['#sg-view-container'].dispatchAction('css', {left, bottom, right});
-      this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom});
+      switch (dockPosition) {
+        case 'left':
+          sgViewContainerCss = {
+            right: '',
+            bottom: '',
+            left: inOrOut ? '0' : '-50vw'
+          };
+          break;
+        case 'bottom':
+          sgViewContainerCss = {
+            right: '',
+            bottom: inOrOut ? '0' : '-50vh',
+            left: ''
+          };
+          sgVpWrapCss = {
+            paddingBottom: inOrOut ? '50vh' : '0'
+          };
+          break;
+        case 'right':
+          sgViewContainerCss = {
+            right: inOrOut ? '0': '-50vw',
+            bottom: '',
+            left: ''
+          };
+          break;
+      }
+
+      this.$orgs['#sg-view-container'].dispatchAction('css', sgViewContainerCss);
+
+      if (sgVpWrapCss) {
+        this.$orgs['#sg-vp-wrap'].dispatchAction('css', sgVpWrapCss);
+      }
     }
   }
 
