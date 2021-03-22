@@ -53,7 +53,6 @@ export default function (fepperUiInst) {
         this.$orgs['#patternlab-body']
           .dispatchAction('removeClass', 'dock-bottom')
           .dispatchAction('addClass', 'dock-' + this.uiProps.dockPosition);
-        this.codeViewer.openCode(false);
       }
     }
 
@@ -63,7 +62,7 @@ export default function (fepperUiInst) {
         return;
       }
 
-      this.slideViewer(0, this.uiProps.dockPosition);
+      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-open');
 
       setTimeout(() => {
         this.$orgs['#sg-view-container'].dispatchAction('removeClass', 'anim-ready');
@@ -72,58 +71,61 @@ export default function (fepperUiInst) {
 
     dockLeft() {
       if (this.uiProps.dockPosition !== 'left') {
-        this.slideViewer(0, this.uiProps.dockPosition);
+        this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-open');
       }
 
       const dockPosition = this.uiProps.dockPosition = 'left';
       const widthHalf = Math.floor(this.uiProps.sw / 2);
 
       this.dataSaver.updateValue('dockPosition', dockPosition);
-      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-right dock-bottom');
-      this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-' + dockPosition);
+      this.$orgs['#patternlab-body']
+        .dispatchAction('removeClass', 'dock-right dock-bottom')
+        .dispatchAction('addClass', 'dock-' + dockPosition);
       this.uiFns.sizeIframe(widthHalf - this.uiProps.sgRightpullWidth, true, false, true);
 
       setTimeout(() => {
         if (this.annotationsViewer.annotationsActive || this.codeViewer.codeActive) {
-          this.slideViewer(1, dockPosition);
+          this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
         }
       }, this.transitionDuration * 1.25);
     }
 
     dockBottom() {
       if (this.uiProps.dockPosition !== 'bottom') {
-        this.slideViewer(0, this.uiProps.dockPosition);
+        this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-open');
       }
 
       const dockPosition = this.uiProps.dockPosition = 'bottom';
 
       this.dataSaver.updateValue('dockPosition', dockPosition);
-      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-left dock-right');
-      this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-' + dockPosition);
+      this.$orgs['#patternlab-body']
+        .dispatchAction('removeClass', 'dock-left dock-right')
+        .dispatchAction('addClass', 'dock-' + dockPosition);
 
       setTimeout(() => {
         if (this.annotationsViewer.annotationsActive || this.codeViewer.codeActive) {
-          this.slideViewer(1, dockPosition);
+          this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
         }
       }, 10);
     }
 
     dockRight() {
       if (this.uiProps.dockPosition !== 'right') {
-        this.slideViewer(0, this.uiProps.dockPosition);
+        this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-open');
       }
 
       const dockPosition = this.uiProps.dockPosition = 'right';
       const widthHalf = Math.floor(this.uiProps.sw / 2);
 
       this.dataSaver.updateValue('dockPosition', dockPosition);
-      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-bottom dock-left');
-      this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-' + dockPosition);
+      this.$orgs['#patternlab-body']
+        .dispatchAction('removeClass', 'dock-bottom dock-left')
+        .dispatchAction('addClass', 'dock-' + dockPosition);
       this.uiFns.sizeIframe(widthHalf - this.uiProps.sgRightpullWidth, true, false, true);
 
       setTimeout(() => {
         if (this.annotationsViewer.annotationsActive || this.codeViewer.codeActive) {
-          this.slideViewer(1, dockPosition);
+          this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
         }
       }, this.transitionDuration * 1.25);
     }
@@ -151,52 +153,9 @@ export default function (fepperUiInst) {
         }
       }
 
-      // Move the code into view.
-      this.slideViewer(1, this.uiProps.dockPosition);
-    }
-
-    /**
-     * Slide the viewer.
-     *
-     * @param {number} inOrOut - 1 = in; 0 = out.
-     * @param {string} dockPosition - Where on the viewport the annotations/code viewer is fixed.
-     */
-    slideViewer(inOrOut, dockPosition) {
-      let sgViewContainerCss;
-      let sgVpWrapCss;
-
-      switch (dockPosition) {
-        case 'left':
-          sgViewContainerCss = {
-            right: '',
-            bottom: '',
-            left: inOrOut ? '0' : '-50vw'
-          };
-          break;
-        case 'bottom':
-          sgViewContainerCss = {
-            right: '',
-            bottom: inOrOut ? '0' : '-50vh',
-            left: ''
-          };
-          sgVpWrapCss = {
-            paddingBottom: inOrOut ? '50vh' : '0'
-          };
-          break;
-        case 'right':
-          sgViewContainerCss = {
-            right: inOrOut ? '0' : '-50vw',
-            bottom: '',
-            left: ''
-          };
-          break;
-      }
-
-      this.$orgs['#sg-view-container'].dispatchAction('css', sgViewContainerCss);
-
-      if (sgVpWrapCss) {
-        this.$orgs['#sg-vp-wrap'].dispatchAction('css', sgVpWrapCss);
-      }
+      setTimeout(() => {
+        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
+      }, 10);
     }
   }
 

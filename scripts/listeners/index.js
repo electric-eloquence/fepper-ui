@@ -65,6 +65,11 @@ export default function (fepperUiInst) {
           fepperUiInst.uiFns.updateViewportWidth(Number(vpWidth));
         }
 
+        if (fepperUiInst.uiProps.dockPosition === 'left' || fepperUiInst.uiProps.dockPosition === 'right') {
+          this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
+          fepperUiInst.codeViewer.openCode();
+        }
+
         this.$orgs.window.on('resize', () => {
           // On first tick of resize.
           if (!this.windowResizing) {
@@ -93,7 +98,7 @@ export default function (fepperUiInst) {
               else {
                 fepperUiInst.uiProps.dockPosition = 'bottom';
                 fepperUiInst.dataSaver.updateValue('dockPosition', fepperUiInst.uiProps.dockPosition);
-                fepperUiInst.$orgs['#patternlab-body']
+                this.$orgs['#patternlab-body']
                   .dispatchAction('removeClass', 'dock-left dock-right')
                   .dispatchAction('addClass', 'dock-' + fepperUiInst.uiProps.dockPosition);
               }
@@ -116,10 +121,6 @@ export default function (fepperUiInst) {
             // Set iframe width to half and halfMode = true.
             fepperUiInst.uiFns
               .sizeIframe((fepperUiInst.uiProps.sw / 2) - fepperUiInst.uiProps.sgRightpullWidth, false, false, true);
-          }
-
-          if (fepperUiInst.uiProps.dockPosition === 'bottom') {
-            this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: (fepperUiInst.uiProps.sh / 2) + 'px'});
           }
         });
 

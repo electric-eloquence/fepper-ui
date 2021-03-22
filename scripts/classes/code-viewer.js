@@ -442,8 +442,8 @@ export default function (fepperUiInst, root_) {
 
       // Fill in the name of the pattern.
       root.$('#sg-code-pattern-info-rel-path').html(this.uiData.sourceFiles[patternPartial]);
-      root.$('#sg-code-lineage-pattern-name, #sg-code-lineager-pattern-name, #sg-code-pattern-info-pattern-name')
-        .html(patternPartial);
+      root.$('#sg-code-pattern-info-pattern-name').html(`<strong>${patternPartial}</strong> at`);
+      root.$('#sg-code-lineage-pattern-name, #sg-code-lineager-pattern-name').html(patternPartial);
 
       // Get the file name of the pattern so we can update the tabs of code that show in the viewer.
       const filename = this.uiData.patternPaths[patternPartial];
