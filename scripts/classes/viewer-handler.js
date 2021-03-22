@@ -37,12 +37,7 @@ export default function (fepperUiInst) {
     stoke() {
       this.uiProps.dockPosition = this.dataSaver.findValue('dockPosition') || this.uiProps.dockPosition;
 
-      if (this.uiProps.dockPosition === 'bottom') {
-        if (!this.annotationsViewer.annotationsActive && !this.codeViewer.codeActive) {
-          //this.$orgs['#sg-view-container'].dispatchAction('css', {bottom: -(this.uiProps.sh / 2) + 'px'});
-        }
-      }
-      else if (this.uiProps.sw < 768) {
+      if (this.uiProps.sw < 768) {
         this.uiProps.dockPosition = 'bottom';
 
         this.dataSaver.updateValue('dockPosition', this.uiProps.dockPosition);
@@ -101,7 +96,6 @@ export default function (fepperUiInst) {
       }
 
       const dockPosition = this.uiProps.dockPosition = 'bottom';
-      const heightHalf = Math.floor(this.uiProps.sh / 2);
 
       this.dataSaver.updateValue('dockPosition', dockPosition);
       this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-left dock-right');
@@ -111,7 +105,7 @@ export default function (fepperUiInst) {
         if (this.annotationsViewer.annotationsActive || this.codeViewer.codeActive) {
           this.slideViewer(1, dockPosition);
         }
-      }, 0);
+      }, 10);
     }
 
     dockRight() {
@@ -191,7 +185,7 @@ export default function (fepperUiInst) {
           break;
         case 'right':
           sgViewContainerCss = {
-            right: inOrOut ? '0': '-50vw',
+            right: inOrOut ? '0' : '-50vw',
             bottom: '',
             left: ''
           };

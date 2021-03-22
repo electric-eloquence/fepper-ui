@@ -6,11 +6,7 @@ export default function (fepperUiInst) {
     constructor(fepperUi) {
       this.$orgs = fepperUi.requerio.$orgs;
     }
-/*
-    get dockBottom() {
-      return fepperUiInst.viewerHandler.dockBottom.bind(fepperUiInst.viewerHandler);
-    }
-*/
+
     listen() {
       document.addEventListener('DOMContentLoaded', () => {
         this.$orgs['#sg-view-btn-close'].on('click', () => {
