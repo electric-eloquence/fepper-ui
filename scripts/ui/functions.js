@@ -210,12 +210,12 @@ export default function (fepperUiInst, root) {
       const widthHalf = this.uiProps.sw / 2;
       this.uiProps.wholeMode = wholeMode;
 
-      this.dataSaver.updateValue('wholeMode', wholeMode);
+      this.dataSaver.updateValue('wholeMode', this.uiProps.wholeMode);
 
       if (halfMode && !wholeMode) {
-        this.halfMode = halfMode;
+        this.uiProps.halfMode = halfMode;
 
-        this.dataSaver.updateValue('halfMode', halfMode);
+        this.dataSaver.updateValue('halfMode', this.uiProps.halfMode);
       }
 
       if (!size) {
@@ -226,7 +226,15 @@ export default function (fepperUiInst, root) {
       // right, reposition the dock to the bottom.
       if (this.uiProps.dockPosition === 'left' || this.uiProps.dockPosition === 'right') {
         if ((size + this.uiProps.sgRightpullWidth) > widthHalf) {
+          this.uiProps.halfMode = false;
+
+          this.dataSaver.updateValue('halfMode', this.uiProps.halfMode);
           this.viewerHandler.dockBottom();
+        }
+        else if ((size + this.uiProps.sgRightpullWidth) < widthHalf) {
+          this.uiProps.halfMode = false;
+
+          this.dataSaver.updateValue('halfMode', this.uiProps.halfMode);
         }
       }
     }
