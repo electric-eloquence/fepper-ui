@@ -7,9 +7,11 @@ import '../fixtures/_scripts/src/variables.styl';
 const sandbox = sinon.createSandbox();
 
 const $orgs = fepperUi.requerio.$orgs;
-const uiFns = fepperUi.uiFns;
-const uiProps = fepperUi.uiProps;
-const dataSaver = fepperUi.dataSaver;
+const {
+  uiFns,
+  uiProps,
+  dataSaver
+} = fepperUi;
 
 describe('uiFns', function () {
   describe('.closeAllPanels()', function () {
@@ -508,6 +510,50 @@ describe('uiFns', function () {
       expect(sgSizePxStateAfter.value).to.equal(uiProps.minViewportWidth.toString());
       expect(sgSizeEmStateAfter.value).to.equal('15.00');
       expect(dataSaverVpWidthAfter).to.equal(uiProps.minViewportWidth + '');
+    });
+
+    it('in dockPosition left exits halfMode if width is greater than the halfMode threshold', function () {
+      const halfModeBefore = uiProps.halfMode = true;
+      uiProps.dockPosition = 'left';
+
+      uiFns.sizeIframe(499);
+
+      expect(halfModeBefore).to.be.true;
+
+      expect(uiProps.halfMode).to.be.false;
+    });
+
+    it('in dockPosition right exits halfMode if width is greater than the halfMode threshold', function () {
+      const halfModeBefore = uiProps.halfMode = true;
+      uiProps.dockPosition = 'right';
+
+      uiFns.sizeIframe(499);
+
+      expect(halfModeBefore).to.be.true;
+
+      expect(uiProps.halfMode).to.be.false;
+    });
+
+    it('in dockPosition left exits halfMode if width is less than the halfMode threshold', function () {
+      const halfModeBefore = uiProps.halfMode = true;
+      uiProps.dockPosition = 'left';
+
+      uiFns.sizeIframe(497);
+
+      expect(halfModeBefore).to.be.true;
+
+      expect(uiProps.halfMode).to.be.false;
+    });
+
+    it('in dockPosition right exits halfMode if width is less than the halfMode threshold', function () {
+      const halfModeBefore = uiProps.halfMode = true;
+      uiProps.dockPosition = 'right';
+
+      uiFns.sizeIframe(497);
+
+      expect(halfModeBefore).to.be.true;
+
+      expect(uiProps.halfMode).to.be.false;
     });
   });
 

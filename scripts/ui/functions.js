@@ -218,6 +218,7 @@ export default function (fepperUiInst, root) {
         this.dataSaver.updateValue('halfMode', this.uiProps.halfMode);
       }
 
+      /* istanbul ignore if */
       if (!size) {
         return;
       }
