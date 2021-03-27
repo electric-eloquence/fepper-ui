@@ -119,8 +119,8 @@ describe('viewerHandler', function () {
     it('opens viewer if annotations viewer is active', function (done) {
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
-
       annotationsViewer.annotationsActive = true;
+
       viewerHandler.openViewer();
 
       setTimeout(() => {
@@ -143,8 +143,8 @@ describe('viewerHandler', function () {
     it('opens viewer if code viewer is active', function (done) {
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
-
       codeViewer.codeActive = true;
+
       viewerHandler.openViewer();
 
       setTimeout(() => {
@@ -185,6 +185,7 @@ describe('viewerHandler', function () {
       codeViewer.codeActive = false;
 
       viewerHandler.closeViewer();
+
       setTimeout(() => {
         const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
         const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
@@ -210,6 +211,7 @@ describe('viewerHandler', function () {
       codeViewer.codeActive = true;
 
       viewerHandler.closeViewer();
+
       setTimeout(() => {
         const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
         const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
@@ -235,6 +237,7 @@ describe('viewerHandler', function () {
       codeViewer.codeActive = false;
 
       viewerHandler.closeViewer();
+
       setTimeout(() => {
         const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
         const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
@@ -267,6 +270,7 @@ describe('viewerHandler', function () {
       const vpWidthBefore = uiProps.vpWidth;
 
       viewerHandler.dockLeft();
+
       setTimeout(() => {
         const dockPositionAfter = uiProps.dockPosition;
         const halfModeAfter = uiProps.halfMode;
@@ -299,6 +303,7 @@ describe('viewerHandler', function () {
       const vpWidthBefore = uiProps.vpWidth;
 
       viewerHandler.dockBottom();
+
       setTimeout(() => {
         const dockPositionAfter = uiProps.dockPosition;
         const halfModeAfter = uiProps.halfMode;
@@ -333,6 +338,7 @@ describe('viewerHandler', function () {
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
 
       viewerHandler.dockRight();
+
       setTimeout(() => {
         const dockPositionAfter = uiProps.dockPosition;
         const halfModeAfter = uiProps.halfMode;

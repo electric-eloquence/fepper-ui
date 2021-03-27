@@ -1075,7 +1075,7 @@ describe('patternViewport', function () {
       expect(sgAccPanelStateAfter.classArray).to.not.include('active');
     });
 
-    it('runs .goXXSmall() on patternlab.keyPress "ctrl+alt+0"', function () {
+    it('runs .goXXSmall() with patternlab.keyPress "ctrl+alt+0"', function () {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'ctrl+alt+0'
@@ -1136,7 +1136,7 @@ describe('patternViewport', function () {
       expect(dataSaverVpWidthAfter).to.equal('320');
     });
 
-    it('runs .goXSmall() on patternlab.keyPress "ctrl+shift+x"', function () {
+    it('runs .goXSmall() with patternlab.keyPress "ctrl+shift+x"', function () {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'ctrl+shift+x'
@@ -1197,7 +1197,7 @@ describe('patternViewport', function () {
       expect(dataSaverVpWidthAfter).to.equal('480');
     });
 
-    it('runs .goXXSmall() on patternlab.keyPress "ctrl+shift+0"', function () {
+    it('runs .goXXSmall() with patternlab.keyPress "ctrl+shift+0"', function () {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'ctrl+shift+0'
@@ -1258,7 +1258,7 @@ describe('patternViewport', function () {
       expect(dataSaverVpWidthAfter).to.equal('320');
     });
 
-    it('runs .goSmall() on patternlab.keyPress "ctrl+shift+s"', function () {
+    it('runs .goSmall() with patternlab.keyPress "ctrl+shift+s"', function () {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'ctrl+shift+s'
@@ -1319,7 +1319,7 @@ describe('patternViewport', function () {
       expect(dataSaverVpWidthAfter).to.equal('767');
     });
 
-    it('runs .goMedium() on patternlab.keyPress "ctrl+shift+m"', function () {
+    it('runs .goMedium() with patternlab.keyPress "ctrl+shift+m"', function () {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'ctrl+shift+m'
@@ -1380,7 +1380,7 @@ describe('patternViewport', function () {
       expect(dataSaverVpWidthAfter).to.equal('1024');
     });
 
-    it('runs .goLarge() on patternlab.keyPress "ctrl+shift+l"', function () {
+    it('runs .goLarge() with patternlab.keyPress "ctrl+shift+l"', function () {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'ctrl+shift+l'
@@ -1428,7 +1428,7 @@ describe('patternViewport', function () {
       expect(dataSaverVpWidthAfter).to.equal('1280');
     });
 
-    it('runs .goWhole() on patternlab.keyPress "ctrl+alt+w"', function () {
+    it('runs .goWhole() with patternlab.keyPress "ctrl+alt+w"', function () {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'ctrl+alt+w'
@@ -1489,7 +1489,7 @@ describe('patternViewport', function () {
       expect(dataSaverVpWidthAfter).to.equal('1024');
     });
 
-    it('runs .goLarge() on patternlab.keyPress "ctrl+shift+l"', function () {
+    it('runs .goLarge() with patternlab.keyPress "ctrl+shift+l"', function () {
       global.navigator = {
         userAgent: ''
       };
@@ -1540,7 +1540,7 @@ describe('patternViewport', function () {
       expect(dataSaverVpWidthAfter).to.equal('1280');
     });
 
-    it('runs .goWhole() on patternlab.keyPress "ctrl+shift+w"', function () {
+    it('runs .goWhole() with patternlab.keyPress "ctrl+shift+w"', function () {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'ctrl+shift+w'
@@ -1601,7 +1601,7 @@ describe('patternViewport', function () {
       expect(dataSaverVpWidthAfter).to.equal('1024');
     });
 
-    it('runs .goRandom() on patternlab.keyPress "ctrl+alt+r"', function () {
+    it('runs .goRandom() with patternlab.keyPress "ctrl+alt+r"', function () {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'ctrl+alt+r'
@@ -1662,7 +1662,7 @@ describe('patternViewport', function () {
       expect(dataSaverVpWidthBefore).to.not.equal(dataSaverVpWidthAfter);
     });
 
-    it('toggles on grow on patternlab.keyPress "ctrl+alt+g"', function (done) {
+    it('toggles on grow with patternlab.keyPress "ctrl+alt+g"', function (done) {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'ctrl+alt+g'
@@ -1704,7 +1704,7 @@ describe('patternViewport', function () {
       }, uiProps.timeoutDefault);
     });
 
-    it('toggles off grow on patternlab.keyPress "ctrl+alt+g"', function (done) {
+    it('toggles off grow with patternlab.keyPress "ctrl+alt+g"', function (done) {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'ctrl+alt+g'
@@ -1736,7 +1736,7 @@ describe('patternViewport', function () {
       }, uiProps.timeoutDefault);
     });
 
-    it('toggles on disco on patternlab.keyPress "ctrl+shift+d"', function (done) {
+    it('toggles on disco with patternlab.keyPress "ctrl+shift+d"', function (done) {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'ctrl+shift+d'
@@ -1768,7 +1768,7 @@ describe('patternViewport', function () {
       }, 1000);
     });
 
-    it('toggles off disco on patternlab.keyPress "ctrl+shift+d"', function (done) {
+    it('toggles off disco with patternlab.keyPress "ctrl+shift+d"', function (done) {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'ctrl+shift+d'
