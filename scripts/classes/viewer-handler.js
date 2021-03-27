@@ -37,7 +37,7 @@ export default function (fepperUiInst) {
     stoke() {
       this.uiProps.dockPosition = this.dataSaver.findValue('dockPosition') || this.uiProps.dockPosition;
 
-      if (this.uiProps.sw < 768) {
+      if (this.uiProps.sw <= this.uiProps.bpSm) {
         this.uiProps.dockPosition = 'bottom';
 
         this.dataSaver.updateValue('dockPosition', this.uiProps.dockPosition);
@@ -84,9 +84,7 @@ export default function (fepperUiInst) {
       this.uiFns.sizeIframe(widthHalf - this.uiProps.sgRightpullWidth, true, false, true);
 
       setTimeout(() => {
-        if (this.annotationsViewer.annotationsActive || this.codeViewer.codeActive) {
-          this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
-        }
+        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
       }, this.transitionDuration * 1.25);
     }
 
@@ -103,9 +101,7 @@ export default function (fepperUiInst) {
         .dispatchAction('addClass', 'dock-' + dockPosition);
 
       setTimeout(() => {
-        if (this.annotationsViewer.annotationsActive || this.codeViewer.codeActive) {
-          this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
-        }
+        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
       }, 10);
     }
 
@@ -124,9 +120,7 @@ export default function (fepperUiInst) {
       this.uiFns.sizeIframe(widthHalf - this.uiProps.sgRightpullWidth, true, false, true);
 
       setTimeout(() => {
-        if (this.annotationsViewer.annotationsActive || this.codeViewer.codeActive) {
-          this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
-        }
+        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
       }, this.transitionDuration * 1.25);
     }
 
@@ -138,9 +132,9 @@ export default function (fepperUiInst) {
 
       this.$orgs['#sg-view-container'].dispatchAction('addClass', 'anim-ready');
 
-      /* istanbul ignore if */
-      if (typeof getComputedStyle === 'function') {
-        if (this.transitionDuration === null) {
+      if (this.transitionDuration === null) {
+        /* istanbul ignore if */
+        if (typeof getComputedStyle === 'function') {
           const transitionDurationStr =
             getComputedStyle(this.$orgs['#sg-view-container'][0]).getPropertyValue('transition-duration');
 
@@ -150,6 +144,9 @@ export default function (fepperUiInst) {
           else {
             this.transitionDuration = parseFloat(transitionDurationStr) * 1000;
           }
+        }
+        else {
+          this.transitionDuration = 0;
         }
       }
 

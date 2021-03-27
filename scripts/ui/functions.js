@@ -212,7 +212,7 @@ export default function (fepperUiInst, root) {
 
       this.dataSaver.updateValue('wholeMode', this.uiProps.wholeMode);
 
-      if (halfMode && !wholeMode) {
+      if (!wholeMode) {
         this.uiProps.halfMode = halfMode;
 
         this.dataSaver.updateValue('halfMode', this.uiProps.halfMode);
