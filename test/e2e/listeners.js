@@ -15,7 +15,7 @@ describe('Listeners end-to-end tests', function () {
         $('#sg-view-btn-close').click();
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
       });
     });
 
@@ -42,7 +42,7 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'a']);
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
       });
     });
   });
@@ -63,7 +63,7 @@ menu anchor.</p>
         $('#sg-view-btn-close').click();
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
       });
 
       it('HTML button displays HTML code', function () {
@@ -119,7 +119,7 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
       });
 
       it('"ctrl+shift+y" selects the HTML tab in code viewer', function () {
@@ -209,7 +209,7 @@ menu anchor.</p>
         browser.pause(700);
         $('#sg-code-fill').click();
         browser.pause(700);
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
       });
 
       it('does nothing when clicking on HTML code in code viewer', function () {

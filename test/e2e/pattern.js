@@ -40,7 +40,7 @@ menu anchor.</p>
         browser.pause(700);
         browser.switchToParentFrame();
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
       });
     });
 
@@ -71,7 +71,7 @@ menu anchor.</p>
         browser.pause(700);
         browser.switchToParentFrame();
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
       });
     });
   });
@@ -96,7 +96,7 @@ menu anchor.</p>
         browser.pause(700);
         browser.switchToParentFrame();
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
       });
     });
 
@@ -118,7 +118,7 @@ menu anchor.</p>
         browser.pause(700);
         browser.switchToParentFrame();
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('-257.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
       });
 
       it('"ctrl+shift+y" selects the HTML tab in code viewer', function () {
