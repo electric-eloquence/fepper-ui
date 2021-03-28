@@ -197,10 +197,14 @@ body {
 }
 .sg-acc-panel li {
   background-color: #222;
+  border-color: #999;
+  border-style: solid;
+  border-width: 0 1px;
 }
 .sg-acc-panel li:last-child {
   border-bottom-left-radius: 0.6rem;
   border-bottom-right-radius: 0.6rem;
+  border-bottom-width: 1px;
 }
 .sg-acc-panel li:last-child a {
   border-bottom-left-radius: 0.6rem;
@@ -534,16 +538,20 @@ body {
  */
 #sg-vp-wrap {
   background-color: #222;
-  width: 100%;
+  padding-bottom: 0;
   position: fixed;
   top: 3.2rem;
+  right: 0;
   bottom: 0;
   left: 0;
-  right: 0;
+  width: 100%;
   z-index: 0;
 }
-#sg-vp-wrap.anim-ready {
+.dock-bottom #sg-vp-wrap.anim-ready {
   transition: padding-bottom 0.3s linear;
+}
+.dock-open.dock-bottom #sg-vp-wrap.anim-ready {
+  padding-bottom: 50vh;
 }
 
 /**
@@ -559,6 +567,12 @@ body {
 }
 .mobile #sg-gen-container {
   width: 100%;
+}
+.dock-left #sg-gen-container {
+  margin-right: 0;
+}
+.dock-right #sg-gen-container {
+  margin-left: 0;
 }
 
 /**
@@ -634,9 +648,8 @@ body {
   line-height: 1.4;
   padding: 0.8rem 0 0;
   position: fixed;
-  left: 0;
-  width: 100%;
-  height: 50%;
+  width: 0;
+  height: 0;
 }
 .sg-view-container a {
   color: #999;
@@ -644,17 +657,39 @@ body {
 .sg-view-container pre {
   padding: 0 1.4rem;
 }
-.sg-view-container.anim-ready {
-  transition: bottom 0.3s linear;
+.dock-left .sg-view-container,
+.dock-right .sg-view-container {
+  top: 3.2rem;
 }
-.sg-view-container.anim-ready.dock-bottom {
-  border-top-width: 1px;
-}
-.sg-view-container.anim-ready.dock-right {
-  border-left-width: 1px;
-}
-.sg-view-container.anim-ready.dock-left {
+.dock-left .sg-view-container.anim-ready {
   border-right-width: 1px;
+  left: -50vw;
+  transition: left 0.3s linear;
+  width: 50%;
+  height: 100%;
+}
+.dock-open.dock-left .sg-view-container.anim-ready {
+  left: 0;
+}
+.dock-bottom .sg-view-container.anim-ready {
+  border-top-width: 1px;
+  bottom: -50vh;
+  transition: bottom 0.3s linear;
+  width: 100%;
+  height: 50%;
+}
+.dock-open.dock-bottom .sg-view-container.anim-ready {
+  bottom: 0;
+}
+.dock-right .sg-view-container.anim-ready {
+  border-left-width: 1px;
+  right: -50vw;
+  transition: right 0.3s linear;
+  width: 50%;
+  height: 100%;
+}
+.dock-open.dock-right .sg-view-container.anim-ready {
+  right: 0;
 }
 
 .sg-view-scroll-container {
@@ -687,6 +722,12 @@ body {
   width: 1.6rem;
   height: 1.6rem;
 }
+.dock-left .sg-view-btn-dock-left,
+.dock-bottom .sg-view-btn-dock-bottom,
+.dock-right .sg-view-btn-dock-right {
+  cursor: default;
+  pointer-events: none;
+}
 #sg-annotations {
   padding-bottom: 0.7rem;
 }
@@ -701,8 +742,9 @@ body {
   text-decoration: none;
 }
 
-.sg-code-pattern-name {
+.sg-code-pattern-name strong {
   color: #aaa;
+  font-weight: normal;
 }
 
 #sg-code-pattern-info-rel-path {

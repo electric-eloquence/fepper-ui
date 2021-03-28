@@ -207,7 +207,7 @@ export default function (fepperUiInst, root) {
       }
 
       const size = this.updateViewportWidth(size_);
-      const widthHalf = this.uiProps.sw / 2;
+      const widthHalf = Math.floor(this.uiProps.sw / 2);
       this.uiProps.wholeMode = wholeMode;
 
       this.dataSaver.updateValue('wholeMode', this.uiProps.wholeMode);

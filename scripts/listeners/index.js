@@ -76,14 +76,6 @@ export default function (fepperUiInst) {
             if (fepperUiInst.annotationsViewer.annotationsActive || fepperUiInst.codeViewer.codeActive) {
               this.$orgs['#sg-vp-wrap'].dispatchAction('removeClass', 'anim-ready');
             }
-
-            if (
-              fepperUiInst.uiProps.sw <= fepperUiInst.uiProps.bpSm ||
-              fepperUiInst.uiProps.sw > fepperUiInst.uiProps.bpMd
-            ) {
-              this.$orgs['.sg-size'].dispatchAction('removeClass', 'active');
-              this.$orgs['#sg-form-label'].dispatchAction('removeClass', 'active');
-            }
           }
 
           // On each tick of resize.
@@ -126,6 +118,14 @@ export default function (fepperUiInst) {
 
         this.$orgs.window.on('resize', fepperUiInst.uiFns.debounce(() => {
           this.windowResizing = false;
+
+          if (
+            fepperUiInst.uiProps.sw <= fepperUiInst.uiProps.bpSm ||
+            fepperUiInst.uiProps.sw > fepperUiInst.uiProps.bpMd
+          ) {
+            this.$orgs['.sg-size'].dispatchAction('removeClass', 'active');
+            this.$orgs['#sg-form-label'].dispatchAction('removeClass', 'active');
+          }
 
           if (fepperUiInst.annotationsViewer.annotationsActive || fepperUiInst.codeViewer.codeActive) {
             this.$orgs['#sg-vp-wrap'].dispatchAction('addClass', 'anim-ready');
