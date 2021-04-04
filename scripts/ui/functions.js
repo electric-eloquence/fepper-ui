@@ -206,7 +206,7 @@ export default function (fepperUiInst, root) {
         this.$orgs['#sg-viewport'].dispatchAction('addClass', 'vp-animate');
       }
 
-      const size = this.updateViewportWidth(size_);
+      const size = this.updateViewportWidth(Math.floor(size_));
       const widthHalf = Math.floor(this.uiProps.sw / 2);
       this.uiProps.wholeMode = wholeMode;
 
