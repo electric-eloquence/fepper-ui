@@ -75,6 +75,11 @@ export default function (fepperUiInst) {
           if (!this.windowResizing) {
             if (fepperUiInst.annotationsViewer.annotationsActive || fepperUiInst.codeViewer.codeActive) {
               this.$orgs['#sg-vp-wrap'].dispatchAction('removeClass', 'anim-ready');
+
+              // Zero out padding-bottom, but unset this zeroing out after done resizing.
+              if (fepperUiInst.uiProps.dockPosition === 'bottom') {
+                this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: '0'});
+              }
             }
           }
 
@@ -128,7 +133,17 @@ export default function (fepperUiInst) {
           }
 
           if (fepperUiInst.annotationsViewer.annotationsActive || fepperUiInst.codeViewer.codeActive) {
-            this.$orgs['#sg-vp-wrap'].dispatchAction('addClass', 'anim-ready');
+            if (fepperUiInst.uiProps.dockPosition === 'bottom') {
+              // Unset the zeroing out of padding-bottom.
+              this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: ''});
+
+              setTimeout(() => {
+                this.$orgs['#sg-vp-wrap'].dispatchAction('addClass', 'anim-ready');
+              }, fepperUiInst.uiProps.timeoutDefault);
+            }
+            else {
+              this.$orgs['#sg-vp-wrap'].dispatchAction('addClass', 'anim-ready');
+            }
           }
         }));
       });
