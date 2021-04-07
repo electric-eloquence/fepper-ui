@@ -5,6 +5,42 @@ describe('Listeners end-to-end tests', function () {
         browser.setWindowSize(1024, 640);
       });
 
+      it('dock-right button docks the viewer to the right', function () {
+        $('#sg-t-toggle').click();
+        browser.pause(100);
+        $('#sg-t-annotations').click();
+        browser.pause(100);
+        expect($('#patternlab-body').getAttribute('class')).to.not.have.string('dock-right');
+        expect($('#sg-viewport').getSize().width).to.equal(1024);
+        $('#sg-view-btn-dock-right').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-right');
+        expect($('#sg-gen-container').getSize().width).to.equal(512);
+      });
+
+      it('dock-left button docks the viewer to the left', function () {
+        $('#sg-form-label').click();
+        browser.pause(100);
+        $('#sg-size-w').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.not.have.string('dock-left');
+        expect($('#sg-viewport').getSize().width).to.equal(1024);
+        $('#sg-view-btn-dock-left').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-left');
+        expect($('#sg-gen-container').getSize().width).to.equal(512);
+      });
+
+      it('dock-bottom button docks the viewer to the bottom', function () {
+        $('#sg-view-btn-dock-bottom').click();
+        browser.pause(100);
+        $('#sg-form-label').click();
+        browser.pause(100);
+        $('#sg-size-w').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-bottom');
+      });
+
       it('close button closes annotations viewer', function () {
         $('#sg-t-toggle').click();
         browser.pause(100);
@@ -51,6 +87,42 @@ menu anchor.</p>
     describe('click', function () {
       before(function () {
         browser.setWindowSize(1024, 640);
+      });
+
+      it('dock-right button docks the viewer to the right', function () {
+        $('#sg-t-toggle').click();
+        browser.pause(100);
+        $('#sg-t-code').click();
+        browser.pause(100);
+        expect($('#patternlab-body').getAttribute('class')).to.not.have.string('dock-right');
+        expect($('#sg-viewport').getSize().width).to.equal(1024);
+        $('#sg-view-btn-dock-right').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-right');
+        expect($('#sg-gen-container').getSize().width).to.equal(512);
+      });
+
+      it('dock-left button docks the viewer to the left', function () {
+        $('#sg-form-label').click();
+        browser.pause(100);
+        $('#sg-size-w').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.not.have.string('dock-left');
+        expect($('#sg-viewport').getSize().width).to.equal(1024);
+        $('#sg-view-btn-dock-left').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-left');
+        expect($('#sg-gen-container').getSize().width).to.equal(512);
+      });
+
+      it('dock-bottom button docks the viewer to the bottom', function () {
+        $('#sg-view-btn-dock-bottom').click();
+        browser.pause(100);
+        $('#sg-form-label').click();
+        browser.pause(100);
+        $('#sg-size-w').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-bottom');
       });
 
       it('close button closes code viewer', function () {
