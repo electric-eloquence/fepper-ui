@@ -25,6 +25,10 @@ export default class UiFns {
     return this.#fepperUi.uiProps;
   }
 
+  get viewerHandler() {
+    return this.#fepperUi.viewerHandler;
+  }
+
   /* METHODS */
 
   /**
@@ -192,33 +196,9 @@ export default class UiFns {
    * @param {number} size - The target size of the iframe.
    * @param {[boolean]} animate - For switching the CSS animation on or off.
    * @param {[boolean]} wholeMode - In wholeMode, the iframe will dynamically resize when #sg-rightpull is dragged.
+   * @param {[boolean]} halfMode - Like wholeMode, but half. wholeMode has priority in the case of conflict.
    */
-  sizeIframe(size_, animate = true, wholeMode = false) {
-    /* istanbul ignore if */
-    if (!size_ || typeof size_ !== 'number' || Number.isNaN(size_)) {
-      return;
-    }
-
-    const maxViewportWidth = this.uiProps.maxViewportWidth;
-    const minViewportWidth = this.uiProps.minViewportWidth;
-    this.uiProps.wholeMode = wholeMode;
-
-    this.dataSaver.updateValue('wholeMode', wholeMode);
-
-    let size;
-
-    // If the entered size is larger than the max allowed viewport size, cap value at max vp size.
-    if (size_ > maxViewportWidth) {
-      size = maxViewportWidth;
-    }
-    // If the entered size is less than the minimum allowed viewport size, cap value at min vp size.
-    else if (size_ < minViewportWidth) {
-      size = minViewportWidth;
-    }
-    else {
-      size = size_;
-    }
-
+  sizeIframe(size_, animate = true, wholeMode = false, halfMode = false) {
     // Conditionally remove CSS animation class from viewport.
     if (animate === false) {
       this.$orgs['#sg-gen-container'].dispatchAction('removeClass', 'vp-animate');
@@ -229,14 +209,38 @@ export default class UiFns {
       this.$orgs['#sg-viewport'].dispatchAction('addClass', 'vp-animate');
     }
 
-    // Resize viewport wrapper to desired size + size of drag resize handler.
-    this.$orgs['#sg-gen-container']
-      .dispatchAction('css', {width: (size + this.uiProps.sgRightpullWidth) + 'px'});
-    // Resize viewport to desired size.
-    this.$orgs['#sg-viewport'].dispatchAction('css', {width: size + 'px'});
+    const size = this.updateViewportWidth(Math.floor(size_));
+    const widthHalf = Math.floor(this.uiProps.sw / 2);
+    this.uiProps.wholeMode = wholeMode;
 
-    this.updateSizeReading(size); // Update values in toolbar.
-    this.dataSaver.updateValue('vpWidth', size); // Save current viewport to cookie.
+    this.dataSaver.updateValue('wholeMode', this.uiProps.wholeMode);
+
+    if (!wholeMode) {
+      this.uiProps.halfMode = halfMode;
+
+      this.dataSaver.updateValue('halfMode', this.uiProps.halfMode);
+    }
+
+    /* istanbul ignore if */
+    if (!size) {
+      return;
+    }
+
+    // If the submitted iframe viewport is larger than half the browser viewport, and the dock is positioned left or
+    // right, reposition the dock to the bottom.
+    if (this.uiProps.dockPosition === 'left' || this.uiProps.dockPosition === 'right') {
+      if ((size + this.uiProps.sgRightpullWidth) > widthHalf) {
+        this.uiProps.halfMode = false;
+
+        this.dataSaver.updateValue('halfMode', this.uiProps.halfMode);
+        this.viewerHandler.dockBottom();
+      }
+      else if ((size + this.uiProps.sgRightpullWidth) < widthHalf) {
+        this.uiProps.halfMode = false;
+
+        this.dataSaver.updateValue('halfMode', this.uiProps.halfMode);
+      }
+    }
   }
 
   startDisco() {
@@ -327,6 +331,9 @@ export default class UiFns {
    */
   updateSizeReading(size, unit, target) {
     const bodyFontSize = this.uiProps.bodyFontSize;
+    this.uiProps.vpWidth = size;
+
+    this.dataSaver.updateValue('vpWidth', size); // Save current viewport to cookie.
 
     let emSize;
     let pxSize;
@@ -350,14 +357,39 @@ export default class UiFns {
   }
 
   /**
-   * Update iframe width.
+   * Update iframe width. With fewer bells and whistles than sizeIframe().
    *
    * @param {number} size - The size in px.
+   * @returns {number} The size as constrained by minViewportWidth and maxViewportWidth.
    */
-  updateViewportWidth(size) {
+  updateViewportWidth(size_) {
+    /* istanbul ignore if */
+    if (!size_ || typeof size_ !== 'number' || Number.isNaN(size_)) {
+      return;
+    }
+
+    const maxViewportWidth = this.uiProps.maxViewportWidth;
+    const minViewportWidth = this.uiProps.minViewportWidth;
+
+    let size;
+
+    // If the entered size is larger than the max allowed viewport size, cap value at max vp size.
+    if (size_ > maxViewportWidth) {
+      size = maxViewportWidth;
+    }
+    // If the entered size is less than the minimum allowed viewport size, cap value at min vp size.
+    else if (size_ < minViewportWidth) {
+      size = minViewportWidth;
+    }
+    else {
+      size = size_;
+    }
+
     this.$orgs['#sg-gen-container']
       .dispatchAction('css', {width: (size + this.uiProps.sgRightpullWidth) + 'px'});
     this.$orgs['#sg-viewport'].dispatchAction('css', {width: size + 'px'});
     this.updateSizeReading(size);
+
+    return size;
   }
 }

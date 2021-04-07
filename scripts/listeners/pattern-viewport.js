@@ -9,7 +9,7 @@ export default class PatternlabViewer {
 
   listen() {
     // e2e test this by triggering the pattern to postMessage to be received here.
-    window.addEventListener('message', this.#fepperUi.patternlabViewer.receiveIframeMessage);
+    window.addEventListener('message', this.#fepperUi.patternViewport.receiveIframeMessage);
 
     document.addEventListener('DOMContentLoaded', () => {
       const fepperUi = this.#fepperUi;
@@ -71,7 +71,7 @@ export default class PatternlabViewer {
     // Publicly documenting ctrl+alt+0 because ctrl+shift+0 does not work in Windows.
     // However, allowing ctrl+shift+0 because it is publicly documented by Pattern Lab.
     Mousetrap.bind(['ctrl+alt+0', 'ctrl+shift+0'], (e) => {
-      this.#fepperUi.patternlabViewer.goXXSmall();
+      this.#fepperUi.patternViewport.goXXSmall();
 
       e.preventDefault();
       return false;
@@ -79,7 +79,7 @@ export default class PatternlabViewer {
 
     // Extra small.
     Mousetrap.bind('ctrl+shift+x', (e) => {
-      this.#fepperUi.patternlabViewer.goXSmall();
+      this.#fepperUi.patternViewport.goXSmall();
 
       e.preventDefault();
       return false;
@@ -87,7 +87,7 @@ export default class PatternlabViewer {
 
     // Small.
     Mousetrap.bind('ctrl+shift+s', (e) => {
-      this.#fepperUi.patternlabViewer.goSmall();
+      this.#fepperUi.patternViewport.goSmall();
 
       e.preventDefault();
       return false;
@@ -95,7 +95,7 @@ export default class PatternlabViewer {
 
     // Medium.
     Mousetrap.bind('ctrl+shift+m', (e) => {
-      this.#fepperUi.patternlabViewer.goMedium();
+      this.#fepperUi.patternViewport.goMedium();
 
       e.preventDefault();
       return false;
@@ -103,7 +103,7 @@ export default class PatternlabViewer {
 
     // Large.
     Mousetrap.bind('ctrl+shift+l', (e) => {
-      this.#fepperUi.patternlabViewer.goLarge();
+      this.#fepperUi.patternViewport.goLarge();
 
       e.preventDefault();
       return false;
@@ -111,7 +111,7 @@ export default class PatternlabViewer {
 
     // TODO: The following is DEPRECATED since it was a workaround for pre-Chromium Microsoft Edge.
     Mousetrap.bind('ctrl+alt+l', (e) => {
-      this.#fepperUi.patternlabViewer.goLarge();
+      this.#fepperUi.patternViewport.goLarge();
 
       e.preventDefault();
       return false;
@@ -121,7 +121,7 @@ export default class PatternlabViewer {
     // shortcuts. However, ctrl+shift+w cannot be publicly documented since browser behavior may change without
     // warning in the future (however unlikely).
     Mousetrap.bind(['ctrl+alt+w', 'ctrl+shift+w'], (e) => {
-      this.#fepperUi.patternlabViewer.goWhole();
+      this.#fepperUi.patternViewport.goWhole();
 
       e.preventDefault();
       return false;
@@ -129,7 +129,7 @@ export default class PatternlabViewer {
 
     // Random width.
     Mousetrap.bind('ctrl+alt+r', (e) => {
-      this.#fepperUi.patternlabViewer.goRandom();
+      this.#fepperUi.patternViewport.goRandom();
 
       e.preventDefault();
       return false;

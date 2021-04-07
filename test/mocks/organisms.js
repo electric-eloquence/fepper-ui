@@ -11,5 +11,4 @@ $orgs['#sg-annotations-container'].animate = () => {};
 $orgs.window.dispatchAction('innerWidth', 1024);
 $orgs.window.dispatchAction('innerHeight', 768);
 $orgs.window.dispatchAction('innerHeight', 768);
-$orgs['#sg-annotations-container'].dispatchAction('innerHeight', 384);
-$orgs['#sg-code-container'].dispatchAction('innerHeight', 384);
+$orgs['#sg-view-container'].dispatchAction('innerHeight', 384);

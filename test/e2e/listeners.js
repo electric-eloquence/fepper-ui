@@ -5,17 +5,53 @@ describe('Listeners end-to-end tests', function () {
         browser.setWindowSize(1024, 640);
       });
 
+      it('dock-right button docks the viewer to the right', function () {
+        $('#sg-t-toggle').click();
+        browser.pause(100);
+        $('#sg-t-annotations').click();
+        browser.pause(100);
+        expect($('#patternlab-body').getAttribute('class')).to.not.have.string('dock-right');
+        expect($('#sg-viewport').getSize().width).to.equal(1024);
+        $('#sg-view-btn-dock-right').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-right');
+        expect($('#sg-gen-container').getSize().width).to.equal(512);
+      });
+
+      it('dock-left button docks the viewer to the left', function () {
+        $('#sg-form-label').click();
+        browser.pause(100);
+        $('#sg-size-w').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.not.have.string('dock-left');
+        expect($('#sg-viewport').getSize().width).to.equal(1024);
+        $('#sg-view-btn-dock-left').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-left');
+        expect($('#sg-gen-container').getSize().width).to.equal(512);
+      });
+
+      it('dock-bottom button docks the viewer to the bottom', function () {
+        $('#sg-view-btn-dock-bottom').click();
+        browser.pause(100);
+        $('#sg-form-label').click();
+        browser.pause(100);
+        $('#sg-size-w').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-bottom');
+      });
+
       it('close button closes annotations viewer', function () {
         $('#sg-t-toggle').click();
         browser.pause(100);
         $('#sg-t-annotations').click();
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
-        $('#sg-annotations-close-btn').click();
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
+        $('#sg-view-btn-close').click();
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
       });
     });
 
@@ -28,8 +64,8 @@ describe('Listeners end-to-end tests', function () {
         browser.keys(['Control', 'Shift', 'a']);
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
-        expect($('#sg-annotations').getHTML(false)).to.equal(`<div id="annotation-1">
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
+        expect($('#sg-annotations').getHTML(false)).to.equal(`<div id="annotation-1" class="sg-annotation">
 <h2>1. Navigation</h2>
 <div><p>Navigation for responsive web experiences can be tricky. Large navigation menus 
 are typical on desktop sites, but mobile screen sizes don't give us the luxury 
@@ -42,7 +78,7 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'a']);
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
       });
     });
   });
@@ -53,17 +89,53 @@ menu anchor.</p>
         browser.setWindowSize(1024, 640);
       });
 
+      it('dock-right button docks the viewer to the right', function () {
+        $('#sg-t-toggle').click();
+        browser.pause(100);
+        $('#sg-t-code').click();
+        browser.pause(100);
+        expect($('#patternlab-body').getAttribute('class')).to.not.have.string('dock-right');
+        expect($('#sg-viewport').getSize().width).to.equal(1024);
+        $('#sg-view-btn-dock-right').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-right');
+        expect($('#sg-gen-container').getSize().width).to.equal(512);
+      });
+
+      it('dock-left button docks the viewer to the left', function () {
+        $('#sg-form-label').click();
+        browser.pause(100);
+        $('#sg-size-w').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.not.have.string('dock-left');
+        expect($('#sg-viewport').getSize().width).to.equal(1024);
+        $('#sg-view-btn-dock-left').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-left');
+        expect($('#sg-gen-container').getSize().width).to.equal(512);
+      });
+
+      it('dock-bottom button docks the viewer to the bottom', function () {
+        $('#sg-view-btn-dock-bottom').click();
+        browser.pause(100);
+        $('#sg-form-label').click();
+        browser.pause(100);
+        $('#sg-size-w').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-bottom');
+      });
+
       it('close button closes code viewer', function () {
         $('#sg-t-toggle').click();
         browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
-        $('#sg-code-close-btn').click();
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
+        $('#sg-view-btn-close').click();
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
       });
 
       it('HTML button displays HTML code', function () {
@@ -114,12 +186,12 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
       });
 
       it('"ctrl+shift+y" selects the HTML tab in code viewer', function () {
@@ -209,7 +281,7 @@ menu anchor.</p>
         browser.pause(700);
         $('#sg-code-fill').click();
         browser.pause(700);
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
       });
 
       it('does nothing when clicking on HTML code in code viewer', function () {
@@ -279,7 +351,7 @@ menu anchor.</p>
     });
   });
 
-  describe('patternlabViewer', function () {
+  describe('patternViewport', function () {
     describe('window.resize', function () {
       before(function () {
         browser.setWindowSize(1200, 640);
@@ -372,12 +444,6 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'm']);
         browser.pause(1000);
         expect($('#sg-viewport').getSize().width).to.equal(1024);
-      });
-
-      it('"ctrl+alt+l" resizes to Large', function () {
-        browser.keys(['Control', 'Alt', 'l']);
-        browser.pause(1000);
-        expect($('#sg-viewport').getSize().width).to.equal(1280);
       });
 
       it('"ctrl+shift+s" resizes to Small', function () {

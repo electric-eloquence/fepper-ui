@@ -4,12 +4,12 @@
  * Copyright (c) 2013-2016 Dave Olsen, http://dmolsen.com
  * Licensed under the MIT license.
  */
-export default class PatternlabViewer {
+export default class PatternViewport {
 
   /* CLASS FIELDS */
 
-  // Declared as a class field to retain the Event function prototype while keeping the class constructor tidy.
-  // Exposed as a property on the instance so it can be unit tested.
+  // The following function is declared as a class field to retain the Event function prototype while keeping the
+  // class constructor tidy. Exposed as a property on the instance so it can be unit tested.
   receiveIframeMessage = (event) => {
     const data = this.uiFns.receiveIframeMessageBoilerplate(event);
 
@@ -44,12 +44,6 @@ export default class PatternlabViewer {
 
           case 'ctrl+shift+m':
             this.goMedium();
-
-            break;
-
-          // TODO: The following is DEPRECATED since it was a workaround for pre-Chromium Microsoft Edge.
-          case 'ctrl+alt+l':
-            this.goLarge();
 
             break;
 
@@ -183,6 +177,7 @@ export default class PatternlabViewer {
         }
 
         if (!Number.isNaN(vpWidth)) {
+          this.uiProps.vpWidth = vpWidth;
           this.dataSaver.updateValue('vpWidth', vpWidth);
         }
       }

@@ -59,24 +59,12 @@ if (typeof window === 'object') {
       uiFns,
       uiProps
     } = FEPPER_UI;
-    const bpMd = 1024; // Not to be user-configured.
-    const bpSm = 767; // Not to be user-configured.
-
-    // Remove active classes if browser is resized outside small sw.
-    // Putting this window resize listener here instead of in a more general listeners file because we want to keep the
-    // bpMd and bpSm variables in one place.
-    $orgs.window.on('resize', function () {
-      if (uiProps.sw <= bpSm || uiProps.sw > bpMd) {
-        $orgs['.sg-size'].dispatchAction('removeClass', 'active');
-        $orgs['#sg-form-label'].dispatchAction('removeClass', 'active');
-      }
-    });
 
     // Toggle hidden sg-size-options buttons at small sw.
     $orgs['#sg-form-label'].on('click', function (e) {
       e.preventDefault();
 
-      if (uiProps.sw > bpSm && uiProps.sw <= bpMd) {
+      if (uiProps.sw > uiProps.bpSm && uiProps.sw <= uiProps.bpMd) {
         $orgs['.sg-size'].dispatchAction('toggleClass', 'active');
       }
     });
@@ -107,16 +95,6 @@ if (typeof window === 'object') {
       }
     });
 
-    $orgs['#sg-size-px'].on('keyup', function () {
-      const val = parseFloat($orgs['#sg-size-px'].getState().value);
-
-      if (Number.isNaN(val) || !Number.isInteger(val)) {
-        return;
-      }
-
-      uiFns.updateSizeReading(val, 'px', 'updateEmInput');
-    });
-
     // Em input.
     $orgs['#sg-size-em'].on('keydown', function (e) {
       let val = parseFloat($orgs['#sg-size-em'].getState().value);
@@ -142,26 +120,16 @@ if (typeof window === 'object') {
       }
     });
 
-    $orgs['#sg-size-em'].on('keyup', function () {
-      const val = parseFloat($orgs['#sg-size-em'].getState().value);
-
-      if (Number.isNaN(val)) {
-        return;
-      }
-
-      uiFns.updateSizeReading(val, 'em', 'updatePxInput');
-    });
-
     // Click whole width button.
     $orgs['#sg-size-w'].on('click', function (e) {
       e.preventDefault();
-      FEPPER_UI.patternlabViewer.goWhole();
+      FEPPER_UI.patternViewport.goWhole();
     });
 
     // Click Random Size Button.
     $orgs['#sg-size-random'].on('click', function (e) {
       e.preventDefault();
-      FEPPER_UI.patternlabViewer.goRandom();
+      FEPPER_UI.patternViewport.goRandom();
     });
 
     // Click for Disco Mode, which resizes the viewport randomly.
@@ -267,7 +235,7 @@ export function sgTAnnotationsClick(event) {
   annotationsViewer.toggleAnnotations();
 
   // If viewall, scroll to the focused pattern.
-  if (annotationsViewer.viewall) {
+  if (annotationsViewer.viewall && annotationsViewer.annotationsActive) {
     annotationsViewer.scrollViewall();
   }
 
@@ -289,7 +257,7 @@ export function sgTCodeClick(event) {
   codeViewer.toggleCode();
 
   // If viewall, scroll to the focused pattern.
-  if (codeViewer.viewall) {
+  if (codeViewer.viewall && codeViewer.codeActive) {
     codeViewer.scrollViewall();
   }
 
@@ -342,7 +310,6 @@ if (typeof window === 'object') {
     const {
       annotationsViewer,
       codeViewer,
-      dataSaver,
       uiFns,
       uiProps
     } = FEPPER_UI;
@@ -358,39 +325,51 @@ if (typeof window === 'object') {
       }
     });
 
-    // Handle widening the viewport.
+    $orgs['#sg-rightpull'].on('mouseenter', function () {
+      $orgs['#sg-cover'].dispatchAction('addClass', 'shown-by-rightpull-hover');
+    });
+
+    $orgs['#sg-rightpull'].on('mouseleave', function () {
+      $orgs['#sg-cover'].dispatchAction('removeClass', 'shown-by-rightpull-hover');
+    });
+
+    // Handle manually resizing the viewport.
     // 1. On "mousedown" store the click location.
-    // 2. Make a hidden div visible so that it can track mouse movements and make sure the pointer doesn't get lost
-    //    in the iframe.
+    // 2. Make a hidden div visible so that the cursor doesn't get lost in the iframe.
     // 3. On "mousemove" calculate the math, save the results to a cookie, and update the viewport.
     $orgs['#sg-rightpull'].on('mousedown', function (e) {
-      const origClientX = e.clientX;
-      const origViewportWidth = $orgs['#sg-viewport'].getState().innerWidth;
+      uiProps.sgRightpull.posX = e.pageX;
+      uiProps.sgRightpull.vpWidth = uiProps.vpWidth;
 
       // Show the cover.
-      $orgs['#sg-cover'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-cover'].dispatchAction('addClass', 'shown-by-rightpull-drag');
+    });
 
-      // Add the mouse move event and capture data. Also update the viewport width.
-      $orgs['#sg-cover'].on('mousemove', function (e) {
-        const viewportWidth = origViewportWidth + 2 * (e.clientX - origClientX);
+    // Add the mouse move event and capture data. Also update the viewport width.
+    $orgs['#patternlab-body'].on('mousemove', function (e) {
+      if ($orgs['#sg-cover'].getState().classArray.includes('shown-by-rightpull-drag')) {
+        let vpWidthNew = uiProps.sgRightpull.vpWidth;
 
-        if (viewportWidth > uiProps.minViewportWidth) {
-          if (!dataSaver.findValue('vpWidth')) {
-            dataSaver.addValue('vpWidth', viewportWidth);
-          }
-          else {
-            dataSaver.updateValue('vpWidth', viewportWidth);
-          }
-
-          uiFns.sizeIframe(viewportWidth, false);
+        if (uiProps.dockPosition === 'bottom') {
+          vpWidthNew += 2 * (e.pageX - uiProps.sgRightpull.posX);
         }
-      });
+        else {
+          vpWidthNew += e.pageX - uiProps.sgRightpull.posX;
+        }
+
+        if (vpWidthNew > uiProps.minViewportWidth) {
+          uiFns.sizeIframe(vpWidthNew, false);
+        }
+      }
     });
 
     // Handle letting go of rightpull bar after dragging to resize.
     $orgs['#patternlab-body'].on('mouseup', function () {
-      $orgs['#sg-cover'].off('mousemove');
-      $orgs['#sg-cover'].dispatchAction('css', {display: 'none'});
+      uiProps.sgRightpull.posX = null;
+      uiProps.sgRightpull.vpWidth = null;
+
+      $orgs['#sg-cover'].dispatchAction('removeClass', 'shown-by-rightpull-hover');
+      $orgs['#sg-cover'].dispatchAction('removeClass', 'shown-by-rightpull-drag');
     });
   });
 }

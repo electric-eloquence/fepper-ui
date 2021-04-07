@@ -14,13 +14,6 @@ export default class CodeViewer {
     document.addEventListener('DOMContentLoaded', () => {
       this.$orgs['#sg-code-container'].dispatchAction('css', 'bottom'); // Set this measurement in state.
 
-      // Make sure the close button handles the click.
-      this.$orgs['#sg-code-close-btn'].on('click', (e) => {
-        e.preventDefault();
-
-        this.#fepperUi.codeViewer.closeCode();
-      });
-
       // Make sure the click events are handled on the HTML tab.
       this.$orgs['#sg-code-title-html'].on('click', (e) => {
         e.preventDefault();
@@ -98,17 +91,6 @@ export default class CodeViewer {
 
       e.preventDefault();
       return false;
-    });
-
-    // DEPRECATED! Will be removed.
-    // When the code panel is open hijack, cmd+a/ctrl+a so that it only selects the code view.
-    Mousetrap.bind('mod+a', (e) => {
-      if (this.#fepperUi.codeViewer.codeActive) {
-        this.#fepperUi.codeViewer.selectCode();
-
-        e.preventDefault();
-        return false;
-      }
     });
 
     // Select the mustache tab.

@@ -28,9 +28,9 @@ function addLineageListeners($orgs, uiProps) {
 export default class CodeViewer {
 
   /* CLASS FIELDS */
+  // The following functions are declared as class fields to retain function-scoped `this` context while keeping the
+  // class constructor tidy. Exposed as properties on the instance so they can be unit tested.
 
-  // Declared as class fields to retain function-scoped `this` context while keeping the class constructor tidy.
-  // Exposed as properties on the instance so they can be unit tested.
   getPrintXHRErrorFunction = () => {
     const codeViewer = this;
 
@@ -123,13 +123,6 @@ export default class CodeViewer {
             }
 
             break;
-
-          // DEPRECATED! Will be removed.
-          /* istanbul ignore next */
-          case 'mod+a':
-            this.selectCode();
-
-            break;
         }
 
         break;
@@ -207,7 +200,6 @@ export default class CodeViewer {
 
     this.codeActive = false;
     this.$orgs = fepperUi.requerio.$orgs;
-    this.selectForCopy = false; // DEPRECATED! Will be removed.
     this.encoded = '';
     this.mustache = '';
     this.mustacheBrowser = false;
@@ -237,6 +229,10 @@ export default class CodeViewer {
     return this.#fepperUi.urlHandler;
   }
 
+  get viewerHandler() {
+    return this.#fepperUi.viewerHandler;
+  }
+
   /* METHODS */
 
   // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
@@ -245,7 +241,6 @@ export default class CodeViewer {
     const searchParams = this.urlHandler.getSearchParams();
 
     if (searchParams.view === 'code' || searchParams.view === 'c') {
-      this.selectForCopy = (searchParams.copy === 'true') ? true : false; // DEPRECATED! Will be removed.
       this.openCode();
     }
 
@@ -278,16 +273,6 @@ export default class CodeViewer {
 
     this.$orgs['#sg-code-fill'].dispatchAction('html', code);
     this.#root.Prism.highlightElement(this.$orgs['#sg-code-fill'][0]);
-
-    // DEPRECATED! Will be removed.
-    if (this.selectForCopy) {
-      /* istanbul ignore if */
-      if (typeof window === 'object') {
-        this.selectCode();
-      }
-
-      this.selectForCopy = false;
-    }
   }
 
   /**
@@ -307,44 +292,15 @@ export default class CodeViewer {
   }
 
   closeCode() {
+    // Tell the pattern that code viewer has been turned off.
     const obj = {codeToggle: 'off'};
+    // Flag that viewer is inactive.
     this.codeActive = false;
 
-    /* istanbul ignore if */
-    if (typeof getComputedStyle === 'function') {
-      this.$orgs['#sg-code-container'].dispatchAction('addClass', 'close');
-    }
-
+    this.viewerHandler.closeViewer();
     this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, this.uiProps.targetOrigin);
-    this.slideCode(
-      Number(this.$orgs['#sg-code-container'].getState().innerHeight)
-    );
     this.$orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
-
-    // Remove padding from bottom of viewport if appropriate.
-    if (!this.annotationsViewer.annotationsActive) {
-      this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: '0px'});
-    }
-
-    /* istanbul ignore if */
-    if (typeof getComputedStyle === 'function') {
-      const transitionDurationStr =
-        getComputedStyle(this.$orgs['#sg-code-container'][0]).getPropertyValue('transition-duration');
-      let transitionDurationNum;
-
-      if (transitionDurationStr.slice(-2) === 'ms') {
-        transitionDurationNum = parseFloat(transitionDurationStr);
-      }
-      else {
-        transitionDurationNum = parseFloat(transitionDurationStr) * 1000;
-      }
-
-      setTimeout(() => {
-        this.$orgs['#sg-code-container']
-          .dispatchAction('removeClass', 'close')
-          .dispatchAction('removeClass', 'anim-ready');
-      }, transitionDurationNum);
-    }
+    this.$orgs['#sg-code-container'].dispatchAction('removeClass', 'active');
   }
 
   openCode() {
@@ -353,56 +309,21 @@ export default class CodeViewer {
       return;
     }
 
+    // Tell the pattern that code viewer has been turned on.
+    const objCodeToggle = {codeToggle: 'on'};
     // Flag that viewer is active.
     this.codeActive = true;
 
-    this.$orgs['#sg-t-code'].dispatchAction('addClass', 'active');
-    this.$orgs['#sg-code-container'].dispatchAction('css', {bottom: -this.uiProps.sh + 'px'});
-
-    /* istanbul ignore if */
-    if (typeof getComputedStyle === 'function') {
-      this.$orgs['#sg-code-container'].dispatchAction('addClass', 'anim-ready');
-    }
-
     // Make sure the annotations viewer is off before showing code.
     this.annotationsViewer.closeAnnotations();
-
-    // Tell the pattern that code viewer has been turned on.
-    const objCodeToggle = {codeToggle: 'on'};
-
+    this.viewerHandler.openViewer();
     this.$orgs['#sg-viewport'][0].contentWindow.postMessage(objCodeToggle, this.uiProps.targetOrigin);
-
-    // Move the code into view.
-    this.slideCode(0);
-
-    // Add padding to bottom of viewport.
-    this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: (this.uiProps.sh / 2) + 'px'});
+    this.$orgs['#sg-t-code'].dispatchAction('addClass', 'active');
+    this.$orgs['#sg-code-container'].dispatchAction('addClass', 'active');
   }
 
-  scrollViewall() {
+  scrollViewall() /* istanbul ignore next */ {
     this.$orgs['#sg-viewport'][0].contentWindow.postMessage({codeScrollViewall: true}, this.uiProps.targetOrigin);
-  }
-
-  // DEPRECATED! Will be removed.
-  /**
-   * Select the code where using cmd+a/ctrl+a.
-   */
-  selectCode() /* istanbul ignore next */ {
-    const range = this.#root.document.createRange();
-    const selection = this.#root.getSelection();
-
-    range.selectNodeContents(this.$orgs['#sg-code-fill'][0]);
-    selection.removeAllRanges();
-    selection.addRange(range);
-  }
-
-  /**
-   * Slide the panel.
-   *
-   * @param {number} pos - The distance to slide.
-   */
-  slideCode(pos) {
-    this.$orgs['#sg-code-container'].dispatchAction('css', {bottom: -pos + 'px'});
   }
 
   /**
@@ -532,8 +453,8 @@ export default class CodeViewer {
 
     // Fill in the name of the pattern.
     this.#root.$('#sg-code-pattern-info-rel-path').html(this.uiData.sourceFiles[patternPartial]);
-    this.#root.$('#sg-code-lineage-pattern-name, #sg-code-lineager-pattern-name, #sg-code-pattern-info-pattern-name')
-      .html(patternPartial);
+    this.#root.$('#sg-code-pattern-info-pattern-name').html(`<strong>${patternPartial}</strong> at`);
+    this.#root.$('#sg-code-lineage-pattern-name, #sg-code-lineager-pattern-name').html(patternPartial);
 
     // Get the file name of the pattern so we can update the tabs of code that show in the viewer.
     const filename = this.uiData.patternPaths[patternPartial];
@@ -552,32 +473,5 @@ export default class CodeViewer {
     m.onerror = this.getPrintXHRErrorFunction(this);
     m.open('GET', filename.replace(/\.html/, patternExtension) + '?' + (new Date()).getTime(), true);
     m.send();
-
-    // Select the relative path to the pattern.
-    // Do not copy. Let the user decide whether or not to copy.
-    let selection;
-
-    /* istanbul ignore next */
-    try {
-      const range = this.#root.document.createRange();
-      selection = this.#root.getSelection();
-
-      range.selectNodeContents(this.$orgs['#sg-code-pattern-info-rel-path'][0]);
-      selection.removeAllRanges();
-      selection.addRange(range);
-    }
-    catch (err) {
-      /* eslint-disable no-console */
-      console.error(err);
-      console.error('Selection failed!');
-    }
-
-    // Deselect after 5 seconds.
-    /* istanbul ignore if */
-    if (selection) {
-      setTimeout(() => {
-        selection.removeAllRanges();
-      }, 5000);
-    }
   }
 }

@@ -7,8 +7,8 @@ export default class PatternFinder {
 
   /* CLASS FIELDS */
 
-  // Declared as a class field to retain the Event function prototype while keeping the class constructor tidy.
-  // Exposed as a property on the instance so it can be unit tested.
+  // The following function is declared as a class field to retain the Event function prototype while keeping the
+  // class constructor tidy. Exposed as a property on the instance so it can be unit tested.
   receiveIframeMessage = (event) => {
     const data = this.uiFns.receiveIframeMessageBoilerplate(event);
 

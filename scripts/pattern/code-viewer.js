@@ -20,8 +20,6 @@
     parent.postMessage({codeViewall: viewall}, targetOrigin);
   }
 
-  let codeActive = false;
-
   function scrollViewall() {
     const focusedEl = d.querySelector('.sg-pattern-toggle-code.focused');
 
@@ -62,8 +60,6 @@
 
       // Get and post data for selected pattern.
       if (data.codeToggle === 'on') {
-        codeActive = true;
-
         const sgPatterns = d.querySelectorAll('.sg-pattern');
         let obj;
 
@@ -146,8 +142,6 @@
 
       // data.codeToggle off.
       else {
-        codeActive = false;
-
         sgPatternToggleCode.forEach((el) => {
           el.classList.remove('active');
         });
@@ -238,17 +232,4 @@
       return false;
     });
   }
-
-  // DEPRECATED! Will be removed.
-  // When the code panel is open, hijack cmd+a/ctrl+a so that it only selects the code view.
-  Mousetrap.bind('mod+a', (e) => {
-    if (codeActive) {
-      const obj = {event: 'patternlab.keyPress', keyPress: 'mod+a'};
-
-      parent.postMessage(obj, targetOrigin);
-
-      e.preventDefault();
-      return false;
-    }
-  });
 })(document);

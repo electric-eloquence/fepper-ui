@@ -19,32 +19,34 @@ export default class UiProps {
     // Measurements.
     this.bodyFontSize = this.bodyFontSize || 16;
     this.bpObj = this.uiFns.getBreakpointsSorted();
-    this.maxViewportWidth =
-      this.#root.config ? parseInt(this.#root.config.ishMaximum) : 2600; // Maxiumum Size for Viewport.
-    this.minViewportWidth =
-      this.#root.config ? parseInt(this.#root.config.ishMinimum) : 240; // Minimum Size for Viewport.
-    // Any change to sgRightpullWidth needs to be replicated in ui/core/styleguide/index/html/01-body/40-main/main.css
-    // in fepper-npm in order to be compiled into styles/ui.css with a consistent width.
-    this.sgRightpullWidth = 14;
+    this.bpMd = 1024; // Not to be user-configured.
+    this.bpSm = 767; // Not to be user-configured.
+    this.maxViewportWidth = root.config ? parseInt(root.config.ishMaximum) : 2600; // Maxiumum Size for Viewport.
+    this.minViewportWidth = root.config ? parseInt(root.config.ishMinimum) : 240; // Minimum Size for Viewport.
 
     // Modes.
     this.discoMode = false;
     this.growMode = false;
+    this.halfMode = null; // Set later.
     this.wholeMode = null; // Set later.
 
     // Right pullbar drag state.
     this.sgRightpull = {
-      dragOn: false,
       posX: null,
-      viewportWidth: null
+      vpWidth: null
     };
 
     // Other.
     this.discoId = 0;
+    this.dockPosition = 'bottom';
     this.growId = 0;
-    this.isMobile = 'ontouchstart' in this.#root && this.sw <= 1024;
+    this.isMobile = 'ontouchstart' in root && this.sw <= 1024;
+    // Any change to sgRightpullWidth needs to be replicated in ui/core/styleguide/index/html/01-body/40-main/main.css
+    // in fepper-npm in order to be compiled into styles/ui.css with a consistent width.
+    this.sgRightpullWidth = this.isMobile ? 0 : 14;
     this.timeoutDefault = 200;
     this.titleSeparator = ' : ';
+    this.vpWidth = null;
   }
 
   /* GETTER for fepperUi.uiFns in case it is undefined at instantiation. */

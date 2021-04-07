@@ -5,6 +5,8 @@ import fepperUi from '../unit';
 const $orgs = fepperUi.requerio.$orgs;
 const uiComp = fepperUi.uiComp;
 
+const timeout = 10;
+
 describe('uiComp', function () {
   it('.sgAccHandleClick() toggles on', function () {
     const sgAccHandleLength = $orgs['.sg-acc-handle'].length;
@@ -101,46 +103,63 @@ describe('uiComp', function () {
     expect(sgNavTargetStateAfter.classArray).to.not.include('active');
   });
 
-  it('.sgTAnnotationsClick() toggles on', function () {
+  it('.sgTAnnotationsClick() toggles on', function (done) {
     fepperUi.annotationsViewer.stoke();
+    fepperUi.viewerHandler.stoke();
     $orgs['#sg-code-container'].dispatchAction('css', {bottom: 'auto'});
     $orgs['#sg-t-code'].dispatchAction('addClass', 'active');
 
+    const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
     const sgTCodeStateBefore = $orgs['#sg-t-code'].getState();
-    const sgCodeContainerStateBefore = $orgs['#sg-code-container'].getState();
     const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
+    const sgViewContainerStateBefore = $orgs['#sg-view-container'].getState();
 
     uiComp.sgTAnnotationsClick({preventDefault: () => {}});
 
-    const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
-    const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
-    const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
+    setTimeout(() => {
+      const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+      const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
+      const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
+      const sgViewContainerStateAfter = $orgs['#sg-view-container'].getState();
 
-    expect(sgTCodeStateBefore.classArray).to.include('active');
-    expect(sgCodeContainerStateBefore.css.bottom).to.not.equal(sgCodeContainerStateAfter.css.bottom);
-    expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
+      expect(patternlabBodyBefore.classArray).to.not.include('dock-open');
+      expect(sgTCodeStateBefore.classArray).to.include('active');
+      expect(sgTAnnotationsStateBefore.classArray).to.not.include('active');
+      expect(sgViewContainerStateBefore.classArray).to.not.include('anim-ready');
 
-    expect(sgTCodeStateAfter.classArray).to.not.include('active');
-    expect(sgCodeContainerStateAfter.css.bottom).to.equal('-384px');
-    expect(sgTAnnotationsStateAfter.classArray).to.include('active');
+      expect(patternlabBodyAfter.classArray).to.include('dock-open');
+      expect(sgTCodeStateAfter.classArray).to.not.include('active');
+      expect(sgTAnnotationsStateAfter.classArray).to.include('active');
+      expect(sgViewContainerStateAfter.classArray).to.include('anim-ready');
+
+      done();
+    }, timeout);
   });
 
-  it('.sgTAnnotationsClick() toggles off', function () {
+  it('.sgTAnnotationsClick() toggles off', function (done) {
     fepperUi.annotationsViewer.viewall = true;
 
-    const sgAnnotationsContainerStateBefore = $orgs['#sg-annotations-container'].getState();
+    const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
     const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
+    const sgViewContainerStateBefore = $orgs['#sg-view-container'].getState();
 
     uiComp.sgTAnnotationsClick({preventDefault: () => {}});
 
-    const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
-    const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
+    setTimeout(() => {
+      const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+      const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
+      const sgViewContainerStateAfter = $orgs['#sg-view-container'].getState();
 
-    expect(sgAnnotationsContainerStateBefore.css.bottom).to.not.equal(sgAnnotationsContainerStateAfter.css.bottom);
-    expect(sgTAnnotationsStateBefore.classArray).to.include('active');
+      expect(patternlabBodyBefore.classArray).to.include('dock-open');
+      expect(sgTAnnotationsStateBefore.classArray).to.include('active');
+      expect(sgViewContainerStateBefore.classArray).to.include('anim-ready');
 
-    expect(sgAnnotationsContainerStateAfter.css.bottom).to.equal('-384px');
-    expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
+      expect(patternlabBodyAfter.classArray).to.not.include('dock-open');
+      expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
+      expect(sgViewContainerStateAfter.classArray).to.not.include('anim-ready');
+
+      done();
+    }, timeout);
   });
 
   it('.sgTAnnotationsClick() does nothing if annotationsViewer.mustacheBrowser is true', function () {
@@ -163,52 +182,68 @@ describe('uiComp', function () {
       .to.equal(JSON.stringify(sgTAnnotationsStateAfter.classArray));
   });
 
-  it('.sgTCodeClick() toggles on', function () {
+  it('.sgTCodeClick() toggles on', function (done) {
     fepperUi.codeViewer.stoke();
+    fepperUi.viewerHandler.stoke();
     $orgs['#sg-t-annotations'].dispatchAction('addClass', 'active');
-    $orgs['#sg-annotations-container'].dispatchAction('css', {bottom: 'auto'});
     $orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
 
+    const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
     const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
-    const sgAnnotationsContainerStateBefore = $orgs['#sg-annotations-container'].getState();
     const sgTCodeStateBefore = $orgs['#sg-t-code'].getState();
+    const sgViewContainerStateBefore = $orgs['#sg-view-container'].getState();
     fepperUi.annotationsViewer.annotationsActive = true;
     fepperUi.codeViewer.codeActive = false;
 
     uiComp.sgTCodeClick({preventDefault: () => {}});
 
-    const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
-    const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
-    const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
+    setTimeout(() => {
+      const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+      const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
+      const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
+      const sgViewContainerStateAfter = $orgs['#sg-view-container'].getState();
 
-    expect(sgTAnnotationsStateBefore.classArray).to.include('active');
-    expect(sgAnnotationsContainerStateBefore.css.bottom).to.not.equal(sgAnnotationsContainerStateAfter.css.bottom);
-    expect(sgTCodeStateBefore.classArray).to.not.include('active');
+      expect(patternlabBodyBefore.classArray).to.not.include('dock-open');
+      expect(sgTAnnotationsStateBefore.classArray).to.include('active');
+      expect(sgTCodeStateBefore.classArray).to.not.include('active');
+      expect(sgViewContainerStateBefore.classArray).to.not.include('anim-ready');
 
-    expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
-    expect(sgAnnotationsContainerStateAfter.css.bottom).to.equal('-384px');
-    expect(sgTCodeStateAfter.classArray).to.include('active');
-    expect(fepperUi.annotationsViewer.annotationsActive).to.be.false;
-    expect(fepperUi.codeViewer.codeActive).to.be.true;
+      expect(patternlabBodyAfter.classArray).to.include('dock-open');
+      expect(sgTAnnotationsStateAfter.classArray).to.not.include('active');
+      expect(sgTCodeStateAfter.classArray).to.include('active');
+      expect(sgViewContainerStateAfter.classArray).to.include('anim-ready');
+      expect(fepperUi.annotationsViewer.annotationsActive).to.be.false;
+      expect(fepperUi.codeViewer.codeActive).to.be.true;
+
+      done();
+    }, timeout);
   });
 
-  it('.sgTCodeClick() toggles off', function () {
+  it('.sgTCodeClick() toggles off', function (done) {
     fepperUi.codeViewer.viewall = true;
 
-    const sgCodeContainerStateBefore = $orgs['#sg-code-container'].getState();
+    const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
     const sgTCodeStateBefore = $orgs['#sg-t-code'].getState();
+    const sgViewContainerStateBefore = $orgs['#sg-view-container'].getState();
 
     uiComp.sgTCodeClick({preventDefault: () => {}});
 
-    const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
-    const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
+    setTimeout(() => {
+      const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+      const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
+      const sgViewContainerStateAfter = $orgs['#sg-view-container'].getState();
 
-    expect(sgCodeContainerStateBefore.css.bottom).to.not.equal(sgCodeContainerStateAfter.css.bottom);
-    expect(sgTCodeStateBefore.classArray).to.include('active');
+      expect(patternlabBodyBefore.classArray).to.include('dock-open');
+      expect(sgTCodeStateBefore.classArray).to.include('active');
+      expect(sgViewContainerStateBefore.classArray).to.include('anim-ready');
 
-    expect(sgCodeContainerStateAfter.css.bottom).to.equal('-384px');
-    expect(sgTCodeStateAfter.classArray).to.not.include('active');
-    expect(fepperUi.codeViewer.codeActive).to.be.false;
+      expect(patternlabBodyAfter.classArray).to.not.include('dock-open');
+      expect(sgTCodeStateAfter.classArray).to.not.include('active');
+      expect(sgViewContainerStateAfter.classArray).to.not.include('anim-ready');
+      expect(fepperUi.codeViewer.codeActive).to.be.false;
+
+      done();
+    }, timeout);
   });
 
   it('.sgTCodeClick() does nothing if codeViewer.mustacheBrowser is true', function () {
