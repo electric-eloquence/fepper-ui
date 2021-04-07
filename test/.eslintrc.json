@@ -9,6 +9,7 @@
     "expect": true
   },
   "rules": {
+    "no-multi-str": 0,
     "no-unused-expressions": 0
   }
 }

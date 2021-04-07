@@ -265,7 +265,6 @@ describe('viewerHandler', function () {
       uiFns.sizeIframe(1024);
 
       const halfModeBefore = uiProps.halfMode;
-      const wholeModeBefore = uiProps.wholeMode;
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const vpWidthBefore = uiProps.vpWidth;
 
