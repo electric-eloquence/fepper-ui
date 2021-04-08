@@ -14,6 +14,8 @@ export default function (fepperUiInst) {
       document.addEventListener('DOMContentLoaded', () => {
         this.$orgs['#sg-code-container'].dispatchAction('css', 'bottom'); // Set this measurement in state.
 
+        // TODO: Create button listeners to switch between Feplet and Requerio tabs.
+/*
         // Make sure the click events are handled on the HTML tab.
         this.$orgs['#sg-code-title-html'].on('click', (e) => {
           e.preventDefault();
@@ -27,6 +29,7 @@ export default function (fepperUiInst) {
 
           fepperUiInst.codeViewer.swapCode('m');
         });
+*/
 
         // Select and copy the relative path to the pattern.
         this.$orgs['#sg-code-copy-path'].on('click', () => {
@@ -93,6 +96,8 @@ export default function (fepperUiInst) {
         return false;
       });
 
+      // TODO: Create keyboard shortcuts to switch between Feplet and Requerio tabs.
+/*
       // Select the mustache tab.
       // ctrl+shift+u is a Pattern Lab convention.
       Mousetrap.bind(['ctrl+alt+m', 'ctrl+shift+u'], (e) => {
@@ -110,6 +115,7 @@ export default function (fepperUiInst) {
         e.preventDefault();
         return false;
       });
+*/
     }
   }
 

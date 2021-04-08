@@ -61,7 +61,7 @@ export default function (fepperUiInst, root) {
               break;
 
             case 'esc':
-              if (this.annotationsActive) {
+              if (this.annotationsActive && this.uiProps.dockPosition === 'bottom') {
                 this.closeAnnotations();
               }
 

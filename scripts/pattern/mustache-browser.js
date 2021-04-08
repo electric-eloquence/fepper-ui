@@ -49,17 +49,12 @@
     }
   }
 
+  // Create click listener for copying relative path.
+  /*
   const pathAbs = d.getElementById('mustache-browser__path--absolute');
   const pathRel = d.getElementById('mustache-browser__path--relative');
   const pathButtonAbs = d.getElementById('mustache-browser__button--absolute');
   const pathButtonRel = d.getElementById('mustache-browser__button--relative');
-
-  // Select the absolute path to the pattern and copy it to the clipboard.
-  pathButtonAbs.addEventListener('click', () => {
-    pathAbs.style.visibility = 'visible';
-    pathRel.style.display = 'none';
-    selectAndCopy(pathAbs, pathButtonAbs);
-  });
 
   // Select the relative path to the pattern and copy it to the clipboard.
   pathButtonRel.addEventListener('click', () => {
@@ -67,4 +62,5 @@
     pathRel.style.display = 'block';
     selectAndCopy(pathRel, pathButtonRel);
   });
+  */
 })(document);

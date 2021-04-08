@@ -9,23 +9,8 @@ export default function (fepperUiInst) {
 
     listen() {
       document.addEventListener('DOMContentLoaded', () => {
-        // These css actions are here instead of in the CodeViewer class to abstract away Mustache Browser behavior.
-        this.$orgs['#sg-code-fill'].on('mouseenter', () => {
-          const titleState = this.$orgs['#sg-code-title-mustache'].getState();
-
-          if (titleState.classArray.includes('sg-code-title-active')) {
-            this.$orgs['#sg-code-fill'].dispatchAction('css', {cursor: 'pointer'});
-          }
-          else {
-            this.$orgs['#sg-code-fill'].dispatchAction('css', {cursor: 'default'});
-          }
-        });
-
         // Redirect to Fepper's Mustache browser when clicking the rel-path link.
         this.$orgs['#sg-code-pattern-info-rel-path'].on('click', this.mustacheBrowse.bind(this));
-
-        // Redirect to Fepper's Mustache browser when clicking the viewer's Mustache code.
-        this.$orgs['#sg-code-fill'].on('click', this.mustacheBrowse.bind(this));
       });
     }
 

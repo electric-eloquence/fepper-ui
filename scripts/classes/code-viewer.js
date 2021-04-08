@@ -98,6 +98,8 @@ export default function (fepperUiInst, root_) {
 
               break;
 
+            // TODO: Create keyboard shortcuts to switch between Feplet and Requerio tabs.
+/*
             case 'ctrl+alt+h':
             case 'ctrl+shift+y':
               this.swapCode('e');
@@ -109,9 +111,10 @@ export default function (fepperUiInst, root_) {
               this.swapCode('m');
 
               break;
+*/
 
             case 'esc':
-              if (this.codeActive) {
+              if (this.codeActive && this.uiProps.dockPosition === 'bottom') {
                 this.closeCode();
               }
 
