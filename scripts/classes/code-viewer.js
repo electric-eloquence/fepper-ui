@@ -48,15 +48,6 @@ export default function (fepperUiInst, root_) {
         else {
           error = `Status ${this.status}: ${this.statusText}`;
         }
-
-        if (codeViewer.tabActive === 'e') {
-          codeViewer.encoded = error;
-          codeViewer.activateDefaultTab('e', error);
-        }
-        else if (codeViewer.tabActive === 'm') {
-          codeViewer.mustache = error;
-          codeViewer.activateDefaultTab('m', error);
-        }
       };
     };
 
@@ -131,59 +122,6 @@ export default function (fepperUiInst, root_) {
       }
     };
 
-    // This runs once the AJAX request for the encoded markup is finished.
-    // If the encoded tab is the current active tab, it adds the content to the default code container.
-    getSaveEncodedFunction = (codeViewer) => {
-      return function () {
-        let encoded = this.responseText;
-
-        // We sometimes want markup code to be in an HTML-like template language with tags delimited by stashes.
-        // In order for js-beautify to indent such code correctly, any space between control characters #, ^, and /, and
-        // the variable name must be removed. However, we want to add the spaces back later.
-        // \u00A0 is &nbsp; a space character not on standard keyboards, and therefore a good delimiter.
-        encoded = encoded.replace(/(\{\{#)(\s+)(\S+)/g, '$1$3$2\u00A0');
-        encoded = encoded.replace(/(\{\{\^)(\s+)(\S+)/g, '$1$3$2\u00A0');
-        encoded = encoded.replace(/(\{\{\/)(\s+)(\S+)/g, '$1$3$2\u00A0');
-
-        encoded = root.html_beautify(encoded, {
-          indent_handlebars: true,
-          indent_size: 2,
-          wrap_line_length: 0
-        });
-
-        // Add back removed spaces to retain the look intended by the author.
-        encoded = encoded.replace(/(\{\{#)(\S+)(\s+)\u00A0/g, '$1$3$2');
-        encoded = encoded.replace(/(\{\{\^)(\S+)(\s+)\u00A0/g, '$1$3$2');
-        encoded = encoded.replace(/(\{\{\/)(\S+)(\s+)\u00A0/g, '$1$3$2');
-
-        // Delete empty lines.
-        encoded = encoded.replace(/^\s*$\n/gm, '');
-
-        // Encode with HTML entities.
-        encoded = root.he.encode(encoded);
-
-        codeViewer.encoded = encoded;
-
-        if (codeViewer.tabActive === 'e') {
-          codeViewer.activateDefaultTab('e', encoded);
-        }
-      };
-    };
-
-    // Run this once the AJAX request for the mustache markup has finished.
-    // If the mustache tab is the current active tab, add the content to the default code container.
-    getSaveMustacheFunction = (codeViewer) => {
-      return function () {
-        let mustache = this.responseText;
-        mustache = root.he.encode(mustache);
-        codeViewer.mustache = mustache;
-
-        if (codeViewer.tabActive === 'm') {
-          codeViewer.activateDefaultTab('m', mustache);
-        }
-      };
-    };
-
     /* CONSTRUCTOR */
 
     constructor(fepperUi) {
@@ -240,31 +178,6 @@ export default function (fepperUiInst, root_) {
     }
 
     /**
-     * When loading the code view, make sure the active tab is highlighted and filled in appropriately.
-     *
-     * @param {string} type - Single letter that refers to classes and types.
-     * @param {string} code - Code to appear in code view.
-     */
-    activateDefaultTab(type, code) {
-      this.$orgs['.sg-code-title'].dispatchAction('removeClass', 'sg-code-title-active');
-
-      switch (type) {
-        case 'e':
-          this.$orgs['#sg-code-title-html'].dispatchAction('addClass', 'sg-code-title-active');
-
-          break;
-
-        case 'm':
-          this.$orgs['#sg-code-title-mustache'].dispatchAction('addClass', 'sg-code-title-active');
-
-          break;
-      }
-
-      this.$orgs['#sg-code-fill'].dispatchAction('html', code);
-      root.Prism.highlightElement(this.$orgs['#sg-code-fill'][0]);
-    }
-
-    /**
      * Clear any selection of code when swapping tabs or opening a new pattern.
      */
     clearSelection() /* istanbul ignore next */ {
@@ -316,42 +229,6 @@ export default function (fepperUiInst, root_) {
     }
 
     /**
-     * Depending on what tab is clicked, swap out the code container. Make sure Prism highlight is added.
-     *
-     * @param {string} type - Single letter abbreviation of type.
-     */
-    swapCode(type) {
-      if (!this.codeActive) {
-        return;
-      }
-
-      let fill = '';
-      this.tabActive = type;
-
-      this.$orgs['.sg-code-title'].dispatchAction('removeClass', 'sg-code-title-active');
-
-      switch (type) {
-        case 'e':
-          fill = this.encoded;
-
-          this.$orgs['#sg-code-title-html'].dispatchAction('addClass', 'sg-code-title-active');
-
-          break;
-
-        case 'm':
-          fill = this.mustache;
-
-          this.$orgs['#sg-code-title-mustache'].dispatchAction('addClass', 'sg-code-title-active');
-
-          break;
-      }
-
-      this.$orgs['#sg-code-fill'].dispatchAction('html', fill);
-      root.Prism.highlightElement(this.$orgs['#sg-code-fill'][0]);
-      this.clearSelection();
-    }
-
-    /**
      * Decide on whether the code panel should be open or closed.
      */
     toggleCode() {
@@ -373,6 +250,14 @@ export default function (fepperUiInst, root_) {
      * @param {string} patternState - inprogress, inreview, complete
      */
     updateCode(lineage, lineageR, patternPartial, patternState) {
+      this.$orgs['#sg-code-mustache-browser'][0]
+        .contentWindow.location.replace(`/mustache-browser?partial=${patternPartial}`);
+      this.$orgs['#sg-code-mustache-browser'][0]
+        .addEventListener('load', () => {
+          const height = this.$orgs['#sg-code-mustache-browser'][0].contentWindow.document.documentElement.offsetHeight;
+
+          this.$orgs['#sg-code-mustache-browser'].dispatchAction('css', {height: `${height}px`, opacity: 1});
+        });
 
       // Clear any selections that might have been made.
       this.clearSelection();
@@ -444,24 +329,6 @@ export default function (fepperUiInst, root_) {
       root.$('#sg-code-pattern-info-rel-path').html(this.uiData.sourceFiles[patternPartial]);
       root.$('#sg-code-pattern-info-pattern-name').html(`<strong>${patternPartial}</strong> at`);
       root.$('#sg-code-lineage-pattern-name, #sg-code-lineager-pattern-name').html(patternPartial);
-
-      // Get the file name of the pattern so we can update the tabs of code that show in the viewer.
-      const filename = this.uiData.patternPaths[patternPartial];
-      const patternExtension = this.uiData.config.patternExtension || '.mustache';
-
-      // Request the encoded markup version of the pattern.
-      const e = new root.XMLHttpRequest();
-      e.onload = this.getSaveEncodedFunction(this);
-      e.onerror = this.getPrintXHRErrorFunction(this);
-      e.open('GET', filename.replace(/\.html/, '.markup-only.html') + '?' + (new Date()).getTime(), true);
-      e.send();
-
-      // Request the Mustache markup version of the pattern.
-      const m = new root.XMLHttpRequest();
-      m.onload = this.getSaveMustacheFunction(this);
-      m.onerror = this.getPrintXHRErrorFunction(this);
-      m.open('GET', filename.replace(/\.html/, patternExtension) + '?' + (new Date()).getTime(), true);
-      m.send();
     }
   }
 
