@@ -32,7 +32,7 @@ export default function (fepperUiInst) {
 */
 
         // Select and copy the relative path to the pattern.
-        this.$orgs['#sg-code-copy-path'].on('click', () => {
+        this.$orgs['#sg-code-pattern-info-rel-path'].on('click', () => {
           let selection;
 
           try {
@@ -56,20 +56,7 @@ export default function (fepperUiInst) {
           }
 
           try {
-            const copyPathState = this.$orgs['#sg-code-copy-path'].getState();
-            const origMsg = this.$orgs['#sg-code-copy-path'][0].innerHTML;
-            const origWidth = copyPathState.width;
-            const copiedMsg = copyPathState.attribs['data-copied-msg'];
-
             document.execCommand('copy');
-
-            this.$orgs['#sg-code-copy-path'].dispatchAction('width', origWidth);
-            this.$orgs['#sg-code-copy-path'].dispatchAction('html', copiedMsg);
-
-            setTimeout(() => {
-              selection.removeAllRanges();
-              this.$orgs['#sg-code-copy-path'].dispatchAction('html', origMsg);
-            }, 5000);
           }
           catch (err) {
             console.error(err);
