@@ -202,7 +202,7 @@ menu anchor.</p>
     <meta http-equiv="pragma" content="no-cache">
 
     
-    <link rel="stylesheet" href="/fepper-core/html-scraper.css">
+    <link rel="stylesheet" href="/styles/html-scraper.css">
     
   </head>
 
@@ -287,9 +287,9 @@ menu anchor.</p>
     <meta http-equiv="pragma" content="no-cache">
 
     
-    <link rel="stylesheet" href="/fepper-core/html-scraper.css">
+    <link rel="stylesheet" href="/styles/html-scraper.css">
     
-  <link rel="stylesheet" href="/fepper-core/html-scraper.css"></head>
+  <link rel="stylesheet" href="/styles/html-scraper.css"></head>
 
   <body class="text ">
     <main id="fepper-html-scraper" class="">
@@ -347,7 +347,7 @@ menu anchor.</p>
     <meta http-equiv="pragma" content="no-cache">
 
     
-    <link rel="stylesheet" href="/fepper-core/html-scraper.css">
+    <link rel="stylesheet" href="/styles/html-scraper.css">
     
   </head>
 

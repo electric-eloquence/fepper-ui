@@ -1,6 +1,5 @@
 *.log
 .*
 !.gitkeep
-/fepper-core
 /patterns
 /test
