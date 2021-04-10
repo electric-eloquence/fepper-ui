@@ -26,7 +26,6 @@ require('./mocks/bloodhound');
 require('./mocks/document');
 require('./mocks/he');
 require('./mocks/history');
-require('./mocks/html_beautify');
 require('./mocks/location');
 require('./mocks/Prism');
 require('./mocks/XMLHttpRequest');

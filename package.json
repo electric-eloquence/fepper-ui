@@ -43,7 +43,6 @@
     "feplet": "*",
     "he": "1.2.0",
     "jquery": "^3.5.1",
-    "js-beautify": "1.13.0",
     "mousetrap": "1.6.5",
     "redux": "^4.0.5",
     "requerio": "*",
