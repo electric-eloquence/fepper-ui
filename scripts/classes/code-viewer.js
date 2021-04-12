@@ -35,22 +35,6 @@ export default function (fepperUiInst, root_) {
     // Declared as class fields to retain function-scoped `this` context while keeping the class constructor tidy.
     // Exposed as properties on the instance so they can be unit tested.
 
-    getPrintXHRErrorFunction = (codeViewer) => {
-      return function () {
-        let error;
-
-        /* istanbul ignore else */
-        if (root.location.protocol === 'file:' && !this.status) {
-          // While it would be nice to offer internationalization of this error message, users shouldn't be using the
-          // file protocol scheme in the first place!
-          error = 'Access to XMLHttpRequest with the file protocol scheme has been blocked by CORS policy.';
-        }
-        else {
-          error = `Status ${this.status}: ${this.statusText}`;
-        }
-      };
-    };
-
     receiveIframeMessage = (event) => {
       const data = this.uiFns.receiveIframeMessageBoilerplate(event);
 
@@ -63,9 +47,6 @@ export default function (fepperUiInst, root_) {
         if (data.codeOverlay === 'on') {
           this.viewall = data.viewall || false;
 
-          // Can assume we're not viewing the Mustache Browser.
-          this.mustacheBrowser = false;
-
           if (data.openCode) {
             this.openCode();
           }
@@ -76,9 +57,6 @@ export default function (fepperUiInst, root_) {
         else {
           this.closeCode();
         }
-      }
-      else if (typeof data.codeMustacheBrowser === 'boolean') {
-        this.mustacheBrowser = data.codeMustacheBrowser;
       }
       else if (typeof data.codeViewall === 'boolean') {
         this.viewall = data.codeViewall;
@@ -130,10 +108,7 @@ export default function (fepperUiInst, root_) {
     constructor(fepperUi) {
       this.codeActive = false;
       this.$orgs = fepperUi.requerio.$orgs;
-      this.encoded = '';
-      this.mustache = '';
-      this.mustacheBrowser = false;
-      this.tabActive = 'm';
+      this.tabActive = 'f';
       this.viewall = false;
     }
 
@@ -180,22 +155,6 @@ export default function (fepperUiInst, root_) {
       }
     }
 
-    /**
-     * Clear any selection of code when swapping tabs or opening a new pattern.
-     */
-    clearSelection() /* istanbul ignore next */ {
-      if (!this.codeActive || !root.getSelection) {
-        return;
-      }
-
-      if (root.getSelection().empty) {
-        root.getSelection().empty();
-      }
-      else if (root.getSelection().removeAllRanges) {
-        root.getSelection().removeAllRanges();
-      }
-    }
-
     closeCode() {
       // Tell the pattern that code viewer has been turned off.
       const obj = {codeToggle: 'off'};
@@ -209,11 +168,6 @@ export default function (fepperUiInst, root_) {
     }
 
     openCode() {
-      // Do nothing if viewing Mustache Browser.
-      if (this.mustacheBrowser) {
-        return;
-      }
-
       // Tell the pattern that code viewer has been turned on.
       const objCodeToggle = {codeToggle: 'on'};
       // Flag that viewer is active.
@@ -261,9 +215,6 @@ export default function (fepperUiInst, root_) {
 
           this.$orgs['#sg-code-mustache-browser'].dispatchAction('css', {height: `${height}px`, opacity: 1});
         });
-
-      // Clear any selections that might have been made.
-      this.clearSelection();
 
       // Set data-patternpartial attribute.
       this.$orgs['#sg-code-container'].dispatchAction('attr', {'data-patternpartial': patternPartial});
