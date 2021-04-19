@@ -76,20 +76,7 @@ export default function (fepperUiInst, root_) {
 
               break;
 
-            // TODO: Create keyboard shortcuts to switch between Feplet and Requerio tabs.
-/*
-            case 'ctrl+alt+h':
-            case 'ctrl+shift+y':
-              this.swapCode('e');
-
-              break;
-
-            case 'ctrl+alt+m':
-            case 'ctrl+shift+u':
-              this.swapCode('m');
-
-              break;
-*/
+              // TODO: Create keyboard shortcuts to switch between Feplet and Requerio tabs.
 
             case 'esc':
               if (this.codeActive && this.uiProps.dockPosition === 'bottom') {
@@ -201,12 +188,10 @@ export default function (fepperUiInst, root_) {
           break;
         }
         case 'requerio': {
-          //this.$orgs['#sg-code-title-html'].dispatchAction('addClass', 'sg-code-title-active');
 
           break;
         }
         case 'git': {
-          //this.$orgs['#sg-code-title-mustache'].dispatchAction('addClass', 'sg-code-title-active');
 
           break;
         }
@@ -288,6 +273,7 @@ export default function (fepperUiInst, root_) {
             codeViewer.$orgs['#sg-code-panel-markdown'].dispatchAction('html', output);
           };
           xhr.onerror = function () {
+            // eslint-disable-next-line no-console
             console.error(`Status ${this.status}: ${this.statusText}`);
           };
 

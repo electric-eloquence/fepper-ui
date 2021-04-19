@@ -25,7 +25,6 @@
   // Only process this block to postMessage if there are patternData in the footer, i.e. not a viewall.
   if (patternData) {
     // Notify the UI what pattern this is so it updates itself appropriately.
-    const parts = window.location.href.split('?');
     const obj = {event: 'patternlab.pageLoad'};
     obj.patternPartial = patternData.patternPartial;
 

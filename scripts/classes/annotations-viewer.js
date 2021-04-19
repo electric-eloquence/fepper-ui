@@ -185,9 +185,8 @@ export default function (fepperUiInst, root) {
      * When updating the annotations panel, get the annotations from the pattern via postMessage.
      *
      * @param {array} annotations - Annotations array.
-     * @param {string} patternPartial - The shorthand partials syntax for a given pattern.
      */
-    updateAnnotations(annotations, patternPartial) {
+    updateAnnotations(annotations) {
       // See how many annotations this pattern might have.
       // If more than zero, write them out.
       // If not, alert the user to the fact there aren't any.

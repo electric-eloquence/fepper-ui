@@ -74,26 +74,7 @@ export default function (fepperUiInst) {
         return false;
       });
 
-      // TODO: Create keyboard shortcuts to switch between Feplet and Requerio tabs.
-/*
-      // Select the mustache tab.
-      // ctrl+shift+u is a Pattern Lab convention.
-      Mousetrap.bind(['ctrl+alt+m', 'ctrl+shift+u'], (e) => {
-        fepperUiInst.codeViewer.swapCode('m');
-
-        e.preventDefault();
-        return false;
-      });
-
-      // Select the html tab.
-      // ctrl+shift+y is a Pattern Lab convention.
-      Mousetrap.bind(['ctrl+alt+h', 'ctrl+shift+y'], (e) => {
-        fepperUiInst.codeViewer.swapCode('e');
-
-        e.preventDefault();
-        return false;
-      });
-*/
+      // TODO: Create keyboard shortcuts to switch between Feplet, Markdown, Requerio, and Git tabs.
     }
   }
 

@@ -6,6 +6,17 @@ $orgs['#sg-viewport'][0].contentWindow = {
   },
   postMessage: () => {}
 };
+$orgs['#sg-code-panel-feplet'][0].addEventListener = () => {};
+$orgs['#sg-code-panel-feplet'][0].contentWindow = {
+  document: {
+    documentElement: {
+      offsetHeight: 100
+    }
+  },
+  location: {
+    replace: () => {}
+  }
+};
 $orgs['#sg-annotations-container'].animate = () => {};
 
 $orgs.window.dispatchAction('innerWidth', 1024);
