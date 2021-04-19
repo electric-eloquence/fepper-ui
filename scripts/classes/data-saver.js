@@ -1,10 +1,13 @@
 // TODO: Replace closure with private class field when there is greater browser support.
 export default function (cookieName, fepperUiInst) {
+
+  /**
+   * This cookie-handler stores cookies delimited by characters that the Firefox Storage Inspector parses into objects.
+   * @see {@link https://developer.mozilla.org/en-US/docs/Tools/Storage_Inspector#sidebar}
+   */
   class DataSaver {
 
     /**
-     * Instantiate a namespaced cookie-handler.
-     *
      * @param {string} cookieName - The name of the cookie to store the data in.
      * @param {object} fepperUi - The Fepper UI instance.
      */
@@ -28,10 +31,10 @@ export default function (cookieName, fepperUiInst) {
      */
     addValue(name, val) {
       const cookieValOrig = this.cookies.get(this.cookieName);
-      let cookieValNew = name + '~' + val;
+      let cookieValNew = name + '=' + val;
 
       if (cookieValOrig) {
-        cookieValNew = cookieValOrig + '|' + cookieValNew;
+        cookieValNew = cookieValOrig + ':' + cookieValNew;
       }
 
       this.cookies.set(this.cookieName, cookieValNew, {sameSite: 'strict'});
@@ -46,21 +49,21 @@ export default function (cookieName, fepperUiInst) {
     updateValue(name, val) {
       if (this.findValue(name)) {
         const cookieVal = this.cookies.get(this.cookieName) || '';
-        const cookieVals = cookieVal.split('|');
+        const cookieVals = cookieVal.split(':');
         let cookieValNew = '';
 
         for (let i = 0; i < cookieVals.length; i++) {
-          const fieldVals = cookieVals[i].split('~');
+          const fieldVals = cookieVals[i].split('=');
 
           if (fieldVals[0] === name) {
             fieldVals[1] = val;
           }
 
           if (i) {
-            cookieValNew += '|';
+            cookieValNew += ':';
           }
 
-          cookieValNew += fieldVals[0] + '~' + fieldVals[1];
+          cookieValNew += fieldVals[0] + '=' + fieldVals[1];
         }
 
         this.cookies.set(this.cookieName, cookieValNew, {sameSite: 'strict'});
@@ -77,19 +80,19 @@ export default function (cookieName, fepperUiInst) {
      */
     removeValue(name) {
       const cookieVal = this.cookies.get(this.cookieName) || '';
-      const cookieVals = cookieVal.split('|');
+      const cookieVals = cookieVal.split(':');
       let k = 0;
       let cookieValNew = '';
 
       for (let i = 0; i < cookieVals.length; i++) {
-        const fieldVals = cookieVals[i].split('~');
+        const fieldVals = cookieVals[i].split('=');
 
         if (fieldVals[0] !== name) {
           if (k) {
-            cookieValNew += '|';
+            cookieValNew += ':';
           }
 
-          cookieValNew += fieldVals[0] + '~' + fieldVals[1];
+          cookieValNew += fieldVals[0] + '=' + fieldVals[1];
           k++;
         }
       }
@@ -105,10 +108,10 @@ export default function (cookieName, fepperUiInst) {
      */
     findValue(name) {
       const cookieVal = this.cookies.get(this.cookieName) || '';
-      const cookieVals = cookieVal.split('|');
+      const cookieVals = cookieVal.split(':');
 
       for (let i = 0; i < cookieVals.length; i++) {
-        const fieldVals = cookieVals[i].split('~');
+        const fieldVals = cookieVals[i].split('=');
 
         if (fieldVals[0] === name) {
           return fieldVals[1];

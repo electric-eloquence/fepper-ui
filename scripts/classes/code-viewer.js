@@ -47,7 +47,7 @@ export default function (fepperUiInst, root_) {
         if (data.codeOverlay === 'on') {
           this.viewall = data.viewall || false;
 
-          if (data.openCode) {
+          if (data.openCode && !this.codeActive) {
             this.openCode();
           }
 
@@ -108,7 +108,8 @@ export default function (fepperUiInst, root_) {
     constructor(fepperUi) {
       this.codeActive = false;
       this.$orgs = fepperUi.requerio.$orgs;
-      this.tabActive = 'f';
+      this.patternPartial = null;
+      this.tabActive = 'feplet';
       this.viewall = false;
     }
 
@@ -116,6 +117,10 @@ export default function (fepperUiInst, root_) {
 
     get annotationsViewer() {
       return fepperUiInst.annotationsViewer;
+    }
+
+    get dataSaver() {
+      return fepperUiInst.dataSaver;
     }
 
     get uiData() {
@@ -144,14 +149,67 @@ export default function (fepperUiInst, root_) {
     stoke() {
       // Load the query strings in case code view has to show by default.
       const searchParams = this.urlHandler.getSearchParams();
+      const tabActive = this.dataSaver.findValue('tabActive');
+      this.patternPartial = searchParams.p;
 
       if (searchParams.view === 'code' || searchParams.view === 'c') {
         this.openCode();
       }
-
       // Open code panel on page load if config.defaultShowPatternInfo === true.
       else if (this.uiData.config.defaultShowPatternInfo) {
         this.openCode();
+      }
+
+      if (tabActive && tabActive !== this.tabActive) {
+        this.activateTabAndPanel(tabActive);
+      }
+    }
+
+    /**
+     * When loading the code view, make sure the active tab is highlighted and filled in appropriately.
+     *
+     * @param {string} type - Single letter that refers to classes and types.
+     */
+    activateTabAndPanel(type) {
+      this.tabActive = type;
+
+      this.$orgs['.sg-code-tab'].dispatchAction('removeClass', 'sg-code-tab-active');
+      this.$orgs['.sg-code-panel'].dispatchAction('removeClass', 'sg-code-panel-active');
+      this.dataSaver.updateValue('tabActive', type);
+
+      switch (type) {
+        case 'feplet': {
+          this.$orgs['#sg-code-tab-feplet'].dispatchAction('addClass', 'sg-code-tab-active');
+          this.$orgs['#sg-code-panel-feplet'].dispatchAction('addClass', 'sg-code-panel-active');
+          this.setPanelContent('feplet');
+
+          break;
+        }
+        case 'markdown': {
+          // TODO: Viewall behavior:
+          //       While clicking code buttons on viewall, update markdown panel.
+          //       If activated while on viewall, do not show an edit button.
+          this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-active');
+          this.$orgs['#sg-code-panel-markdown'].dispatchAction('addClass', 'sg-code-panel-active');
+
+          const panelMarkdown = this.$orgs['#sg-code-panel-markdown'].getState().html;
+
+          if (!panelMarkdown) {
+            this.setPanelContent('markdown');
+          }
+
+          break;
+        }
+        case 'requerio': {
+          //this.$orgs['#sg-code-title-html'].dispatchAction('addClass', 'sg-code-title-active');
+
+          break;
+        }
+        case 'git': {
+          //this.$orgs['#sg-code-title-mustache'].dispatchAction('addClass', 'sg-code-title-active');
+
+          break;
+        }
       }
     }
 
@@ -181,8 +239,64 @@ export default function (fepperUiInst, root_) {
       this.$orgs['#sg-code-container'].dispatchAction('addClass', 'active');
     }
 
+    resetPanels(patternPartial) {
+      this.patternPartial = patternPartial;
+
+      this.unsetPanelContent('feplet');
+      this.unsetPanelContent('markdown');
+      this.unsetPanelContent('requerio');
+      this.unsetPanelContent('git');
+      this.setPanelContent(this.tabActive);
+    }
+
     scrollViewall() /* istanbul ignore next */ {
       this.$orgs['#sg-viewport'][0].contentWindow.postMessage({codeScrollViewall: true}, this.uiProps.targetOrigin);
+    }
+
+    setPanelContent(type) {
+      switch (type) {
+        case 'feplet': {
+          this.$orgs['#sg-code-panel-feplet'][0]
+            .contentWindow.location.replace(`/mustache-browser?partial=${this.patternPartial}`);
+          this.$orgs['#sg-code-panel-feplet'][0]
+            .addEventListener('load', () => {
+              const height = this.$orgs['#sg-code-panel-feplet'][0].contentWindow.document.documentElement.offsetHeight;
+
+              this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: `${height}px`, visibility: ''});
+            });
+
+          break;
+        }
+        case 'markdown': {
+          const codeViewer = this;
+          const config = this.uiData.config;
+          const patternPath = this.uiData.patternPaths[this.patternPartial];
+          const mdPath = patternPath.slice(0, -(config.outfileExtension.length)) + config.frontMatterExtension;
+
+          const xhr = new root.XMLHttpRequest();
+          xhr.onload = function () {
+            let output;
+
+            if (this.status === 200) {
+              output = '<pre><code class="language-markdown">' + this.responseText + '</code></pre>';
+            }
+            else {
+              output = `<p>There is no .md file associated with this pattern.</p>
+<p>Please refer to <a href="/readme#markdown-content" target="_blank">the docs</a> for additional information.</p>`;
+            }
+
+            codeViewer.$orgs['#sg-code-panel-markdown'].dispatchAction('html', output);
+          };
+          xhr.onerror = function () {
+            console.error(`Status ${this.status}: ${this.statusText}`);
+          };
+
+          xhr.open('GET', mdPath + '?' + Date.now());
+          xhr.send();
+
+          break;
+        }
+      }
     }
 
     /**
@@ -197,6 +311,19 @@ export default function (fepperUiInst, root_) {
       }
     }
 
+    unsetPanelContent(type) {
+      switch (type) {
+        case 'feplet':
+          this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: '', visibility: 'hidden'});
+          this.$orgs['#sg-code-panel-feplet'][0].contentWindow.location.replace('about:blank');
+
+          break;
+
+        default:
+          this.$orgs['#sg-code-panel-' + type].dispatchAction('html', '');
+      }
+    }
+
     /**
      * When turning on or switching between patterns with code viewer on, make sure we get the code from the pattern via
      * postMessage.
@@ -207,17 +334,10 @@ export default function (fepperUiInst, root_) {
      * @param {string} patternState - inprogress, inreview, complete
      */
     updateCode(lineage, lineageR, patternPartial, patternState) {
-      this.$orgs['#sg-code-mustache-browser'][0]
-        .contentWindow.location.replace(`/mustache-browser?partial=${patternPartial}`);
-      this.$orgs['#sg-code-mustache-browser'][0]
-        .addEventListener('load', () => {
-          const height = this.$orgs['#sg-code-mustache-browser'][0].contentWindow.document.documentElement.offsetHeight;
+      this.patternPartial = patternPartial;
 
-          this.$orgs['#sg-code-mustache-browser'].dispatchAction('css', {height: `${height}px`, opacity: 1});
-        });
-
-      // Set data-patternpartial attribute.
-      this.$orgs['#sg-code-container'].dispatchAction('attr', {'data-patternpartial': patternPartial});
+      // Setting panel content is async, so fire that off first.
+      this.setPanelContent(this.tabActive);
 
       // Draw lineage.
       if (lineage.length) {
@@ -231,8 +351,8 @@ export default function (fepperUiInst, root_) {
           }
 
           lineageList += (i === 0) ? '' : ', ';
-          lineageList += '<a href="' + lineage[i].lineagePath + '" class="' + cssClass + '" data-patternpartial="';
-          lineageList += lineage[i].lineagePattern + '">' + lineage[i].lineagePattern + '</a>';
+          lineageList += '<a href="' + lineage[i].lineagePath + '" class="' + cssClass + '">';
+          lineageList += lineage[i].lineagePattern + '</a>';
         }
 
         this.$orgs['#sg-code-lineage'].dispatchAction('css', {display: 'block'});
@@ -254,8 +374,8 @@ export default function (fepperUiInst, root_) {
           }
 
           lineageRList += (i === 0) ? '' : ', ';
-          lineageRList += '<a href="' + lineageR[i].lineagePath + '" class="' + cssClass + '" data-patternpartial="';
-          lineageRList += lineageR[i].lineagePattern + '">' + lineageR[i].lineagePattern + '</a>';
+          lineageRList += '<a href="' + lineageR[i].lineagePath + '" class="' + cssClass + '">';
+          lineageRList += lineageR[i].lineagePattern + '</a>';
         }
 
         this.$orgs['#sg-code-lineager'].dispatchAction('css', {display: 'block'});

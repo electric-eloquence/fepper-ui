@@ -15,6 +15,10 @@ export default function (fepperUiInst, root) {
 
     /* GETTERS for fepperUi instance props in case they are undefined at instantiation. */
 
+    get codeViewer() {
+      return fepperUiInst.codeViewer;
+    }
+
     get uiData() {
       return fepperUiInst.uiData;
     }
@@ -108,6 +112,7 @@ export default function (fepperUiInst, root) {
       const data = {pattern: patternPartial};
 
       root.history.pushState(data, null, addressReplacement);
+      this.codeViewer.resetPanels(patternPartial);
       this.uiFns.updatePatternInfo(patternPartial, this.uiData.patternPaths[patternPartial]);
     }
   }

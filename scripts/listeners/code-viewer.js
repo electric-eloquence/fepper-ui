@@ -14,22 +14,13 @@ export default function (fepperUiInst) {
       document.addEventListener('DOMContentLoaded', () => {
         this.$orgs['#sg-code-container'].dispatchAction('css', 'bottom'); // Set this measurement in state.
 
-        // TODO: Create button listeners to switch between Feplet and Requerio tabs.
-/*
-        // Make sure the click events are handled on the HTML tab.
-        this.$orgs['#sg-code-title-html'].on('click', (e) => {
-          e.preventDefault();
-
-          fepperUiInst.codeViewer.swapCode('e');
+        this.$orgs['#sg-code-tab-feplet'].on('click', () => {
+          fepperUiInst.codeViewer.activateTabAndPanel('feplet');
         });
 
-        // Make sure the click events are handled on the Mustache tab.
-        this.$orgs['#sg-code-title-mustache'].on('click', (e) => {
-          e.preventDefault();
-
-          fepperUiInst.codeViewer.swapCode('m');
+        this.$orgs['#sg-code-tab-markdown'].on('click', () => {
+          fepperUiInst.codeViewer.activateTabAndPanel('markdown');
         });
-*/
 
         // Select and copy the relative path to the pattern.
         this.$orgs['#sg-code-pattern-info-rel-path'].on('click', () => {
