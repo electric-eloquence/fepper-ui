@@ -2,11 +2,16 @@ const $orgs = global.FEPPER_UI.requerio.$orgs;
 
 $orgs['#sg-viewport'][0].contentWindow = {
   location: {
-    replace: () => {}
+    href: '',
+    replace: (href) => {
+      $orgs['#sg-viewport'][0].contentWindow.location.href = href;
+    }
   },
   postMessage: () => {}
 };
-$orgs['#sg-code-panel-feplet'][0].addEventListener = () => {};
+$orgs['#sg-code-panel-feplet'][0].addEventListener = (event, callback) => {
+  callback();
+};
 $orgs['#sg-code-panel-feplet'][0].contentWindow = {
   document: {
     documentElement: {
@@ -14,7 +19,10 @@ $orgs['#sg-code-panel-feplet'][0].contentWindow = {
     }
   },
   location: {
-    replace: () => {}
+    href: '',
+    replace: (href) => {
+      $orgs['#sg-code-panel-feplet'][0].contentWindow.location.href = href;
+    }
   }
 };
 $orgs['#sg-annotations-container'].animate = () => {};

@@ -130,6 +130,83 @@ describe('codeViewer', function () {
     });
   });
 
+  describe('.activateTabAndPanel()', function () {
+    before(function () {
+      global.location = {
+        search: '?p=compounds-block'
+      };
+
+      codeViewer.stoke();
+    });
+
+    // Must test a tab + panel besides the Feplet default first. This way the Feplet tab + panel test can be accurate.
+    it('activates the Markdown tab and panel for a pattern with Markdown - also tests .setPanelContent()', function () {
+      const panelStateBefore = $orgs['#sg-code-panel-markdown'].getState();
+      const tabStateBefore = $orgs['#sg-code-tab-markdown'].getState();
+
+      codeViewer.activateTabAndPanel('markdown');
+
+      const panelStateAfter = $orgs['#sg-code-panel-markdown'].getState();
+      const tabStateAfter = $orgs['#sg-code-tab-markdown'].getState();
+
+      expect(panelStateBefore.classArray).to.not.include('sg-code-panel-active');
+      expect(panelStateBefore.html).to.not.equal(panelStateAfter.html);
+      expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
+
+      expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
+      expect(panelStateAfter.html).to.equal('<pre><code class="language-markdown">SUCCESS!</code></pre>');
+      expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
+    });
+
+    it('activates the Feplet tab and panel - also tests .setPanelContent()', function () {
+      const panelLocationHrefBefore = $orgs['#sg-code-panel-feplet'][0].contentWindow.location.href;
+      const panelStateBefore = $orgs['#sg-code-panel-feplet'].getState();
+      const tabStateBefore = $orgs['#sg-code-tab-feplet'].getState();
+
+      codeViewer.activateTabAndPanel('feplet');
+
+      const panelLocationHrefAfter = $orgs['#sg-code-panel-feplet'][0].contentWindow.location.href;
+      const panelStateAfter = $orgs['#sg-code-panel-feplet'].getState();
+      const tabStateAfter = $orgs['#sg-code-tab-feplet'].getState();
+
+      expect(panelLocationHrefBefore).to.not.equal(panelLocationHrefAfter);
+      expect(panelStateBefore.classArray).to.not.include('sg-code-panel-active');
+      expect(panelStateBefore.style.height).to.not.equal(panelStateAfter.style.height);
+      expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
+
+      expect(panelLocationHrefAfter).to.equal('/mustache-browser?partial=compounds-block');
+      expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
+      expect(panelStateAfter.style.height).to.equal('100px');
+      expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
+    });
+
+    it('activates the Markdown tab and panel for a pattern without Markdown - does via the tabActive cookie on.stoke();\
+also tests .resetPanels()', function () {
+      global.location.search = '?p=elements-paragraph';
+
+      codeViewer.resetPanels();
+      codeViewer.stoke();
+
+      const panelStateBefore = $orgs['#sg-code-panel-markdown'].getState();
+      const tabStateBefore = $orgs['#sg-code-tab-markdown'].getState();
+
+      fepperUi.dataSaver.updateValue('tabActive', 'markdown');
+      codeViewer.stoke();
+
+      const panelStateAfter = $orgs['#sg-code-panel-markdown'].getState();
+      const tabStateAfter = $orgs['#sg-code-tab-markdown'].getState();
+
+      expect(panelStateBefore.classArray).to.not.include('sg-code-panel-active');
+      expect(panelStateBefore.html).to.not.equal(panelStateAfter.html);
+      expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
+
+      expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
+      expect(panelStateAfter.html).to.equal(`<p>There is no .md file associated with this pattern.</p>
+<p>Please refer to <a href="/readme#markdown-content" target="_blank">the docs</a> for additional information.</p>`);
+      expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
+    });
+  });
+
   describe('.toggleCode()', function () {
     after(function (done) {
       codeViewer.closeCode();

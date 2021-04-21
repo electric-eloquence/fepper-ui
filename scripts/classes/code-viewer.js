@@ -272,6 +272,7 @@ export default function (fepperUiInst, root_) {
 
             codeViewer.$orgs['#sg-code-panel-markdown'].dispatchAction('html', output);
           };
+          /* istanbul ignore next */
           xhr.onerror = function () {
             // eslint-disable-next-line no-console
             console.error(`Status ${this.status}: ${this.statusText}`);
