@@ -149,11 +149,11 @@ export default class Listeners {
     const Mousetrap = window.Mousetrap;
 
     Mousetrap.bind('esc', () => {
-      if (this.#fepperUi.annotationsViewer.annotationsActive) {
+      if (this.#fepperUi.annotationsViewer.annotationsActive && this.#fepperUi.uiProps.dockPosition === 'bottom') {
         this.#fepperUi.annotationsViewer.closeAnnotations();
       }
 
-      if (this.#fepperUi.codeViewer.codeActive) {
+      if (this.#fepperUi.codeViewer.codeActive && this.#fepperUi.uiProps.dockPosition === 'bottom') {
         this.#fepperUi.codeViewer.closeCode();
       }
 
