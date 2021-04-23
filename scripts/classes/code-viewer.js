@@ -31,33 +31,6 @@ export default class CodeViewer {
   // The following functions are declared as class fields to retain function-scoped `this` context while keeping the
   // class constructor tidy. Exposed as properties on the instance so they can be unit tested.
 
-  getPrintXHRErrorFunction = () => {
-    const codeViewer = this;
-
-    return function () {
-      let error;
-
-      /* istanbul ignore else */
-      if (codeViewer.#root.location.protocol === 'file:' && !this.status) {
-        // While it would be nice to offer internationalization of this error message, users shouldn't be using the
-        // file protocol scheme in the first place!
-        error = 'Access to XMLHttpRequest with the file protocol scheme has been blocked by CORS policy.';
-      }
-      else {
-        error = `Status ${this.status}: ${this.statusText}`;
-      }
-
-      if (codeViewer.tabActive === 'e') {
-        codeViewer.encoded = error;
-        codeViewer.activateDefaultTab('e', error);
-      }
-      else if (codeViewer.tabActive === 'm') {
-        codeViewer.mustache = error;
-        codeViewer.activateDefaultTab('m', error);
-      }
-    };
-  };
-
   receiveIframeMessage = (event) => {
     const data = this.uiFns.receiveIframeMessageBoilerplate(event);
 
@@ -70,10 +43,7 @@ export default class CodeViewer {
       if (data.codeOverlay === 'on') {
         this.viewall = data.viewall || false;
 
-        // Can assume we're not viewing the Mustache Browser.
-        this.mustacheBrowser = false;
-
-        if (data.openCode) {
+        if (data.openCode && !this.codeActive) {
           this.openCode();
         }
 
@@ -83,9 +53,6 @@ export default class CodeViewer {
       else {
         this.closeCode();
       }
-    }
-    else if (typeof data.codeMustacheBrowser === 'boolean') {
-      this.mustacheBrowser = data.codeMustacheBrowser;
     }
     else if (typeof data.codeViewall === 'boolean') {
       this.viewall = data.codeViewall;
@@ -105,20 +72,10 @@ export default class CodeViewer {
 
             break;
 
-          case 'ctrl+alt+h':
-          case 'ctrl+shift+y':
-            this.swapCode('e');
-
-            break;
-
-          case 'ctrl+alt+m':
-          case 'ctrl+shift+u':
-            this.swapCode('m');
-
-            break;
+            // TODO: Create keyboard shortcuts to switch between Feplet and Requerio tabs.
 
           case 'esc':
-            if (this.codeActive) {
+            if (this.codeActive && this.uiProps.dockPosition === 'bottom') {
               this.closeCode();
             }
 
@@ -127,63 +84,6 @@ export default class CodeViewer {
 
         break;
     }
-  };
-
-  // This runs once the AJAX request for the encoded markup is finished.
-  // If the encoded tab is the current active tab, it adds the content to the default code container.
-  getSaveEncodedFunction = () => {
-    const codeViewer = this;
-
-    return function () {
-      let encoded = this.responseText;
-
-      // We sometimes want markup code to be in an HTML-like template language with tags delimited by stashes.
-      // In order for js-beautify to indent such code correctly, any space between control characters #, ^, and /, and
-      // the variable name must be removed. However, we want to add the spaces back later.
-      // \u00A0 is &nbsp; a space character not on standard keyboards, and therefore a good delimiter.
-      encoded = encoded.replace(/(\{\{#)(\s+)(\S+)/g, '$1$3$2\u00A0');
-      encoded = encoded.replace(/(\{\{\^)(\s+)(\S+)/g, '$1$3$2\u00A0');
-      encoded = encoded.replace(/(\{\{\/)(\s+)(\S+)/g, '$1$3$2\u00A0');
-
-      encoded = codeViewer.#root.html_beautify(encoded, {
-        indent_handlebars: true,
-        indent_size: 2,
-        wrap_line_length: 0
-      });
-
-      // Add back removed spaces to retain the look intended by the author.
-      encoded = encoded.replace(/(\{\{#)(\S+)(\s+)\u00A0/g, '$1$3$2');
-      encoded = encoded.replace(/(\{\{\^)(\S+)(\s+)\u00A0/g, '$1$3$2');
-      encoded = encoded.replace(/(\{\{\/)(\S+)(\s+)\u00A0/g, '$1$3$2');
-
-      // Delete empty lines.
-      encoded = encoded.replace(/^\s*$\n/gm, '');
-
-      // Encode with HTML entities.
-      encoded = codeViewer.#root.he.encode(encoded);
-
-      codeViewer.encoded = encoded;
-
-      if (codeViewer.tabActive === 'e') {
-        codeViewer.activateDefaultTab('e', encoded);
-      }
-    };
-  };
-
-  // Run this once the AJAX request for the mustache markup has finished.
-  // If the mustache tab is the current active tab, add the content to the default code container.
-  getSaveMustacheFunction = () => {
-    const codeViewer = this;
-
-    return function () {
-      let mustache = this.responseText;
-      mustache = codeViewer.#root.he.encode(mustache);
-      codeViewer.mustache = mustache;
-
-      if (codeViewer.tabActive === 'm') {
-        codeViewer.activateDefaultTab('m', mustache);
-      }
-    };
   };
 
   // Private class fields.
@@ -200,10 +100,8 @@ export default class CodeViewer {
 
     this.codeActive = false;
     this.$orgs = fepperUi.requerio.$orgs;
-    this.encoded = '';
-    this.mustache = '';
-    this.mustacheBrowser = false;
-    this.tabActive = 'm';
+    this.patternPartial = null;
+    this.tabActive = 'feplet';
     this.viewall = false;
   }
 
@@ -211,6 +109,10 @@ export default class CodeViewer {
 
   get annotationsViewer() {
     return this.#fepperUi.annotationsViewer;
+  }
+
+  get dataSaver() {
+    return this.#fepperUi.dataSaver;
   }
 
   get uiData() {
@@ -239,14 +141,19 @@ export default class CodeViewer {
   stoke() {
     // Load the query strings in case code view has to show by default.
     const searchParams = this.urlHandler.getSearchParams();
+    const tabActive = this.dataSaver.findValue('tabActive');
+    this.patternPartial = searchParams.p;
 
     if (searchParams.view === 'code' || searchParams.view === 'c') {
       this.openCode();
     }
-
     // Open code panel on page load if config.defaultShowPatternInfo === true.
     else if (this.uiData.config.defaultShowPatternInfo) {
       this.openCode();
+    }
+
+    if (tabActive && tabActive !== this.tabActive) {
+      this.activateTabAndPanel(tabActive);
     }
   }
 
@@ -254,40 +161,47 @@ export default class CodeViewer {
    * When loading the code view, make sure the active tab is highlighted and filled in appropriately.
    *
    * @param {string} type - Single letter that refers to classes and types.
-   * @param {string} code - Code to appear in code view.
    */
-  activateDefaultTab(type, code) {
-    this.$orgs['.sg-code-title'].dispatchAction('removeClass', 'sg-code-title-active');
+  activateTabAndPanel(type) {
+    this.tabActive = type;
+
+    this.$orgs['.sg-code-tab'].dispatchAction('removeClass', 'sg-code-tab-active');
+    this.$orgs['.sg-code-panel'].dispatchAction('removeClass', 'sg-code-panel-active');
+    this.dataSaver.updateValue('tabActive', type);
 
     switch (type) {
-      case 'e':
-        this.$orgs['#sg-code-title-html'].dispatchAction('addClass', 'sg-code-title-active');
+      case 'feplet': {
+        this.$orgs['#sg-code-tab-feplet'].dispatchAction('addClass', 'sg-code-tab-active');
+        this.$orgs['#sg-code-panel-feplet'].dispatchAction('addClass', 'sg-code-panel-active');
+        this.setPanelContent('feplet');
 
         break;
+      }
+      case 'markdown': {
+        // TODO: Viewall behavior:
+        //       While clicking code buttons on viewall, update markdown panel.
+        //       If activated while on viewall, do not show an edit button.
+        this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-active');
+        this.$orgs['#sg-code-panel-markdown'].dispatchAction('addClass', 'sg-code-panel-active');
 
-      case 'm':
-        this.$orgs['#sg-code-title-mustache'].dispatchAction('addClass', 'sg-code-title-active');
+        const panelMarkdown = this.$orgs['#sg-code-panel-markdown'].getState().html;
+
+        if (!panelMarkdown) {
+          this.setPanelContent('markdown');
+        }
 
         break;
-    }
+      }
+      /* istanbul ignore next */
+      case 'requerio': {
 
-    this.$orgs['#sg-code-fill'].dispatchAction('html', code);
-    this.#root.Prism.highlightElement(this.$orgs['#sg-code-fill'][0]);
-  }
+        break;
+      }
+      /* istanbul ignore next */
+      case 'git': {
 
-  /**
-   * Clear any selection of code when swapping tabs or opening a new pattern.
-   */
-  clearSelection() /* istanbul ignore next */ {
-    if (!this.codeActive || !this.#root.getSelection) {
-      return;
-    }
-
-    if (this.#root.getSelection().empty) {
-      this.#root.getSelection().empty();
-    }
-    else if (this.#root.getSelection().removeAllRanges) {
-      this.#root.getSelection().removeAllRanges();
+        break;
+      }
     }
   }
 
@@ -304,11 +218,6 @@ export default class CodeViewer {
   }
 
   openCode() {
-    // Do nothing if viewing Mustache Browser.
-    if (this.mustacheBrowser) {
-      return;
-    }
-
     // Tell the pattern that code viewer has been turned on.
     const objCodeToggle = {codeToggle: 'on'};
     // Flag that viewer is active.
@@ -322,44 +231,66 @@ export default class CodeViewer {
     this.$orgs['#sg-code-container'].dispatchAction('addClass', 'active');
   }
 
+  resetPanels(patternPartial) {
+    this.patternPartial = patternPartial;
+
+    this.unsetPanelContent('feplet');
+    this.unsetPanelContent('markdown');
+    this.unsetPanelContent('requerio');
+    this.unsetPanelContent('git');
+    this.setPanelContent(this.tabActive);
+  }
+
   scrollViewall() /* istanbul ignore next */ {
     this.$orgs['#sg-viewport'][0].contentWindow.postMessage({codeScrollViewall: true}, this.uiProps.targetOrigin);
   }
 
-  /**
-   * Depending on what tab is clicked, swap out the code container. Make sure Prism highlight is added.
-   *
-   * @param {string} type - Single letter abbreviation of type.
-   */
-  swapCode(type) {
-    if (!this.codeActive) {
-      return;
-    }
-
-    let fill = '';
-    this.tabActive = type;
-
-    this.$orgs['.sg-code-title'].dispatchAction('removeClass', 'sg-code-title-active');
-
+  setPanelContent(type) {
     switch (type) {
-      case 'e':
-        fill = this.encoded;
+      case 'feplet': {
+        this.$orgs['#sg-code-panel-feplet'][0]
+          .contentWindow.location.replace(`/mustache-browser?partial=${this.patternPartial}`);
+        this.$orgs['#sg-code-panel-feplet'][0]
+          .addEventListener('load', () => {
+            const height = this.$orgs['#sg-code-panel-feplet'][0].contentWindow.document.documentElement.offsetHeight;
 
-        this.$orgs['#sg-code-title-html'].dispatchAction('addClass', 'sg-code-title-active');
-
-        break;
-
-      case 'm':
-        fill = this.mustache;
-
-        this.$orgs['#sg-code-title-mustache'].dispatchAction('addClass', 'sg-code-title-active');
+            this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: `${height}px`, visibility: ''});
+          });
 
         break;
+      }
+      case 'markdown': {
+        const codeViewer = this;
+        const config = this.uiData.config;
+        const patternPath = this.uiData.patternPaths[this.patternPartial];
+        const mdPath = patternPath.slice(0, -(config.outfileExtension.length)) + config.frontMatterExtension;
+
+        const xhr = new root.XMLHttpRequest();
+        xhr.onload = function () {
+          let output;
+
+          if (this.status === 200) {
+            output = '<pre><code class="language-markdown">' + this.responseText + '</code></pre>';
+          }
+          else {
+            output = `<p>There is no .md file associated with this pattern.</p>
+<p>Please refer to <a href="/readme#markdown-content" target="_blank">the docs</a> for additional information.</p>`;
+          }
+
+          codeViewer.$orgs['#sg-code-panel-markdown'].dispatchAction('html', output);
+        };
+        /* istanbul ignore next */
+        xhr.onerror = function () {
+          // eslint-disable-next-line no-console
+          console.error(`Status ${this.status}: ${this.statusText}`);
+        };
+
+        xhr.open('GET', mdPath + '?' + Date.now());
+        xhr.send();
+
+        break;
+      }
     }
-
-    this.$orgs['#sg-code-fill'].dispatchAction('html', fill);
-    this.#root.Prism.highlightElement(this.$orgs['#sg-code-fill'][0]);
-    this.clearSelection();
   }
 
   /**
@@ -374,6 +305,19 @@ export default class CodeViewer {
     }
   }
 
+  unsetPanelContent(type) {
+    switch (type) {
+      case 'feplet':
+        this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: '', visibility: 'hidden'});
+        this.$orgs['#sg-code-panel-feplet'][0].contentWindow.location.replace('about:blank');
+
+        break;
+
+      default:
+        this.$orgs['#sg-code-panel-' + type].dispatchAction('html', '');
+    }
+  }
+
   /**
    * When turning on or switching between patterns with code viewer on, make sure we get the code from the pattern via
    * postMessage.
@@ -384,12 +328,10 @@ export default class CodeViewer {
    * @param {string} patternState - inprogress, inreview, complete
    */
   updateCode(lineage, lineageR, patternPartial, patternState) {
+    this.patternPartial = patternPartial;
 
-    // Clear any selections that might have been made.
-    this.clearSelection();
-
-    // Set data-patternpartial attribute.
-    this.$orgs['#sg-code-container'].dispatchAction('attr', {'data-patternpartial': patternPartial});
+    // Setting panel content is async, so fire that off first.
+    this.setPanelContent(this.tabActive);
 
     // Draw lineage.
     if (lineage.length) {
@@ -403,8 +345,8 @@ export default class CodeViewer {
         }
 
         lineageList += (i === 0) ? '' : ', ';
-        lineageList += '<a href="' + lineage[i].lineagePath + '" class="' + cssClass + '" data-patternpartial="';
-        lineageList += lineage[i].lineagePattern + '">' + lineage[i].lineagePattern + '</a>';
+        lineageList += '<a href="' + lineage[i].lineagePath + '" class="' + cssClass + '">';
+        lineageList += lineage[i].lineagePattern + '</a>';
       }
 
       this.$orgs['#sg-code-lineage'].dispatchAction('css', {display: 'block'});
@@ -426,8 +368,8 @@ export default class CodeViewer {
         }
 
         lineageRList += (i === 0) ? '' : ', ';
-        lineageRList += '<a href="' + lineageR[i].lineagePath + '" class="' + cssClass + '" data-patternpartial="';
-        lineageRList += lineageR[i].lineagePattern + '">' + lineageR[i].lineagePattern + '</a>';
+        lineageRList += '<a href="' + lineageR[i].lineagePath + '" class="' + cssClass + '">';
+        lineageRList += lineageR[i].lineagePattern + '</a>';
       }
 
       this.$orgs['#sg-code-lineager'].dispatchAction('css', {display: 'block'});
@@ -455,23 +397,5 @@ export default class CodeViewer {
     this.#root.$('#sg-code-pattern-info-rel-path').html(this.uiData.sourceFiles[patternPartial]);
     this.#root.$('#sg-code-pattern-info-pattern-name').html(`<strong>${patternPartial}</strong> at`);
     this.#root.$('#sg-code-lineage-pattern-name, #sg-code-lineager-pattern-name').html(patternPartial);
-
-    // Get the file name of the pattern so we can update the tabs of code that show in the viewer.
-    const filename = this.uiData.patternPaths[patternPartial];
-    const patternExtension = this.uiData.config.patternExtension || '.mustache';
-
-    // Request the encoded markup version of the pattern.
-    const e = new this.#root.XMLHttpRequest();
-    e.onload = this.getSaveEncodedFunction(this);
-    e.onerror = this.getPrintXHRErrorFunction(this);
-    e.open('GET', filename.replace(/\.html/, '.markup-only.html') + '?' + (new Date()).getTime(), true);
-    e.send();
-
-    // Request the Mustache markup version of the pattern.
-    const m = new this.#root.XMLHttpRequest();
-    m.onload = this.getSaveMustacheFunction(this);
-    m.onerror = this.getPrintXHRErrorFunction(this);
-    m.open('GET', filename.replace(/\.html/, patternExtension) + '?' + (new Date()).getTime(), true);
-    m.send();
   }
 }

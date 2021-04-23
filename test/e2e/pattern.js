@@ -1,15 +1,3 @@
-const fs = require('fs');
-const mkdirp = require('mkdirp');
-const fepperUiDir = 'node_modules/fepper-ui';
-const scriptsPatternDir = 'scripts/pattern';
-const dhtmlFile = 'html-scraper-dhtml.js';
-
-if (!fs.existsSync(`${fepperUiDir}/${scriptsPatternDir}`)) {
-  mkdirp.sync(`${fepperUiDir}/${scriptsPatternDir}`);
-}
-
-fs.copyFileSync(`${scriptsPatternDir}/${dhtmlFile}`, `${fepperUiDir}/${scriptsPatternDir}/${dhtmlFile}`);
-
 describe('Pattern end-to-end tests', function () {
   describe('annotations-viewer.js', function () {
     describe('click', function () {
@@ -90,13 +78,14 @@ menu anchor.</p>
         browser.switchToParentFrame();
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
         expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
-        expect($('#sg-code-fill').getText()).to.equal('{{> 01-compounds/block }}');
+        expect($('#sg-view-container').getAttribute('class')).to.have.string('anim-ready');
         browser.switchToFrame($('#sg-viewport'));
         $('#sg-pattern-toggle-code-components-region').click();
         browser.pause(700);
         browser.switchToParentFrame();
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
         expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
+        expect($('#sg-view-container').getAttribute('class')).to.not.have.string('anim-ready');
       });
     });
 
@@ -112,73 +101,25 @@ menu anchor.</p>
         browser.switchToParentFrame();
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
         expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
-        expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
+        expect($('#sg-view-container').getAttribute('class')).to.have.string('anim-ready');
         browser.switchToFrame($('#sg-viewport'));
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
         browser.switchToParentFrame();
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
         expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
-      });
-
-      it('"ctrl+shift+y" selects the HTML tab in code viewer', function () {
-        browser.switchToFrame($('#sg-viewport'));
-        browser.keys(['Control', 'Shift', 'c']);
-        browser.pause(700);
-        browser.switchToParentFrame();
-        expect($('#sg-code-title-html').getAttribute('class')).to.not.have.string('sg-code-title-active');
-        browser.switchToFrame($('#sg-viewport'));
-        browser.keys(['Control', 'Shift', 'y']);
-        browser.switchToParentFrame();
-        expect($('#sg-code-title-html').getAttribute('class')).to.have.string('sg-code-title-active');
-      });
-
-      it('"ctrl+alt+h" selects the HTML tab in code viewer', function () {
-        browser.switchToFrame($('#sg-viewport'));
-        browser.keys(['Control', 'Shift', 'c']);
-        browser.pause(700);
-        browser.switchToParentFrame();
-        expect($('#sg-code-title-html').getAttribute('class')).to.not.have.string('sg-code-title-active');
-        browser.switchToFrame($('#sg-viewport'));
-        browser.keys(['Control', 'Alt', 'h']);
-        browser.switchToParentFrame();
-        expect($('#sg-code-title-html').getAttribute('class')).to.have.string('sg-code-title-active');
-      });
-
-      it('"ctrl+shift+u" selects the Mustache tab in code viewer', function () {
-        browser.switchToFrame($('#sg-viewport'));
-        browser.keys(['Control', 'Shift', 'c']);
-        browser.pause(700);
-        browser.keys(['Control', 'Shift', 'y']);
-        browser.switchToParentFrame();
-        expect($('#sg-code-title-mustache').getAttribute('class')).to.not.have.string('sg-code-title-active');
-        browser.switchToFrame($('#sg-viewport'));
-        browser.keys(['Control', 'Shift', 'u']);
-        browser.switchToParentFrame();
-        expect($('#sg-code-title-mustache').getAttribute('class')).to.have.string('sg-code-title-active');
-      });
-
-      it('"ctrl+alt+h" selects the Mustache tab in code viewer', function () {
-        browser.switchToFrame($('#sg-viewport'));
-        browser.keys(['Control', 'Shift', 'c']);
-        browser.pause(700);
-        browser.keys(['Control', 'Alt', 'h']);
-        browser.switchToParentFrame();
-        expect($('#sg-code-title-mustache').getAttribute('class')).to.not.have.string('sg-code-title-active');
-        browser.switchToFrame($('#sg-viewport'));
-        browser.keys(['Control', 'Alt', 'm']);
-        browser.switchToParentFrame();
-        expect($('#sg-code-title-mustache').getAttribute('class')).to.have.string('sg-code-title-active');
+        expect($('#sg-view-container').getAttribute('class')).to.not.have.string('anim-ready');
       });
     });
   });
 
+  /* eslint-disable max-len */
+  /* eslint-disable no-useless-escape */
   describe('html-scraper-ajax.js', function () {
     before(function () {
       browser.setWindowSize(1024, 640);
     });
 
-    /* eslint-disable max-len */
     it('pre-import submit button posts correctly', function () {
       $('.sg-nav-scrape').$('.sg-acc-handle').click();
       browser.pause(100);
@@ -202,7 +143,7 @@ menu anchor.</p>
     <meta http-equiv="pragma" content="no-cache">
 
     
-    <link rel="stylesheet" href="/fepper-core/html-scraper.css">
+    <link rel="stylesheet" href="/styles/html-scraper.css">
     
   </head>
 
@@ -250,7 +191,7 @@ menu anchor.</p>
       <div id="help-text">
         <p></p>
         <p>Use this tool to scrape and import .mustache templates and .json data files from actual web pages, preferably the actual backend CMS that Fepper is prototyping for. Simply enter the URL of the page you wish to scrape. Then, enter the CSS selector you wish to target (prepended with "#" for IDs and "." for classes). Classnames and tagnames may be appended with array index notation ([n]). Otherwise, the Scraper will scrape all elements of that class or tag sequentially. Such a loosely targeted scrape will save many of the targeted fields to the .json file, but will only save the first instance of the target to a .mustache template.</p>
-        <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save .mustache and .json files by that name in your patterns' scrape directory, also viewable under the Scrape menu of the toolbar.</p>
+        <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save .mustache and .json files by that name in your patterns\' scrape directory, also viewable under the Scrape menu of the toolbar.</p>
       </div>
       <iframe id="scraper__stage" sandbox="allow-same-origin allow-scripts"></iframe>
       <script src="/scripts/pattern/html-scraper-dhtml.js"></script>
@@ -287,9 +228,9 @@ menu anchor.</p>
     <meta http-equiv="pragma" content="no-cache">
 
     
-    <link rel="stylesheet" href="/fepper-core/html-scraper.css">
+    <link rel="stylesheet" href="/styles/html-scraper.css">
     
-  <link rel="stylesheet" href="/fepper-core/html-scraper.css"></head>
+  <link rel="stylesheet" href="/node_modules/fepper-ui/styles/html-scraper.css"></head>
 
   <body class="text ">
     <main id="fepper-html-scraper" class="">
@@ -314,7 +255,7 @@ menu anchor.</p>
       </form><script src="/node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js"></script><div id="help-text">
         <p></p>
         <p>Use this tool to scrape and import .mustache templates and .json data files from actual web pages, preferably the actual backend CMS that Fepper is prototyping for. Simply enter the URL of the page you wish to scrape. Then, enter the CSS selector you wish to target (prepended with "#" for IDs and "." for classes). Classnames and tagnames may be appended with array index notation ([n]). Otherwise, the Scraper will scrape all elements of that class or tag sequentially. Such a loosely targeted scrape will save many of the targeted fields to the .json file, but will only save the first instance of the target to a .mustache template.</p>
-        <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save .mustache and .json files by that name in your patterns' scrape directory, also viewable under the Scrape menu of the toolbar.</p>
+        <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save .mustache and .json files by that name in your patterns\' scrape directory, also viewable under the Scrape menu of the toolbar.</p>
       </div><iframe id="scraper__stage" sandbox="allow-same-origin allow-scripts"></iframe></main>
     
   
@@ -347,7 +288,7 @@ menu anchor.</p>
     <meta http-equiv="pragma" content="no-cache">
 
     
-    <link rel="stylesheet" href="/fepper-core/html-scraper.css">
+    <link rel="stylesheet" href="/styles/html-scraper.css">
     
   </head>
 
@@ -395,7 +336,7 @@ menu anchor.</p>
       <div id="help-text">
         <p></p>
         <p>Use this tool to scrape and import .mustache templates and .json data files from actual web pages, preferably the actual backend CMS that Fepper is prototyping for. Simply enter the URL of the page you wish to scrape. Then, enter the CSS selector you wish to target (prepended with "#" for IDs and "." for classes). Classnames and tagnames may be appended with array index notation ([n]). Otherwise, the Scraper will scrape all elements of that class or tag sequentially. Such a loosely targeted scrape will save many of the targeted fields to the .json file, but will only save the first instance of the target to a .mustache template.</p>
-        <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save .mustache and .json files by that name in your patterns' scrape directory, also viewable under the Scrape menu of the toolbar.</p>
+        <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save .mustache and .json files by that name in your patterns\' scrape directory, also viewable under the Scrape menu of the toolbar.</p>
       </div>
       <iframe id="scraper__stage" sandbox="allow-same-origin allow-scripts"></iframe>
       <script src="/scripts/pattern/html-scraper-dhtml.js"></script>
@@ -405,6 +346,8 @@ menu anchor.</p>
 </body>`);
     });
   });
+  /* eslint-enable max-len */
+  /* eslint-enable no-useless-escape */
 
   describe('html-scraper-dhtml.js', function () {
     before(function () {
@@ -524,18 +467,18 @@ menu anchor.</p>
       });
 
       it('pattern anchor clicks switch the pattern in the iframe', function () {
-        $('.sg-nav-compounds').$('.sg-acc-handle').click();
+        $('.sg-nav-pages').$('.sg-acc-handle').click();
         browser.pause(100);
-        $('.sg-nav-compounds').$('.sg-pop').click();
+        $('.sg-nav-pages').$('.sg-pop').click();
         browser.pause(100);
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/01-compounds-block/01-compounds-block.html');
+          .to.equal('http://localhost:8080/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
         browser.switchToFrame($('#sg-viewport'));
         $('a').click();
         browser.pause(100);
         browser.switchToParentFrame();
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
+          .to.equal('http://localhost:8080/patterns/02-components-region/02-components-region.html');
       });
     });
 

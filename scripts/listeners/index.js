@@ -1,6 +1,5 @@
 import AnnotationsViewer from './annotations-viewer.js';
 import CodeViewer from './code-viewer.js';
-import MustacheBrowser from './mustache-browser.js';
 import PatternFinder from './pattern-finder.js';
 import PatternViewport from './pattern-viewport.js';
 import UrlHandler from './url-handler.js';
@@ -16,7 +15,6 @@ export default class Listeners {
 
     this.annotationsViewer = new AnnotationsViewer(fepperUi);
     this.codeViewer = new CodeViewer(fepperUi);
-    this.mustacheBrowser = new MustacheBrowser(fepperUi);
     this.patternFinder = new PatternFinder(fepperUi);
     this.patternViewport = new PatternViewport(fepperUi);
     this.urlHandler = new UrlHandler(fepperUi);

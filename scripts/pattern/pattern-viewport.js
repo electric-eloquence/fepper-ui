@@ -24,41 +24,12 @@
 
   // Only process this block to postMessage if there are patternData in the footer, i.e. not a viewall.
   if (patternData) {
-    const parts = window.location.href.split('?');
-    let obj;
-
-    // This if condition requires clicks within the iframe. WebdriverIO cannot test back and forward buttons for this.
-
-    // When navigating back to a pattern from the Mustache Browser, invoke patternlab.updatePatternInfo for its
-    // special treatment of browser history in this instance.
-    if (d.referrer.indexOf(window.location.protocol + '//' + window.location.host + '/mustache-browser') === 0) {
-      obj = {
-        event: 'patternlab.updatePatternInfo',
-        path: parts[0],
-        patternPartial: patternData.patternPartial
-      };
-
-      if (!d.getElementById('mustache-browser')) {
-        obj.annotationsMustacheBrowser = false;
-        obj.codeMustacheBrowser = false;
-      }
-    }
-
-    // Else condition patternlab.pageLoad e2e tested by urlHandler listener tests.
-
     // Notify the UI what pattern this is so it updates itself appropriately.
-    else {
-      obj = {event: 'patternlab.pageLoad'};
-      obj.patternPartial = patternData.patternPartial;
+    const obj = {event: 'patternlab.pageLoad'};
+    obj.patternPartial = patternData.patternPartial;
 
-      if (patternData.lineage) {
-        obj.lineage = patternData.lineage;
-      }
-
-      if (!d.getElementById('mustache-browser')) {
-        obj.annotationsMustacheBrowser = false;
-        obj.codeMustacheBrowser = false;
-      }
+    if (patternData.lineage) {
+      obj.lineage = patternData.lineage;
     }
 
     parent.postMessage(obj, targetOrigin);

@@ -4,7 +4,7 @@
   <title>Fepper</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <meta name="generator" content="Fepper Front End Prototyper (http://fepper.io)">
+  <meta name="generator" content="Fepper Front End Prototyper (https://fepper.io)">
 
   <!-- Disable cache -->
   <meta http-equiv="cache-control" content="max-age=0">
@@ -14,18 +14,20 @@
   <meta http-equiv="pragma" content="no-cache">
 
   <!-- Begin Pattern Lab (Required for Pattern Lab to run properly) -->
-<link rel="stylesheet" href="../../test/fixtures/styles/pattern.css">
+<link rel="stylesheet" href="../../node_modules/fepper-ui/styles/pattern.css">
 <script src="../../node_modules/mousetrap/mousetrap.min.js"></script>
-<script src="../../test/fixtures/annotations/annotations.js"></script>
+<script src="../../annotations/annotations.js"></script>
 <!-- End Pattern Lab -->
 
 
+  <link rel="stylesheet" href="../../_styles/bld/style.css">
+  <script src="../../_scripts/src/variables.styl" type="text/javascript"></script>
 </head>
 <body class="">
 <!-- View All -->
-<link rel="stylesheet" href="../../test/fixtures/styles/pattern-scaffolding.css">
+<link rel="stylesheet" href="../../_styles/pattern-scaffolding.css">
 <div class="sg-main" role="main">
-  
+
   <!-- Patterns -->
   <div id="sg-patterns">
     
@@ -38,42 +40,6 @@
           >Elements</a>
         </h2>
       </div><!--end sg-pattern-category-->
-    
-      <div id="elements-anchor" class="sg-pattern">
-        <div class="sg-pattern-head">
-          <h4 class="sg-pattern-title">
-            <a
-              href="../../patterns/00-elements-anchor/00-elements-anchor.html"
-              class="sg-pattern-link"
-              data-patternpartial="elements-anchor"
-              title="Link to Pattern"
-            >Anchor</a>
-          </h4>
-          <div class="sg-pattern-info-toggles">
-            <a
-              href="#"
-              id="sg-pattern-toggle-annotations-elements-anchor"
-              class="sg-pattern-info-toggle sg-pattern-toggle-annotations"
-              data-patternpartial="elements-anchor"
-              title="View Pattern Annotations"
-            >&#x1F4C4;</a>
-            <a
-              href="#"
-              id="sg-pattern-toggle-code-elements-anchor"
-              class="sg-pattern-info-toggle sg-pattern-toggle-code"
-              data-patternpartial="elements-anchor"
-              title="View Pattern Code"
-            >&#x276E;&#x276F;</a>
-          </div>
-        </div>
-        <div class="sg-pattern-example cf">
-          <a href="../04-pages-00-homepage/04-pages-00-homepage.html">Home</a>
-
-        </div>
-        <script type="text/json" id="sg-pattern-data-elements-anchor" class="sg-pattern-data">
-          {"lineage":[],"lineageExists":false,"lineageR":[{"lineagePattern":"compounds-block","lineagePath":"patterns/01-compounds-block/01-compounds-block.html","isHidden":false}],"lineageRExists":true,"patternDesc":"","patternExtension":".mustache","patternName":"Anchor","patternPartial":"elements-anchor","patternState":""}
-        </script>
-      </div><!--end .sg-pattern-->
     
       <div id="elements-paragraph" class="sg-pattern">
         <div class="sg-pattern-head">
@@ -102,12 +68,9 @@
             >&#x276E;&#x276F;</a>
           </div>
         </div>
-        <div class="sg-pattern-example cf">
-          <p>Fepper Base</p>
-
-        </div>
+        <div class="sg-pattern-example cf"></div>
         <script type="text/json" id="sg-pattern-data-elements-paragraph" class="sg-pattern-data">
-          {"lineage":[],"lineageExists":false,"lineageR":[{"lineagePattern":"compounds-block","lineagePath":"patterns/01-compounds-block/01-compounds-block.html","isHidden":false}],"lineageRExists":true,"patternDesc":"","patternExtension":".mustache","patternName":"Paragraph","patternPartial":"elements-paragraph","patternState":""}
+          {"lineage":[],"lineageExists":false,"lineageR":[{"lineagePattern":"compounds-block","lineagePath":"patterns/01-compounds-block/01-compounds-block.html","isHidden":false}],"lineageRExists":true,"patternDesc":"","patternExtension":".mustache","patternName":"Paragraph","patternPartial":"elements-paragraph","patternState":"","portReloader":35730,"portServer":3001}
         </script>
       </div><!--end .sg-pattern-->
     
@@ -115,15 +78,53 @@
 
 </div><!--end .sg-main-->
 
+<script>
+  // Hydrate viewalls.
+  const patternEls = document.getElementsByClassName('sg-pattern');
+
+  for (const patternEl of patternEls) {
+    const exampleEl = patternEl.querySelector('.sg-pattern-example');
+    const linkEl = patternEl.querySelector('.sg-pattern-link');
+    const xhr = new XMLHttpRequest();
+
+    if (linkEl && linkEl.href) {
+      const regex = /\.\w+$/;
+      const matches = linkEl.href.match(regex);
+      const ext = matches && matches[0] ? matches[0] : matches;
+
+      if (ext) {
+        const link = linkEl.href.replace(regex, '.markup-only' + ext);
+
+        xhr.open('GET', link, true);
+        xhr.onload = () => {
+          if (xhr.responseText) {
+            exampleEl.innerHTML = xhr.responseText;
+          }
+        };
+        xhr.send();
+      }
+    }
+  }
+</script>
+
 <!-- Begin Pattern Lab (Required for Pattern Lab to run properly) -->
 <script type="text/json" id="sg-pattern-data-footer" class="sg-pattern-data">
   {"patternPartial":"viewall-elements"}
 </script>
 
-<script src="../../scripts/pattern/index.js" type="module"></script>
+<script>
+  // LiveReload.
+  if (location.protocol !== 'file:') {
+    const reloader = document.createElement('script');
+
+    reloader.setAttribute('src', location.protocol + '//' + location.hostname + ':35730/livereload.js');
+    document.body.appendChild(reloader);
+  }
+</script>
+
+<script src="../../node_modules/fepper-ui/scripts/pattern/index.js" type="module"></script>
 <!-- End Pattern Lab -->
 
 
-  <script src="../../test/fixtures/_scripts/src/variables.styl" type="text/javascript"></script>
 </body>
 </html>

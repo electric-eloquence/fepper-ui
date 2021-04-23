@@ -27,11 +27,10 @@ require('./mocks/document');
 require('./mocks/getSelection');
 require('./mocks/he');
 require('./mocks/history');
-require('./mocks/html_beautify');
 require('./mocks/location');
 require('./mocks/Prism');
 require('./mocks/XMLHttpRequest');
-require('./mocks/variables.styl');
+require('./fixtures/_scripts/src/variables.styl');
 
 const fepperUi = new FepperUi(Requerio, $, Redux, $organisms, global, uiData);
 fepperUi.uiComp = uiComp;

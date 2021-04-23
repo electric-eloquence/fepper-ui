@@ -28,15 +28,11 @@ describe('annotationsViewer', function () {
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
       expect(annotationsViewer.constructor.name).to.equal('AnnotationsViewer');
-      expect(Object.keys(annotationsViewer).length).to.equal(6);
+      expect(Object.keys(annotationsViewer).length).to.equal(5);
       expect(annotationsViewer).to.have.property('receiveIframeMessage');
-      expect(annotationsViewer).to.have.property('$orgs');
-      expect(annotationsViewer).to.have.property('uiFns');
-      expect(annotationsViewer).to.have.property('uiProps');
-      expect(annotationsViewer).to.have.property('codeViewer');
       expect(annotationsViewer).to.have.property('annotationsActive');
       expect(annotationsViewer).to.have.property('moveToNumber');
-      expect(annotationsViewer).to.have.property('mustacheBrowser');
+      expect(annotationsViewer).to.have.property('$orgs');
       expect(annotationsViewer).to.have.property('viewall');
     });
   });
@@ -168,28 +164,6 @@ describe('annotationsViewer', function () {
       }, timeout);
     });
 
-    it('does nothing if .mustacheBrowser is true', function (done) {
-      annotationsViewer.annotationsActive = false;
-      annotationsViewer.mustacheBrowser = true;
-
-      $orgs['#sg-t-annotations'].dispatchAction('removeClass', 'active');
-
-      const sgTAnnotationsBefore = $orgs['#sg-t-annotations'].getState();
-
-      annotationsViewer.toggleAnnotations();
-
-      setTimeout(() => {
-        const sgTAnnotationsAfter = $orgs['#sg-t-annotations'].getState();
-
-        expect(sgTAnnotationsBefore.classArray).to.not.include('active');
-        expect(sgTAnnotationsAfter.classArray).to.not.include('active');
-
-        annotationsViewer.mustacheBrowser = false;
-
-        done();
-      }, timeout);
-    });
-
     it('toggles on - also tests .openAnnotations()', function (done) {
       annotationsViewer.closeAnnotations();
       $orgs['#sg-t-annotations'].dispatchAction('removeClass', 'active');
@@ -304,19 +278,14 @@ describe('annotationsViewer', function () {
     });
 
     it('fills HTML for one or more annotations', function () {
-      const sgAnnotationsContainerBefore = $orgs['#sg-annotations-container'].getState();
       const sgAnnotationsBefore = $orgs['#sg-annotations'].getState();
 
       annotationsViewer.updateAnnotations(annotations, 'compounds-block');
 
-      const sgAnnotationsContainerAfter = $orgs['#sg-annotations-container'].getState();
       const sgAnnotationsAfter = $orgs['#sg-annotations'].getState();
 
-      expect(sgAnnotationsContainerBefore.attribs['data-patternpartial'])
-        .to.not.equal(sgAnnotationsContainerAfter.attribs['data-patternpartial']);
       expect(sgAnnotationsBefore.html).to.equal('');
 
-      expect(sgAnnotationsContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
       expect(sgAnnotationsAfter.html).to.equal(`<div id="annotation-1" class="sg-annotation">
 <h2>1. Navigation</h2>
 <div><p>Navigation for responsive web experiences can be tricky. Large navigation menus 
@@ -363,22 +332,16 @@ menu anchor.</p>
         viewall: false
       };
 
-      $orgs['#sg-annotations-container'].dispatchAction('attr', {'data-patternpartial': null});
       $orgs['#sg-annotations'].dispatchAction('html', '');
 
-      const sgAnnotationsContainerBefore = $orgs['#sg-annotations-container'].getState();
       const sgAnnotationsBefore = $orgs['#sg-annotations'].getState();
 
       annotationsViewer.receiveIframeMessage(event);
 
-      const sgAnnotationsContainerAfter = $orgs['#sg-annotations-container'].getState();
       const sgAnnotationsAfter = $orgs['#sg-annotations'].getState();
 
-      expect(sgAnnotationsContainerBefore.attribs['data-patternpartial'])
-        .to.not.equal(sgAnnotationsContainerAfter.attribs['data-patternpartial']);
       expect(sgAnnotationsBefore.html).to.equal('');
 
-      expect(sgAnnotationsContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
       expect(sgAnnotationsAfter.html).to.equal(`<div id="annotation-1" class="sg-annotation">
 <h2>1. Navigation</h2>
 <div><p>Navigation for responsive web experiences can be tricky. Large navigation menus 
@@ -409,19 +372,14 @@ menu anchor.</p>
       $orgs['#sg-annotations-container'].dispatchAction('attr', {'data-patternpartial': null});
       $orgs['#sg-annotations'].dispatchAction('html', '');
 
-      const sgAnnotationsContainerBefore = $orgs['#sg-annotations-container'].getState();
       const sgAnnotationsBefore = $orgs['#sg-annotations'].getState();
 
       annotationsViewer.receiveIframeMessage(event);
 
-      const sgAnnotationsContainerAfter = $orgs['#sg-annotations-container'].getState();
       const sgAnnotationsAfter = $orgs['#sg-annotations'].getState();
 
-      expect(sgAnnotationsContainerBefore.attribs['data-patternpartial'])
-        .to.not.equal(sgAnnotationsContainerAfter.attribs['data-patternpartial']);
       expect(sgAnnotationsBefore.html).to.equal('');
 
-      expect(sgAnnotationsContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
       expect(sgAnnotationsAfter.html).to.have.string(`<div id="annotation-2" class="sg-annotation">
 <h2>2. Foo<span id="annotation-state-2" style="font-size: 0.8em;color: #666"> hidden</span></h2>
 <div><p>Foo.</p></div>
@@ -436,22 +394,16 @@ menu anchor.</p>
         viewall: true
       };
 
-      $orgs['#sg-annotations-container'].dispatchAction('attr', {'data-patternpartial': null});
       $orgs['#sg-annotations'].dispatchAction('html', '');
 
-      const sgAnnotationsContainerBefore = $orgs['#sg-annotations-container'].getState();
       const sgAnnotationsBefore = $orgs['#sg-annotations'].getState();
 
       annotationsViewer.receiveIframeMessage(event);
 
-      const sgAnnotationsContainerAfter = $orgs['#sg-annotations-container'].getState();
       const sgAnnotationsAfter = $orgs['#sg-annotations'].getState();
 
-      expect(sgAnnotationsContainerBefore.attribs['data-patternpartial'])
-        .to.not.equal(sgAnnotationsContainerAfter.attribs['data-patternpartial']);
       expect(sgAnnotationsBefore.html).to.equal('');
 
-      expect(sgAnnotationsContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
       expect(sgAnnotationsAfter.html).to.equal(`<div id="annotation-1" class="sg-annotation">
 <h2>1. Navigation</h2>
 <div><p>Navigation for responsive web experiences can be tricky. Large navigation menus 
@@ -463,26 +415,6 @@ menu anchor.</p>
 </div>
 </div>`);
       expect(annotationsViewer.viewall).to.be.true;
-    });
-
-    it('sets .mustacheBrowser on data.annotationsMustacheBrowser = true', function () {
-      event.data = {
-        annotationsMustacheBrowser: true
-      };
-
-      annotationsViewer.receiveIframeMessage(event);
-
-      expect(annotationsViewer.mustacheBrowser).to.be.true;
-    });
-
-    it('sets .mustacheBrowser on data.annotationsMustacheBrowser = false', function () {
-      event.data = {
-        annotationsMustacheBrowser: false
-      };
-
-      annotationsViewer.receiveIframeMessage(event);
-
-      expect(annotationsViewer.mustacheBrowser).to.be.false;
     });
 
     it('sets .moveToNumber when data.annotationNumber is set', function () {

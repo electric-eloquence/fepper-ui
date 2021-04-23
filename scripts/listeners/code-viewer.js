@@ -14,22 +14,16 @@ export default class CodeViewer {
     document.addEventListener('DOMContentLoaded', () => {
       this.$orgs['#sg-code-container'].dispatchAction('css', 'bottom'); // Set this measurement in state.
 
-      // Make sure the click events are handled on the HTML tab.
-      this.$orgs['#sg-code-title-html'].on('click', (e) => {
-        e.preventDefault();
-
-        this.#fepperUi.codeViewer.swapCode('e');
+      this.$orgs['#sg-code-tab-feplet'].on('click', () => {
+        this.#fepperUi.codeViewer.activateTabAndPanel('feplet');
       });
 
-      // Make sure the click events are handled on the Mustache tab.
-      this.$orgs['#sg-code-title-mustache'].on('click', (e) => {
-        e.preventDefault();
-
-        this.#fepperUi.codeViewer.swapCode('m');
+      this.$orgs['#sg-code-tab-markdown'].on('click', () => {
+        this.#fepperUi.codeViewer.activateTabAndPanel('markdown');
       });
 
       // Select and copy the relative path to the pattern.
-      this.$orgs['#sg-code-copy-path'].on('click', () => {
+      this.$orgs['#sg-code-pattern-info-rel-path'].on('click', () => {
         let selection;
 
         try {
@@ -53,20 +47,7 @@ export default class CodeViewer {
         }
 
         try {
-          const copyPathState = this.$orgs['#sg-code-copy-path'].getState();
-          const origMsg = this.$orgs['#sg-code-copy-path'][0].innerHTML;
-          const origWidth = copyPathState.width;
-          const copiedMsg = copyPathState.attribs['data-copied-msg'];
-
           document.execCommand('copy');
-
-          this.$orgs['#sg-code-copy-path'].dispatchAction('width', origWidth);
-          this.$orgs['#sg-code-copy-path'].dispatchAction('html', copiedMsg);
-
-          setTimeout(() => {
-            selection.removeAllRanges();
-            this.$orgs['#sg-code-copy-path'].dispatchAction('html', origMsg);
-          }, 5000);
         }
         catch (err) {
           console.error(err);
@@ -93,22 +74,6 @@ export default class CodeViewer {
       return false;
     });
 
-    // Select the mustache tab.
-    // ctrl+shift+u is a Pattern Lab convention.
-    Mousetrap.bind(['ctrl+alt+m', 'ctrl+shift+u'], (e) => {
-      this.#fepperUi.codeViewer.swapCode('m');
-
-      e.preventDefault();
-      return false;
-    });
-
-    // Select the html tab.
-    // ctrl+shift+y is a Pattern Lab convention.
-    Mousetrap.bind(['ctrl+alt+h', 'ctrl+shift+y'], (e) => {
-      this.#fepperUi.codeViewer.swapCode('e');
-
-      e.preventDefault();
-      return false;
-    });
+    // TODO: Create keyboard shortcuts to switch between Feplet, Markdown, Requerio, and Git tabs.
   }
 }

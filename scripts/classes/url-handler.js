@@ -18,6 +18,10 @@ export default class UrlHandler {
 
   /* GETTERS for fepperUi instance props in case they are undefined at instantiation. */
 
+  get codeViewer() {
+    return this.#fepperUi.codeViewer;
+  }
+
   get uiData() {
     return this.#fepperUi.uiData;
   }
@@ -111,6 +115,7 @@ export default class UrlHandler {
     const data = {pattern: patternPartial};
 
     this.#root.history.pushState(data, null, addressReplacement);
+    this.codeViewer.resetPanels(patternPartial);
     this.uiFns.updatePatternInfo(patternPartial, this.uiData.patternPaths[patternPartial]);
   }
 }

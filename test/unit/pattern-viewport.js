@@ -60,9 +60,6 @@ describe('patternViewport', function () {
 
         expect(sgNavTargetStateAfter.html).to.equal(`
   <li class="sg-nav-elements"><a class="sg-acc-handle">Elements</a><ul class="sg-acc-panel sg-sub-nav">
-    <li class="sg-item-nav-elements-anchor">
-      <a href="patterns/00-elements-anchor/00-elements-anchor.html" class="sg-pop " data-patternpartial="elements-anchor">Anchor</a>
-    </li>
     <li class="sg-item-nav-elements-paragraph">
       <a href="patterns/00-elements-paragraph/00-elements-paragraph.html" class="sg-pop " data-patternpartial="elements-paragraph">Paragraph</a>
     </li>
@@ -97,9 +94,6 @@ describe('patternViewport', function () {
   <li class="sg-nav-pages"><a class="sg-acc-handle">Pages</a><ul class="sg-acc-panel sg-sub-nav">
     <li class="sg-item-nav-pages-homepage">
       <a href="patterns/04-pages-00-homepage/04-pages-00-homepage.html" class="sg-pop " data-patternpartial="pages-homepage">Homepage</a>
-    </li>
-    <li class="sg-item-nav-pages-mustache-browser">
-      <a href="patterns/04-pages-mustache-browser/04-pages-mustache-browser.html" class="sg-pop " data-patternpartial="pages-mustache-browser">Mustache Browser</a>
     </li>
     <li class="sg-item-nav-viewall-pages">
       <a href="patterns/04-pages/index.html" class="sg-pop " data-patternpartial="viewall-pages">View All</a>

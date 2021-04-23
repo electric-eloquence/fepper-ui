@@ -20,18 +20,12 @@ export default class AnnotationsViewer {
       if (data.annotationsOverlay === 'on') {
         this.viewall = data.viewall || false;
 
-        // Can assume we're not viewing the Mustache Browser.
-        this.mustacheBrowser = false;
-
         // Update code.
         this.updateAnnotations(data.annotations, data.patternPartial);
       }
       else {
         this.closeAnnotations();
       }
-    }
-    else if (typeof data.annotationsMustacheBrowser === 'boolean') {
-      this.mustacheBrowser = data.annotationsMustacheBrowser;
     }
     else if (data.annotationNumber) {
       this.moveTo(data.annotationNumber);
@@ -58,7 +52,7 @@ export default class AnnotationsViewer {
             break;
 
           case 'esc':
-            if (this.annotationsActive) {
+            if (this.annotationsActive && this.uiProps.dockPosition === 'bottom') {
               this.closeAnnotations();
             }
 
@@ -81,7 +75,6 @@ export default class AnnotationsViewer {
 
     this.annotationsActive = false;
     this.moveToNumber = 0;
-    this.mustacheBrowser = false;
     this.$orgs = fepperUi.requerio.$orgs;
     this.viewall = false;
   }
@@ -152,11 +145,6 @@ export default class AnnotationsViewer {
   }
 
   openAnnotations() {
-    // Do nothing if viewing Mustache Browser.
-    if (this.mustacheBrowser) {
-      return;
-    }
-
     // Tell the pattern that annotations viewer has been turned on.
     const objAnnotationsToggle = {annotationsToggle: 'on'};
     // Flag that viewer is active.
@@ -201,12 +189,8 @@ export default class AnnotationsViewer {
    * When updating the annotations panel, get the annotations from the pattern via postMessage.
    *
    * @param {array} annotations - Annotations array.
-   * @param {string} patternPartial - The shorthand partials syntax for a given pattern.
    */
-  updateAnnotations(annotations, patternPartial) {
-    // Set data-patternpartial attribute.
-    this.$orgs['#sg-annotations-container'].dispatchAction('attr', {'data-patternpartial': patternPartial});
-
+  updateAnnotations(annotations) {
     // See how many annotations this pattern might have.
     // If more than zero, write them out.
     // If not, alert the user to the fact there aren't any.
