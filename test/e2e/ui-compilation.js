@@ -304,7 +304,7 @@ describe('UI compilation of index page js', function () {
         expect($('#sg-find').getAttribute('class')).to.not.have.string('active');
         expect($(() => document.activeElement).getAttribute('id')).to.not.equal('typeahead');
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/00-elements-anchor/00-elements-anchor.html');
+          .to.equal('http://localhost:8080/patterns/00-elements-paragraph/00-elements-paragraph.html');
       });
 
       it('autocomplete blurs #typeahead, closes patternFinder, and sets iframe', function () {
@@ -465,7 +465,7 @@ describe('UI compilation of index page js', function () {
         browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
-        expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
+        expect($('#sg-code-container').getAttribute('class')).to.have.string('active');
       });
 
       it('sends the postMessage to load code from viewall if code viewer is toggled on', function () {
@@ -474,7 +474,7 @@ describe('UI compilation of index page js', function () {
         $('#sg-pattern-toggle-code-templates-page').click();
         browser.pause(700);
         browser.switchToParentFrame();
-        expect($('#sg-code-fill').getText()).to.equal('{{> 02-components/region }}');
+        expect($('#sg-code-container').getAttribute('class')).to.have.string('active');
       });
     });
 

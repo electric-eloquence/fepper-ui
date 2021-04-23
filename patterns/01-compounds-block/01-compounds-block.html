@@ -4,7 +4,7 @@
   <title>Fepper</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <meta name="generator" content="Fepper Front End Prototyper (http://fepper.io)">
+  <meta name="generator" content="Fepper Front End Prototyper (https://fepper.io)">
 
   <!-- Disable cache -->
   <meta http-equiv="cache-control" content="max-age=0">
@@ -14,31 +14,35 @@
   <meta http-equiv="pragma" content="no-cache">
 
   <!-- Begin Pattern Lab (Required for Pattern Lab to run properly) -->
-<link rel="stylesheet" href="../../test/fixtures/styles/pattern.css">
+<link rel="stylesheet" href="../../node_modules/fepper-ui/styles/pattern.css">
 <script src="../../node_modules/mousetrap/mousetrap.min.js"></script>
-<script src="../../test/fixtures/annotations/annotations.js"></script>
+<script src="../../annotations/annotations.js"></script>
 <!-- End Pattern Lab -->
 
 
+  <link rel="stylesheet" href="../../_styles/bld/style.css">
+  <script src="../../_scripts/src/variables.styl" type="text/javascript"></script>
 </head>
 <body class="">
-<a href="../04-pages-00-homepage/04-pages-00-homepage.html">Home</a>
-<p>Fepper Base</p>
-<p>&copy; MIT License</p>
-
+<p>Fepper Base</p>  
 <!-- Begin Pattern Lab (Required for Pattern Lab to run properly) -->
 <script type="text/json" id="sg-pattern-data-footer" class="sg-pattern-data">
-  {"lineage":[{"lineagePattern":"elements-paragraph","lineagePath":"patterns/00-elements-paragraph/00-elements-paragraph.html","isHidden":false}],"lineageExists":true,"lineageR":[{"lineagePattern":"components-region","lineagePath":"patterns/02-components-region/02-components-region.html","isHidden":false}],"lineageRExists":true,"patternDesc":"","patternExtension":".mustache","patternName":"Block","patternPartial":"compounds-block","patternState":""}
+  {"lineage":[{"lineagePattern":"elements-paragraph","lineagePath":"patterns/00-elements-paragraph/00-elements-paragraph.html","isHidden":false}],"lineageExists":true,"lineageR":[{"lineagePattern":"components-region","lineagePath":"patterns/02-components-region/02-components-region.html","isHidden":false}],"lineageRExists":true,"patternDesc":"","patternExtension":".mustache","patternName":"Block","patternPartial":"compounds-block","patternState":"","portReloader":35730,"portServer":3001}
 </script>
 
 <script>
-  document.querySelector('p').innerHTML = JSON.parse(document.querySelector('#sg-pattern-data-footer').innerHTML).patternPartial;
+  // LiveReload.
+  if (location.protocol !== 'file:') {
+    const reloader = document.createElement('script');
+
+    reloader.setAttribute('src', location.protocol + '//' + location.hostname + ':35730/livereload.js');
+    document.body.appendChild(reloader);
+  }
 </script>
 
-<script src="../../scripts/pattern/index.js" type="module"></script>
+<script src="../../node_modules/fepper-ui/scripts/pattern/index.js" type="module"></script>
 <!-- End Pattern Lab -->
 
 
-  <script src="../../test/fixtures/_scripts/src/variables.styl" type="text/javascript"></script>
 </body>
 </html>

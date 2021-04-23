@@ -187,10 +187,12 @@ export default function (fepperUiInst, root_) {
 
           break;
         }
+        /* istanbul ignore next */
         case 'requerio': {
 
           break;
         }
+        /* istanbul ignore next */
         case 'git': {
 
           break;

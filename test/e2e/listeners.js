@@ -138,42 +138,23 @@ menu anchor.</p>
         expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
       });
 
-      it('HTML button displays HTML code', function () {
+      it('feplet and markdown tabs activate their respective panels', function () {
         $('#sg-t-toggle').click();
         browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
-        expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
-        $('#sg-code-title-html').click();
-        expect($('#sg-code-fill').getText())
-          .to.equal(`<a href="../04-pages-00-homepage/04-pages-00-homepage.html">Home</a>
-<p>Fepper Base</p>`);
-      });
-
-      it('Mustache button displays Mustache code', function () {
-        $('#sg-t-toggle').click();
+        $('#sg-code-tab-markdown').click();
         browser.pause(100);
-        $('#sg-t-code').click();
-        browser.pause(700);
-        $('#sg-code-title-html').click();
-        expect($('#sg-code-fill').getText())
-          .to.equal(`<a href="../04-pages-00-homepage/04-pages-00-homepage.html">Home</a>
-<p>Fepper Base</p>`);
-        $('#sg-code-title-mustache').click();
-        expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
-      });
-
-      it('Copy path button reads "Copied!" when clicked', function () {
-        $('#sg-t-toggle').click();
+        expect($('#sg-code-tab-feplet').getAttribute('class')).to.not.have.string('sg-code-tab-active');
+        expect($('#sg-code-tab-markdown').getAttribute('class')).to.have.string('sg-code-tab-active');
+        expect($('#sg-code-panel-feplet').getAttribute('class')).to.not.have.string('sg-code-panel-active');
+        expect($('#sg-code-panel-markdown').getAttribute('class')).to.have.string('sg-code-panel-active');
+        $('#sg-code-tab-feplet').click();
         browser.pause(100);
-        $('#sg-t-code').click();
-        browser.pause(700);
-        expect($('#sg-code-copy-path').getText())
-          .to.equal('Copy path');
-        $('#sg-code-copy-path').click();
-        browser.pause(100);
-        expect($('#sg-code-copy-path').getText())
-          .to.equal('Copied!');
+        expect($('#sg-code-tab-feplet').getAttribute('class')).to.have.string('sg-code-tab-active');
+        expect($('#sg-code-tab-markdown').getAttribute('class')).to.not.have.string('sg-code-tab-active');
+        expect($('#sg-code-panel-feplet').getAttribute('class')).to.have.string('sg-code-panel-active');
+        expect($('#sg-code-panel-markdown').getAttribute('class')).to.not.have.string('sg-code-panel-active');
       });
     });
 
@@ -187,115 +168,33 @@ menu anchor.</p>
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
         expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
-        expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
+        expect($('#sg-view-container').getAttribute('class')).to.have.string('anim-ready');
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
         expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
-      });
-
-      it('"ctrl+shift+y" selects the HTML tab in code viewer', function () {
-        browser.keys(['Control', 'Shift', 'c']);
-        expect($('#sg-code-title-html').getAttribute('class')).to.not.have.string('sg-code-title-active');
-        browser.keys(['Control', 'Shift', 'y']);
-        expect($('#sg-code-title-html').getAttribute('class')).to.have.string('sg-code-title-active');
-      });
-
-      it('"ctrl+alt+h" selects the HTML tab in code viewer', function () {
-        browser.keys(['Control', 'Shift', 'c']);
-        browser.pause(700);
-        expect($('#sg-code-title-html').getAttribute('class')).to.not.have.string('sg-code-title-active');
-        browser.keys(['Control', 'Alt', 'h']);
-        expect($('#sg-code-title-html').getAttribute('class')).to.have.string('sg-code-title-active');
-      });
-
-      it('"ctrl+shift+u" selects the Mustache tab in code viewer', function () {
-        browser.keys(['Control', 'Shift', 'c']);
-        browser.pause(700);
-        browser.keys(['Control', 'Shift', 'y']);
-        expect($('#sg-code-title-mustache').getAttribute('class')).to.not.have.string('sg-code-title-active');
-        browser.keys(['Control', 'Shift', 'u']);
-        expect($('#sg-code-title-mustache').getAttribute('class')).to.have.string('sg-code-title-active');
-      });
-
-      it('"ctrl+alt+h" selects the Mustache tab in code viewer', function () {
-        browser.keys(['Control', 'Shift', 'c']);
-        browser.pause(700);
-        browser.keys(['Control', 'Alt', 'h']);
-        expect($('#sg-code-title-mustache').getAttribute('class')).to.not.have.string('sg-code-title-active');
-        browser.keys(['Control', 'Alt', 'm']);
-        expect($('#sg-code-title-mustache').getAttribute('class')).to.have.string('sg-code-title-active');
+        expect($('#sg-view-container').getAttribute('class')).to.not.have.string('anim-ready');
       });
     });
   });
 
   describe('mustacheBrowser', function () {
-    describe('mouseenter', function () {
-      before(function () {
-        browser.setWindowSize(1024, 640);
-      });
-
-      it('reveals link to Mustache browser when hovering over Mustache code in code viewer', function () {
-        $('#sg-t-toggle').click();
-        browser.pause(100);
-        $('#sg-t-code').click();
-        browser.pause(700);
-        expect($('#sg-code-fill').getCSSProperty('cursor').value).to.equal('auto');
-        $('#sg-code-fill').moveTo(10, 10);
-        expect($('#sg-code-fill').getCSSProperty('cursor').value).to.equal('pointer');
-      });
-
-      it('shows default cursor when hovering over HTML code in code viewer', function () {
-        $('#sg-t-toggle').click();
-        browser.pause(100);
-        $('#sg-t-code').click();
-        browser.pause(700);
-        $('#sg-code-title-html').click();
-        expect($('#sg-code-fill').getCSSProperty('cursor').value).to.equal('auto');
-        $('#sg-code-fill').moveTo(10, 10);
-        // Was "default" for WebdriverIO 5. Is "auto" for WebdriverIO 6.
-        expect($('#sg-code-fill').getCSSProperty('cursor').value).to.equal('auto');
-      });
-    });
-
     describe('click', function () {
       before(function () {
         browser.setWindowSize(1024, 640);
       });
 
-      it('redirects to Mustache browser when clicking on Mustache code in code viewer', function () {
+      it('hot-links partial tags and redirects to the partial\'s pattern page', function () {
         $('#sg-t-toggle').click();
         browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
-        $('#sg-code-fill').click();
-        browser.switchToFrame($('#sg-viewport'));
-        expect($('main').getAttribute('id')).to.equal('mustache-browser');
+        browser.switchToFrame($('#sg-code-panel-feplet'));
+        $('.language-markup a').click();
+        browser.pause(100);
         browser.switchToParentFrame();
-      });
-
-      it('closes code viewer when clicking on Mustache code in code viewer', function () {
-        $('#sg-t-toggle').click();
-        browser.pause(100);
-        $('#sg-t-code').click();
-        browser.pause(700);
-        $('#sg-code-fill').click();
-        browser.pause(700);
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
-      });
-
-      it('does nothing when clicking on HTML code in code viewer', function () {
-        $('#sg-t-toggle').click();
-        browser.pause(100);
-        $('#sg-t-code').click();
-        browser.pause(700);
-        $('#sg-code-title-html').click();
-        $('#sg-code-fill').click();
-        browser.pause(700);
-        browser.switchToFrame($('#sg-viewport'));
-        expect($('main').error.error).to.equal('no such element');
-        browser.switchToParentFrame();
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
+        expect($('#sg-raw').getAttribute('href'))
+          .to.equal('http://localhost:8080/patterns/03-templates-page/03-templates-page.html');
       });
     });
   });
@@ -378,7 +277,7 @@ menu anchor.</p>
         $('.sg-nav-elements').$('.sg-pop').click();
         browser.pause(100);
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/00-elements-anchor/00-elements-anchor.html');
+          .to.equal('http://localhost:8080/patterns/00-elements-paragraph/00-elements-paragraph.html');
       });
 
       it('closes open nav menu', function () {
@@ -554,7 +453,7 @@ menu anchor.</p>
         .to.equal('http://localhost:8080/patterns/01-compounds-block/01-compounds-block.html');
       browser.back();
       expect($('#sg-raw').getAttribute('href'))
-        .to.equal('http://localhost:8080/patterns/00-elements-anchor/00-elements-anchor.html');
+        .to.equal('http://localhost:8080/patterns/00-elements-paragraph/00-elements-paragraph.html');
       browser.forward();
       expect($('#sg-raw').getAttribute('href'))
         .to.equal('http://localhost:8080/patterns/01-compounds-block/01-compounds-block.html');
