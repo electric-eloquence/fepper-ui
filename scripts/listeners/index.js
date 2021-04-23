@@ -149,11 +149,11 @@ export default function (fepperUiInst) {
       const Mousetrap = window.Mousetrap;
 
       Mousetrap.bind('esc', () => {
-        if (fepperUiInst.annotationsViewer.annotationsActive) {
+        if (fepperUiInst.annotationsViewer.annotationsActive && fepperUiInst.uiProps.dockPosition === 'bottom') {
           fepperUiInst.annotationsViewer.closeAnnotations();
         }
 
-        if (fepperUiInst.codeViewer.codeActive) {
+        if (fepperUiInst.codeViewer.codeActive && fepperUiInst.uiProps.dockPosition === 'bottom') {
           fepperUiInst.codeViewer.closeCode();
         }
 
