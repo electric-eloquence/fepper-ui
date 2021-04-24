@@ -265,7 +265,8 @@ export default function (fepperUiInst, root_) {
             let output;
 
             if (this.status === 200) {
-              output = '<pre><code class="language-markdown">' + this.responseText + '</code></pre>';
+              output = `<pre><code class="language-markdown">${this.responseText}</code></pre>
+<button id="sg-code-btn-markdown-edit">Edit</button>`;
             }
             else {
               output = `<p>There is no .md file associated with this pattern.</p>
