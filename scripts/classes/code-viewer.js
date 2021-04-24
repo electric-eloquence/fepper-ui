@@ -47,12 +47,12 @@ export default function (fepperUiInst, root_) {
         if (data.codeOverlay === 'on') {
           this.viewall = data.viewall || false;
 
+          this.activateTabAndPanel(this.tabActive);
+          this.updateCode(data.lineage, data.lineageR, data.patternPartial, data.patternState);
+
           if (data.openCode && !this.codeActive) {
             this.openCode();
           }
-
-          // Update code.
-          this.updateCode(data.lineage, data.lineageR, data.patternPartial, data.patternState);
         }
         else {
           this.closeCode();
@@ -137,6 +137,7 @@ export default function (fepperUiInst, root_) {
       // Load the query strings in case code view has to show by default.
       const searchParams = this.urlHandler.getSearchParams();
       const tabActive = this.dataSaver.findValue('tabActive');
+      this.tabActive = tabActive || this.tabActive;
       this.patternPartial = searchParams.p;
 
       if (searchParams.view === 'code' || searchParams.view === 'c') {
@@ -146,10 +147,11 @@ export default function (fepperUiInst, root_) {
       else if (this.uiData.config.defaultShowPatternInfo) {
         this.openCode();
       }
+    }
 
-      if (tabActive && tabActive !== this.tabActive) {
-        this.activateTabAndPanel(tabActive);
-      }
+    activateMarkdownTextArea() {
+      this.$orgs['#sg-code-markdown'].dispatchAction('css', {display: ''});
+      this.$orgs['#sg-code-markdown-edit'].dispatchAction('css', {display: 'block'});
     }
 
     /**
@@ -262,18 +264,25 @@ export default function (fepperUiInst, root_) {
 
           const xhr = new root.XMLHttpRequest();
           xhr.onload = function () {
-            let output;
-
+            // TODO: i18n this.
             if (this.status === 200) {
-              output = `<pre><code class="language-markdown">${this.responseText}</code></pre>
-<button id="sg-code-btn-markdown-edit">Edit</button>`;
+              const markdownEditState = codeViewer.$orgs['#sg-code-markdown-edit'].getState();
+
+              codeViewer.$orgs['#sg-code-language-markdown'].dispatchAction('html', this.responseText);
+              codeViewer.$orgs['#sg-code-markdown'].dispatchAction('css', {display: 'block'});
+
+              if (!markdownEditState.html || !markdownEditState.html.includes('form id="sg-code-markdown-form"')) {
+                codeViewer.$orgs['#sg-code-markdown-edit'].dispatchAction(
+                  'prepend',
+                  `<form id="sg-code-markdown-form" action="/markdown-edit" method="post" name="form_markdown">
+  <textarea name="edit_markdown"></textarea>
+</form>`
+                );
+              }
             }
             else {
-              output = `<p>There is no .md file associated with this pattern.</p>
-<p>Please refer to <a href="/readme#markdown-content" target="_blank">the docs</a> for additional information.</p>`;
+              codeViewer.$orgs['#sg-code-no-markdown'].dispatchAction('css', {display: 'block'});
             }
-
-            codeViewer.$orgs['#sg-code-panel-markdown'].dispatchAction('html', output);
           };
           /* istanbul ignore next */
           xhr.onerror = function () {
@@ -325,9 +334,6 @@ export default function (fepperUiInst, root_) {
      */
     updateCode(lineage, lineageR, patternPartial, patternState) {
       this.patternPartial = patternPartial;
-
-      // Setting panel content is async, so fire that off first.
-      this.setPanelContent(this.tabActive);
 
       // Draw lineage.
       if (lineage.length) {

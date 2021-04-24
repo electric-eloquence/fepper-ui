@@ -23,7 +23,6 @@ export default function (fepperUiInst, root) {
         if (data.annotationsOverlay === 'on') {
           this.viewall = data.viewall || false;
 
-          // Update code.
           this.updateAnnotations(data.annotations, data.patternPartial);
         }
         else {

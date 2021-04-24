@@ -57,6 +57,10 @@ export default function (fepperUiInst) {
             return;
           }
         });
+
+        this.$orgs['#sg-code-btn-markdown-edit'].on('click', () => {
+          fepperUiInst.codeViewer.activateMarkdownTextArea();
+        });
       });
 
       const Mousetrap = window.Mousetrap;

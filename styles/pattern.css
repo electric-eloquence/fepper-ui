@@ -105,6 +105,12 @@
 .sg-pattern-example {
   position: relative;
 }
+/* In case there are floats in the example. */
+.sg-pattern-example::after {
+  clear: both;
+  content: " ";
+  display: table;
+}
 
 /* Use px not rem for .annotation-tip */
 .annotation-tip {
