@@ -59,7 +59,7 @@ export default function (fepperUiInst) {
         });
 
         this.$orgs['#sg-code-btn-markdown-edit'].on('click', () => {
-          fepperUiInst.codeViewer.activateMarkdownTextArea();
+          fepperUiInst.codeViewer.focusOnMarkdownTextarea();
         });
       });
 

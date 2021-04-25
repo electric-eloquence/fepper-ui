@@ -11,7 +11,7 @@ const {
 const timeout = 10;
 
 describe('codeViewer', function () {
-  xdescribe('.constructor()', function () {
+  describe('.constructor()', function () {
     it('instantiates correctly', function () {
       expect(codeViewer.constructor.name).to.equal('CodeViewer');
       expect(Object.keys(codeViewer).length).to.equal(7);
@@ -134,6 +134,8 @@ describe('codeViewer', function () {
   describe('.activateTabAndPanel()', function () {
     before(function () {
       global.location = {
+        protocol: 'http:',
+        host: 'localhost:3000',
         search: '?p=compounds-block'
       };
 
@@ -191,6 +193,22 @@ also tests .resetPanels()', function () {
 
       fepperUi.dataSaver.updateValue('tabActive', 'markdown');
       codeViewer.stoke();
+      codeViewer.receiveIframeMessage({
+        origin: 'http://localhost:3000',
+        data: {
+          codeOverlay: 'on',
+          lineage: [],
+          lineageR: [
+            {
+              lineagePattern: 'compounds-block',
+              lineagePath: 'patterns/01-compounds-block/01-compounds-block.html',
+              isHidden: false
+            }
+          ],
+          patternPartial: 'elements-paragraph',
+          patternState: ''
+        }
+      });
 
       const panelStateAfter = $orgs['#sg-code-panel-markdown'].getState();
       const tabStateAfter = $orgs['#sg-code-tab-markdown'].getState();
@@ -200,6 +218,36 @@ also tests .resetPanels()', function () {
 
       expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
       expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
+    });
+  });
+
+  describe('.focusOnMarkdownTextarea()', function () {
+    it('puts the cursor focus on the Markdown textarea', function () {
+      $orgs['#sg-code-pane-markdown-edit']
+        .dispatchAction('width', 996)
+        .dispatchAction('height', 100);
+
+      const documentStateBefore = $orgs.document.getState();
+      const paneEditStateBefore = $orgs['#sg-code-pane-markdown-edit'].getState();
+      const textareaStateBefore = $orgs['#sg-code-textarea-markdown'].getState();
+
+      codeViewer.focusOnMarkdownTextarea('markdown');
+
+      const documentStateAfter = $orgs.document.getState();
+      const paneEditStateAfter = $orgs['#sg-code-pane-markdown-edit'].getState();
+      const paneStateAfter = $orgs['#sg-code-pane-markdown'].getState();
+      const textareaStateAfter = $orgs['#sg-code-textarea-markdown'].getState();
+
+      expect(documentStateBefore.activeOrganism).to.be.null;
+      expect(paneEditStateBefore.style).to.not.have.key('display');
+      expect(textareaStateBefore.height).to.be.null;
+      expect(textareaStateBefore.style).to.not.have.key('width');
+
+      expect(documentStateAfter.activeOrganism).to.equal('#sg-code-textarea-markdown');
+      expect(paneEditStateAfter.style.display).to.equal('block');
+      expect(paneStateAfter.style).to.not.have.key('display');
+      expect(textareaStateAfter.height).to.equal(100);
+      expect(textareaStateAfter.style.width).to.equal('996px');
     });
   });
 

@@ -150,18 +150,6 @@ export default function (fepperUiInst, root_) {
       }
     }
 
-    activateMarkdownTextArea() {
-      this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
-      this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: 'block'});
-
-      const markdownEditState = this.$orgs['#sg-code-pane-markdown-edit'].getState();
-
-      this.$orgs['#sg-code-textarea-markdown']
-        .dispatchAction('css', {width: markdownEditState.width + 'px'})
-        .dispatchAction('height', markdownEditState.height);
-      this.$orgs['#sg-code-textarea-markdown'].focus();
-    }
-
     /**
      * When loading the code view, make sure the active tab is highlighted and filled in appropriately.
      *
@@ -222,6 +210,18 @@ export default function (fepperUiInst, root_) {
       this.$orgs['#sg-code-container'].dispatchAction('removeClass', 'active');
     }
 
+    focusOnMarkdownTextarea() {
+      this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
+      this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: 'block'});
+
+      const markdownEditState = this.$orgs['#sg-code-pane-markdown-edit'].getState();
+
+      this.$orgs['#sg-code-textarea-markdown']
+        .dispatchAction('css', {width: markdownEditState.width + 'px'})
+        .dispatchAction('height', markdownEditState.height);
+      this.$orgs['#sg-code-textarea-markdown'].focus();
+    }
+
     openCode() {
       // Tell the pattern that code viewer has been turned on.
       const objCodeToggle = {codeToggle: 'on'};
@@ -272,10 +272,10 @@ export default function (fepperUiInst, root_) {
 
           const xhr = new root.XMLHttpRequest();
           xhr.onload = function () {
-            // TODO: i18n this.
             if (this.status === 200) {
               const markdownEditState = codeViewer.$orgs['#sg-code-pane-markdown-edit'].getState();
 
+              codeViewer.$orgs['#sg-code-pane-no-markdown'].dispatchAction('css', {display: ''});
               codeViewer.$orgs['#sg-code-language-markdown'].dispatchAction('html', this.responseText);
               codeViewer.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
 
@@ -292,6 +292,7 @@ export default function (fepperUiInst, root_) {
               /* eslint-enable max-len */
             }
             else {
+              codeViewer.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
               codeViewer.$orgs['#sg-code-pane-no-markdown'].dispatchAction('css', {display: 'block'});
             }
           };
