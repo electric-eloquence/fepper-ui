@@ -96,6 +96,7 @@ export default function (fepperUiInst, root_) {
       this.codeActive = false;
       this.$orgs = fepperUi.requerio.$orgs;
       this.patternPartial = null;
+      this.requerio = fepperUi.requerio;
       this.tabActive = 'feplet';
       this.viewall = false;
     }
@@ -150,8 +151,15 @@ export default function (fepperUiInst, root_) {
     }
 
     activateMarkdownTextArea() {
-      this.$orgs['#sg-code-markdown'].dispatchAction('css', {display: ''});
-      this.$orgs['#sg-code-markdown-edit'].dispatchAction('css', {display: 'block'});
+      this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
+      this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: 'block'});
+
+      const markdownEditState = this.$orgs['#sg-code-pane-markdown-edit'].getState();
+
+      this.$orgs['#sg-code-textarea-markdown']
+        .dispatchAction('css', {width: markdownEditState.width + 'px'})
+        .dispatchAction('height', markdownEditState.height);
+      this.$orgs['#sg-code-textarea-markdown'].focus();
     }
 
     /**
@@ -266,22 +274,25 @@ export default function (fepperUiInst, root_) {
           xhr.onload = function () {
             // TODO: i18n this.
             if (this.status === 200) {
-              const markdownEditState = codeViewer.$orgs['#sg-code-markdown-edit'].getState();
+              const markdownEditState = codeViewer.$orgs['#sg-code-pane-markdown-edit'].getState();
 
               codeViewer.$orgs['#sg-code-language-markdown'].dispatchAction('html', this.responseText);
-              codeViewer.$orgs['#sg-code-markdown'].dispatchAction('css', {display: 'block'});
+              codeViewer.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
 
-              if (!markdownEditState.html || !markdownEditState.html.includes('form id="sg-code-markdown-form"')) {
-                codeViewer.$orgs['#sg-code-markdown-edit'].dispatchAction(
+              /* eslint-disable max-len */
+              if (!markdownEditState.html || !markdownEditState.html.includes('form id="sg-code-form-markdown"')) {
+                codeViewer.$orgs['#sg-code-pane-markdown-edit'].dispatchAction(
                   'prepend',
-                  `<form id="sg-code-markdown-form" action="/markdown-edit" method="post" name="form_markdown">
-  <textarea name="edit_markdown"></textarea>
+                  `<form id="sg-code-form-markdown" action="/markdown-edit" method="post" name="form_markdown">
+  <textarea id="sg-code-textarea-markdown" class="language-markdown" name="edit_markdown">${this.responseText}</textarea>
 </form>`
                 );
+                codeViewer.requerio.incept('#sg-code-textarea-markdown');
               }
+              /* eslint-enable max-len */
             }
             else {
-              codeViewer.$orgs['#sg-code-no-markdown'].dispatchAction('css', {display: 'block'});
+              codeViewer.$orgs['#sg-code-pane-no-markdown'].dispatchAction('css', {display: 'block'});
             }
           };
           /* istanbul ignore next */
@@ -315,6 +326,15 @@ export default function (fepperUiInst, root_) {
         case 'feplet':
           this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: '', visibility: 'hidden'});
           this.$orgs['#sg-code-panel-feplet'][0].contentWindow.location.replace('about:blank');
+
+          break;
+
+        case 'markdown':
+          this.$orgs['#sg-code-language-markdown'].dispatchAction('html', '');
+
+          if (this.$orgs['#sg-code-textarea-markdown'].length) {
+            this.$orgs['#sg-code-textarea-markdown'].dispatchAction('html', '');
+          }
 
           break;
 

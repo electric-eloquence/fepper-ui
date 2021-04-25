@@ -145,7 +145,19 @@
   </ul>
   <div id="sg-code-panels">
     <iframe id="sg-code-panel-feplet" class="sg-code-panel sg-code-panel-active" sandbox="allow-same-origin allow-scripts allow-top-navigation"></iframe>
-    <div id="sg-code-panel-markdown" class="sg-code-panel"></div>
+    <div id="sg-code-panel-markdown" class="sg-code-panel">
+      <div id="sg-code-pane-no-markdown" class="sg-code-outcome">
+        <p>There is no .md file associated with this pattern.</p>
+        <p>Please refer to <a href="/readme#markdown-content" target="_blank">the docs</a> for additional information.</p>
+      </div>
+      <div id="sg-code-pane-markdown" class="sg-code-outcome">
+        <pre><code id="sg-code-language-markdown" class="language-markdown"></code></pre>
+        <button id="sg-code-btn-markdown-edit" class="sg-code-btn" title="Edit this pattern's Markdown content">Edit</button>
+      </div>
+      <div id="sg-code-pane-markdown-edit" class="sg-code-outcome">
+        <button id="sg-code-btn-markdown-submit" class="sg-code-btn" title="Save Markdown content">Save</button>
+      </div>
+    </div>
     <div id="sg-code-panel-requerio" class="sg-code-panel"></div>
     <div id="sg-code-panel-git" class="sg-code-panel"></div>
   </div>
