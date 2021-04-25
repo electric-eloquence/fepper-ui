@@ -277,7 +277,7 @@ menu anchor.</p>
         $('.sg-nav-elements').$('.sg-pop').click();
         browser.pause(100);
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/00-elements-paragraph/00-elements-paragraph.html');
+          .to.equal('http://localhost:8080/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
       });
 
       it('closes open nav menu', function () {

@@ -478,7 +478,7 @@ menu anchor.</p>
         browser.pause(100);
         browser.switchToParentFrame();
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/02-components-region/02-components-region.html');
+          .to.equal('http://localhost:8080/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
       });
     });
 

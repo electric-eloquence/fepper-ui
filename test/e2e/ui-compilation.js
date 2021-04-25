@@ -304,7 +304,7 @@ describe('UI compilation of index page js', function () {
         expect($('#sg-find').getAttribute('class')).to.not.have.string('active');
         expect($(() => document.activeElement).getAttribute('id')).to.not.equal('typeahead');
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/00-elements-paragraph/00-elements-paragraph.html');
+          .to.equal('http://localhost:8080/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
       });
 
       it('autocomplete blurs #typeahead, closes patternFinder, and sets iframe', function () {
