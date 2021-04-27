@@ -172,12 +172,12 @@ describe('codeViewer', function () {
 
       expect(panelLocationHrefBefore).to.not.equal(panelLocationHrefAfter);
       expect(panelStateBefore.classArray).to.not.include('sg-code-panel-active');
-      expect(panelStateBefore.style.height).to.not.equal(panelStateAfter.style.height);
+      expect(panelStateBefore.css.height).to.not.equal(panelStateAfter.css.height);
       expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
 
       expect(panelLocationHrefAfter).to.equal('/mustache-browser?partial=compounds-block');
       expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
-      expect(panelStateAfter.style.height).to.equal('100px');
+      expect(panelStateAfter.css.height).to.equal('100px');
       expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
     });
 
@@ -223,7 +223,7 @@ also tests .resetPanels()', function () {
 
   describe('.activateMarkdownTextarea()', function () {
     it('puts the cursor focus on the Markdown textarea', function () {
-      $orgs['#sg-code-pane-markdown-edit']
+      $orgs['#sg-code-pre-language-markdown']
         .dispatchAction('width', 996)
         .dispatchAction('height', 100);
 
@@ -239,15 +239,15 @@ also tests .resetPanels()', function () {
       const textareaStateAfter = $orgs['#sg-code-textarea-markdown'].getState();
 
       expect(documentStateBefore.activeOrganism).to.be.null;
-      expect(paneEditStateBefore.style).to.not.have.key('display');
+      expect(paneEditStateBefore.css).to.not.have.key('display');
       expect(textareaStateBefore.height).to.be.null;
-      expect(textareaStateBefore.style).to.not.have.key('width');
+      expect(textareaStateBefore.css).to.not.have.key('width');
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-code-textarea-markdown');
-      expect(paneEditStateAfter.style.display).to.equal('block');
-      expect(paneStateAfter.style).to.not.have.key('display');
-      expect(textareaStateAfter.height).to.equal(100);
-      expect(textareaStateAfter.style.width).to.equal('996px');
+      expect(paneEditStateAfter.css.display).to.equal('block');
+      expect(paneStateAfter.css).to.not.have.key('display');
+      expect(textareaStateAfter.height).to.equal(121);
+      expect(textareaStateAfter.width).to.equal(996);
     });
   });
 
