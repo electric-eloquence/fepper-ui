@@ -88,7 +88,7 @@ describe('UI compilation of index page js', function () {
 
     describe('#sg-size-px', function () {
       before(function () {
-        browser.setWindowSize(1025, 640);
+        browser.setWindowSize(1025, 768);
       });
 
       it('decreases px size on ArrowDown keydown', function () {
@@ -118,7 +118,7 @@ describe('UI compilation of index page js', function () {
 
     describe('#sg-size-em', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('increases em size on ArrowDown keydown', function () {
@@ -148,7 +148,7 @@ describe('UI compilation of index page js', function () {
 
     describe('#sg-size-w', function () {
       before(function () {
-        browser.setWindowSize(1025, 640);
+        browser.setWindowSize(1025, 768);
       });
 
       it('resizes to whole width', function () {
@@ -160,7 +160,7 @@ describe('UI compilation of index page js', function () {
 
     describe('#sg-size-random', function () {
       before(function () {
-        browser.setWindowSize(1025, 640);
+        browser.setWindowSize(1025, 768);
       });
 
       it('resizes to whole width', function () {
@@ -178,7 +178,7 @@ describe('UI compilation of index page js', function () {
 
     describe('#sg-size-disco', function () {
       before(function () {
-        browser.setWindowSize(1025, 640);
+        browser.setWindowSize(1025, 768);
       });
 
       it('toggles disco mode on and off', function () {
@@ -203,7 +203,7 @@ describe('UI compilation of index page js', function () {
 
     describe('#sg-size-grow', function () {
       before(function () {
-        browser.setWindowSize(1025, 640);
+        browser.setWindowSize(1025, 768);
       });
 
       it('toggles grow mode on and off', function () {
@@ -229,7 +229,7 @@ describe('UI compilation of index page js', function () {
   describe('html/01-body/20-header/60-sg-controls/40-sg-find/li.js', function () {
     describe('#sg-f-toggle', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('mouseenter', function () {
@@ -281,7 +281,7 @@ describe('UI compilation of index page js', function () {
 
     describe('#typeahead', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('blur', function () {
@@ -304,7 +304,7 @@ describe('UI compilation of index page js', function () {
         expect($('#sg-find').getAttribute('class')).to.not.have.string('active');
         expect($(() => document.activeElement).getAttribute('id')).to.not.equal('typeahead');
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
+          .to.equal('http://localhost:8080/patterns/00-elements-paragraph/00-elements-paragraph.html');
       });
 
       it('autocomplete blurs #typeahead, closes patternFinder, and sets iframe', function () {
@@ -325,7 +325,7 @@ describe('UI compilation of index page js', function () {
   describe('html/01-body/20-header/60-sg-controls/60-sg-view/li.js', function () {
     describe('#sg-t-annotations', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('click toggles annotations viewer', function () {
@@ -349,14 +349,14 @@ describe('UI compilation of index page js', function () {
         browser.pause(700);
         expect($('#sg-t-annotations').getAttribute('class')).to.not.have.string('active');
         expect($('#sg-view').getAttribute('class')).to.not.have.string('active');
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('637px');
         expect($('#sg-t-toggle').getAttribute('class')).to.not.have.string('active');
       });
     });
 
     describe('#sg-t-code', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('click toggles code viewer', function () {
@@ -381,13 +381,13 @@ describe('UI compilation of index page js', function () {
         expect($('#sg-t-code').getAttribute('class')).to.not.have.string('active');
         expect($('#sg-t-toggle').getAttribute('class')).to.not.have.string('active');
         expect($('#sg-view').getAttribute('class')).to.not.have.string('active');
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('637px');
       });
     });
 
     describe('#sg-raw', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('pattern opens in new tab and menu closes', function () {
@@ -411,7 +411,7 @@ describe('UI compilation of index page js', function () {
   describe('ui/core/styleguide/index//html/01-body/20-header/60-sg-controls/80-sg-tools/li.js', function () {
     describe('.sg-tool', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       // Skip clicking Fepper docs to avoid hitting the website during automated tests.
@@ -436,7 +436,7 @@ describe('UI compilation of index page js', function () {
   describe('ui/core/styleguide/index//html/01-body/40-main/main.js', function () {
     describe('#sg-viewport', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('sends the postMessage to annotate pattern if annotations viewer is toggled on', function () {

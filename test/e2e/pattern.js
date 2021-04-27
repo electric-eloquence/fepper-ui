@@ -2,7 +2,7 @@ describe('Pattern end-to-end tests', function () {
   describe('annotations-viewer.js', function () {
     describe('click', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('viewall annotations viewer button toggles annotations viewer', function () {
@@ -11,7 +11,7 @@ describe('Pattern end-to-end tests', function () {
         $('#sg-pattern-toggle-annotations-components-region').click();
         browser.pause(700);
         browser.switchToParentFrame();
-        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('322.5px');
         expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-annotations').getHTML(false)).to.equal(`<div id="annotation-1" class="sg-annotation">
 <h2>1. Navigation</h2>
@@ -28,13 +28,13 @@ menu anchor.</p>
         browser.pause(700);
         browser.switchToParentFrame();
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('637px');
       });
     });
 
     describe('Mousetrap', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('"ctrl+shift+a" toggles annotations viewer', function () {
@@ -42,7 +42,7 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'a']);
         browser.pause(700);
         browser.switchToParentFrame();
-        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('322.5px');
         expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-annotations').getHTML(false)).to.equal(`<div id="annotation-1" class="sg-annotation">
 <h2>1. Navigation</h2>
@@ -59,7 +59,7 @@ menu anchor.</p>
         browser.pause(700);
         browser.switchToParentFrame();
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('637px');
       });
     });
   });
@@ -67,7 +67,7 @@ menu anchor.</p>
   describe('code-viewer.js', function () {
     describe('click', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('viewall code viewer button toggles code viewer', function () {
@@ -76,7 +76,7 @@ menu anchor.</p>
         $('#sg-pattern-toggle-code-components-region').click();
         browser.pause(700);
         browser.switchToParentFrame();
-        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('322.5px');
         expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-view-container').getAttribute('class')).to.have.string('anim-ready');
         browser.switchToFrame($('#sg-viewport'));
@@ -84,14 +84,14 @@ menu anchor.</p>
         browser.pause(700);
         browser.switchToParentFrame();
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('637px');
         expect($('#sg-view-container').getAttribute('class')).to.not.have.string('anim-ready');
       });
     });
 
     describe('Mousetrap', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('"ctrl+shift+c" toggles code viewer', function () {
@@ -99,7 +99,7 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
         browser.switchToParentFrame();
-        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('322.5px');
         expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
         expect($('#sg-view-container').getAttribute('class')).to.have.string('anim-ready');
         browser.switchToFrame($('#sg-viewport'));
@@ -107,7 +107,7 @@ menu anchor.</p>
         browser.pause(700);
         browser.switchToParentFrame();
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('509px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('637px');
         expect($('#sg-view-container').getAttribute('class')).to.not.have.string('anim-ready');
       });
     });
@@ -117,7 +117,7 @@ menu anchor.</p>
   /* eslint-disable no-useless-escape */
   describe('html-scraper-ajax.js', function () {
     before(function () {
-      browser.setWindowSize(1024, 640);
+      browser.setWindowSize(1024, 768);
     });
 
     it('pre-import submit button posts correctly', function () {
@@ -351,7 +351,7 @@ menu anchor.</p>
 
   describe('html-scraper-dhtml.js', function () {
     before(function () {
-      browser.setWindowSize(1024, 640);
+      browser.setWindowSize(1024, 768);
     });
 
     it('help button shows and hides help text correctly', function () {
@@ -417,7 +417,7 @@ menu anchor.</p>
   describe('pattern-finder.js', function () {
     describe('Mousetrap', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('"ctrl+shift+f" toggles Pattern Finder', function () {
@@ -443,7 +443,7 @@ menu anchor.</p>
   describe('pattern-viewport.js', function () {
     describe('click', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('bodyClick closes nav panels', function () {
@@ -478,13 +478,13 @@ menu anchor.</p>
         browser.pause(100);
         browser.switchToParentFrame();
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
+          .to.equal('http://localhost:8080/patterns/02-components-region/02-components-region.html');
       });
     });
 
     describe('Mousetrap', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('"ctrl+alt+w" resizes to whole width', function () {
