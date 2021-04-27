@@ -221,7 +221,7 @@ also tests .resetPanels()', function () {
     });
   });
 
-  describe('.focusOnMarkdownTextarea()', function () {
+  describe('.activateMarkdownTextarea()', function () {
     it('puts the cursor focus on the Markdown textarea', function () {
       $orgs['#sg-code-pane-markdown-edit']
         .dispatchAction('width', 996)
@@ -231,7 +231,7 @@ also tests .resetPanels()', function () {
       const paneEditStateBefore = $orgs['#sg-code-pane-markdown-edit'].getState();
       const textareaStateBefore = $orgs['#sg-code-textarea-markdown'].getState();
 
-      codeViewer.focusOnMarkdownTextarea('markdown');
+      codeViewer.activateMarkdownTextarea('markdown');
 
       const documentStateAfter = $orgs.document.getState();
       const paneEditStateAfter = $orgs['#sg-code-pane-markdown-edit'].getState();

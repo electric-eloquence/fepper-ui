@@ -43,12 +43,20 @@ export default function (fepperUiInst, root_) {
         return;
       }
 
+      if (data.viewall) {
+        // This is necessary so the Markdown "Edit" button isn't displayed.
+        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'viewall');
+      }
+      else {
+        this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'viewall');
+      }
+
       if (data.codeOverlay) { // This condition must come first.
         if (data.codeOverlay === 'on') {
           this.viewall = data.viewall || false;
 
-          this.activateTabAndPanel(this.tabActive);
           this.updateCode(data.lineage, data.lineageR, data.patternPartial, data.patternState);
+          this.activateTabAndPanel(this.tabActive);
 
           if (data.openCode && !this.codeActive) {
             this.openCode();
@@ -150,6 +158,18 @@ export default function (fepperUiInst, root_) {
       }
     }
 
+    activateMarkdownTextarea() {
+      const markdownPreState = this.$orgs['#sg-code-pre-language-markdown'].getState();
+
+      this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
+      this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: 'block'});
+
+      this.$orgs['#sg-code-textarea-markdown']
+        .dispatchAction('width', markdownPreState.width)
+        .dispatchAction('height', markdownPreState.height + 21); // line-height is 21px.
+      this.$orgs['#sg-code-textarea-markdown'].focus();
+    }
+
     /**
      * When loading the code view, make sure the active tab is highlighted and filled in appropriately.
      *
@@ -166,21 +186,26 @@ export default function (fepperUiInst, root_) {
         case 'feplet': {
           this.$orgs['#sg-code-tab-feplet'].dispatchAction('addClass', 'sg-code-tab-active');
           this.$orgs['#sg-code-panel-feplet'].dispatchAction('addClass', 'sg-code-panel-active');
-          this.setPanelContent('feplet');
+          this.setPanelContent(type);
 
           break;
         }
         case 'markdown': {
           // TODO: Viewall behavior:
+          //       To replicate:
+          //         1. Open compounds-text viewall
+          //         2. Activate markdown tab and panel
+          //         3. Click code button for footer
+          //
           //       While clicking code buttons on viewall, update markdown panel.
-          //       If activated while on viewall, do not show an edit button.
+          //       Try editing while on viewall.
           this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-active');
           this.$orgs['#sg-code-panel-markdown'].dispatchAction('addClass', 'sg-code-panel-active');
 
           const panelMarkdown = this.$orgs['#sg-code-panel-markdown'].getState().html;
 
           if (!panelMarkdown) {
-            this.setPanelContent('markdown');
+            this.setPanelContent(type);
           }
 
           break;
@@ -208,18 +233,6 @@ export default function (fepperUiInst, root_) {
       this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, this.uiProps.targetOrigin);
       this.$orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
       this.$orgs['#sg-code-container'].dispatchAction('removeClass', 'active');
-    }
-
-    focusOnMarkdownTextarea() {
-      this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
-      this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: 'block'});
-
-      const markdownEditState = this.$orgs['#sg-code-pane-markdown-edit'].getState();
-
-      this.$orgs['#sg-code-textarea-markdown']
-        .dispatchAction('css', {width: markdownEditState.width + 'px'})
-        .dispatchAction('height', markdownEditState.height);
-      this.$orgs['#sg-code-textarea-markdown'].focus();
     }
 
     openCode() {
@@ -273,23 +286,15 @@ export default function (fepperUiInst, root_) {
           const xhr = new root.XMLHttpRequest();
           xhr.onload = function () {
             if (this.status === 200) {
-              const markdownEditState = codeViewer.$orgs['#sg-code-pane-markdown-edit'].getState();
+              const markdownTextareaState = codeViewer.$orgs['#sg-code-textarea-markdown'].getState();
 
               codeViewer.$orgs['#sg-code-pane-no-markdown'].dispatchAction('css', {display: ''});
-              codeViewer.$orgs['#sg-code-language-markdown'].dispatchAction('html', this.responseText);
+              codeViewer.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', this.responseText);
               codeViewer.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
 
-              /* eslint-disable max-len */
-              if (!markdownEditState.html || !markdownEditState.html.includes('form id="sg-code-form-markdown"')) {
-                codeViewer.$orgs['#sg-code-pane-markdown-edit'].dispatchAction(
-                  'prepend',
-                  `<form id="sg-code-form-markdown" action="/markdown-edit" method="post" name="form_markdown">
-  <textarea id="sg-code-textarea-markdown" class="language-markdown" name="edit_markdown">${this.responseText}</textarea>
-</form>`
-                );
-                codeViewer.requerio.incept('#sg-code-textarea-markdown');
+              if (!markdownTextareaState.html) {
+                codeViewer.$orgs['#sg-code-textarea-markdown'].dispatchAction('html', this.responseText);
               }
-              /* eslint-enable max-len */
             }
             else {
               codeViewer.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
@@ -331,7 +336,7 @@ export default function (fepperUiInst, root_) {
           break;
 
         case 'markdown':
-          this.$orgs['#sg-code-language-markdown'].dispatchAction('html', '');
+          this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', '');
 
           if (this.$orgs['#sg-code-textarea-markdown'].length) {
             this.$orgs['#sg-code-textarea-markdown'].dispatchAction('html', '');
