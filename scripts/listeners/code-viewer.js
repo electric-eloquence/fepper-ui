@@ -64,7 +64,7 @@ export default function (fepperUiInst) {
 
         this.$orgs['#sg-code-btn-markdown-save'].on('click', () => {
           const markdownTextareaState = this.$orgs['#sg-code-textarea-markdown'].getState();
-          const body = 'edited_markdown=' + encodeURIComponent(markdownTextareaState.val) + '&rel_path=' +
+          const body = 'markdown_edited=' + encodeURIComponent(markdownTextareaState.val) + '&rel_path=' +
             encodeURIComponent(fepperUiInst.uiData.sourceFiles[fepperUiInst.codeViewer.patternPartial]);
           const codeViewer = this;
 
