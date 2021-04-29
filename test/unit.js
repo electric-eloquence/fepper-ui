@@ -24,7 +24,6 @@ const $ = global.$ = cheerio.load(html);
 // Use "require" to load after imports and declarations.
 require('./mocks/bloodhound');
 require('./mocks/document');
-require('./mocks/getSelection');
 require('./mocks/he');
 require('./mocks/history');
 require('./mocks/location');

@@ -162,26 +162,6 @@ describe('uiComp', function () {
     }, timeout);
   });
 
-  it('.sgTAnnotationsClick() does nothing if annotationsViewer.mustacheBrowser is true', function () {
-    fepperUi.annotationsViewer.mustacheBrowser = true;
-
-    const sgTCodeStateBefore = $orgs['#sg-t-code'].getState();
-    const sgAnnotationsContainerStateBefore = $orgs['#sg-annotations-container'].getState();
-    const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
-
-    uiComp.sgTAnnotationsClick({preventDefault: () => {}});
-
-    const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
-    const sgAnnotationsContainerStateAfter = $orgs['#sg-annotations-container'].getState();
-    const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
-
-    expect(JSON.stringify(sgTCodeStateBefore.classArray))
-      .to.equal(JSON.stringify(sgTCodeStateAfter.classArray));
-    expect(sgAnnotationsContainerStateBefore.css.bottom).to.equal(sgAnnotationsContainerStateAfter.css.bottom);
-    expect(JSON.stringify(sgTAnnotationsStateBefore.classArray))
-      .to.equal(JSON.stringify(sgTAnnotationsStateAfter.classArray));
-  });
-
   it('.sgTCodeClick() toggles on', function (done) {
     fepperUi.codeViewer.stoke();
     fepperUi.viewerHandler.stoke();
@@ -244,24 +224,5 @@ describe('uiComp', function () {
 
       done();
     }, timeout);
-  });
-
-  it('.sgTCodeClick() does nothing if codeViewer.mustacheBrowser is true', function () {
-    fepperUi.codeViewer.mustacheBrowser = true;
-
-    const sgTAnnotationsStateBefore = $orgs['#sg-t-annotations'].getState();
-    const sgCodeContainerStateBefore = $orgs['#sg-code-container'].getState();
-    const sgTCodeStateBefore = $orgs['#sg-t-code'].getState();
-
-    uiComp.sgTCodeClick({preventDefault: () => {}});
-
-    const sgTAnnotationsStateAfter = $orgs['#sg-t-annotations'].getState();
-    const sgCodeContainerStateAfter = $orgs['#sg-code-container'].getState();
-    const sgTCodeStateAfter = $orgs['#sg-t-code'].getState();
-
-    expect(JSON.stringify(sgTAnnotationsStateBefore.classArray))
-      .to.equal(JSON.stringify(sgTAnnotationsStateAfter.classArray));
-    expect(sgCodeContainerStateBefore.css.bottom).to.equal(sgCodeContainerStateAfter.css.bottom);
-    expect(JSON.stringify(sgTCodeStateBefore.classArray)).to.equal(JSON.stringify(sgTCodeStateAfter.classArray));
   });
 });

@@ -57,6 +57,45 @@ export default class CodeViewer {
           return;
         }
       });
+
+      this.$orgs['#sg-code-btn-markdown-edit'].on('click', () => {
+        this.#fepperUi.codeViewer.activateMarkdownTextarea();
+      });
+
+      this.$orgs['#sg-code-btn-markdown-save'].on('click', () => {
+        const markdownTextareaState = this.$orgs['#sg-code-textarea-markdown'].getState();
+        const body = 'markdown_edited=' + encodeURIComponent(markdownTextareaState.val) + '&rel_path=' +
+          encodeURIComponent(this.uiData.sourceFiles[this.codeViewer.patternPartial]);
+        const codeViewer = this;
+
+        const xhr = new window.XMLHttpRequest();
+        xhr.onload = function () {
+          if (this.status === 200) {
+            codeViewer.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: 'none'});
+          }
+          else {
+            // eslint-disable-next-line no-console
+            console.warn(`Status ${this.status}: ${this.statusText}`);
+
+            if (this.status === 403) {
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(this.responseText, 'text/html');
+              const selection = doc.querySelector('section#forbidden');
+
+              codeViewer.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('html', selection);
+            }
+          }
+        };
+        /* istanbul ignore next */
+        xhr.onerror = function () {
+          // eslint-disable-next-line no-console
+          console.error(`Status ${this.status}: ${this.statusText}`);
+        };
+
+        xhr.open('POST', '/markdown-editor');
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.send(body);
+      });
     });
 
     const Mousetrap = window.Mousetrap;

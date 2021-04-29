@@ -39,16 +39,24 @@ export default class CodeViewer {
       return;
     }
 
+    if (data.viewall) {
+      // This is necessary so the Markdown "Edit" button isn't displayed.
+      this.$orgs['#patternlab-body'].dispatchAction('addClass', 'viewall');
+    }
+    else {
+      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'viewall');
+    }
+
     if (data.codeOverlay) { // This condition must come first.
       if (data.codeOverlay === 'on') {
         this.viewall = data.viewall || false;
 
+        this.updateCode(data.lineage, data.lineageR, data.patternPartial, data.patternState);
+        this.activateTabAndPanel(this.tabActive);
+
         if (data.openCode && !this.codeActive) {
           this.openCode();
         }
-
-        // Update code.
-        this.updateCode(data.lineage, data.lineageR, data.patternPartial, data.patternState);
       }
       else {
         this.closeCode();
@@ -101,6 +109,7 @@ export default class CodeViewer {
     this.codeActive = false;
     this.$orgs = fepperUi.requerio.$orgs;
     this.patternPartial = null;
+    this.requerio = fepperUi.requerio;
     this.tabActive = 'feplet';
     this.viewall = false;
   }
@@ -142,6 +151,7 @@ export default class CodeViewer {
     // Load the query strings in case code view has to show by default.
     const searchParams = this.urlHandler.getSearchParams();
     const tabActive = this.dataSaver.findValue('tabActive');
+    this.tabActive = tabActive || this.tabActive;
     this.patternPartial = searchParams.p;
 
     if (searchParams.view === 'code' || searchParams.view === 'c') {
@@ -151,10 +161,18 @@ export default class CodeViewer {
     else if (this.uiData.config.defaultShowPatternInfo) {
       this.openCode();
     }
+  }
 
-    if (tabActive && tabActive !== this.tabActive) {
-      this.activateTabAndPanel(tabActive);
-    }
+  activateMarkdownTextarea() {
+    const markdownPreState = this.$orgs['#sg-code-pre-language-markdown'].getState();
+
+    this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
+    this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: 'block'});
+
+    this.$orgs['#sg-code-textarea-markdown']
+      .dispatchAction('width', markdownPreState.width)
+      .dispatchAction('height', markdownPreState.height + 21); // line-height is 21px.
+    this.$orgs['#sg-code-textarea-markdown'].focus();
   }
 
   /**
@@ -173,21 +191,26 @@ export default class CodeViewer {
       case 'feplet': {
         this.$orgs['#sg-code-tab-feplet'].dispatchAction('addClass', 'sg-code-tab-active');
         this.$orgs['#sg-code-panel-feplet'].dispatchAction('addClass', 'sg-code-panel-active');
-        this.setPanelContent('feplet');
+        this.setPanelContent(type);
 
         break;
       }
       case 'markdown': {
         // TODO: Viewall behavior:
+        //       To replicate:
+        //         1. Open compounds-text viewall
+        //         2. Activate markdown tab and panel
+        //         3. Click code button for footer
+        //
         //       While clicking code buttons on viewall, update markdown panel.
-        //       If activated while on viewall, do not show an edit button.
+        //       Try editing while on viewall.
         this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-active');
         this.$orgs['#sg-code-panel-markdown'].dispatchAction('addClass', 'sg-code-panel-active');
 
         const panelMarkdown = this.$orgs['#sg-code-panel-markdown'].getState().html;
 
         if (!panelMarkdown) {
-          this.setPanelContent('markdown');
+          this.setPanelContent(type);
         }
 
         break;
@@ -267,17 +290,21 @@ export default class CodeViewer {
 
         const xhr = new root.XMLHttpRequest();
         xhr.onload = function () {
-          let output;
-
           if (this.status === 200) {
-            output = '<pre><code class="language-markdown">' + this.responseText + '</code></pre>';
+            const markdownTextareaState = codeViewer.$orgs['#sg-code-textarea-markdown'].getState();
+
+            codeViewer.$orgs['#sg-code-pane-no-markdown'].dispatchAction('css', {display: ''});
+            codeViewer.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', this.responseText);
+            codeViewer.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+
+            if (!markdownTextareaState.html) {
+              codeViewer.$orgs['#sg-code-textarea-markdown'].dispatchAction('html', this.responseText);
+            }
           }
           else {
-            output = `<p>There is no .md file associated with this pattern.</p>
-<p>Please refer to <a href="/readme#markdown-content" target="_blank">the docs</a> for additional information.</p>`;
+            codeViewer.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
+            codeViewer.$orgs['#sg-code-pane-no-markdown'].dispatchAction('css', {display: 'block'});
           }
-
-          codeViewer.$orgs['#sg-code-panel-markdown'].dispatchAction('html', output);
         };
         /* istanbul ignore next */
         xhr.onerror = function () {
@@ -313,6 +340,15 @@ export default class CodeViewer {
 
         break;
 
+      case 'markdown':
+        this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', '');
+
+        if (this.$orgs['#sg-code-textarea-markdown'].length) {
+          this.$orgs['#sg-code-textarea-markdown'].dispatchAction('html', '');
+        }
+
+        break;
+
       default:
         this.$orgs['#sg-code-panel-' + type].dispatchAction('html', '');
     }
@@ -329,9 +365,6 @@ export default class CodeViewer {
    */
   updateCode(lineage, lineageR, patternPartial, patternState) {
     this.patternPartial = patternPartial;
-
-    // Setting panel content is async, so fire that off first.
-    this.setPanelContent(this.tabActive);
 
     // Draw lineage.
     if (lineage.length) {
