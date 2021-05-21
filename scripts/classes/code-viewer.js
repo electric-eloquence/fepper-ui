@@ -25,551 +25,410 @@ function addLineageListeners($orgs, uiProps) {
   }
 }
 
-// TODO: Replace closure with private class field when there is greater browser support.
-export default function (fepperUiInst, root_) {
-  root = root_;
+export default class CodeViewer {
 
-  class CodeViewer {
+  /* CLASS FIELDS */
+  // The following functions are declared as class fields to retain function-scoped `this` context while keeping the
+  // class constructor tidy. Exposed as properties on the instance so they can be unit tested.
 
-    /* CLASS FIELDS */
-    // Declared as class fields to retain function-scoped `this` context while keeping the class constructor tidy.
-    // Exposed as properties on the instance so they can be unit tested.
+  receiveIframeMessage = (event) => {
+    const data = this.uiFns.receiveIframeMessageBoilerplate(event);
 
-    getPrintXHRErrorFunction = (codeViewer) => {
-      return function () {
-        let error;
+    /* istanbul ignore if */
+    if (!data) {
+      return;
+    }
 
-        /* istanbul ignore else */
-        if (root.location.protocol === 'file:' && !this.status) {
-          // While it would be nice to offer internationalization of this error message, users shouldn't be using the
-          // file protocol scheme in the first place!
-          error = 'Access to XMLHttpRequest with the file protocol scheme has been blocked by CORS policy.';
+    if (data.viewall) {
+      // This is necessary so the Markdown "Edit" button isn't displayed.
+      this.$orgs['#patternlab-body'].dispatchAction('addClass', 'viewall');
+    }
+    else {
+      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'viewall');
+    }
+
+    if (data.codeOverlay) { // This condition must come first.
+      if (data.codeOverlay === 'on') {
+        this.viewall = data.viewall || false;
+
+        this.updateCode(data.lineage, data.lineageR, data.patternPartial, data.patternState);
+        this.activateTabAndPanel(this.tabActive);
+
+        if (data.openCode && !this.codeActive) {
+          this.openCode();
         }
-        else {
-          error = `Status ${this.status}: ${this.statusText}`;
-        }
-
-        if (codeViewer.tabActive === 'e') {
-          codeViewer.encoded = error;
-          codeViewer.activateDefaultTab('e', error);
-        }
-        else if (codeViewer.tabActive === 'm') {
-          codeViewer.mustache = error;
-          codeViewer.activateDefaultTab('m', error);
-        }
-      };
-    };
-
-    receiveIframeMessage = (event) => {
-      const data = this.uiFns.receiveIframeMessageBoilerplate(event);
-
-      /* istanbul ignore if */
-      if (!data) {
-        return;
-      }
-
-      if (data.codeOverlay) { // This condition must come first.
-        if (data.codeOverlay === 'on') {
-          this.viewall = data.viewall || false;
-
-          // Can assume we're not viewing the Mustache Browser.
-          this.mustacheBrowser = false;
-
-          if (data.openCode) {
-            this.openCode();
-          }
-
-          // Update code.
-          this.updateCode(data.lineage, data.lineageR, data.patternPartial, data.patternState);
-        }
-        else {
-          this.closeCode();
-        }
-      }
-      else if (typeof data.codeMustacheBrowser === 'boolean') {
-        this.mustacheBrowser = data.codeMustacheBrowser;
-      }
-      else if (typeof data.codeViewall === 'boolean') {
-        this.viewall = data.codeViewall;
-      }
-
-      switch (data.event) {
-        case 'patternlab.keyPress':
-          switch (data.keyPress) {
-            case 'ctrl+shift+c':
-              this.toggleCode();
-
-              // If viewall, scroll to the focused pattern.
-              /* istanbul ignore if */
-              if (this.viewall && this.codeActive) {
-                this.scrollViewall();
-              }
-
-              break;
-
-            case 'ctrl+alt+h':
-            case 'ctrl+shift+y':
-              this.swapCode('e');
-
-              break;
-
-            case 'ctrl+alt+m':
-            case 'ctrl+shift+u':
-              this.swapCode('m');
-
-              break;
-
-            case 'esc':
-              if (this.codeActive) {
-                this.closeCode();
-              }
-
-              break;
-
-            // DEPRECATED! Will be removed.
-            /* istanbul ignore next */
-            case 'mod+a':
-              this.selectCode();
-
-              break;
-          }
-
-          break;
-      }
-    };
-
-    // This runs once the AJAX request for the encoded markup is finished.
-    // If the encoded tab is the current active tab, it adds the content to the default code container.
-    getSaveEncodedFunction = (codeViewer) => {
-      return function () {
-        let encoded = this.responseText;
-
-        // We sometimes want markup code to be in an HTML-like template language with tags delimited by stashes.
-        // In order for js-beautify to indent such code correctly, any space between control characters #, ^, and /, and
-        // the variable name must be removed. However, we want to add the spaces back later.
-        // \u00A0 is &nbsp; a space character not on standard keyboards, and therefore a good delimiter.
-        encoded = encoded.replace(/(\{\{#)(\s+)(\S+)/g, '$1$3$2\u00A0');
-        encoded = encoded.replace(/(\{\{\^)(\s+)(\S+)/g, '$1$3$2\u00A0');
-        encoded = encoded.replace(/(\{\{\/)(\s+)(\S+)/g, '$1$3$2\u00A0');
-
-        encoded = root.html_beautify(encoded, {
-          indent_handlebars: true,
-          indent_size: 2,
-          wrap_line_length: 0
-        });
-
-        // Add back removed spaces to retain the look intended by the author.
-        encoded = encoded.replace(/(\{\{#)(\S+)(\s+)\u00A0/g, '$1$3$2');
-        encoded = encoded.replace(/(\{\{\^)(\S+)(\s+)\u00A0/g, '$1$3$2');
-        encoded = encoded.replace(/(\{\{\/)(\S+)(\s+)\u00A0/g, '$1$3$2');
-
-        // Delete empty lines.
-        encoded = encoded.replace(/^\s*$\n/gm, '');
-
-        // Encode with HTML entities.
-        encoded = root.he.encode(encoded);
-
-        codeViewer.encoded = encoded;
-
-        if (codeViewer.tabActive === 'e') {
-          codeViewer.activateDefaultTab('e', encoded);
-        }
-      };
-    };
-
-    // Run this once the AJAX request for the mustache markup has finished.
-    // If the mustache tab is the current active tab, add the content to the default code container.
-    getSaveMustacheFunction = (codeViewer) => {
-      return function () {
-        let mustache = this.responseText;
-        mustache = root.he.encode(mustache);
-        codeViewer.mustache = mustache;
-
-        if (codeViewer.tabActive === 'm') {
-          codeViewer.activateDefaultTab('m', mustache);
-        }
-      };
-    };
-
-    /* CONSTRUCTOR */
-
-    constructor(fepperUi) {
-      this.codeActive = false;
-      this.$orgs = fepperUi.requerio.$orgs;
-      this.selectForCopy = false; // DEPRECATED! Will be removed.
-      this.encoded = '';
-      this.mustache = '';
-      this.mustacheBrowser = false;
-      this.tabActive = 'm';
-      this.viewall = false;
-    }
-
-    // Getters for fepperUi instance props in case they are undefined at instantiation.
-
-    get annotationsViewer() {
-      return fepperUiInst.annotationsViewer;
-    }
-
-    get uiData() {
-      return fepperUiInst.uiData;
-    }
-
-    get uiFns() {
-      return fepperUiInst.uiFns;
-    }
-
-    get uiProps() {
-      return fepperUiInst.uiProps;
-    }
-
-    get urlHandler() {
-      return fepperUiInst.urlHandler;
-    }
-
-    /* METHODS */
-
-    // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
-    stoke() {
-      // Load the query strings in case code view has to show by default.
-      const searchParams = this.urlHandler.getSearchParams();
-
-      if (searchParams.view === 'code' || searchParams.view === 'c') {
-        this.selectForCopy = (searchParams.copy === 'true') ? true : false; // DEPRECATED! Will be removed.
-        this.openCode();
-      }
-
-      // Open code panel on page load if config.defaultShowPatternInfo === true.
-      else if (this.uiData.config.defaultShowPatternInfo) {
-        this.openCode();
-      }
-    }
-
-    /**
-     * When loading the code view, make sure the active tab is highlighted and filled in appropriately.
-     *
-     * @param {string} type - Single letter that refers to classes and types.
-     * @param {string} code - Code to appear in code view.
-     */
-    activateDefaultTab(type, code) {
-      this.$orgs['.sg-code-title'].dispatchAction('removeClass', 'sg-code-title-active');
-
-      switch (type) {
-        case 'e':
-          this.$orgs['#sg-code-title-html'].dispatchAction('addClass', 'sg-code-title-active');
-
-          break;
-
-        case 'm':
-          this.$orgs['#sg-code-title-mustache'].dispatchAction('addClass', 'sg-code-title-active');
-
-          break;
-      }
-
-      this.$orgs['#sg-code-fill'].dispatchAction('html', code);
-      root.Prism.highlightElement(this.$orgs['#sg-code-fill'][0]);
-
-      // DEPRECATED! Will be removed.
-      if (this.selectForCopy) {
-        /* istanbul ignore if */
-        if (typeof window === 'object') {
-          this.selectCode();
-        }
-
-        this.selectForCopy = false;
-      }
-    }
-
-    /**
-     * Clear any selection of code when swapping tabs or opening a new pattern.
-     */
-    clearSelection() /* istanbul ignore next */ {
-      if (!this.codeActive || !root.getSelection) {
-        return;
-      }
-
-      if (root.getSelection().empty) {
-        root.getSelection().empty();
-      }
-      else if (root.getSelection().removeAllRanges) {
-        root.getSelection().removeAllRanges();
-      }
-    }
-
-    closeCode() {
-      const obj = {codeToggle: 'off'};
-      this.codeActive = false;
-
-      /* istanbul ignore if */
-      if (typeof getComputedStyle === 'function') {
-        this.$orgs['#sg-code-container'].dispatchAction('addClass', 'close');
-      }
-
-      this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, this.uiProps.targetOrigin);
-      this.slideCode(
-        Number(this.$orgs['#sg-code-container'].getState().innerHeight)
-      );
-      this.$orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
-
-      // Remove padding from bottom of viewport if appropriate.
-      if (!this.annotationsViewer.annotationsActive) {
-        this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: '0px'});
-      }
-
-      /* istanbul ignore if */
-      if (typeof getComputedStyle === 'function') {
-        const transitionDurationStr =
-          getComputedStyle(this.$orgs['#sg-code-container'][0]).getPropertyValue('transition-duration');
-        let transitionDurationNum;
-
-        if (transitionDurationStr.slice(-2) === 'ms') {
-          transitionDurationNum = parseFloat(transitionDurationStr);
-        }
-        else {
-          transitionDurationNum = parseFloat(transitionDurationStr) * 1000;
-        }
-
-        setTimeout(() => {
-          this.$orgs['#sg-code-container']
-            .dispatchAction('removeClass', 'close')
-            .dispatchAction('removeClass', 'anim-ready');
-        }, transitionDurationNum);
-      }
-    }
-
-    openCode() {
-      // Do nothing if viewing Mustache Browser.
-      if (this.mustacheBrowser) {
-        return;
-      }
-
-      // Flag that viewer is active.
-      this.codeActive = true;
-
-      this.$orgs['#sg-t-code'].dispatchAction('addClass', 'active');
-      this.$orgs['#sg-code-container'].dispatchAction('css', {bottom: -this.uiProps.sh + 'px'});
-
-      /* istanbul ignore if */
-      if (typeof getComputedStyle === 'function') {
-        this.$orgs['#sg-code-container'].dispatchAction('addClass', 'anim-ready');
-      }
-
-      // Make sure the annotations viewer is off before showing code.
-      this.annotationsViewer.closeAnnotations();
-
-      // Tell the pattern that code viewer has been turned on.
-      const objCodeToggle = {codeToggle: 'on'};
-
-      this.$orgs['#sg-viewport'][0].contentWindow.postMessage(objCodeToggle, this.uiProps.targetOrigin);
-
-      // Move the code into view.
-      this.slideCode(0);
-
-      // Add padding to bottom of viewport.
-      this.$orgs['#sg-vp-wrap'].dispatchAction('css', {paddingBottom: (this.uiProps.sh / 2) + 'px'});
-    }
-
-    scrollViewall() {
-      this.$orgs['#sg-viewport'][0].contentWindow.postMessage({codeScrollViewall: true}, this.uiProps.targetOrigin);
-    }
-
-    // DEPRECATED! Will be removed.
-    /**
-     * Select the code where using cmd+a/ctrl+a.
-     */
-    selectCode() /* istanbul ignore next */ {
-      const range = root.document.createRange();
-      const selection = root.getSelection();
-
-      range.selectNodeContents(this.$orgs['#sg-code-fill'][0]);
-      selection.removeAllRanges();
-      selection.addRange(range);
-    }
-
-    /**
-     * Slide the panel.
-     *
-     * @param {number} pos - The distance to slide.
-     */
-    slideCode(pos) {
-      this.$orgs['#sg-code-container'].dispatchAction('css', {bottom: -pos + 'px'});
-    }
-
-    /**
-     * Depending on what tab is clicked, swap out the code container. Make sure Prism highlight is added.
-     *
-     * @param {string} type - Single letter abbreviation of type.
-     */
-    swapCode(type) {
-      if (!this.codeActive) {
-        return;
-      }
-
-      let fill = '';
-      this.tabActive = type;
-
-      this.$orgs['.sg-code-title'].dispatchAction('removeClass', 'sg-code-title-active');
-
-      switch (type) {
-        case 'e':
-          fill = this.encoded;
-
-          this.$orgs['#sg-code-title-html'].dispatchAction('addClass', 'sg-code-title-active');
-
-          break;
-
-        case 'm':
-          fill = this.mustache;
-
-          this.$orgs['#sg-code-title-mustache'].dispatchAction('addClass', 'sg-code-title-active');
-
-          break;
-      }
-
-      this.$orgs['#sg-code-fill'].dispatchAction('html', fill);
-      root.Prism.highlightElement(this.$orgs['#sg-code-fill'][0]);
-      this.clearSelection();
-    }
-
-    /**
-     * Decide on whether the code panel should be open or closed.
-     */
-    toggleCode() {
-      if (!this.codeActive) {
-        this.openCode();
       }
       else {
         this.closeCode();
       }
     }
+    else if (typeof data.codeViewall === 'boolean') {
+      this.viewall = data.codeViewall;
+    }
 
-    /**
-     * When turning on or switching between patterns with code viewer on, make sure we get the code from the pattern via
-     * postMessage.
-     *
-     * @param {array} lineage - Lineage array.
-     * @param {array} lineageR - Reverse lineage array.
-     * @param {string} patternPartial - The shorthand partials syntax for a given pattern.
-     * @param {string} patternState - inprogress, inreview, complete
-     */
-    updateCode(lineage, lineageR, patternPartial, patternState) {
+    switch (data.event) {
+      case 'patternlab.keyPress':
+        switch (data.keyPress) {
+          case 'ctrl+shift+c':
+            this.toggleCode();
 
-      // Clear any selections that might have been made.
-      this.clearSelection();
+            // If viewall, scroll to the focused pattern.
+            /* istanbul ignore if */
+            if (this.viewall && this.codeActive) {
+              this.scrollViewall();
+            }
 
-      // Set data-patternpartial attribute.
-      this.$orgs['#sg-code-container'].dispatchAction('attr', {'data-patternpartial': patternPartial});
+            break;
 
-      // Draw lineage.
-      if (lineage.length) {
-        let lineageList = '';
+            // TODO: Create keyboard shortcuts to switch between Feplet and Requerio tabs.
 
-        for (let i = 0; i < lineage.length; i++) {
-          let cssClass = '';
+          case 'esc':
+            if (this.codeActive && this.uiProps.dockPosition === 'bottom') {
+              this.closeCode();
+            }
 
-          if (lineage[i].lineageState) {
-            cssClass = 'sg-pattern-state ' + lineage[i].lineageState;
-          }
-
-          lineageList += (i === 0) ? '' : ', ';
-          lineageList += '<a href="' + lineage[i].lineagePath + '" class="' + cssClass + '" data-patternpartial="';
-          lineageList += lineage[i].lineagePattern + '">' + lineage[i].lineagePattern + '</a>';
+            break;
         }
 
-        this.$orgs['#sg-code-lineage'].dispatchAction('css', {display: 'block'});
-        this.$orgs['#sg-code-lineage-fill'].dispatchAction('html', lineageList);
+        break;
+    }
+  };
+
+  // Private class fields.
+  #fepperUi;
+  #root;
+
+  /* CONSTRUCTOR */
+
+  constructor(fepperUi, root_) {
+    root = root_;
+
+    this.#fepperUi = fepperUi;
+    this.#root = root;
+
+    this.codeActive = false;
+    this.$orgs = fepperUi.requerio.$orgs;
+    this.patternPartial = null;
+    this.requerio = fepperUi.requerio;
+    this.tabActive = 'feplet';
+    this.viewall = false;
+  }
+
+  // Getters for fepperUi instance props in case they are undefined at instantiation.
+
+  get annotationsViewer() {
+    return this.#fepperUi.annotationsViewer;
+  }
+
+  get dataSaver() {
+    return this.#fepperUi.dataSaver;
+  }
+
+  get uiData() {
+    return this.#fepperUi.uiData;
+  }
+
+  get uiFns() {
+    return this.#fepperUi.uiFns;
+  }
+
+  get uiProps() {
+    return this.#fepperUi.uiProps;
+  }
+
+  get urlHandler() {
+    return this.#fepperUi.urlHandler;
+  }
+
+  get viewerHandler() {
+    return this.#fepperUi.viewerHandler;
+  }
+
+  /* METHODS */
+
+  // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
+  stoke() {
+    // Load the query strings in case code view has to show by default.
+    const searchParams = this.urlHandler.getSearchParams();
+    const tabActive = this.dataSaver.findValue('tabActive');
+    this.tabActive = tabActive || this.tabActive;
+    this.patternPartial = searchParams.p;
+
+    if (searchParams.view === 'code' || searchParams.view === 'c') {
+      this.openCode();
+    }
+    // Open code panel on page load if config.defaultShowPatternInfo === true.
+    else if (this.uiData.config.defaultShowPatternInfo) {
+      this.openCode();
+    }
+  }
+
+  activateMarkdownTextarea() {
+    const markdownPreState = this.$orgs['#sg-code-pre-language-markdown'].getState();
+
+    this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
+    this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: 'block'});
+
+    this.$orgs['#sg-code-textarea-markdown']
+      .dispatchAction('width', markdownPreState.width)
+      .dispatchAction('height', markdownPreState.height + 21); // line-height is 21px.
+    this.$orgs['#sg-code-textarea-markdown'].focus();
+  }
+
+  /**
+   * When loading the code view, make sure the active tab is highlighted and filled in appropriately.
+   *
+   * @param {string} type - Single letter that refers to classes and types.
+   */
+  activateTabAndPanel(type) {
+    this.tabActive = type;
+
+    this.$orgs['.sg-code-tab'].dispatchAction('removeClass', 'sg-code-tab-active');
+    this.$orgs['.sg-code-panel'].dispatchAction('removeClass', 'sg-code-panel-active');
+    this.dataSaver.updateValue('tabActive', type);
+
+    switch (type) {
+      case 'feplet': {
+        this.$orgs['#sg-code-tab-feplet'].dispatchAction('addClass', 'sg-code-tab-active');
+        this.$orgs['#sg-code-panel-feplet'].dispatchAction('addClass', 'sg-code-panel-active');
+        this.setPanelContent(type);
+
+        break;
       }
-      else {
-        this.$orgs['#sg-code-lineage'].dispatchAction('css', {display: 'none'});
-      }
+      case 'markdown': {
+        // TODO: Viewall behavior:
+        //       To replicate:
+        //         1. Open compounds-text viewall
+        //         2. Activate markdown tab and panel
+        //         3. Click code button for footer
+        //
+        //       While clicking code buttons on viewall, update markdown panel.
+        //       Try editing while on viewall.
+        this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-active');
+        this.$orgs['#sg-code-panel-markdown'].dispatchAction('addClass', 'sg-code-panel-active');
 
-      // Draw reverse lineage.
-      if (lineageR.length) {
-        let lineageRList = '';
+        const panelMarkdown = this.$orgs['#sg-code-panel-markdown'].getState().html;
 
-        for (let i = 0; i < lineageR.length; i++) {
-          let cssClass = '';
-
-          if (lineageR[i].lineageState) {
-            cssClass = 'sg-pattern-state ' + lineageR[i].lineageState;
-          }
-
-          lineageRList += (i === 0) ? '' : ', ';
-          lineageRList += '<a href="' + lineageR[i].lineagePath + '" class="' + cssClass + '" data-patternpartial="';
-          lineageRList += lineageR[i].lineagePattern + '">' + lineageR[i].lineagePattern + '</a>';
+        if (!panelMarkdown) {
+          this.setPanelContent(type);
         }
 
-        this.$orgs['#sg-code-lineager'].dispatchAction('css', {display: 'block'});
-        this.$orgs['#sg-code-lineager-fill'].dispatchAction('html', lineageRList);
+        break;
       }
-      else {
-        this.$orgs['#sg-code-lineager'].dispatchAction('css', {display: 'none'});
-      }
-
-      // When clicking on a lineage item update the iframe.
-      // Abstracted to a function outside any class scope, so there's no ambiguity about the `this` keyword.
-      addLineageListeners(this.$orgs, this.uiProps);
-
-      // Show pattern state.
-      if (patternState) {
-        const patternStateItem = '<span class=\'sg-pattern-state ' + patternState + '\'>' + patternState + '</span>';
-
-        this.$orgs['#sg-code-pattern-info-state'].dispatchAction('html', patternStateItem);
-      }
-      else {
-        this.$orgs['#sg-code-pattern-info-state'].dispatchAction('html', '');
-      }
-
-      // Fill in the name of the pattern.
-      root.$('#sg-code-pattern-info-rel-path').html(this.uiData.sourceFiles[patternPartial]);
-      root.$('#sg-code-lineage-pattern-name, #sg-code-lineager-pattern-name, #sg-code-pattern-info-pattern-name')
-        .html(patternPartial);
-
-      // Get the file name of the pattern so we can update the tabs of code that show in the viewer.
-      const filename = this.uiData.patternPaths[patternPartial];
-      const patternExtension = this.uiData.config.patternExtension || '.mustache';
-
-      // Request the encoded markup version of the pattern.
-      const e = new root.XMLHttpRequest();
-      e.onload = this.getSaveEncodedFunction(this);
-      e.onerror = this.getPrintXHRErrorFunction(this);
-      e.open('GET', filename.replace(/\.html/, '.markup-only.html') + '?' + (new Date()).getTime(), true);
-      e.send();
-
-      // Request the Mustache markup version of the pattern.
-      const m = new root.XMLHttpRequest();
-      m.onload = this.getSaveMustacheFunction(this);
-      m.onerror = this.getPrintXHRErrorFunction(this);
-      m.open('GET', filename.replace(/\.html/, patternExtension) + '?' + (new Date()).getTime(), true);
-      m.send();
-
-      // Select the relative path to the pattern.
-      // Do not copy. Let the user decide whether or not to copy.
-      let selection;
-
       /* istanbul ignore next */
-      try {
-        const range = root.document.createRange();
-        selection = root.getSelection();
+      case 'requerio': {
 
-        range.selectNodeContents(this.$orgs['#sg-code-pattern-info-rel-path'][0]);
-        selection.removeAllRanges();
-        selection.addRange(range);
+        break;
       }
-      catch (err) {
-        /* eslint-disable no-console */
-        console.error(err);
-        console.error('Selection failed!');
-      }
+      /* istanbul ignore next */
+      case 'git': {
 
-      // Deselect after 5 seconds.
-      /* istanbul ignore if */
-      if (selection) {
-        setTimeout(() => {
-          selection.removeAllRanges();
-        }, 5000);
+        break;
       }
     }
   }
 
-  return new CodeViewer(fepperUiInst);
+  closeCode() {
+    // Tell the pattern that code viewer has been turned off.
+    const obj = {codeToggle: 'off'};
+    // Flag that viewer is inactive.
+    this.codeActive = false;
+
+    this.viewerHandler.closeViewer();
+    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, this.uiProps.targetOrigin);
+    this.$orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
+    this.$orgs['#sg-code-container'].dispatchAction('removeClass', 'active');
+  }
+
+  openCode() {
+    // Tell the pattern that code viewer has been turned on.
+    const objCodeToggle = {codeToggle: 'on'};
+    // Flag that viewer is active.
+    this.codeActive = true;
+
+    // Make sure the annotations viewer is off before showing code.
+    this.annotationsViewer.closeAnnotations();
+    this.viewerHandler.openViewer();
+    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(objCodeToggle, this.uiProps.targetOrigin);
+    this.$orgs['#sg-t-code'].dispatchAction('addClass', 'active');
+    this.$orgs['#sg-code-container'].dispatchAction('addClass', 'active');
+  }
+
+  resetPanels(patternPartial) {
+    this.patternPartial = patternPartial;
+
+    this.unsetPanelContent('feplet');
+    this.unsetPanelContent('markdown');
+    this.unsetPanelContent('requerio');
+    this.unsetPanelContent('git');
+    this.setPanelContent(this.tabActive);
+  }
+
+  scrollViewall() /* istanbul ignore next */ {
+    this.$orgs['#sg-viewport'][0].contentWindow.postMessage({codeScrollViewall: true}, this.uiProps.targetOrigin);
+  }
+
+  setPanelContent(type) {
+    switch (type) {
+      case 'feplet': {
+        this.$orgs['#sg-code-panel-feplet'][0]
+          .contentWindow.location.replace(`/mustache-browser?partial=${this.patternPartial}`);
+        this.$orgs['#sg-code-panel-feplet'][0]
+          .addEventListener('load', () => {
+            const height = this.$orgs['#sg-code-panel-feplet'][0].contentWindow.document.documentElement.offsetHeight;
+
+            this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: `${height}px`, visibility: ''});
+          });
+
+        break;
+      }
+      case 'markdown': {
+        const codeViewer = this;
+        const config = this.uiData.config;
+        const patternPath = this.uiData.patternPaths[this.patternPartial];
+        const mdPath = patternPath.slice(0, -(config.outfileExtension.length)) + config.frontMatterExtension;
+
+        const xhr = new root.XMLHttpRequest();
+        xhr.onload = function () {
+          if (this.status === 200) {
+            const markdownTextareaState = codeViewer.$orgs['#sg-code-textarea-markdown'].getState();
+
+            codeViewer.$orgs['#sg-code-pane-no-markdown'].dispatchAction('css', {display: ''});
+            codeViewer.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', this.responseText);
+            codeViewer.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+
+            if (!markdownTextareaState.html) {
+              codeViewer.$orgs['#sg-code-textarea-markdown'].dispatchAction('html', this.responseText);
+            }
+          }
+          else {
+            codeViewer.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
+            codeViewer.$orgs['#sg-code-pane-no-markdown'].dispatchAction('css', {display: 'block'});
+          }
+        };
+        /* istanbul ignore next */
+        xhr.onerror = function () {
+          // eslint-disable-next-line no-console
+          console.error(`Status ${this.status}: ${this.statusText}`);
+        };
+
+        xhr.open('GET', mdPath + '?' + Date.now());
+        xhr.send();
+
+        break;
+      }
+    }
+  }
+
+  /**
+   * Decide on whether the code panel should be open or closed.
+   */
+  toggleCode() {
+    if (!this.codeActive) {
+      this.openCode();
+    }
+    else {
+      this.closeCode();
+    }
+  }
+
+  unsetPanelContent(type) {
+    switch (type) {
+      case 'feplet':
+        this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: '', visibility: 'hidden'});
+        this.$orgs['#sg-code-panel-feplet'][0].contentWindow.location.replace('about:blank');
+
+        break;
+
+      case 'markdown':
+        this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', '');
+
+        if (this.$orgs['#sg-code-textarea-markdown'].length) {
+          this.$orgs['#sg-code-textarea-markdown'].dispatchAction('html', '');
+        }
+
+        break;
+
+      default:
+        this.$orgs['#sg-code-panel-' + type].dispatchAction('html', '');
+    }
+  }
+
+  /**
+   * When turning on or switching between patterns with code viewer on, make sure we get the code from the pattern via
+   * postMessage.
+   *
+   * @param {array} lineage - Lineage array.
+   * @param {array} lineageR - Reverse lineage array.
+   * @param {string} patternPartial - The shorthand partials syntax for a given pattern.
+   * @param {string} patternState - inprogress, inreview, complete
+   */
+  updateCode(lineage, lineageR, patternPartial, patternState) {
+    this.patternPartial = patternPartial;
+
+    // Draw lineage.
+    if (lineage.length) {
+      let lineageList = '';
+
+      for (let i = 0; i < lineage.length; i++) {
+        let cssClass = '';
+
+        if (lineage[i].lineageState) {
+          cssClass = 'sg-pattern-state ' + lineage[i].lineageState;
+        }
+
+        lineageList += (i === 0) ? '' : ', ';
+        lineageList += '<a href="' + lineage[i].lineagePath + '" class="' + cssClass + '">';
+        lineageList += lineage[i].lineagePattern + '</a>';
+      }
+
+      this.$orgs['#sg-code-lineage'].dispatchAction('css', {display: 'block'});
+      this.$orgs['#sg-code-lineage-fill'].dispatchAction('html', lineageList);
+    }
+    else {
+      this.$orgs['#sg-code-lineage'].dispatchAction('css', {display: 'none'});
+    }
+
+    // Draw reverse lineage.
+    if (lineageR.length) {
+      let lineageRList = '';
+
+      for (let i = 0; i < lineageR.length; i++) {
+        let cssClass = '';
+
+        if (lineageR[i].lineageState) {
+          cssClass = 'sg-pattern-state ' + lineageR[i].lineageState;
+        }
+
+        lineageRList += (i === 0) ? '' : ', ';
+        lineageRList += '<a href="' + lineageR[i].lineagePath + '" class="' + cssClass + '">';
+        lineageRList += lineageR[i].lineagePattern + '</a>';
+      }
+
+      this.$orgs['#sg-code-lineager'].dispatchAction('css', {display: 'block'});
+      this.$orgs['#sg-code-lineager-fill'].dispatchAction('html', lineageRList);
+    }
+    else {
+      this.$orgs['#sg-code-lineager'].dispatchAction('css', {display: 'none'});
+    }
+
+    // When clicking on a lineage item update the iframe.
+    // Abstracted to a function outside any class scope, so there's no ambiguity about the `this` keyword.
+    addLineageListeners(this.$orgs, this.uiProps);
+
+    // Show pattern state.
+    if (patternState) {
+      const patternStateItem = '<span class=\'sg-pattern-state ' + patternState + '\'>' + patternState + '</span>';
+
+      this.$orgs['#sg-code-pattern-info-state'].dispatchAction('html', patternStateItem);
+    }
+    else {
+      this.$orgs['#sg-code-pattern-info-state'].dispatchAction('html', '');
+    }
+
+    // Fill in the name of the pattern.
+    this.#root.$('#sg-code-pattern-info-rel-path').html(this.uiData.sourceFiles[patternPartial]);
+    this.#root.$('#sg-code-pattern-info-pattern-name').html(`<strong>${patternPartial}</strong> at`);
+    this.#root.$('#sg-code-lineage-pattern-name, #sg-code-lineager-pattern-name').html(patternPartial);
+  }
 }

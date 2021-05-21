@@ -1,5 +1,8 @@
 /**
  * Copyright (c) 2013 Brad Frost, http://bradfrostweb.com & Dave Olsen, http://dmolsen.com
+ *
+ * .sg-main, .sg-pattern and its children are viewall selectors.
+ * .annotation-tip is the primary annotation selector.
  */
 .sg-main {
   margin: 0 auto;
@@ -102,6 +105,12 @@
 .sg-pattern-example {
   position: relative;
 }
+/* In case there are floats in the example. */
+.sg-pattern-example::after {
+  clear: both;
+  content: " ";
+  display: table;
+}
 
 /* Use px not rem for .annotation-tip */
 .annotation-tip {
@@ -121,13 +130,4 @@
   width: 25px;
   height: 25px;
   z-index: 100;
-}
-
-.cf::before,
-.cf::after {
-  content: " ";
-  display: table;
-}
-.cf::after {
-  clear: both;
 }

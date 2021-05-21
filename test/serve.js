@@ -33,7 +33,7 @@ module.exports = new Promise((resolve) => {
     <meta http-equiv="pragma" content="no-cache">
 
     
-    <link rel="stylesheet" href="/fepper-core/html-scraper.css">
+    <link rel="stylesheet" href="/styles/html-scraper.css">
     
   </head>
 
@@ -123,7 +123,7 @@ module.exports = new Promise((resolve) => {
       const urlObj = urlParse(req.url, true);
       let filePath = urlObj.pathname;
 
-      switch (filePath) {
+      switch (urlObj.pathname) {
         case '/':
           filePath += 'test/fixtures/index.html';
 
@@ -197,8 +197,9 @@ module.exports = new Promise((resolve) => {
           res.writeHead(200, {'Content-Type': 'text/html'});
           /* eslint-disable max-len */
           res.end(`
+
 <!DOCTYPE html>
-<html class="">
+<html class="mustache-browser">
   <head>
     <title id="title">Fepper Mustache Browser</title>
     <meta charset="utf-8">
@@ -211,15 +212,18 @@ module.exports = new Promise((resolve) => {
     <meta http-equiv="pragma" content="no-cache">
 
     
-    <link rel="stylesheet" href="/fepper-core/mustache-browser.css">
+    <link rel="stylesheet" href="/styles/prism-twilight.css">
+    <link rel="stylesheet" href="/styles/mustache-browser.css">
     
   </head>
 
-  <body class="text">
-    <main id="mustache-browser" class="mustache-browser">
-      <a href="#" class="fp-express mustache-browser__back" onclick="window.history.back();return false;">&#8678;</a>
-      <h2><a href="../patterns/04-pages-00-homepage/04-pages-00-homepage.html" class="fp-express mustache-browser__pattern-link">pages-homepage</a></h2>
-      <a href="?partial={{&gt; 03-templates/page }}" class="fp-express">{{&gt; 03-templates/page }}</a><br>
+  <body class="mustache-browser__body">
+    <main id="" class="mustache-browser__main">
+      <div id="message" class="message "></div>
+<pre><code class="language-markup">{{{ content }}}
+<a href="/?p=templates-page" target="_top">{{> 03-templates/00-page }}</a>
+</code></pre>
+
     </main>
     
   </body>
@@ -229,7 +233,38 @@ module.exports = new Promise((resolve) => {
           return;
       }
 
-      filePath = `${__dirname}/..${filePath}`;
+      const excerpt = '/node_modules/fepper-ui';
+
+      if (urlObj.pathname.startsWith(excerpt)) {
+        switch (urlObj.pathname) {
+          case '/node_modules/fepper-ui/scripts/ui/compilation.js':
+            filePath = `${__dirname}/fixtures/ui-compilation.js`;
+
+            break;
+          case '/node_modules/fepper-ui/scripts/ui/data.js':
+            filePath = `${__dirname}/fixtures/ui-data.js`;
+
+            break;
+          case '/node_modules/fepper-ui/styles/ui.css':
+            filePath = `${__dirname}/fixtures/styles/ui.css`;
+
+            break;
+          default:
+            filePath = `${__dirname}/..${filePath.replace(excerpt, '')}`;
+        }
+      }
+      else if (urlObj.pathname.startsWith('/annotations/')) {
+        filePath = `${__dirname}/fixtures${filePath}`;
+      }
+      else if (urlObj.pathname.startsWith('/_scripts/')) {
+        filePath = `${__dirname}/../node_modules/fepper/excludes/profiles/base/source${filePath}`;
+      }
+      else if (urlObj.pathname.startsWith('/_styles/')) {
+        filePath = `${__dirname}/../node_modules/fepper/excludes/profiles/base/source${filePath}`;
+      }
+      else {
+        filePath = `${__dirname}/..${filePath}`;
+      }
 
       const extname = path.extname(filePath);
       let contentType = 'application/octet-stream';
@@ -242,6 +277,8 @@ module.exports = new Promise((resolve) => {
           contentType = 'text/html';
           break;
         case '.js':
+          contentType = 'application/javascript';
+        case '.mjs':
           contentType = 'application/javascript';
           break;
         case '.styl':

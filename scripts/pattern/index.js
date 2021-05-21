@@ -2,9 +2,8 @@
 
 import './annotations-viewer.js';
 import './code-viewer.js';
-import './mustache-browser.js';
 import './pattern-finder.js';
-import './patternlab-viewer.js';
+import './pattern-viewport.js';
 
 if (parent !== window && window.Mousetrap) {
   const Mousetrap = window.Mousetrap;

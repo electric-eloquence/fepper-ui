@@ -1,18 +1,14 @@
-// Be sure to e2e test listeners.
+export default class UrlHandler {
+  #fepperUi;
 
-// TODO: Replace closure with private class field when there is greater browser support.
-export default function (fepperUiInst) {
-  class UrlHandler {
-    constructor() {
-    }
-
-    listen() {
-      window.onpopstate = (e) => {
-        fepperUiInst.urlHandler.skipBack = true;
-        fepperUiInst.urlHandler.popPattern(e);
-      };
-    }
+  constructor(fepperUi) {
+    this.#fepperUi = fepperUi;
   }
 
-  return new UrlHandler(fepperUiInst);
+  listen() {
+    window.onpopstate = (e) => {
+      this.#fepperUi.urlHandler.skipBack = true;
+      this.#fepperUi.urlHandler.popPattern(e);
+    };
+  }
 }

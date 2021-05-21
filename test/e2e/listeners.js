@@ -2,7 +2,43 @@ describe('Listeners end-to-end tests', function () {
   describe('annotationsViewer', function () {
     describe('click', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
+      });
+
+      it('dock-right button docks the viewer to the right', function () {
+        $('#sg-t-toggle').click();
+        browser.pause(100);
+        $('#sg-t-annotations').click();
+        browser.pause(100);
+        expect($('#patternlab-body').getAttribute('class')).to.not.have.string('dock-right');
+        expect($('#sg-viewport').getSize().width).to.equal(1024);
+        $('#sg-view-btn-dock-right').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-right');
+        expect($('#sg-gen-container').getSize().width).to.equal(512);
+      });
+
+      it('dock-left button docks the viewer to the left', function () {
+        $('#sg-form-label').click();
+        browser.pause(100);
+        $('#sg-size-w').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.not.have.string('dock-left');
+        expect($('#sg-viewport').getSize().width).to.equal(1024);
+        $('#sg-view-btn-dock-left').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-left');
+        expect($('#sg-gen-container').getSize().width).to.equal(512);
+      });
+
+      it('dock-bottom button docks the viewer to the bottom', function () {
+        $('#sg-view-btn-dock-bottom').click();
+        browser.pause(100);
+        $('#sg-form-label').click();
+        browser.pause(100);
+        $('#sg-size-w').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-bottom');
       });
 
       it('close button closes annotations viewer', function () {
@@ -10,26 +46,26 @@ describe('Listeners end-to-end tests', function () {
         browser.pause(100);
         $('#sg-t-annotations').click();
         browser.pause(700);
-        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
-        $('#sg-annotations-close-btn').click();
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('322.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
+        $('#sg-view-btn-close').click();
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('637px');
       });
     });
 
     describe('Mousetrap', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('"ctrl+shift+a" toggles annotations viewer', function () {
         browser.keys(['Control', 'Shift', 'a']);
         browser.pause(700);
-        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('0px');
-        expect($('#sg-annotations').getHTML(false)).to.equal(`<div id="annotation-1">
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('322.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
+        expect($('#sg-annotations').getHTML(false)).to.equal(`<div id="annotation-1" class="sg-annotation">
 <h2>1. Navigation</h2>
 <div><p>Navigation for responsive web experiences can be tricky. Large navigation menus 
 are typical on desktop sites, but mobile screen sizes don't give us the luxury 
@@ -42,7 +78,7 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'a']);
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-annotations-container').getCSSProperty('bottom').value).to.equal('-258.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('637px');
       });
     });
   });
@@ -50,7 +86,43 @@ menu anchor.</p>
   describe('codeViewer', function () {
     describe('click', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
+      });
+
+      it('dock-right button docks the viewer to the right', function () {
+        $('#sg-t-toggle').click();
+        browser.pause(100);
+        $('#sg-t-code').click();
+        browser.pause(100);
+        expect($('#patternlab-body').getAttribute('class')).to.not.have.string('dock-right');
+        expect($('#sg-viewport').getSize().width).to.equal(1024);
+        $('#sg-view-btn-dock-right').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-right');
+        expect($('#sg-gen-container').getSize().width).to.equal(512);
+      });
+
+      it('dock-left button docks the viewer to the left', function () {
+        $('#sg-form-label').click();
+        browser.pause(100);
+        $('#sg-size-w').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.not.have.string('dock-left');
+        expect($('#sg-viewport').getSize().width).to.equal(1024);
+        $('#sg-view-btn-dock-left').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-left');
+        expect($('#sg-gen-container').getSize().width).to.equal(512);
+      });
+
+      it('dock-bottom button docks the viewer to the bottom', function () {
+        $('#sg-view-btn-dock-bottom').click();
+        browser.pause(100);
+        $('#sg-form-label').click();
+        browser.pause(100);
+        $('#sg-size-w').click();
+        browser.pause(1000);
+        expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-bottom');
       });
 
       it('close button closes code viewer', function () {
@@ -58,172 +130,86 @@ menu anchor.</p>
         browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
-        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
-        $('#sg-code-close-btn').click();
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('322.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
+        $('#sg-view-btn-close').click();
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('637px');
       });
 
-      it('HTML button displays HTML code', function () {
+      it('feplet and markdown tabs activate their respective panels', function () {
         $('#sg-t-toggle').click();
         browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
-        expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
-        $('#sg-code-title-html').click();
-        expect($('#sg-code-fill').getText())
-          .to.equal(`<a href="../04-pages-00-homepage/04-pages-00-homepage.html">Home</a>
-<p>Fepper Base</p>`);
+        $('#sg-code-tab-markdown').click();
+        browser.pause(100);
+        expect($('#sg-code-tab-feplet').getAttribute('class')).to.not.have.string('sg-code-tab-active');
+        expect($('#sg-code-tab-markdown').getAttribute('class')).to.have.string('sg-code-tab-active');
+        expect($('#sg-code-panel-feplet').getAttribute('class')).to.not.have.string('sg-code-panel-active');
+        expect($('#sg-code-panel-markdown').getAttribute('class')).to.have.string('sg-code-panel-active');
+        $('#sg-code-tab-feplet').click();
+        browser.pause(100);
+        expect($('#sg-code-tab-feplet').getAttribute('class')).to.have.string('sg-code-tab-active');
+        expect($('#sg-code-tab-markdown').getAttribute('class')).to.not.have.string('sg-code-tab-active');
+        expect($('#sg-code-panel-feplet').getAttribute('class')).to.have.string('sg-code-panel-active');
+        expect($('#sg-code-panel-markdown').getAttribute('class')).to.not.have.string('sg-code-panel-active');
       });
 
-      it('Mustache button displays Mustache code', function () {
+      it('the markdown edit button activates the markdown edit pane', function () {
         $('#sg-t-toggle').click();
         browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
-        $('#sg-code-title-html').click();
-        expect($('#sg-code-fill').getText())
-          .to.equal(`<a href="../04-pages-00-homepage/04-pages-00-homepage.html">Home</a>
-<p>Fepper Base</p>`);
-        $('#sg-code-title-mustache').click();
-        expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
-      });
-
-      it('Copy path button reads "Copied!" when clicked', function () {
-        $('#sg-t-toggle').click();
+        $('#sg-code-tab-markdown').click();
         browser.pause(100);
-        $('#sg-t-code').click();
-        browser.pause(700);
-        expect($('#sg-code-copy-path').getText())
-          .to.equal('Copy path');
-        $('#sg-code-copy-path').click();
+        $('#sg-code-btn-markdown-edit').click();
         browser.pause(100);
-        expect($('#sg-code-copy-path').getText())
-          .to.equal('Copied!');
+        expect($('#sg-code-pane-markdown').getCSSProperty('display').value).to.equal('none');
+        expect($('#sg-code-pane-markdown-edit').getCSSProperty('display').value).to.equal('block');
       });
     });
 
     describe('Mousetrap', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('"ctrl+shift+c" toggles code viewer', function () {
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
-        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('258.5px');
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
-        expect($('#sg-code-fill').getText()).to.equal('{{> 03-templates/page }}');
+        expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('322.5px');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('0px');
+        expect($('#sg-view-container').getAttribute('class')).to.have.string('anim-ready');
         browser.keys(['Control', 'Shift', 'c']);
         browser.pause(700);
         expect($('#sg-vp-wrap').getCSSProperty('padding-bottom').value).to.equal('0px');
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
-      });
-
-      it('"ctrl+shift+y" selects the HTML tab in code viewer', function () {
-        browser.keys(['Control', 'Shift', 'c']);
-        expect($('#sg-code-title-html').getAttribute('class')).to.not.have.string('sg-code-title-active');
-        browser.keys(['Control', 'Shift', 'y']);
-        expect($('#sg-code-title-html').getAttribute('class')).to.have.string('sg-code-title-active');
-      });
-
-      it('"ctrl+alt+h" selects the HTML tab in code viewer', function () {
-        browser.keys(['Control', 'Shift', 'c']);
-        browser.pause(700);
-        expect($('#sg-code-title-html').getAttribute('class')).to.not.have.string('sg-code-title-active');
-        browser.keys(['Control', 'Alt', 'h']);
-        expect($('#sg-code-title-html').getAttribute('class')).to.have.string('sg-code-title-active');
-      });
-
-      it('"ctrl+shift+u" selects the Mustache tab in code viewer', function () {
-        browser.keys(['Control', 'Shift', 'c']);
-        browser.pause(700);
-        browser.keys(['Control', 'Shift', 'y']);
-        expect($('#sg-code-title-mustache').getAttribute('class')).to.not.have.string('sg-code-title-active');
-        browser.keys(['Control', 'Shift', 'u']);
-        expect($('#sg-code-title-mustache').getAttribute('class')).to.have.string('sg-code-title-active');
-      });
-
-      it('"ctrl+alt+h" selects the Mustache tab in code viewer', function () {
-        browser.keys(['Control', 'Shift', 'c']);
-        browser.pause(700);
-        browser.keys(['Control', 'Alt', 'h']);
-        expect($('#sg-code-title-mustache').getAttribute('class')).to.not.have.string('sg-code-title-active');
-        browser.keys(['Control', 'Alt', 'm']);
-        expect($('#sg-code-title-mustache').getAttribute('class')).to.have.string('sg-code-title-active');
+        expect($('#sg-view-container').getCSSProperty('bottom').value).to.equal('637px');
+        expect($('#sg-view-container').getAttribute('class')).to.not.have.string('anim-ready');
       });
     });
   });
 
   describe('mustacheBrowser', function () {
-    describe('mouseenter', function () {
-      before(function () {
-        browser.setWindowSize(1024, 640);
-      });
-
-      it('reveals link to Mustache browser when hovering over Mustache code in code viewer', function () {
-        $('#sg-t-toggle').click();
-        browser.pause(100);
-        $('#sg-t-code').click();
-        browser.pause(700);
-        expect($('#sg-code-fill').getCSSProperty('cursor').value).to.equal('auto');
-        $('#sg-code-fill').moveTo(10, 10);
-        expect($('#sg-code-fill').getCSSProperty('cursor').value).to.equal('pointer');
-      });
-
-      it('shows default cursor when hovering over HTML code in code viewer', function () {
-        $('#sg-t-toggle').click();
-        browser.pause(100);
-        $('#sg-t-code').click();
-        browser.pause(700);
-        $('#sg-code-title-html').click();
-        expect($('#sg-code-fill').getCSSProperty('cursor').value).to.equal('auto');
-        $('#sg-code-fill').moveTo(10, 10);
-        // Was "default" for WebdriverIO 5. Is "auto" for WebdriverIO 6.
-        expect($('#sg-code-fill').getCSSProperty('cursor').value).to.equal('auto');
-      });
-    });
-
     describe('click', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
-      it('redirects to Mustache browser when clicking on Mustache code in code viewer', function () {
+      it('hot-links partial tags and redirects to the partial\'s pattern page', function () {
         $('#sg-t-toggle').click();
         browser.pause(100);
         $('#sg-t-code').click();
         browser.pause(700);
-        $('#sg-code-fill').click();
-        browser.switchToFrame($('#sg-viewport'));
-        expect($('main').getAttribute('id')).to.equal('mustache-browser');
+        $('#sg-code-tab-feplet').click();
+        browser.pause(100);
+        browser.switchToFrame($('#sg-code-panel-feplet'));
+        $('.language-markup a').click();
+        browser.pause(100);
         browser.switchToParentFrame();
-      });
-
-      it('closes code viewer when clicking on Mustache code in code viewer', function () {
-        $('#sg-t-toggle').click();
-        browser.pause(100);
-        $('#sg-t-code').click();
-        browser.pause(700);
-        $('#sg-code-fill').click();
-        browser.pause(700);
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('-258.5px');
-      });
-
-      it('does nothing when clicking on HTML code in code viewer', function () {
-        $('#sg-t-toggle').click();
-        browser.pause(100);
-        $('#sg-t-code').click();
-        browser.pause(700);
-        $('#sg-code-title-html').click();
-        $('#sg-code-fill').click();
-        browser.pause(700);
-        browser.switchToFrame($('#sg-viewport'));
-        expect($('main').error.error).to.equal('no such element');
-        browser.switchToParentFrame();
-        expect($('#sg-code-container').getCSSProperty('bottom').value).to.equal('0px');
+        expect($('#sg-raw').getAttribute('href'))
+          .to.equal('http://localhost:8080/patterns/03-templates-page/03-templates-page.html');
       });
     });
   });
@@ -231,7 +217,7 @@ menu anchor.</p>
   describe('patternFinder', function () {
     describe('Mousetrap', function () {
       before(function () {
-        browser.setWindowSize(1024, 640);
+        browser.setWindowSize(1024, 768);
       });
 
       it('"ctrl+shift+f" toggles patternFinder', function () {
@@ -279,10 +265,10 @@ menu anchor.</p>
     });
   });
 
-  describe('patternlabViewer', function () {
+  describe('patternViewport', function () {
     describe('window.resize', function () {
       before(function () {
-        browser.setWindowSize(1200, 640);
+        browser.setWindowSize(1200, 768);
       });
 
       it('updates viewport width when in whole mode', function () {
@@ -297,7 +283,7 @@ menu anchor.</p>
 
     describe('.sg-pop click', function () {
       before(function () {
-        browser.setWindowSize(1300, 640);
+        browser.setWindowSize(1300, 768);
       });
 
       it('loads pattern', function () {
@@ -306,7 +292,7 @@ menu anchor.</p>
         $('.sg-nav-elements').$('.sg-pop').click();
         browser.pause(100);
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/00-elements-anchor/00-elements-anchor.html');
+          .to.equal('http://localhost:8080/patterns/00-elements-paragraph/00-elements-paragraph.html');
       });
 
       it('closes open nav menu', function () {
@@ -322,7 +308,7 @@ menu anchor.</p>
 
     describe('viewport resizer buttons', function () {
       before(function () {
-        browser.setWindowSize(1300, 640);
+        browser.setWindowSize(1300, 768);
       });
 
       it('LG button resizes to Large', function () {
@@ -359,7 +345,7 @@ menu anchor.</p>
     // Test the viewport sizes in reverse to reduce the distance shrinking from 1300 in the previous tests.
     describe('Mousetrap', function () {
       before(function () {
-        browser.setWindowSize(1300, 640);
+        browser.setWindowSize(1300, 768);
       });
 
       it('"ctrl+shift+l" resizes to Large', function () {
@@ -372,12 +358,6 @@ menu anchor.</p>
         browser.keys(['Control', 'Shift', 'm']);
         browser.pause(1000);
         expect($('#sg-viewport').getSize().width).to.equal(1024);
-      });
-
-      it('"ctrl+alt+l" resizes to Large', function () {
-        browser.keys(['Control', 'Alt', 'l']);
-        browser.pause(1000);
-        expect($('#sg-viewport').getSize().width).to.equal(1280);
       });
 
       it('"ctrl+shift+s" resizes to Small', function () {
@@ -469,7 +449,7 @@ menu anchor.</p>
 
   describe('urlHandler', function () {
     before(function () {
-      browser.setWindowSize(1024, 640);
+      browser.setWindowSize(1024, 768);
     });
 
     it('handles history correctly for back and forward buttons', function () {
@@ -488,7 +468,7 @@ menu anchor.</p>
         .to.equal('http://localhost:8080/patterns/01-compounds-block/01-compounds-block.html');
       browser.back();
       expect($('#sg-raw').getAttribute('href'))
-        .to.equal('http://localhost:8080/patterns/00-elements-anchor/00-elements-anchor.html');
+        .to.equal('http://localhost:8080/patterns/00-elements-paragraph/00-elements-paragraph.html');
       browser.forward();
       expect($('#sg-raw').getAttribute('href'))
         .to.equal('http://localhost:8080/patterns/01-compounds-block/01-compounds-block.html');

@@ -2,14 +2,16 @@ import {expect} from 'chai';
 import sinon from 'sinon';
 
 import fepperUi from '../unit';
-import '../fixtures/_scripts/src/variables.styl';
+import 'fepper/excludes/profiles/base/source/_scripts/src/variables.styl';
 
 const sandbox = sinon.createSandbox();
 
 const $orgs = fepperUi.requerio.$orgs;
-const uiFns = fepperUi.uiFns;
-const uiProps = fepperUi.uiProps;
-const dataSaver = fepperUi.dataSaver;
+const {
+  uiFns,
+  uiProps,
+  dataSaver
+} = fepperUi;
 
 describe('uiFns', function () {
   describe('.closeAllPanels()', function () {
@@ -313,8 +315,8 @@ describe('uiFns', function () {
       expect(sgGenContainerStateBefore.css.width).to.not.equal('334px');
       expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.css.width).to.not.equal('320px');
-      expect(sgSizePxStateBefore.value).to.not.equal('320');
-      expect(sgSizeEmStateBefore.value).to.not.equal('20.00');
+      expect(sgSizePxStateBefore.val).to.not.equal('320');
+      expect(sgSizeEmStateBefore.val).to.not.equal('20.00');
       expect(dataSaverVpWidthBefore).to.equal('');
 
       expect(wholeModeAfter).to.be.false;
@@ -322,8 +324,8 @@ describe('uiFns', function () {
       expect(sgGenContainerStateAfter.css.width).to.equal('334px');
       expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.css.width).to.equal('320px');
-      expect(sgSizePxStateAfter.value).to.equal('320');
-      expect(sgSizeEmStateAfter.value).to.equal('20.00');
+      expect(sgSizePxStateAfter.val).to.equal('320');
+      expect(sgSizeEmStateAfter.val).to.equal('20.00');
       expect(dataSaverVpWidthAfter).to.equal('320');
     });
 
@@ -354,8 +356,8 @@ describe('uiFns', function () {
       expect(sgGenContainerStateBefore.css.width).to.not.equal('494px');
       expect(sgViewportStateBefore.classArray).to.include('vp-animate');
       expect(sgViewportStateBefore.css.width).to.not.equal('480px');
-      expect(sgSizePxStateBefore.value).to.not.equal('480');
-      expect(sgSizeEmStateBefore.value).to.not.equal('30.00');
+      expect(sgSizePxStateBefore.val).to.not.equal('480');
+      expect(sgSizeEmStateBefore.val).to.not.equal('30.00');
       expect(dataSaverVpWidthBefore).to.equal('');
 
       expect(wholeModeAfter).to.be.false;
@@ -363,8 +365,8 @@ describe('uiFns', function () {
       expect(sgGenContainerStateAfter.css.width).to.equal('494px');
       expect(sgViewportStateAfter.classArray).to.not.include('vp-animate');
       expect(sgViewportStateAfter.css.width).to.equal('480px');
-      expect(sgSizePxStateAfter.value).to.equal('480');
-      expect(sgSizeEmStateAfter.value).to.equal('30.00');
+      expect(sgSizePxStateAfter.val).to.equal('480');
+      expect(sgSizeEmStateAfter.val).to.equal('30.00');
       expect(dataSaverVpWidthAfter).to.equal('480');
     });
 
@@ -395,8 +397,8 @@ describe('uiFns', function () {
       expect(sgGenContainerStateBefore.css.width).to.not.equal('781px');
       expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.css.width).to.not.equal('767px');
-      expect(sgSizePxStateBefore.value).to.not.equal('767');
-      expect(sgSizeEmStateBefore.value).to.not.equal('47.94');
+      expect(sgSizePxStateBefore.val).to.not.equal('767');
+      expect(sgSizeEmStateBefore.val).to.not.equal('47.94');
       expect(dataSaverVpWidthBefore).to.equal('');
 
       expect(wholeModeAfter).to.be.true;
@@ -404,8 +406,8 @@ describe('uiFns', function () {
       expect(sgGenContainerStateAfter.css.width).to.equal('781px');
       expect(sgViewportStateAfter.classArray).to.include('vp-animate');
       expect(sgViewportStateAfter.css.width).to.equal('767px');
-      expect(sgSizePxStateAfter.value).to.equal('767');
-      expect(sgSizeEmStateAfter.value).to.equal('47.94');
+      expect(sgSizePxStateAfter.val).to.equal('767');
+      expect(sgSizeEmStateAfter.val).to.equal('47.94');
       expect(dataSaverVpWidthAfter).to.equal('767');
     });
 
@@ -436,8 +438,8 @@ describe('uiFns', function () {
       expect(sgGenContainerStateBefore.css.width).to.not.equal('1038px');
       expect(sgViewportStateBefore.classArray).to.not.include('vp-animate');
       expect(sgViewportStateBefore.css.width).to.not.equal('1024px');
-      expect(sgSizePxStateBefore.value).to.not.equal('1024');
-      expect(sgSizeEmStateBefore.value).to.not.equal('64.00');
+      expect(sgSizePxStateBefore.val).to.not.equal('1024');
+      expect(sgSizeEmStateBefore.val).to.not.equal('64.00');
       expect(dataSaverVpWidthBefore).to.equal('');
 
       expect(wholeModeAfter).to.be.true;
@@ -445,8 +447,8 @@ describe('uiFns', function () {
       expect(sgGenContainerStateAfter.css.width).to.equal('1038px');
       expect(sgViewportStateAfter.classArray).to.not.include('vp-animate');
       expect(sgViewportStateAfter.css.width).to.equal('1024px');
-      expect(sgSizePxStateAfter.value).to.equal('1024');
-      expect(sgSizeEmStateAfter.value).to.equal('64.00');
+      expect(sgSizePxStateAfter.val).to.equal('1024');
+      expect(sgSizeEmStateAfter.val).to.equal('64.00');
       expect(dataSaverVpWidthAfter).to.equal('1024');
     });
 
@@ -469,14 +471,14 @@ describe('uiFns', function () {
 
       expect(sgGenContainerStateBefore.css.width).to.not.equal('2614px');
       expect(sgViewportStateBefore.css.width).to.not.equal(uiProps.maxViewportWidth + 'px');
-      expect(sgSizePxStateBefore.value).to.not.equal(uiProps.maxViewportWidth.toString());
-      expect(sgSizeEmStateBefore.value).to.not.equal('162.50');
+      expect(sgSizePxStateBefore.val).to.not.equal(uiProps.maxViewportWidth.toString());
+      expect(sgSizeEmStateBefore.val).to.not.equal('162.50');
       expect(dataSaverVpWidthBefore).to.equal('');
 
       expect(sgGenContainerStateAfter.css.width).to.equal('2614px');
       expect(sgViewportStateAfter.css.width).to.equal(uiProps.maxViewportWidth + 'px');
-      expect(sgSizePxStateAfter.value).to.equal(uiProps.maxViewportWidth.toString());
-      expect(sgSizeEmStateAfter.value).to.equal('162.50');
+      expect(sgSizePxStateAfter.val).to.equal(uiProps.maxViewportWidth.toString());
+      expect(sgSizeEmStateAfter.val).to.equal('162.50');
       expect(dataSaverVpWidthAfter).to.equal(uiProps.maxViewportWidth + '');
     });
 
@@ -499,15 +501,59 @@ describe('uiFns', function () {
 
       expect(sgGenContainerStateBefore.css.width).to.not.equal('254px');
       expect(sgViewportStateBefore.css.width).to.not.equal(uiProps.minViewportWidth + 'px');
-      expect(sgSizePxStateBefore.value).to.not.equal(uiProps.minViewportWidth.toString());
-      expect(sgSizeEmStateBefore.value).to.not.equal('15.00');
+      expect(sgSizePxStateBefore.val).to.not.equal(uiProps.minViewportWidth.toString());
+      expect(sgSizeEmStateBefore.val).to.not.equal('15.00');
       expect(dataSaverVpWidthBefore).to.equal('');
 
       expect(sgGenContainerStateAfter.css.width).to.equal('254px');
       expect(sgViewportStateAfter.css.width).to.equal(uiProps.minViewportWidth + 'px');
-      expect(sgSizePxStateAfter.value).to.equal(uiProps.minViewportWidth.toString());
-      expect(sgSizeEmStateAfter.value).to.equal('15.00');
+      expect(sgSizePxStateAfter.val).to.equal(uiProps.minViewportWidth.toString());
+      expect(sgSizeEmStateAfter.val).to.equal('15.00');
       expect(dataSaverVpWidthAfter).to.equal(uiProps.minViewportWidth + '');
+    });
+
+    it('in dockPosition left exits halfMode if width is greater than the halfMode threshold', function () {
+      const halfModeBefore = uiProps.halfMode = true;
+      uiProps.dockPosition = 'left';
+
+      uiFns.sizeIframe(499);
+
+      expect(halfModeBefore).to.be.true;
+
+      expect(uiProps.halfMode).to.be.false;
+    });
+
+    it('in dockPosition right exits halfMode if width is greater than the halfMode threshold', function () {
+      const halfModeBefore = uiProps.halfMode = true;
+      uiProps.dockPosition = 'right';
+
+      uiFns.sizeIframe(499);
+
+      expect(halfModeBefore).to.be.true;
+
+      expect(uiProps.halfMode).to.be.false;
+    });
+
+    it('in dockPosition left exits halfMode if width is less than the halfMode threshold', function () {
+      const halfModeBefore = uiProps.halfMode = true;
+      uiProps.dockPosition = 'left';
+
+      uiFns.sizeIframe(497);
+
+      expect(halfModeBefore).to.be.true;
+
+      expect(uiProps.halfMode).to.be.false;
+    });
+
+    it('in dockPosition right exits halfMode if width is less than the halfMode threshold', function () {
+      const halfModeBefore = uiProps.halfMode = true;
+      uiProps.dockPosition = 'right';
+
+      uiFns.sizeIframe(497);
+
+      expect(halfModeBefore).to.be.true;
+
+      expect(uiProps.halfMode).to.be.false;
     });
   });
 
@@ -542,11 +588,11 @@ describe('uiFns', function () {
       const sgSizePxStateAfter = $orgs['#sg-size-px'].getState();
       const sgSizeEmStateAfter = $orgs['#sg-size-em'].getState();
 
-      expect(sgSizePxStateBefore.value).to.equal('1024');
-      expect(sgSizeEmStateBefore.value).to.equal('64.00');
+      expect(sgSizePxStateBefore.val).to.equal('1024');
+      expect(sgSizeEmStateBefore.val).to.equal('64.00');
 
-      expect(sgSizePxStateAfter.value).to.equal('480');
-      expect(sgSizeEmStateAfter.value).to.equal('30.00');
+      expect(sgSizePxStateAfter.val).to.equal('480');
+      expect(sgSizeEmStateAfter.val).to.equal('30.00');
     });
 
     it('updates size reading submitted in px for both inputs', function () {
@@ -561,11 +607,11 @@ describe('uiFns', function () {
       const sgSizePxStateAfter = $orgs['#sg-size-px'].getState();
       const sgSizeEmStateAfter = $orgs['#sg-size-em'].getState();
 
-      expect(sgSizePxStateBefore.value).to.equal('1024');
-      expect(sgSizeEmStateBefore.value).to.equal('64.00');
+      expect(sgSizePxStateBefore.val).to.equal('1024');
+      expect(sgSizeEmStateBefore.val).to.equal('64.00');
 
-      expect(sgSizePxStateAfter.value).to.equal('320');
-      expect(sgSizeEmStateAfter.value).to.equal('20.00');
+      expect(sgSizePxStateAfter.val).to.equal('320');
+      expect(sgSizeEmStateAfter.val).to.equal('20.00');
     });
 
     it('updates size reading submitted in em for both inputs', function () {
@@ -580,11 +626,11 @@ describe('uiFns', function () {
       const sgSizePxStateAfter = $orgs['#sg-size-px'].getState();
       const sgSizeEmStateAfter = $orgs['#sg-size-em'].getState();
 
-      expect(sgSizePxStateBefore.value).to.equal('1024');
-      expect(sgSizeEmStateBefore.value).to.equal('64.00');
+      expect(sgSizePxStateBefore.val).to.equal('1024');
+      expect(sgSizeEmStateBefore.val).to.equal('64.00');
 
-      expect(sgSizePxStateAfter.value).to.equal('767');
-      expect(sgSizeEmStateAfter.value).to.equal('47.94');
+      expect(sgSizePxStateAfter.val).to.equal('767');
+      expect(sgSizeEmStateAfter.val).to.equal('47.94');
     });
 
     it('updates size reading submitted in px for #sg-size-px input', function () {
@@ -599,11 +645,11 @@ describe('uiFns', function () {
       const sgSizePxStateAfter = $orgs['#sg-size-px'].getState();
       const sgSizeEmStateAfter = $orgs['#sg-size-em'].getState();
 
-      expect(sgSizePxStateBefore.value).to.equal('1024');
-      expect(sgSizeEmStateBefore.value).to.equal('64.00');
+      expect(sgSizePxStateBefore.val).to.equal('1024');
+      expect(sgSizeEmStateBefore.val).to.equal('64.00');
 
-      expect(sgSizePxStateAfter.value).to.equal('767');
-      expect(sgSizeEmStateAfter.value).to.equal(sgSizeEmStateAfter.value);
+      expect(sgSizePxStateAfter.val).to.equal('767');
+      expect(sgSizeEmStateAfter.val).to.equal(sgSizeEmStateAfter.val);
     });
 
     it('updates size reading submitted in px for #sg-size-em input', function () {
@@ -618,11 +664,11 @@ describe('uiFns', function () {
       const sgSizePxStateAfter = $orgs['#sg-size-px'].getState();
       const sgSizeEmStateAfter = $orgs['#sg-size-em'].getState();
 
-      expect(sgSizePxStateBefore.value).to.equal('1024');
-      expect(sgSizeEmStateBefore.value).to.equal('64.00');
+      expect(sgSizePxStateBefore.val).to.equal('1024');
+      expect(sgSizeEmStateBefore.val).to.equal('64.00');
 
-      expect(sgSizePxStateAfter.value).to.equal(sgSizePxStateAfter.value);
-      expect(sgSizeEmStateAfter.value).to.equal('47.94');
+      expect(sgSizePxStateAfter.val).to.equal(sgSizePxStateAfter.val);
+      expect(sgSizeEmStateAfter.val).to.equal('47.94');
     });
 
     it('updates size reading submitted in em for #sg-size-px input', function () {
@@ -637,11 +683,11 @@ describe('uiFns', function () {
       const sgSizePxStateAfter = $orgs['#sg-size-px'].getState();
       const sgSizeEmStateAfter = $orgs['#sg-size-em'].getState();
 
-      expect(sgSizePxStateBefore.value).to.equal('1024');
-      expect(sgSizeEmStateBefore.value).to.equal('64.00');
+      expect(sgSizePxStateBefore.val).to.equal('1024');
+      expect(sgSizeEmStateBefore.val).to.equal('64.00');
 
-      expect(sgSizePxStateAfter.value).to.equal('480');
-      expect(sgSizeEmStateAfter.value).to.equal(sgSizeEmStateAfter.value);
+      expect(sgSizePxStateAfter.val).to.equal('480');
+      expect(sgSizeEmStateAfter.val).to.equal(sgSizeEmStateAfter.val);
     });
 
     it('updates size reading submitted in em for #sg-size-em input', function () {
@@ -656,11 +702,11 @@ describe('uiFns', function () {
       const sgSizePxStateAfter = $orgs['#sg-size-px'].getState();
       const sgSizeEmStateAfter = $orgs['#sg-size-em'].getState();
 
-      expect(sgSizePxStateBefore.value).to.equal('1024');
-      expect(sgSizeEmStateBefore.value).to.equal('64.00');
+      expect(sgSizePxStateBefore.val).to.equal('1024');
+      expect(sgSizeEmStateBefore.val).to.equal('64.00');
 
-      expect(sgSizePxStateAfter.value).to.equal(sgSizePxStateAfter.value);
-      expect(sgSizeEmStateAfter.value).to.equal('30.00');
+      expect(sgSizePxStateAfter.val).to.equal(sgSizePxStateAfter.val);
+      expect(sgSizeEmStateAfter.val).to.equal('30.00');
     });
   });
 
@@ -680,13 +726,13 @@ describe('uiFns', function () {
 
       expect(sgViewportStateBefore).to.not.equal(sgViewportStateAfter);
       expect(sgGenContainerStateAfter).to.not.equal(sgGenContainerStateBefore);
-      expect(sgSizePxStateBefore.value).to.not.equal(sgSizePxStateAfter.value);
-      expect(sgSizeEmStateBefore.value).to.not.equal(sgSizeEmStateAfter.value);
+      expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
+      expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
 
       expect(sgViewportStateAfter.css.width).to.equal('1280px');
       expect(sgGenContainerStateAfter.css.width).to.equal('1294px');
-      expect(sgSizePxStateAfter.value).to.equal('1280');
-      expect(sgSizeEmStateAfter.value).to.equal('80.00');
+      expect(sgSizePxStateAfter.val).to.equal('1280');
+      expect(sgSizeEmStateAfter.val).to.equal('80.00');
     });
   });
 });

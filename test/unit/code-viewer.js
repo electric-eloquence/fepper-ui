@@ -3,415 +3,367 @@ import {expect} from 'chai';
 import fepperUi from '../unit';
 
 const $orgs = fepperUi.requerio.$orgs;
-const annotationsViewer = fepperUi.annotationsViewer;
-const codeViewer = fepperUi.codeViewer;
+const {
+  annotationsViewer,
+  codeViewer
+} = fepperUi;
+
+const timeout = 10;
 
 describe('codeViewer', function () {
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
       expect(codeViewer.constructor.name).to.equal('CodeViewer');
-      expect(Object.keys(codeViewer).length).to.equal(12);
-      expect(codeViewer).to.have.property('getPrintXHRErrorFunction');
+      expect(Object.keys(codeViewer).length).to.equal(7);
       expect(codeViewer).to.have.property('receiveIframeMessage');
-      expect(codeViewer).to.have.property('getSaveEncodedFunction');
-      expect(codeViewer).to.have.property('getSaveMustacheFunction');
-      expect(codeViewer).to.have.property('$orgs');
-      expect(codeViewer).to.have.property('uiData');
-      expect(codeViewer).to.have.property('uiFns');
-      expect(codeViewer).to.have.property('uiProps');
-      expect(codeViewer).to.have.property('annotationsViewer');
       expect(codeViewer).to.have.property('codeActive');
-      expect(codeViewer).to.have.property('encoded');
-      expect(codeViewer).to.have.property('mustache');
-      expect(codeViewer).to.have.property('mustacheBrowser');
+      expect(codeViewer).to.have.property('$orgs');
+      expect(codeViewer).to.have.property('patternPartial');
+      expect(codeViewer).to.have.property('requerio');
       expect(codeViewer).to.have.property('tabActive');
       expect(codeViewer).to.have.property('viewall');
     });
   });
 
   describe('.stoke()', function () {
-    beforeEach(function () {
+    beforeEach(function (done) {
       codeViewer.closeCode();
-      $orgs['#sg-code-container'].dispatchAction('css', {bottom: 'auto'});
+
+      setTimeout(() => {
+        done();
+      }, timeout);
     });
 
-    it('opens code viewer with a "view=code" param', function () {
+    it('opens code viewer with a "view=code" param', function (done) {
       global.location = {
         search: '?view=code'
       };
 
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
+      const codeActiveBefore = codeViewer.codeActive;
+      const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgTCodeBefore = $orgs['#sg-t-code'].getState();
+      const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
       codeViewer.stoke();
 
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
-      const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+      setTimeout(() => {
+        const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+        const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+        const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
 
-      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
-      expect(sgTCodeBefore.classArray).to.not.include('active');
+        expect(codeActiveBefore).to.be.false;
+        expect(patternlabBodyBefore.classArray).to.not.include('dock-open');
+        expect(sgTCodeBefore.classArray).to.not.include('active');
+        expect(sgViewContainerBefore.classArray).to.not.include('anim-ready');
 
-      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
-      expect(sgTCodeAfter.classArray).to.include('active');
+        expect(codeViewer.codeActive).to.be.true;
+        expect(patternlabBodyAfter.classArray).to.include('dock-open');
+        expect(sgTCodeAfter.classArray).to.include('active');
+        expect(sgViewContainerAfter.classArray).to.include('anim-ready');
+
+        done();
+      }, timeout);
     });
 
-    it('opens code viewer with a "view=c" param', function () {
+    it('opens code viewer with a "view=c" param', function (done) {
       global.location = {
         search: '?view=c'
       };
 
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
+      const codeActiveBefore = codeViewer.codeActive;
+      const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgTCodeBefore = $orgs['#sg-t-code'].getState();
+      const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
       codeViewer.stoke();
 
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
-      const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+      setTimeout(() => {
+        const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+        const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+        const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
 
-      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
-      expect(sgTCodeBefore.classArray).to.not.include('active');
+        expect(codeActiveBefore).to.be.false;
+        expect(patternlabBodyBefore.classArray).to.not.include('dock-open');
+        expect(sgTCodeBefore.classArray).to.not.include('active');
+        expect(sgViewContainerBefore.classArray).to.not.include('anim-ready');
 
-      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
-      expect(sgTCodeAfter.classArray).to.include('active');
+        expect(codeViewer.codeActive).to.be.true;
+        expect(patternlabBodyAfter.classArray).to.include('dock-open');
+        expect(sgTCodeAfter.classArray).to.include('active');
+        expect(sgViewContainerAfter.classArray).to.include('anim-ready');
+
+        done();
+      }, timeout);
     });
 
-    it('opens code viewer with a "defaultShowPatternInfo": true config', function () {
+    it('opens code viewer with a "defaultShowPatternInfo": true config', function (done) {
       global.location = {
         search: ''
       };
       codeViewer.uiData.config.defaultShowPatternInfo = true;
 
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
+      const codeActiveBefore = codeViewer.codeActive;
+      const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgTCodeBefore = $orgs['#sg-t-code'].getState();
+      const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
       codeViewer.stoke();
 
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
-      const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+      setTimeout(() => {
+        const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+        const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+        const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
 
-      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
-      expect(sgTCodeBefore.classArray).to.not.include('active');
+        expect(codeActiveBefore).to.be.false;
+        expect(patternlabBodyBefore.classArray).to.not.include('dock-open');
+        expect(sgTCodeBefore.classArray).to.not.include('active');
+        expect(sgViewContainerBefore.classArray).to.not.include('anim-ready');
 
-      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
-      expect(sgTCodeAfter.classArray).to.include('active');
+        expect(codeViewer.codeActive).to.be.true;
+        expect(patternlabBodyAfter.classArray).to.include('dock-open');
+        expect(sgTCodeAfter.classArray).to.include('active');
+        expect(sgViewContainerAfter.classArray).to.include('anim-ready');
 
-      codeViewer.uiData.config.defaultShowPatternInfo = false;
+        codeViewer.uiData.config.defaultShowPatternInfo = false;
+
+        done();
+      }, timeout);
     });
+  });
 
-    // DEPRECATED! Will be removed.
-    it('sets .selectForCopy = true with a "view=code&copy=true" param', function () {
+  describe('.activateTabAndPanel()', function () {
+    before(function () {
       global.location = {
-        search: '?view=code&copy=true'
+        protocol: 'http:',
+        host: 'localhost:3000',
+        search: '?p=compounds-block'
       };
 
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
-      const sgTCodeBefore = $orgs['#sg-t-code'].getState();
+      codeViewer.stoke();
+    });
 
+    // Must test a tab + panel besides the Feplet default first. This way the Feplet tab + panel test can be accurate.
+    it('activates the Markdown tab and panel for a pattern with Markdown - also tests .setPanelContent()', function () {
+      const panelStateBefore = $orgs['#sg-code-panel-markdown'].getState();
+      const tabStateBefore = $orgs['#sg-code-tab-markdown'].getState();
+
+      codeViewer.activateTabAndPanel('markdown');
+
+      const panelStateAfter = $orgs['#sg-code-panel-markdown'].getState();
+      const tabStateAfter = $orgs['#sg-code-tab-markdown'].getState();
+
+      expect(panelStateBefore.classArray).to.not.include('sg-code-panel-active');
+      expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
+
+      expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
+      expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
+    });
+
+    it('activates the Feplet tab and panel - also tests .setPanelContent()', function () {
+      const panelLocationHrefBefore = $orgs['#sg-code-panel-feplet'][0].contentWindow.location.href;
+      const panelStateBefore = $orgs['#sg-code-panel-feplet'].getState();
+      const tabStateBefore = $orgs['#sg-code-tab-feplet'].getState();
+
+      codeViewer.activateTabAndPanel('feplet');
+
+      const panelLocationHrefAfter = $orgs['#sg-code-panel-feplet'][0].contentWindow.location.href;
+      const panelStateAfter = $orgs['#sg-code-panel-feplet'].getState();
+      const tabStateAfter = $orgs['#sg-code-tab-feplet'].getState();
+
+      expect(panelLocationHrefBefore).to.not.equal(panelLocationHrefAfter);
+      expect(panelStateBefore.classArray).to.not.include('sg-code-panel-active');
+      expect(panelStateBefore.css.height).to.not.equal(panelStateAfter.css.height);
+      expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
+
+      expect(panelLocationHrefAfter).to.equal('/mustache-browser?partial=compounds-block');
+      expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
+      expect(panelStateAfter.css.height).to.equal('100px');
+      expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
+    });
+
+    it('activates the Markdown tab and panel for a pattern without Markdown - does via the tabActive cookie on.stoke();\
+also tests .resetPanels()', function () {
+      global.location.search = '?p=elements-paragraph';
+
+      codeViewer.resetPanels();
       codeViewer.stoke();
 
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
-      const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+      const panelStateBefore = $orgs['#sg-code-panel-markdown'].getState();
+      const tabStateBefore = $orgs['#sg-code-tab-markdown'].getState();
 
-      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
-      expect(sgTCodeBefore.classArray).to.not.include('active');
+      fepperUi.dataSaver.updateValue('tabActive', 'markdown');
+      codeViewer.stoke();
+      codeViewer.receiveIframeMessage({
+        origin: 'http://localhost:3000',
+        data: {
+          codeOverlay: 'on',
+          lineage: [],
+          lineageR: [
+            {
+              lineagePattern: 'compounds-block',
+              lineagePath: 'patterns/01-compounds-block/01-compounds-block.html',
+              isHidden: false
+            }
+          ],
+          patternPartial: 'elements-paragraph',
+          patternState: ''
+        }
+      });
 
-      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
-      expect(sgTCodeAfter.classArray).to.include('active');
-      expect(codeViewer.selectForCopy).to.be.true;
+      const panelStateAfter = $orgs['#sg-code-panel-markdown'].getState();
+      const tabStateAfter = $orgs['#sg-code-tab-markdown'].getState();
+
+      expect(panelStateBefore.classArray).to.not.include('sg-code-panel-active');
+      expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
+
+      expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
+      expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
     });
   });
 
-  describe('.activateDefaultTab()', function () {
-    it('activates tab and fills with content', function () {
-      $orgs['#sg-code-title-html'].dispatchAction('removeClass', 'sg-code-title-active');
-      $orgs['#sg-code-title-mustache'].dispatchAction('removeClass', 'sg-code-title-active');
+  describe('.activateMarkdownTextarea()', function () {
+    it('puts the cursor focus on the Markdown textarea', function () {
+      $orgs['#sg-code-pre-language-markdown']
+        .dispatchAction('width', 996)
+        .dispatchAction('height', 100);
 
-      const sgCodeTitleHtmlBefore = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheBefore = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillBefore = $orgs['#sg-code-fill'].getState();
+      const documentStateBefore = $orgs.document.getState();
+      const paneEditStateBefore = $orgs['#sg-code-pane-markdown-edit'].getState();
+      const textareaStateBefore = $orgs['#sg-code-textarea-markdown'].getState();
 
-      codeViewer.activateDefaultTab('m', 'mustache');
+      codeViewer.activateMarkdownTextarea('markdown');
 
-      const sgCodeTitleHtmlAfter = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheAfter = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillAfter = $orgs['#sg-code-fill'].getState();
+      const documentStateAfter = $orgs.document.getState();
+      const paneEditStateAfter = $orgs['#sg-code-pane-markdown-edit'].getState();
+      const paneStateAfter = $orgs['#sg-code-pane-markdown'].getState();
+      const textareaStateAfter = $orgs['#sg-code-textarea-markdown'].getState();
 
-      expect(sgCodeTitleHtmlBefore.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheBefore.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeFillBefore.html).to.not.equal(sgCodeFillAfter.html);
+      expect(documentStateBefore.activeOrganism).to.be.null;
+      expect(paneEditStateBefore.css).to.not.have.key('display');
+      expect(textareaStateBefore.height).to.be.null;
+      expect(textareaStateBefore.css).to.not.have.key('width');
 
-      expect(sgCodeTitleHtmlAfter.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheAfter.classArray).to.include('sg-code-title-active');
-      expect(sgCodeFillAfter.html).to.equal('mustache');
-    });
-  });
-
-  describe('.getSaveEncodedFunction()', function () {
-    it('returns a function that saves encoded HTML', function () {
-      codeViewer.encoded = '';
-      codeViewer.tabActive = 'e';
-      const saveEncoded = codeViewer.getSaveEncodedFunction(codeViewer).bind({responseText: 'encoded'});
-
-      $orgs['#sg-code-title-html'].dispatchAction('removeClass', 'sg-code-title-active');
-      $orgs['#sg-code-title-mustache'].dispatchAction('removeClass', 'sg-code-title-active');
-
-      const sgCodeTitleHtmlBefore = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheBefore = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillBefore = $orgs['#sg-code-fill'].getState();
-
-      saveEncoded();
-
-      const sgCodeTitleHtmlAfter = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheAfter = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillAfter = $orgs['#sg-code-fill'].getState();
-
-      expect(sgCodeTitleHtmlBefore.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheBefore.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeFillBefore.html).to.not.equal(sgCodeFillAfter.html);
-
-      expect(sgCodeTitleHtmlAfter.classArray).to.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheAfter.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeFillAfter.html).to.equal('encoded');
-    });
-  });
-
-  describe('.getSaveMustacheFunction()', function () {
-    it('returns a function that saves Mustache-like Feplet', function () {
-      codeViewer.mustache = '';
-      codeViewer.tabActive = 'm';
-      const saveMustache = codeViewer.getSaveMustacheFunction(codeViewer).bind({responseText: 'mustache'});
-
-      $orgs['#sg-code-title-html'].dispatchAction('removeClass', 'sg-code-title-active');
-      $orgs['#sg-code-title-mustache'].dispatchAction('removeClass', 'sg-code-title-active');
-
-      const sgCodeTitleHtmlBefore = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheBefore = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillBefore = $orgs['#sg-code-fill'].getState();
-
-      saveMustache();
-
-      const sgCodeTitleHtmlAfter = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheAfter = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillAfter = $orgs['#sg-code-fill'].getState();
-
-      expect(sgCodeTitleHtmlBefore.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheBefore.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeFillBefore.html).to.not.equal(sgCodeFillAfter.html);
-
-      expect(sgCodeTitleHtmlAfter.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheAfter.classArray).to.include('sg-code-title-active');
-      expect(sgCodeFillAfter.html).to.equal('mustache');
-    });
-  });
-
-  describe('.slideCode()', function () {
-    before(function () {
-      $orgs['#sg-code-container'].dispatchAction('css', {bottom: 'auto'});
-    });
-
-    after(function () {
-      $orgs['#sg-code-container'].dispatchAction('css', {bottom: 'auto'});
-    });
-
-    it('slides up', function () {
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
-
-      codeViewer.slideCode(768);
-
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
-
-      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
-
-      expect(sgCodeContainerAfter.css.bottom).to.equal('-768px');
-    });
-
-    it('slides up', function () {
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
-
-      codeViewer.slideCode(0);
-
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
-
-      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
-
-      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
-    });
-  });
-
-  describe('.swapCode()', function () {
-    beforeEach(function () {
-      codeViewer.encoded = '';
-      codeViewer.mustache = '';
-      codeViewer.tabActive = '';
-
-      $orgs['#sg-code-fill'].dispatchAction('html', '');
-    });
-
-    it('swaps in encoded HTML', function () {
-      codeViewer.encoded = 'encoded';
-
-      const sgCodeFillBefore = $orgs['#sg-code-fill'].getState();
-
-      codeViewer.swapCode('e');
-
-      const sgCodeTitleHtmlAfter = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheAfter = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillAfter = $orgs['#sg-code-fill'].getState();
-
-      expect(sgCodeFillBefore.html).to.not.equal(sgCodeFillAfter.html);
-
-      expect(codeViewer.tabActive).to.equal('e');
-      expect(sgCodeTitleHtmlAfter.classArray).to.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheAfter.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeFillAfter.html).to.equal('encoded');
-    });
-
-    it('swaps in Mustache-like Feplet', function () {
-      codeViewer.mustache = 'mustache';
-
-      const sgCodeFillBefore = $orgs['#sg-code-fill'].getState();
-
-      codeViewer.swapCode('m');
-
-      const sgCodeTitleHtmlAfter = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheAfter = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillAfter = $orgs['#sg-code-fill'].getState();
-
-      expect(sgCodeFillBefore.html).to.not.equal(sgCodeFillAfter.html);
-
-      expect(codeViewer.tabActive).to.equal('m');
-      expect(sgCodeTitleHtmlAfter.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheAfter.classArray).to.include('sg-code-title-active');
-      expect(sgCodeFillAfter.html).to.equal('mustache');
-    });
-
-    it('does nothing if .codeActive is false', function () {
-      codeViewer.codeActive = false;
-      codeViewer.mustache = 'mustache';
-
-      $orgs['#sg-code-title-html'].dispatchAction('removeClass', 'sg-code-title-active');
-      $orgs['#sg-code-title-mustache'].dispatchAction('removeClass', 'sg-code-title-active');
-
-      const sgCodeTitleHtmlBefore = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheBefore = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillBefore = $orgs['#sg-code-fill'].getState();
-
-      codeViewer.swapCode('m');
-
-      const sgCodeTitleHtmlAfter = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheAfter = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillAfter = $orgs['#sg-code-fill'].getState();
-
-      expect(sgCodeTitleHtmlBefore.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheBefore.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeFillBefore.html).to.equal(sgCodeFillAfter.html);
-
-      expect(codeViewer.tabActive).to.equal('');
-      expect(sgCodeTitleHtmlAfter.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheAfter.classArray).to.not.include('sg-code-title-active');
+      expect(documentStateAfter.activeOrganism).to.equal('#sg-code-textarea-markdown');
+      expect(paneEditStateAfter.css.display).to.equal('block');
+      expect(paneStateAfter.css).to.not.have.key('display');
+      expect(textareaStateAfter.height).to.equal(121);
+      expect(textareaStateAfter.width).to.equal(996);
     });
   });
 
   describe('.toggleCode()', function () {
-    after(function () {
-      codeViewer.closeCode();
-    });
-
-    it('does nothing if .mustacheBrowser is true', function () {
-      codeViewer.codeActive = false;
-      codeViewer.mustacheBrowser = true;
-
-      $orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
-
-      const sgTCodeBefore = $orgs['#sg-t-code'].getState();
-
-      codeViewer.toggleCode();
-
-      const sgTCodeAfter = $orgs['#sg-t-code'].getState();
-
-      expect(sgTCodeBefore.classArray).to.not.include('active');
-      expect(sgTCodeAfter.classArray).to.not.include('active');
-
-      codeViewer.mustacheBrowser = false;
-    });
-
-    it('toggles on - also tests .openCode()', function () {
+    after(function (done) {
       codeViewer.closeCode();
 
+      setTimeout(() => {
+        done();
+      }, timeout);
+    });
+
+    it('toggles on - also tests .openCode()', function (done) {
+      codeViewer.closeCode();
       $orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
-      $orgs['#sg-code-container'].dispatchAction('css', {bottom: 'auto'});
 
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
+      setTimeout(() => {
+        const codeActiveBefore = codeViewer.codeActive;
+        const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
+        const sgTCodeBefore = $orgs['#sg-t-code'].getState();
+        const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
+
+        codeViewer.toggleCode();
+
+        setTimeout(() => {
+          const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+          const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+          const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
+
+          expect(codeActiveBefore).to.be.false;
+          expect(patternlabBodyBefore.classArray).to.not.include('dock-open');
+          expect(sgTCodeBefore.classArray).to.not.include('active');
+          expect(sgViewContainerBefore.classArray).to.not.include('anim-ready');
+
+          expect(codeViewer.codeActive).to.be.true;
+          expect(patternlabBodyAfter.classArray).to.include('dock-open');
+          expect(sgTCodeAfter.classArray).to.include('active');
+          expect(sgViewContainerAfter.classArray).to.include('anim-ready');
+
+          done();
+        }, timeout);
+      }, timeout);
+    });
+
+    it('toggles off - also tests .closeCode()', function (done) {
+      const codeActiveBefore = codeViewer.codeActive;
+      const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgTCodeBefore = $orgs['#sg-t-code'].getState();
-      const sgVpWrapBefore = $orgs['#sg-vp-wrap'].getState();
+      const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
       codeViewer.toggleCode();
 
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
-      const sgTCodeAfter = $orgs['#sg-t-code'].getState();
-      const sgVpWrapAfter = $orgs['#sg-vp-wrap'].getState();
+      setTimeout(() => {
+        const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+        const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+        const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
 
-      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
-      expect(sgTCodeBefore.classArray).to.not.include('active');
-      expect(sgVpWrapBefore.css.paddingBottom).to.equal('0px');
+        expect(codeActiveBefore).to.be.true;
+        expect(patternlabBodyBefore.classArray).to.include('dock-open');
+        expect(sgTCodeBefore.classArray).to.include('active');
+        expect(sgViewContainerBefore.classArray).to.include('anim-ready');
 
-      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
-      expect(sgTCodeAfter.classArray).to.include('active');
-      expect(sgVpWrapAfter.css.paddingBottom).to.equal('384px');
-      expect(codeViewer.codeActive).to.be.true;
+        expect(codeViewer.codeActive).to.be.false;
+        expect(patternlabBodyAfter.classArray).to.not.include('dock-open');
+        expect(sgTCodeAfter.classArray).to.not.include('active');
+        expect(sgViewContainerAfter.classArray).to.not.include('anim-ready');
+
+        done();
+      }, timeout);
     });
 
-    it('toggles off - also tests .closeCode()', function () {
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
-      const sgTCodeBefore = $orgs['#sg-t-code'].getState();
-      const sgVpWrapBefore = $orgs['#sg-vp-wrap'].getState();
-
-      codeViewer.toggleCode();
-
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
-      const sgTCodeAfter = $orgs['#sg-t-code'].getState();
-      const sgVpWrapAfter = $orgs['#sg-vp-wrap'].getState();
-
-      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
-      expect(sgTCodeBefore.classArray).to.include('active');
-      expect(sgVpWrapBefore.css.paddingBottom).to.equal('384px');
-
-      expect(sgCodeContainerAfter.css.bottom).to.equal('-384px');
-      expect(sgTCodeAfter.classArray).to.not.include('active');
-      expect(sgVpWrapAfter.css.paddingBottom).to.equal('0px');
-      expect(codeViewer.codeActive).to.be.false;
-    });
-
-    it('toggles on - also closes annotations viewer', function () {
+    it('switches from annotations viewer to code viewer', function (done) {
       annotationsViewer.openAnnotations();
-
       $orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
-      $orgs['#sg-code-container'].dispatchAction('css', {bottom: 'auto'});
 
-      const sgTAnnotationsBefore = $orgs['#sg-t-annotations'].getState();
-      const sgAnnotationsContainerBefore = $orgs['#sg-annotations-container'].getState();
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
-      const sgTCodeBefore = $orgs['#sg-t-code'].getState();
+      setTimeout(() => {
+        const annotationsActiveBefore = annotationsViewer.annotationsActive;
+        const codeActiveBefore = codeViewer.codeActive;
+        const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
+        const sgAnnotationsContainerBefore = $orgs['#sg-annotations-container'].getState();
+        const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
+        const sgTAnnotationsBefore = $orgs['#sg-t-annotations'].getState();
+        const sgTCodeBefore = $orgs['#sg-t-code'].getState();
+        const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
-      codeViewer.toggleCode();
+        codeViewer.toggleCode();
 
-      const sgTAnnotationsAfter = $orgs['#sg-t-annotations'].getState();
-      const sgAnnotationsContainerAfter = $orgs['#sg-annotations-container'].getState();
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
-      const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+        setTimeout(() => {
+          const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+          const sgAnnotationsContainerAfter = $orgs['#sg-annotations-container'].getState();
+          const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
+          const sgTAnnotationsAfter = $orgs['#sg-t-annotations'].getState();
+          const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+          const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
 
-      expect(sgTAnnotationsBefore.classArray).to.include('active');
-      expect(sgAnnotationsContainerBefore.css.bottom)
-        .to.not.equal(sgAnnotationsContainerAfter.css.bottom);
-      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
-      expect(sgTCodeBefore.classArray).to.not.include('active');
+          expect(annotationsActiveBefore).to.be.true;
+          expect(codeActiveBefore).to.be.false;
+          expect(patternlabBodyBefore.classArray).to.include('dock-open');
+          expect(sgAnnotationsContainerBefore.classArray).to.include('active');
+          expect(sgCodeContainerBefore.classArray).to.not.include('active');
+          expect(sgTAnnotationsBefore.classArray).to.include('active');
+          expect(sgTCodeBefore.classArray).to.not.include('active');
+          expect(sgViewContainerBefore.classArray).to.include('anim-ready');
 
-      expect(sgTAnnotationsAfter.classArray).to.not.include('active');
-      expect(sgAnnotationsContainerAfter.css.bottom).to.equal('-384px');
-      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
-      expect(sgTCodeAfter.classArray).to.include('active');
-      expect(annotationsViewer.annotationsActive).to.be.false;
-      expect(codeViewer.codeActive).to.be.true;
+          expect(annotationsViewer.annotationsActive).to.be.false;
+          expect(codeViewer.codeActive).to.be.true;
+          expect(patternlabBodyAfter.classArray).to.include('dock-open');
+          expect(sgAnnotationsContainerAfter.classArray).to.not.include('active');
+          expect(sgCodeContainerAfter.classArray).to.include('active');
+          expect(sgTAnnotationsAfter.classArray).to.not.include('active');
+          expect(sgTCodeAfter.classArray).to.include('active');
+          expect(sgViewContainerAfter.classArray).to.include('anim-ready');
+
+          done();
+        }, timeout);
+      }, timeout);
     });
   });
 
@@ -426,12 +378,11 @@ describe('codeViewer', function () {
     });
 
     it('updates code', function () {
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
       const sgCodeLineageBefore = $orgs['#sg-code-lineage'].getState();
       const sgCodeLineageFillBefore = $orgs['#sg-code-lineage-fill'].getState();
       const sgCodeLineagerBefore = $orgs['#sg-code-lineager'].getState();
       const sgCodeLineagerFillBefore = $orgs['#sg-code-lineager-fill'].getState();
-      const sgCodePatternInfoStateBefore = $orgs['#sg-code-pattern-info-state'].getState();
+      const sgCodePatternInfoBefore = $orgs['#sg-code-pattern-info-state'].getState();
 
       codeViewer.updateCode(
         [],
@@ -440,34 +391,29 @@ describe('codeViewer', function () {
         ''
       );
 
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
       const sgCodeLineageAfter = $orgs['#sg-code-lineage'].getState();
       const sgCodeLineageFillAfter = $orgs['#sg-code-lineage-fill'].getState();
       const sgCodeLineagerAfter = $orgs['#sg-code-lineager'].getState();
       const sgCodeLineagerFillAfter = $orgs['#sg-code-lineager-fill'].getState();
-      const sgCodePatternInfoStateAfter = $orgs['#sg-code-pattern-info-state'].getState();
+      const sgCodePatternInfoAfter = $orgs['#sg-code-pattern-info-state'].getState();
 
-      expect(sgCodeContainerBefore.attribs['data-patternpartial'])
-        .to.not.equal(sgCodeContainerAfter.attribs['data-patternpartial']);
       expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
       expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
       expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
-      expect(sgCodePatternInfoStateBefore.html).to.equal(sgCodePatternInfoStateAfter.html);
+      expect(sgCodePatternInfoBefore.html).to.equal(sgCodePatternInfoAfter.html);
 
       expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
-      expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
       expect(sgCodeLineageAfter.css.display).to.equal('none');
       expect(sgCodeLineagerAfter.css.display).to.equal('none');
     });
 
     /* eslint-disable comma-spacing, key-spacing, max-len, quote-props, quotes */
     it('updates code with lineage array', function () {
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
       const sgCodeLineageBefore = $orgs['#sg-code-lineage'].getState();
       const sgCodeLineageFillBefore = $orgs['#sg-code-lineage-fill'].getState();
       const sgCodeLineagerBefore = $orgs['#sg-code-lineager'].getState();
       const sgCodeLineagerFillBefore = $orgs['#sg-code-lineager-fill'].getState();
-      const sgCodePatternInfoStateBefore = $orgs['#sg-code-pattern-info-state'].getState();
+      const sgCodePatternInfoBefore = $orgs['#sg-code-pattern-info-state'].getState();
 
       codeViewer.updateCode(
         [{"lineagePattern":"elements-paragraph","lineagePath":"patterns/00-elements-paragraph/00-elements-paragraph.html","isHidden":false,"lineageState":"complete"}],
@@ -476,36 +422,31 @@ describe('codeViewer', function () {
         ''
       );
 
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
       const sgCodeLineageAfter = $orgs['#sg-code-lineage'].getState();
       const sgCodeLineageFillAfter = $orgs['#sg-code-lineage-fill'].getState();
       const sgCodeLineagerAfter = $orgs['#sg-code-lineager'].getState();
       const sgCodeLineagerFillAfter = $orgs['#sg-code-lineager-fill'].getState();
-      const sgCodePatternInfoStateAfter = $orgs['#sg-code-pattern-info-state'].getState();
+      const sgCodePatternInfoAfter = $orgs['#sg-code-pattern-info-state'].getState();
 
-      expect(sgCodeContainerBefore.attribs['data-patternpartial'])
-        .to.not.equal(sgCodeContainerAfter.attribs['data-patternpartial']);
       expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
       expect(sgCodeLineageFillBefore.html).to.not.equal(sgCodeLineageFillAfter.html);
       expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
       expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
-      expect(sgCodePatternInfoStateBefore.html).to.equal(sgCodePatternInfoStateAfter.html);
+      expect(sgCodePatternInfoBefore.html).to.equal(sgCodePatternInfoAfter.html);
 
-      expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
       expect(sgCodeLineageAfter.css.display).to.equal('block');
       expect(sgCodeLineageFillAfter.html).to.equal(
-        '<a href="patterns/00-elements-paragraph/00-elements-paragraph.html" class="sg-pattern-state complete" data-patternpartial="elements-paragraph">elements-paragraph</a>'
+        '<a href="patterns/00-elements-paragraph/00-elements-paragraph.html" class="sg-pattern-state complete">elements-paragraph</a>'
       );
       expect(sgCodeLineagerAfter.css.display).to.equal('none');
     });
 
     it('updates code with lineageR array', function () {
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
       const sgCodeLineageBefore = $orgs['#sg-code-lineage'].getState();
       const sgCodeLineageFillBefore = $orgs['#sg-code-lineage-fill'].getState();
       const sgCodeLineagerBefore = $orgs['#sg-code-lineager'].getState();
       const sgCodeLineagerFillBefore = $orgs['#sg-code-lineager-fill'].getState();
-      const sgCodePatternInfoStateBefore = $orgs['#sg-code-pattern-info-state'].getState();
+      const sgCodePatternInfoBefore = $orgs['#sg-code-pattern-info-state'].getState();
 
       codeViewer.updateCode(
         [],
@@ -514,37 +455,32 @@ describe('codeViewer', function () {
         ''
       );
 
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
       const sgCodeLineageAfter = $orgs['#sg-code-lineage'].getState();
       const sgCodeLineageFillAfter = $orgs['#sg-code-lineage-fill'].getState();
       const sgCodeLineagerAfter = $orgs['#sg-code-lineager'].getState();
       const sgCodeLineagerFillAfter = $orgs['#sg-code-lineager-fill'].getState();
-      const sgCodePatternInfoStateAfter = $orgs['#sg-code-pattern-info-state'].getState();
+      const sgCodePatternInfoAfter = $orgs['#sg-code-pattern-info-state'].getState();
 
-      expect(sgCodeContainerBefore.attribs['data-patternpartial'])
-        .to.not.equal(sgCodeContainerAfter.attribs['data-patternpartial']);
       expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
       expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
       expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
       expect(sgCodeLineagerFillBefore.html).to.not.equal(sgCodeLineagerFillAfter.html);
-      expect(sgCodePatternInfoStateBefore.html).to.equal(sgCodePatternInfoStateAfter.html);
+      expect(sgCodePatternInfoBefore.html).to.equal(sgCodePatternInfoAfter.html);
 
-      expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
       expect(sgCodeLineageAfter.css.display).to.equal('none');
       expect(sgCodeLineagerAfter.css.display).to.equal('block');
       expect(sgCodeLineagerFillAfter.html).to.equal(
-        '<a href="patterns/02-components-region/02-components-region.html" class="sg-pattern-state inreview" data-patternpartial="components-region">components-region</a>'
+        '<a href="patterns/02-components-region/02-components-region.html" class="sg-pattern-state inreview">components-region</a>'
       );
     });
     /* eslint-enable comma-spacing, key-spacing, max-len, quote-props, quotes */
 
     it('updates code with pattern state', function () {
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
       const sgCodeLineageBefore = $orgs['#sg-code-lineage'].getState();
       const sgCodeLineageFillBefore = $orgs['#sg-code-lineage-fill'].getState();
       const sgCodeLineagerBefore = $orgs['#sg-code-lineager'].getState();
       const sgCodeLineagerFillBefore = $orgs['#sg-code-lineager-fill'].getState();
-      const sgCodePatternInfoStateBefore = $orgs['#sg-code-pattern-info-state'].getState();
+      const sgCodePatternInfoBefore = $orgs['#sg-code-pattern-info-state'].getState();
 
       codeViewer.updateCode(
         [],
@@ -553,88 +489,22 @@ describe('codeViewer', function () {
         'inprogress'
       );
 
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
       const sgCodeLineageAfter = $orgs['#sg-code-lineage'].getState();
       const sgCodeLineageFillAfter = $orgs['#sg-code-lineage-fill'].getState();
       const sgCodeLineagerAfter = $orgs['#sg-code-lineager'].getState();
       const sgCodeLineagerFillAfter = $orgs['#sg-code-lineager-fill'].getState();
-      const sgCodePatternInfoStateAfter = $orgs['#sg-code-pattern-info-state'].getState();
+      const sgCodePatternInfoAfter = $orgs['#sg-code-pattern-info-state'].getState();
 
-      expect(sgCodeContainerBefore.attribs['data-patternpartial'])
-        .to.not.equal(sgCodeContainerAfter.attribs['data-patternpartial']);
       expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
       expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
       expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
       expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
-      expect(sgCodePatternInfoStateBefore.html).to.not.equal(sgCodePatternInfoStateAfter.html);
+      expect(sgCodePatternInfoBefore.html).to.not.equal(sgCodePatternInfoAfter.html);
 
-      expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
       expect(sgCodeLineageAfter.css.display).to.equal('none');
       expect(sgCodeLineagerAfter.css.display).to.equal('none');
-      expect(sgCodePatternInfoStateAfter.html)
+      expect(sgCodePatternInfoAfter.html)
         .to.equal('<span class="sg-pattern-state inprogress">inprogress</span>');
-    });
-  });
-
-  describe('.printXHRError()', function () {
-    it('returns a function that prints the XHR error given protocol "http:"', function () {
-      global.location = {
-        protocol: 'file:'
-      };
-      codeViewer.tabActive = 'e';
-      const printXHRError =
-        codeViewer.getPrintXHRErrorFunction(codeViewer).bind({status: 418, statusText: 'I\'m a teapot'});
-
-      $orgs['#sg-code-title-html'].dispatchAction('removeClass', 'sg-code-title-active');
-      $orgs['#sg-code-title-mustache'].dispatchAction('removeClass', 'sg-code-title-active');
-
-      const sgCodeTitleHtmlBefore = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheBefore = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillBefore = $orgs['#sg-code-fill'].getState();
-
-      printXHRError();
-
-      const sgCodeTitleHtmlAfter = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheAfter = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillAfter = $orgs['#sg-code-fill'].getState();
-
-      expect(sgCodeTitleHtmlBefore.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheBefore.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeFillBefore.html).to.not.equal(sgCodeFillAfter.html);
-
-      expect(sgCodeTitleHtmlAfter.classArray).to.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheAfter.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeFillAfter.html).to.equal('Status 418: I\'m a teapot');
-    });
-
-    it('returns a function that prints the XHR error given protocol "file:" and no status', function () {
-      global.location = {
-        protocol: 'file:'
-      };
-      codeViewer.tabActive = 'm';
-      const printXHRError = codeViewer.getPrintXHRErrorFunction(codeViewer).bind({});
-
-      $orgs['#sg-code-title-html'].dispatchAction('removeClass', 'sg-code-title-active');
-      $orgs['#sg-code-title-mustache'].dispatchAction('removeClass', 'sg-code-title-active');
-
-      const sgCodeTitleHtmlBefore = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheBefore = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillBefore = $orgs['#sg-code-fill'].getState();
-
-      printXHRError();
-
-      const sgCodeTitleHtmlAfter = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheAfter = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillAfter = $orgs['#sg-code-fill'].getState();
-
-      expect(sgCodeTitleHtmlBefore.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheBefore.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeFillBefore.html).to.not.equal(sgCodeFillAfter.html);
-
-      expect(sgCodeTitleHtmlAfter.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheAfter.classArray).to.include('sg-code-title-active');
-      expect(sgCodeFillAfter.html)
-        .to.equal('Access to XMLHttpRequest with the file protocol scheme has been blocked by CORS policy.');
     });
   });
 
@@ -651,7 +521,7 @@ describe('codeViewer', function () {
       };
     });
 
-    it('updates code on data.codeOverlay = "on"', function () {
+    it('opens and updates code on data.codeOverlay = "on"', function () {
       event.data = {
         codeOverlay: 'on',
         lineage: [],
@@ -667,8 +537,7 @@ describe('codeViewer', function () {
       $orgs['#sg-code-lineager'].dispatchAction('css', {display: 'inline'});
       $orgs['#sg-code-lineager-fill'].dispatchAction('html', null);
 
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
-      const sgCodePatternInfoStateBefore = $orgs['#sg-code-pattern-info-state'].getState();
+      const sgCodePatternInfoBefore = $orgs['#sg-code-pattern-info-state'].getState();
       const sgCodeLineageBefore = $orgs['#sg-code-lineage'].getState();
       const sgCodeLineageFillBefore = $orgs['#sg-code-lineage-fill'].getState();
       const sgCodeLineagerBefore = $orgs['#sg-code-lineager'].getState();
@@ -676,24 +545,20 @@ describe('codeViewer', function () {
 
       codeViewer.receiveIframeMessage(event);
 
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
-      const sgCodePatternInfoStateAfter = $orgs['#sg-code-pattern-info-state'].getState();
+      const sgCodePatternInfoAfter = $orgs['#sg-code-pattern-info-state'].getState();
       const sgCodeLineageAfter = $orgs['#sg-code-lineage'].getState();
       const sgCodeLineageFillAfter = $orgs['#sg-code-lineage-fill'].getState();
       const sgCodeLineagerAfter = $orgs['#sg-code-lineager'].getState();
       const sgCodeLineagerFillAfter = $orgs['#sg-code-lineager-fill'].getState();
 
-      expect(sgCodeContainerBefore.attribs['data-patternpartial'])
-        .to.not.equal(sgCodeContainerAfter.attribs['data-patternpartial']);
-      expect(sgCodePatternInfoStateBefore.html).to.equal(sgCodePatternInfoStateAfter.html);
+      expect(sgCodePatternInfoBefore.html).to.equal(sgCodePatternInfoAfter.html);
       expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
       expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
       expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
 
-      expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
-      expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
       expect(sgCodeLineageAfter.css.display).to.equal('none');
       expect(sgCodeLineagerAfter.css.display).to.equal('none');
+      expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
     });
 
     it('updates code on data.codeOverlay = "on" and data.viewall = true', function () {
@@ -713,8 +578,7 @@ describe('codeViewer', function () {
       $orgs['#sg-code-lineager'].dispatchAction('css', {display: 'inline'});
       $orgs['#sg-code-lineager-fill'].dispatchAction('html', null);
 
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
-      const sgCodePatternInfoStateBefore = $orgs['#sg-code-pattern-info-state'].getState();
+      const sgCodePatternInfoBefore = $orgs['#sg-code-pattern-info-state'].getState();
       const sgCodeLineageBefore = $orgs['#sg-code-lineage'].getState();
       const sgCodeLineageFillBefore = $orgs['#sg-code-lineage-fill'].getState();
       const sgCodeLineagerBefore = $orgs['#sg-code-lineager'].getState();
@@ -722,118 +586,21 @@ describe('codeViewer', function () {
 
       codeViewer.receiveIframeMessage(event);
 
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
-      const sgCodePatternInfoStateAfter = $orgs['#sg-code-pattern-info-state'].getState();
+      const sgCodePatternInfoAfter = $orgs['#sg-code-pattern-info-state'].getState();
       const sgCodeLineageAfter = $orgs['#sg-code-lineage'].getState();
       const sgCodeLineageFillAfter = $orgs['#sg-code-lineage-fill'].getState();
       const sgCodeLineagerAfter = $orgs['#sg-code-lineager'].getState();
       const sgCodeLineagerFillAfter = $orgs['#sg-code-lineager-fill'].getState();
 
-      expect(sgCodeContainerBefore.attribs['data-patternpartial'])
-        .to.not.equal(sgCodeContainerAfter.attribs['data-patternpartial']);
-      expect(sgCodePatternInfoStateBefore.html).to.equal(sgCodePatternInfoStateAfter.html);
+      expect(sgCodePatternInfoBefore.html).to.equal(sgCodePatternInfoAfter.html);
       expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
       expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
       expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
       expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
 
-      expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
       expect(sgCodeLineageAfter.css.display).to.equal('none');
       expect(sgCodeLineagerAfter.css.display).to.equal('none');
       expect(codeViewer.viewall).to.be.true;
-    });
-
-    it('opens and updates code on data.codeOverlay = "on", data.viewall = true, and data.openCode = true', function () {
-      event.data = {
-        codeOverlay: 'on',
-        lineage: [],
-        lineageR: [],
-        openCode: true,
-        patternPartial: 'compounds-block',
-        patternState: '',
-        viewall: true
-      };
-
-      $orgs['#sg-code-container'].dispatchAction('attr', {'data-patternpartial': null});
-      $orgs['#sg-code-pattern-info-state'].dispatchAction('html', null);
-      $orgs['#sg-code-lineage'].dispatchAction('css', {display: 'inline'});
-      $orgs['#sg-code-lineage-fill'].dispatchAction('html', null);
-      $orgs['#sg-code-lineager'].dispatchAction('css', {display: 'inline'});
-      $orgs['#sg-code-lineager-fill'].dispatchAction('html', null);
-
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
-      const sgCodePatternInfoStateBefore = $orgs['#sg-code-pattern-info-state'].getState();
-      const sgCodeLineageBefore = $orgs['#sg-code-lineage'].getState();
-      const sgCodeLineageFillBefore = $orgs['#sg-code-lineage-fill'].getState();
-      const sgCodeLineagerBefore = $orgs['#sg-code-lineager'].getState();
-      const sgCodeLineagerFillBefore = $orgs['#sg-code-lineager-fill'].getState();
-
-      codeViewer.receiveIframeMessage(event);
-
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
-      const sgCodePatternInfoStateAfter = $orgs['#sg-code-pattern-info-state'].getState();
-      const sgCodeLineageAfter = $orgs['#sg-code-lineage'].getState();
-      const sgCodeLineageFillAfter = $orgs['#sg-code-lineage-fill'].getState();
-      const sgCodeLineagerAfter = $orgs['#sg-code-lineager'].getState();
-      const sgCodeLineagerFillAfter = $orgs['#sg-code-lineager-fill'].getState();
-
-      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
-      expect(sgCodeContainerBefore.attribs['data-patternpartial'])
-        .to.not.equal(sgCodeContainerAfter.attribs['data-patternpartial']);
-      expect(sgCodePatternInfoStateBefore.html).to.equal(sgCodePatternInfoStateAfter.html);
-      expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
-      expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
-      expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
-
-      expect(sgCodeContainerAfter.css.bottom).to.equal('0px');
-      expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
-      expect(sgCodeContainerAfter.attribs['data-patternpartial']).to.equal('compounds-block');
-      expect(sgCodeLineageAfter.css.display).to.equal('none');
-      expect(sgCodeLineagerAfter.css.display).to.equal('none');
-      expect(codeViewer.viewall).to.be.true;
-    });
-
-    it('closes code on data.codeOverlay = "off"', function () {
-      event.data = {
-        codeOverlay: 'off'
-      };
-
-      codeViewer.openCode();
-
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
-      const sgTCodeBefore = $orgs['#sg-t-code'].getState();
-
-      codeViewer.receiveIframeMessage(event);
-
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
-      const sgTCodeAfter = $orgs['#sg-t-code'].getState();
-
-      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
-      expect(sgTCodeBefore.classArray).to.include('active');
-
-      expect(sgCodeContainerAfter.css.bottom).to.equal('-384px');
-      expect(sgTCodeAfter.classArray).to.not.include('active');
-      expect(codeViewer.codeActive).to.be.false;
-    });
-
-    it('sets .mustacheBrowser on data.codeMustacheBrowser = true', function () {
-      event.data = {
-        codeMustacheBrowser: true
-      };
-
-      codeViewer.receiveIframeMessage(event);
-
-      expect(codeViewer.mustacheBrowser).to.be.true;
-    });
-
-    it('sets .mustacheBrowser on data.codeMustacheBrowser = false', function () {
-      event.data = {
-        codeMustacheBrowser: false
-      };
-
-      codeViewer.receiveIframeMessage(event);
-
-      expect(codeViewer.mustacheBrowser).to.be.false;
     });
 
     it('sets .viewall on data.codeViewall = true', function () {
@@ -856,188 +623,198 @@ describe('codeViewer', function () {
       expect(codeViewer.viewall).to.be.false;
     });
 
-    it('toggles code on on patternlab.keyPress "ctrl+shift+c"', function () {
+    it('opens and updates code on data.codeOverlay = "on", data.viewall = true, and data.openCode = true\
+', function (done) {
+      codeViewer.closeCode();
+      $orgs['#sg-code-container'].dispatchAction('attr', {'data-patternpartial': null});
+      $orgs['#sg-code-pattern-info-state'].dispatchAction('html', null);
+      $orgs['#sg-code-lineage'].dispatchAction('css', {display: 'inline'});
+      $orgs['#sg-code-lineage-fill'].dispatchAction('html', null);
+      $orgs['#sg-code-lineager'].dispatchAction('css', {display: 'inline'});
+      $orgs['#sg-code-lineager-fill'].dispatchAction('html', null);
+
+      setTimeout(() => {
+        event.data = {
+          codeOverlay: 'on',
+          lineage: [],
+          lineageR: [],
+          openCode: true,
+          patternPartial: 'compounds-block',
+          patternState: '',
+          viewall: true
+        };
+        const codeActiveBefore = codeViewer.codeActive;
+        const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
+        const sgCodePatternInfoBefore = $orgs['#sg-code-pattern-info-state'].getState();
+        const sgCodeLineageBefore = $orgs['#sg-code-lineage'].getState();
+        const sgCodeLineageFillBefore = $orgs['#sg-code-lineage-fill'].getState();
+        const sgCodeLineagerBefore = $orgs['#sg-code-lineager'].getState();
+        const sgCodeLineagerFillBefore = $orgs['#sg-code-lineager-fill'].getState();
+        const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
+
+        codeViewer.receiveIframeMessage(event);
+
+        setTimeout(() => {
+          const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+          const sgCodePatternInfoAfter = $orgs['#sg-code-pattern-info-state'].getState();
+          const sgCodeLineageAfter = $orgs['#sg-code-lineage'].getState();
+          const sgCodeLineageFillAfter = $orgs['#sg-code-lineage-fill'].getState();
+          const sgCodeLineagerAfter = $orgs['#sg-code-lineager'].getState();
+          const sgCodeLineagerFillAfter = $orgs['#sg-code-lineager-fill'].getState();
+          const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
+
+          expect(codeActiveBefore).to.be.false;
+          expect(patternlabBodyBefore.classArray).to.not.include('dock-open');
+          expect(sgCodePatternInfoBefore.html).to.equal(sgCodePatternInfoAfter.html);
+          expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
+          expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
+          expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
+          expect(sgViewContainerBefore.classArray).to.not.include('anim-ready');
+
+          expect(codeViewer.codeActive).to.be.true;
+          expect(patternlabBodyAfter.classArray).to.include('dock-open');
+          expect(sgCodeLineageAfter.css.display).to.equal('none');
+          expect(sgCodeLineagerAfter.css.display).to.equal('none');
+          expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
+          expect(sgViewContainerAfter.classArray).to.include('anim-ready');
+          expect(codeViewer.viewall).to.be.true;
+
+          done();
+        }, timeout);
+      }, timeout);
+    });
+
+    it('closes code on data.codeOverlay = "off"', function (done) {
+      event.data = {
+        codeOverlay: 'off'
+      };
+
+      codeViewer.openCode();
+
+      setTimeout(() => {
+        const codeActiveBefore = codeViewer.codeActive;
+        const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
+        const sgTCodeBefore = $orgs['#sg-t-code'].getState();
+        const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
+
+        codeViewer.receiveIframeMessage(event);
+
+        setTimeout(() => {
+          const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+          const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+          const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
+
+          expect(codeActiveBefore).to.be.true;
+          expect(patternlabBodyBefore.classArray).to.include('dock-open');
+          expect(sgTCodeBefore.classArray).to.include('active');
+          expect(sgViewContainerBefore.classArray).to.include('anim-ready');
+
+          expect(codeViewer.codeActive).to.be.false;
+          expect(patternlabBodyAfter.classArray).to.not.include('dock-open');
+          expect(sgTCodeAfter.classArray).to.not.include('active');
+          expect(sgViewContainerAfter.classArray).to.not.include('anim-ready');
+
+          done();
+        }, timeout);
+      }, timeout);
+    });
+
+    it('toggles code on with patternlab.keyPress "ctrl+shift+c"', function (done) {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'ctrl+shift+c'
       };
-
-      annotationsViewer.annotationsActive = true;
-      codeViewer.codeActive = false;
-      codeViewer.mustacheBrowser = false;
-
-      $orgs['#sg-t-annotations'].dispatchAction('addClass', 'active');
-      $orgs['#sg-annotations-container'].dispatchAction('css', {bottom: 'auto'});
-      $orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
-
-      const sgTAnnotationsBefore = $orgs['#sg-t-annotations'].getState();
-      const sgAnnotationsContainerBefore = $orgs['#sg-annotations-container'].getState();
+      const codeActiveBefore = codeViewer.codeActive;
+      const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgTCodeBefore = $orgs['#sg-t-code'].getState();
+      const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
       codeViewer.receiveIframeMessage(event);
 
-      const sgTAnnotationsAfter = $orgs['#sg-t-annotations'].getState();
-      const sgAnnotationsContainerAfter = $orgs['#sg-annotations-container'].getState();
-      const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+      setTimeout(() => {
+        const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+        const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+        const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
 
-      expect(sgTAnnotationsBefore.classArray).to.include('active');
-      expect(sgAnnotationsContainerBefore.css.bottom)
-        .to.not.equal(sgAnnotationsContainerAfter.css.bottom);
-      expect(sgTCodeBefore.classArray).to.not.include('active');
+        expect(codeActiveBefore).to.be.false;
+        expect(patternlabBodyBefore.classArray).to.not.include('dock-open');
+        expect(sgTCodeBefore.classArray).to.not.include('active');
+        expect(sgViewContainerBefore.classArray).to.not.include('anim-ready');
 
-      expect(sgTAnnotationsAfter.classArray).to.not.include('active');
-      expect(sgAnnotationsContainerAfter.css.bottom).to.equal('-384px');
-      expect(sgTCodeAfter.classArray).to.include('active');
-      expect(annotationsViewer.annotationsActive).to.be.false;
-      expect(codeViewer.codeActive).to.be.true;
+        expect(codeViewer.codeActive).to.be.true;
+        expect(patternlabBodyAfter.classArray).to.include('dock-open');
+        expect(sgTCodeAfter.classArray).to.include('active');
+        expect(sgViewContainerAfter.classArray).to.include('anim-ready');
+
+        done();
+      }, timeout);
     });
 
-    it('toggles code off on patternlab.keyPress "ctrl+shift+c"', function () {
+    it('toggles code off with patternlab.keyPress "ctrl+shift+c"', function (done) {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'ctrl+shift+c'
       };
-
+      const codeActiveBefore = codeViewer.codeActive;
+      const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgTCodeBefore = $orgs['#sg-t-code'].getState();
+      const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
       codeViewer.receiveIframeMessage(event);
 
-      const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+      setTimeout(() => {
+        const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+        const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+        const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
 
-      expect(sgTCodeBefore.classArray).to.include('active');
+        expect(codeActiveBefore).to.be.true;
+        expect(patternlabBodyBefore.classArray).to.include('dock-open');
+        expect(sgTCodeBefore.classArray).to.include('active');
+        expect(sgViewContainerBefore.classArray).to.include('anim-ready');
 
-      expect(sgTCodeAfter.classArray).to.not.include('active');
-      expect(codeViewer.codeActive).to.be.false;
+        expect(codeViewer.codeActive).to.be.false;
+        expect(patternlabBodyAfter.classArray).to.not.include('dock-open');
+        expect(sgTCodeAfter.classArray).to.not.include('active');
+        expect(sgViewContainerAfter.classArray).to.not.include('anim-ready');
+
+        // Reopen code viewer in order to run the following tests.
+        codeViewer.openCode();
+
+        setTimeout(() => {
+          done();
+        }, timeout);
+      }, timeout);
     });
 
-    it('swaps in encoded HTML on patternlab.keyPress "ctrl+alt+h"', function () {
-      event.data = {
-        event: 'patternlab.keyPress',
-        keyPress: 'ctrl+alt+h'
-      };
-      codeViewer.codeActive = true;
-      codeViewer.encoded = 'encoded';
-
-      $orgs['#sg-code-fill'].dispatchAction('html', '');
-
-      const sgCodeFillBefore = $orgs['#sg-code-fill'].getState();
-
-      codeViewer.receiveIframeMessage(event);
-
-      const sgCodeTitleHtmlAfter = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheAfter = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillAfter = $orgs['#sg-code-fill'].getState();
-
-      expect(sgCodeFillBefore.html).to.not.equal(sgCodeFillAfter.html);
-
-      expect(codeViewer.tabActive).to.equal('e');
-      expect(sgCodeTitleHtmlAfter.classArray).to.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheAfter.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeFillAfter.html).to.equal('encoded');
-    });
-
-    it('swaps in encoded HTML on patternlab.keyPress "ctrl+shift+y"', function () {
-      event.data = {
-        event: 'patternlab.keyPress',
-        keyPress: 'ctrl+shift+y'
-      };
-      codeViewer.codeActive = true;
-      codeViewer.encoded = 'encoded';
-
-      $orgs['#sg-code-fill'].dispatchAction('html', '');
-
-      const sgCodeFillBefore = $orgs['#sg-code-fill'].getState();
-
-      codeViewer.receiveIframeMessage(event);
-
-      const sgCodeTitleHtmlAfter = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheAfter = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillAfter = $orgs['#sg-code-fill'].getState();
-
-      expect(sgCodeFillBefore.html).to.not.equal(sgCodeFillAfter.html);
-
-      expect(codeViewer.tabActive).to.equal('e');
-      expect(sgCodeTitleHtmlAfter.classArray).to.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheAfter.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeFillAfter.html).to.equal('encoded');
-    });
-
-    it('swaps in Mustache-like Feplet on patternlab.keyPress "ctrl+alt+m"', function () {
-      event.data = {
-        event: 'patternlab.keyPress',
-        keyPress: 'ctrl+alt+m'
-      };
-      codeViewer.codeActive = true;
-      codeViewer.mustache = 'mustache';
-
-      $orgs['#sg-code-fill'].dispatchAction('html', '');
-
-      const sgCodeFillBefore = $orgs['#sg-code-fill'].getState();
-
-      codeViewer.receiveIframeMessage(event);
-
-      const sgCodeTitleHtmlAfter = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheAfter = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillAfter = $orgs['#sg-code-fill'].getState();
-
-      expect(sgCodeFillBefore.html).to.not.equal(sgCodeFillAfter.html);
-
-      expect(codeViewer.tabActive).to.equal('m');
-      expect(sgCodeTitleHtmlAfter.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheAfter.classArray).to.include('sg-code-title-active');
-      expect(sgCodeFillAfter.html).to.equal('mustache');
-    });
-
-    it('swaps in Mustache-like Feplet on patternlab.keyPress "ctrl+shift+u"', function () {
-      event.data = {
-        event: 'patternlab.keyPress',
-        keyPress: 'ctrl+shift+u'
-      };
-      codeViewer.codeActive = true;
-      codeViewer.mustache = 'mustache';
-
-      $orgs['#sg-code-fill'].dispatchAction('html', '');
-
-      const sgCodeFillBefore = $orgs['#sg-code-fill'].getState();
-
-      codeViewer.receiveIframeMessage(event);
-
-      const sgCodeTitleHtmlAfter = $orgs['#sg-code-title-html'].getState();
-      const sgCodeTitleMustacheAfter = $orgs['#sg-code-title-mustache'].getState();
-      const sgCodeFillAfter = $orgs['#sg-code-fill'].getState();
-
-      expect(sgCodeFillBefore.html).to.not.equal(sgCodeFillAfter.html);
-
-      expect(codeViewer.tabActive).to.equal('m');
-      expect(sgCodeTitleHtmlAfter.classArray).to.not.include('sg-code-title-active');
-      expect(sgCodeTitleMustacheAfter.classArray).to.include('sg-code-title-active');
-      expect(sgCodeFillAfter.html).to.equal('mustache');
-    });
-
-    it('closes codeViewer on patternlab.keyPress "esc"', function () {
+    it('closes codeViewer with patternlab.keyPress "esc"', function (done) {
       event.data = {
         event: 'patternlab.keyPress',
         keyPress: 'esc'
       };
-      codeViewer.codeActive = true;
-
-      $orgs['#sg-code-container'].dispatchAction('css', {bottom: '0px'});
-      $orgs['#sg-t-code'].dispatchAction('addClass', 'active');
-
-      const sgCodeContainerBefore = $orgs['#sg-code-container'].getState();
+      const codeActiveBefore = codeViewer.codeActive;
+      const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgTCodeBefore = $orgs['#sg-t-code'].getState();
+      const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
       codeViewer.receiveIframeMessage(event);
 
-      const sgCodeContainerAfter = $orgs['#sg-code-container'].getState();
-      const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+      setTimeout(() => {
+        const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+        const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+        const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
 
-      expect(sgTCodeBefore.classArray).to.include('active');
-      expect(sgCodeContainerBefore.css.bottom).to.not.equal(sgCodeContainerAfter.css.bottom);
+        expect(codeActiveBefore).to.be.true;
+        expect(patternlabBodyBefore.classArray).to.include('dock-open');
+        expect(sgTCodeBefore.classArray).to.include('active');
+        expect(sgViewContainerBefore.classArray).to.include('anim-ready');
 
-      expect(sgCodeContainerAfter.css.bottom).to.equal('-384px');
-      expect(sgTCodeAfter.classArray).to.not.include('active');
-      expect(codeViewer.codeActive).to.be.false;
+        expect(codeViewer.codeActive).to.be.false;
+        expect(patternlabBodyAfter.classArray).to.not.include('dock-open');
+        expect(sgTCodeAfter.classArray).to.not.include('active');
+        expect(sgViewContainerAfter.classArray).to.not.include('anim-ready');
+
+        done();
+      }, timeout);
     });
   });
 });
