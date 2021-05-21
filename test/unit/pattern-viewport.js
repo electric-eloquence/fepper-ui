@@ -95,6 +95,9 @@ describe('patternViewport', function () {
     <li class="sg-item-nav-pages-homepage">
       <a href="patterns/04-pages-00-homepage/04-pages-00-homepage.html" class="sg-pop " data-patternpartial="pages-homepage">Homepage</a>
     </li>
+    <li class="sg-item-nav-pages-test-svg">
+      <a href="patterns/04-pages-test-svg/04-pages-test-svg.html" class="sg-pop " data-patternpartial="pages-test-svg">Test Svg</a>
+    </li>
     <li class="sg-item-nav-viewall-pages">
       <a href="patterns/04-pages/index.html" class="sg-pop " data-patternpartial="viewall-pages">View All</a>
     </li>
