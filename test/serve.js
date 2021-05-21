@@ -245,6 +245,10 @@ module.exports = new Promise((resolve) => {
             filePath = `${__dirname}/fixtures/ui-data.js`;
 
             break;
+          case '/node_modules/fepper-ui/styles/ui.css':
+            filePath = `${__dirname}/fixtures/styles/ui.css`;
+
+            break;
           default:
             filePath = `${__dirname}/..${filePath.replace(excerpt, '')}`;
         }

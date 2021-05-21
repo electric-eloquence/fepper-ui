@@ -22,6 +22,7 @@ const html = fs.readFileSync(path.resolve(__dirname, 'fixtures', 'index.html'), 
 const $ = global.$ = cheerio.load(html);
 
 // Use "require" to load after imports and declarations.
+require('fepper/excludes/profiles/base/source/_scripts/src/variables.styl');
 require('./mocks/bloodhound');
 require('./mocks/document');
 require('./mocks/he');
@@ -29,7 +30,6 @@ require('./mocks/history');
 require('./mocks/location');
 require('./mocks/Prism');
 require('./mocks/XMLHttpRequest');
-require('./fixtures/_scripts/src/variables.styl');
 
 const fepperUi = new FepperUi(Requerio, $, Redux, $organisms, global, uiData);
 fepperUi.uiComp = uiComp;

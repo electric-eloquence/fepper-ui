@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import sinon from 'sinon';
 
 import fepperUi from '../unit';
-import '../fixtures/_scripts/src/variables.styl';
+import 'fepper/excludes/profiles/base/source/_scripts/src/variables.styl';
 
 const sandbox = sinon.createSandbox();
 
