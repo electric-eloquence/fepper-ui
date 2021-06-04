@@ -209,7 +209,7 @@ menu anchor.</p>
         browser.pause(100);
         browser.switchToParentFrame();
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/03-templates-page/03-templates-page.html');
+          .to.equal('patterns/03-templates-page/03-templates-page.html');
       });
     });
   });
@@ -292,7 +292,7 @@ menu anchor.</p>
         $('.sg-nav-elements').$('.sg-pop').click();
         browser.pause(100);
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/00-elements-paragraph/00-elements-paragraph.html');
+          .to.equal('patterns/00-elements-paragraph/00-elements-paragraph.html');
       });
 
       it('closes open nav menu', function () {
@@ -465,16 +465,16 @@ menu anchor.</p>
       browser.pause(100);
       browser.back();
       expect($('#sg-raw').getAttribute('href'))
-        .to.equal('http://localhost:8080/patterns/01-compounds-block/01-compounds-block.html');
+        .to.equal('patterns/01-compounds-block/01-compounds-block.html');
       browser.back();
       expect($('#sg-raw').getAttribute('href'))
-        .to.equal('http://localhost:8080/patterns/00-elements-paragraph/00-elements-paragraph.html');
+        .to.equal('patterns/00-elements-paragraph/00-elements-paragraph.html');
       browser.forward();
       expect($('#sg-raw').getAttribute('href'))
-        .to.equal('http://localhost:8080/patterns/01-compounds-block/01-compounds-block.html');
+        .to.equal('patterns/01-compounds-block/01-compounds-block.html');
       browser.forward();
       expect($('#sg-raw').getAttribute('href'))
-        .to.equal('http://localhost:8080/patterns/02-components-region/02-components-region.html');
+        .to.equal('patterns/02-components-region/02-components-region.html');
     });
   });
 });

@@ -271,6 +271,7 @@ export default class CodeViewer {
   setPanelContent(type) {
     switch (type) {
       case 'feplet': {
+        /* istanbul ignore else */
         if (this.$orgs['#sg-code-panel-feplet'].length) {
           this.$orgs['#sg-code-panel-feplet'][0]
             .contentWindow.location.replace(`/mustache-browser?partial=${this.patternPartial}`);

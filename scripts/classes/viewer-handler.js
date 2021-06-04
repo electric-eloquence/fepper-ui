@@ -67,6 +67,7 @@ export default class ViewerHandler {
 
 
     // DEPRECATED: Here for backward-compatibility. Will be removed.
+    /* istanbul ignore if */
     if (!this.$orgs['#sg-view-container'].length) {
         this.$orgs['#sg-annotations-container']
           .dispatchAction('removeClass', 'anim-ready')
@@ -144,6 +145,7 @@ export default class ViewerHandler {
 
     this.$orgs['#sg-view-container'].dispatchAction('addClass', 'anim-ready');
 
+    /* istanbul ignore else */
     if (this.$orgs['#sg-view-container'].length) {
       if (this.transitionDuration === null) {
         /* istanbul ignore if */
