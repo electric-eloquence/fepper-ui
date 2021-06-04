@@ -16,6 +16,7 @@ export default {
   '#sg-code-btn-markdown-save': null,
   '#sg-code-code-language-markdown': null,
   '#sg-code-container': null,
+  '#sg-code-fill': null, // DEPRECATED: Here for backward-compatibility.
   '#sg-code-lineage': null,
   '#sg-code-lineage-fill': null,
   '#sg-code-lineager': null,
@@ -78,4 +79,5 @@ export default {
   '.sg-pop': null,
   '.sg-size': null,
   '.sg-tool': null,
+  '.sg-view-close-btn': null // DEPRECATED: Here for backward-compatibility.
 };

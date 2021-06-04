@@ -32,5 +32,11 @@ export default class FepperUi {
 
     // uiComp allows for UI customization. Define this later so tests can use a fixed (non-customized) compilation.
     this.uiComp = null;
+
+    // DEPRECATED: Here for backward-compatibility. Will be removed.
+    this.patternlabViewer = {
+      goRandom: this.patternViewport.goRandom.bind(this.patternViewport),
+      goWhole: this.patternViewport.goWhole.bind(this.patternViewport)
+    }
   }
 }

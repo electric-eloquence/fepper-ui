@@ -271,14 +271,22 @@ export default class CodeViewer {
   setPanelContent(type) {
     switch (type) {
       case 'feplet': {
-        this.$orgs['#sg-code-panel-feplet'][0]
-          .contentWindow.location.replace(`/mustache-browser?partial=${this.patternPartial}`);
-        this.$orgs['#sg-code-panel-feplet'][0]
-          .addEventListener('load', () => {
-            const height = this.$orgs['#sg-code-panel-feplet'][0].contentWindow.document.documentElement.offsetHeight;
+        if (this.$orgs['#sg-code-panel-feplet'].length) {
+          this.$orgs['#sg-code-panel-feplet'][0]
+            .contentWindow.location.replace(`/mustache-browser?partial=${this.patternPartial}`);
+          this.$orgs['#sg-code-panel-feplet'][0]
+            .addEventListener('load', () => {
+              const height = this.$orgs['#sg-code-panel-feplet'][0].contentWindow.document.documentElement.offsetHeight;
 
-            this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: `${height}px`, visibility: ''});
-          });
+              this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: `${height}px`, visibility: ''});
+            });
+        }
+        // DEPRECATED: Here for backward-compatibility. Will be removed.
+        else {
+          this.$orgs['#sg-code-fill']
+            .dispatchAction('text', 'Update Fepper UI to get this working correctly.')
+            .dispatchAction('css', {color: 'red'});
+        }
 
         break;
       }

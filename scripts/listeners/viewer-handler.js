@@ -25,6 +25,14 @@ export default class ViewerHandler {
       this.$orgs['#sg-view-btn-dock-right'].on('click', () => {
         this.#fepperUi.viewerHandler.dockRight();
       });
+
+      // DEPRECATED: Here for backward-compatibility. Will be removed.
+      if (this.$orgs['.sg-view-close-btn'].length) {
+        this.$orgs['.sg-view-close-btn'].on('click', () => {
+          this.#fepperUi.annotationsViewer.closeAnnotations();
+          this.#fepperUi.codeViewer.closeCode();
+        });
+      }
     });
   }
 }

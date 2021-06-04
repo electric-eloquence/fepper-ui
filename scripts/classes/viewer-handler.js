@@ -71,6 +71,9 @@ export default class ViewerHandler {
         this.$orgs['#sg-annotations-container']
           .dispatchAction('removeClass', 'anim-ready')
           .dispatchAction('css', {bottom: 'auto'});
+        this.$orgs['#sg-code-container']
+          .dispatchAction('removeClass', 'anim-ready')
+          .dispatchAction('css', {bottom: 'auto'});
     }
 
     setTimeout(() => {
@@ -164,6 +167,11 @@ export default class ViewerHandler {
     else {
       if (this.annotationsViewer.annotationsActive) {
         this.$orgs['#sg-annotations-container']
+          .dispatchAction('addClass', 'anim-ready')
+          .dispatchAction('css', {bottom: '0'});
+      }
+      else if (this.codeViewer.codeActive) {
+        this.$orgs['#sg-code-container']
           .dispatchAction('addClass', 'anim-ready')
           .dispatchAction('css', {bottom: '0'});
       }
