@@ -65,6 +65,14 @@ export default class ViewerHandler {
 
     this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-open');
 
+
+    // DEPRECATED: Here for backward-compatibility. Will be removed.
+    if (!this.$orgs['#sg-view-container'].length) {
+        this.$orgs['#sg-annotations-container']
+          .dispatchAction('removeClass', 'anim-ready')
+          .dispatchAction('css', {bottom: 'auto'});
+    }
+
     setTimeout(() => {
       this.$orgs['#sg-view-container'].dispatchAction('removeClass', 'anim-ready');
     }, this.transitionDuration);
@@ -133,21 +141,31 @@ export default class ViewerHandler {
 
     this.$orgs['#sg-view-container'].dispatchAction('addClass', 'anim-ready');
 
-    if (this.transitionDuration === null) {
-      /* istanbul ignore if */
-      if (typeof getComputedStyle === 'function') {
-        const transitionDurationStr =
-          getComputedStyle(this.$orgs['#sg-view-container'][0]).getPropertyValue('transition-duration');
+    if (this.$orgs['#sg-view-container'].length) {
+      if (this.transitionDuration === null) {
+        /* istanbul ignore if */
+        if (typeof getComputedStyle === 'function') {
+          const transitionDurationStr =
+            getComputedStyle(this.$orgs['#sg-view-container'][0]).getPropertyValue('transition-duration');
 
-        if (transitionDurationStr.slice(-2) === 'ms') {
-          this.transitionDuration = parseFloat(transitionDurationStr);
+          if (transitionDurationStr.slice(-2) === 'ms') {
+            this.transitionDuration = parseFloat(transitionDurationStr);
+          }
+          else {
+            this.transitionDuration = parseFloat(transitionDurationStr) * 1000;
+          }
         }
         else {
-          this.transitionDuration = parseFloat(transitionDurationStr) * 1000;
+          this.transitionDuration = 0;
         }
       }
-      else {
-        this.transitionDuration = 0;
+    }
+    // DEPRECATED: Here for backward-compatibility. Will be removed.
+    else {
+      if (this.annotationsViewer.annotationsActive) {
+        this.$orgs['#sg-annotations-container']
+          .dispatchAction('addClass', 'anim-ready')
+          .dispatchAction('css', {bottom: '0'});
       }
     }
 
