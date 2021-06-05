@@ -285,7 +285,7 @@ export default class CodeViewer {
         // DEPRECATED: Here for backward-compatibility. Will be removed.
         else {
           this.$orgs['#sg-code-fill']
-            .dispatchAction('text', 'Update Fepper UI to get this working correctly.')
+            .dispatchAction('text', 'Update Fepper UI to make this work correctly.')
             .dispatchAction('css', {color: 'red'});
         }
 
