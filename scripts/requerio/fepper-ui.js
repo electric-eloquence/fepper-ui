@@ -37,6 +37,6 @@ export default class FepperUi {
     this.patternlabViewer = {
       goRandom: this.patternViewport.goRandom.bind(this.patternViewport),
       goWhole: this.patternViewport.goWhole.bind(this.patternViewport)
-    }
+    };
   }
 }

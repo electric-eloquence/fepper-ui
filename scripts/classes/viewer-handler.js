@@ -69,12 +69,12 @@ export default class ViewerHandler {
     // DEPRECATED: Here for backward-compatibility. Will be removed.
     /* istanbul ignore if */
     if (!this.$orgs['#sg-view-container'].length) {
-        this.$orgs['#sg-annotations-container']
-          .dispatchAction('removeClass', 'anim-ready')
-          .dispatchAction('css', {bottom: 'auto'});
-        this.$orgs['#sg-code-container']
-          .dispatchAction('removeClass', 'anim-ready')
-          .dispatchAction('css', {bottom: 'auto'});
+      this.$orgs['#sg-annotations-container']
+        .dispatchAction('removeClass', 'anim-ready')
+        .dispatchAction('css', {bottom: 'auto'});
+      this.$orgs['#sg-code-container']
+        .dispatchAction('removeClass', 'anim-ready')
+        .dispatchAction('css', {bottom: 'auto'});
     }
 
     setTimeout(() => {
