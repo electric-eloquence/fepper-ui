@@ -388,7 +388,8 @@ also tests .resetPanels()', function () {
         [],
         [],
         'compounds-block',
-        ''
+        '',
+        []
       );
 
       const sgCodeLineageAfter = $orgs['#sg-code-lineage'].getState();
@@ -419,7 +420,8 @@ also tests .resetPanels()', function () {
         [{"lineagePattern":"elements-paragraph","lineagePath":"patterns/00-elements-paragraph/00-elements-paragraph.html","isHidden":false,"lineageState":"complete"}],
         [],
         'compounds-block',
-        ''
+        '',
+        []
       );
 
       const sgCodeLineageAfter = $orgs['#sg-code-lineage'].getState();
@@ -452,7 +454,8 @@ also tests .resetPanels()', function () {
         [],
         [{"lineagePattern":"components-region","lineagePath":"patterns/02-components-region/02-components-region.html","isHidden":false,"lineageState":"inreview"}],
         'compounds-block',
-        ''
+        '',
+        []
       );
 
       const sgCodeLineageAfter = $orgs['#sg-code-lineage'].getState();
@@ -486,7 +489,8 @@ also tests .resetPanels()', function () {
         [],
         [],
         'compounds-block',
-        'inprogress'
+        'inprogress',
+        []
       );
 
       const sgCodeLineageAfter = $orgs['#sg-code-lineage'].getState();
@@ -505,6 +509,70 @@ also tests .resetPanels()', function () {
       expect(sgCodeLineagerAfter.css.display).to.equal('none');
       expect(sgCodePatternInfoAfter.html)
         .to.equal('<span class="sg-pattern-state inprogress">inprogress</span>');
+    });
+
+    it('shows when a pattern is missing an included partial', function () {
+      const sgCodeLineageBefore = $orgs['#sg-code-lineage'].getState();
+      const sgCodeLineageFillBefore = $orgs['#sg-code-lineage-fill'].getState();
+      const sgCodeLineagerBefore = $orgs['#sg-code-lineager'].getState();
+      const sgCodeLineagerFillBefore = $orgs['#sg-code-lineager-fill'].getState();
+      const sgCodeMissingPartialsFillBefore = $orgs['#sg-code-missing-partials-fill'].getState();
+
+      codeViewer.updateCode(
+        [],
+        [],
+        'compounds-block',
+        '',
+        ['organisms-molecules']
+      );
+
+      const sgCodeLineageAfter = $orgs['#sg-code-lineage'].getState();
+      const sgCodeLineageFillAfter = $orgs['#sg-code-lineage-fill'].getState();
+      const sgCodeLineagerAfter = $orgs['#sg-code-lineager'].getState();
+      const sgCodeLineagerFillAfter = $orgs['#sg-code-lineager-fill'].getState();
+      const sgCodeMissingPartialsFillAfter = $orgs['#sg-code-missing-partials-fill'].getState();
+
+      expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
+      expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
+      expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
+      expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
+      expect(sgCodeMissingPartialsFillBefore.html).to.not.equal(sgCodeMissingPartialsFillAfter.html);
+
+      expect(sgCodeLineageAfter.css.display).to.equal('none');
+      expect(sgCodeLineagerAfter.css.display).to.equal('none');
+      expect(sgCodeMissingPartialsFillAfter.html).to.equal('organisms-molecules');
+    });
+
+    it('shows when a pattern is missing multiple included partials', function () {
+      const sgCodeLineageBefore = $orgs['#sg-code-lineage'].getState();
+      const sgCodeLineageFillBefore = $orgs['#sg-code-lineage-fill'].getState();
+      const sgCodeLineagerBefore = $orgs['#sg-code-lineager'].getState();
+      const sgCodeLineagerFillBefore = $orgs['#sg-code-lineager-fill'].getState();
+      const sgCodeMissingPartialsFillBefore = $orgs['#sg-code-missing-partials-fill'].getState();
+
+      codeViewer.updateCode(
+        [],
+        [],
+        'compounds-block',
+        '',
+        ['organisms-molecules, molecules-atoms']
+      );
+
+      const sgCodeLineageAfter = $orgs['#sg-code-lineage'].getState();
+      const sgCodeLineageFillAfter = $orgs['#sg-code-lineage-fill'].getState();
+      const sgCodeLineagerAfter = $orgs['#sg-code-lineager'].getState();
+      const sgCodeLineagerFillAfter = $orgs['#sg-code-lineager-fill'].getState();
+      const sgCodeMissingPartialsFillAfter = $orgs['#sg-code-missing-partials-fill'].getState();
+
+      expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
+      expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
+      expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
+      expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
+      expect(sgCodeMissingPartialsFillBefore.html).to.not.equal(sgCodeMissingPartialsFillAfter.html);
+
+      expect(sgCodeLineageAfter.css.display).to.equal('none');
+      expect(sgCodeLineagerAfter.css.display).to.equal('none');
+      expect(sgCodeMissingPartialsFillAfter.html).to.equal('organisms-molecules, molecules-atoms');
     });
   });
 

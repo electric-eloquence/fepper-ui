@@ -423,7 +423,7 @@ export default class CodeViewer {
     }
 
     // Identify any missing partials.
-    if (missingPartials.length) {
+    if (missingPartials && missingPartials.length) {
       let missingPartialsList = '';
 
       for (let i = 0; i < missingPartials.length; i++) {

@@ -40,10 +40,13 @@ export default class FepperUi {
     };
 
     // Also DEPRECATED:
-    const deprecationMessage = document.getElementById('deprecation-message-0.40.0');
+    /* istanbul ignore if */
+    if (typeof window === 'object') {
+      const deprecationMessage = document.getElementById('deprecation-message-0.40.0');
 
-    if (deprecationMessage && deprecationMessage.remove) {
-      deprecationMessage.remove();
+      if (deprecationMessage && deprecationMessage.remove) {
+        deprecationMessage.remove();
+      }
     }
   }
 }
