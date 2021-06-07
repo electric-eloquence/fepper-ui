@@ -51,7 +51,7 @@ export default class CodeViewer {
       if (data.codeOverlay === 'on') {
         this.viewall = data.viewall || false;
 
-        this.updateCode(data.lineage, data.lineageR, data.patternPartial, data.patternState);
+        this.updateCode(data.lineage, data.lineageR, data.patternPartial, data.patternState, data.missingPartials);
         this.activateTabAndPanel(this.tabActive);
 
         if (data.openCode && !this.codeActive) {
@@ -285,7 +285,7 @@ export default class CodeViewer {
         // DEPRECATED: Here for backward-compatibility. Will be removed.
         else {
           this.$orgs['#sg-code-fill']
-            .dispatchAction('text', 'Update Fepper UI to make this work correctly.')
+            .dispatchAction('text', 'Update Fepper NPM to make this work correctly.')
             .dispatchAction('css', {color: 'red'});
         }
 
@@ -371,8 +371,9 @@ export default class CodeViewer {
    * @param {array} lineageR - Reverse lineage array.
    * @param {string} patternPartial - The shorthand partials syntax for a given pattern.
    * @param {string} patternState - inprogress, inreview, complete
+   * @param {array} missingPartials - Array of missing partials.
    */
-  updateCode(lineage, lineageR, patternPartial, patternState) {
+  updateCode(lineage, lineageR, patternPartial, patternState, missingPartials) {
     this.patternPartial = patternPartial;
 
     // Draw lineage.
@@ -419,6 +420,22 @@ export default class CodeViewer {
     }
     else {
       this.$orgs['#sg-code-lineager'].dispatchAction('css', {display: 'none'});
+    }
+
+    // Identify any missing partials.
+    if (missingPartials.length) {
+      let missingPartialsList = '';
+
+      for (let i = 0; i < missingPartials.length; i++) {
+        missingPartialsList += (i === 0) ? '' : ', ';
+        missingPartialsList += missingPartials[i];
+      }
+
+      this.$orgs['#sg-code-missing-partials'].dispatchAction('css', {display: 'block'});
+      this.$orgs['#sg-code-missing-partials-fill'].dispatchAction('html', missingPartialsList);
+    }
+    else {
+      this.$orgs['#sg-code-missing-partials'].dispatchAction('css', {display: 'none'});
     }
 
     // When clicking on a lineage item update the iframe.

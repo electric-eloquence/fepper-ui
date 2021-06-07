@@ -61,12 +61,10 @@
       // Get and post data for selected pattern.
       if (data.codeToggle === 'on') {
         const sgPatterns = d.querySelectorAll('.sg-pattern');
-        let obj;
+        let patternData;
 
         // Viewall.
         if (viewall) {
-          let patternData;
-
           sgPatterns.forEach((el) => {
             const sgPatternToggle = el.querySelector('.sg-pattern-toggle-code');
 
@@ -100,22 +98,16 @@
             }
           }
 
-          if (patternData) {
-            obj = {
-              codeOverlay: 'on',
-              lineage: patternData.lineage,
-              lineageR: patternData.lineageR,
-              patternPartial: patternData.patternPartial,
-              patternState: patternData.patternState,
-              viewall: true
-            };
+          if (!patternData) {
+            patternData = {};
           }
+
+          patternData.viewall = true;
         }
 
         // Pattern.
         else {
           const patternDataEl = d.querySelector('.sg-pattern-data');
-          let patternData = {};
 
           if (patternDataEl) {
             try {
@@ -126,18 +118,14 @@
             }
           }
 
-          obj = {
-            codeOverlay: 'on',
-            lineage: patternData.lineage,
-            lineageR: patternData.lineageR,
-            patternPartial: patternData.patternPartial,
-            patternState: patternData.patternState
-          };
+          if (!patternData) {
+            patternData = {};
+          }
         }
 
-        if (obj) {
-          parent.postMessage(obj, targetOrigin);
-        }
+        patternData.codeOverlay = 'on';
+
+        parent.postMessage(patternData, targetOrigin);
       }
 
       // data.codeToggle off.

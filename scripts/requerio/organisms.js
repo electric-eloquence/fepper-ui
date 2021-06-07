@@ -21,6 +21,8 @@ export default {
   '#sg-code-lineage-fill': null,
   '#sg-code-lineager': null,
   '#sg-code-lineager-fill': null,
+  '#sg-code-missing-partials': null,
+  '#sg-code-missing-partials-fill': null,
   '#sg-code-pane-markdown': null,
   '#sg-code-pane-markdown-edit': null,
   '#sg-code-pane-no-markdown': null,
