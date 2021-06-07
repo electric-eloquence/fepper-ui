@@ -65,7 +65,6 @@ export default class ViewerHandler {
 
     this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-open');
 
-
     // DEPRECATED: Here for backward-compatibility. Will be removed.
     /* istanbul ignore if */
     if (!this.$orgs['#sg-view-container'].length) {

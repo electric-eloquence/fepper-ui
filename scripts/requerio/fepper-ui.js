@@ -38,5 +38,12 @@ export default class FepperUi {
       goRandom: this.patternViewport.goRandom.bind(this.patternViewport),
       goWhole: this.patternViewport.goWhole.bind(this.patternViewport)
     };
+
+    // Also DEPRECATED:
+    const deprecationMessage = document.getElementById('deprecation-message-0.40.0');
+
+    if (deprecationMessage && deprecationMessage.remove) {
+      deprecationMessage.remove();
+    }
   }
 }
