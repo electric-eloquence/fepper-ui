@@ -11,8 +11,8 @@ if (parent !== window && window.Mousetrap) {
     (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
 
   Mousetrap.bind('esc', () => {
-    const obj = {event: 'patternlab.keyPress', keyPress: 'esc'};
+    const messageObj = {event: 'patternlab.keyPress', keyPress: 'esc'};
 
-    parent.postMessage(obj, targetOrigin);
+    parent.postMessage(messageObj, targetOrigin);
   });
 }

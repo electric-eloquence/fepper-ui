@@ -15,12 +15,12 @@ function addLineageListeners($orgs, uiProps) {
     root.$('#sg-code-lineage-fill a, #sg-code-lineager-fill a').on('click', function (e) {
       e.preventDefault();
 
-      const obj = {
+      const messageObj = {
         event: 'patternlab.updatePath',
         path: root.$(this).attr('href')
       };
 
-      $orgs['#sg-viewport'][0].contentWindow.postMessage(obj, uiProps.targetOrigin);
+      $orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, uiProps.targetOrigin);
     });
   }
 }
@@ -39,12 +39,9 @@ export default class CodeViewer {
       return;
     }
 
-    if (data.viewall) {
+    if (data.viewall === true) {
       // This is necessary so the Markdown "Edit" button isn't displayed.
       this.$orgs['#patternlab-body'].dispatchAction('addClass', 'viewall');
-    }
-    else {
-      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'viewall');
     }
 
     if (data.codeOverlay) { // This condition must come first.
@@ -196,14 +193,6 @@ export default class CodeViewer {
         break;
       }
       case 'markdown': {
-        // TODO: Viewall behavior:
-        //       To replicate:
-        //         1. Open compounds-text viewall
-        //         2. Activate markdown tab and panel
-        //         3. Click code button for footer
-        //
-        //       While clicking code buttons on viewall, update markdown panel.
-        //       Try editing while on viewall.
         this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-active');
         this.$orgs['#sg-code-panel-markdown'].dispatchAction('addClass', 'sg-code-panel-active');
 
@@ -230,26 +219,26 @@ export default class CodeViewer {
 
   closeCode() {
     // Tell the pattern that code viewer has been turned off.
-    const obj = {codeToggle: 'off'};
+    const messageObj = {codeToggle: 'off'};
     // Flag that viewer is inactive.
     this.codeActive = false;
 
     this.viewerHandler.closeViewer();
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, this.uiProps.targetOrigin);
+    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
     this.$orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
     this.$orgs['#sg-code-container'].dispatchAction('removeClass', 'active');
   }
 
   openCode() {
     // Tell the pattern that code viewer has been turned on.
-    const objCodeToggle = {codeToggle: 'on'};
+    const messageObj = {codeToggle: 'on'};
     // Flag that viewer is active.
     this.codeActive = true;
 
     // Make sure the annotations viewer is off before showing code.
     this.annotationsViewer.closeAnnotations();
     this.viewerHandler.openViewer();
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(objCodeToggle, this.uiProps.targetOrigin);
+    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
     this.$orgs['#sg-t-code'].dispatchAction('addClass', 'active');
     this.$orgs['#sg-code-container'].dispatchAction('addClass', 'active');
   }

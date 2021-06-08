@@ -46,12 +46,12 @@ export default class PatternFinder {
     this.$orgs = fepperUi.requerio.$orgs;
 
     for (const patternPartial of Object.keys(this.uiData.patternPaths)) {
-      const obj = {
+      const patternData = {
         patternPartial,
         patternPath: this.uiData.patternPaths[patternPartial]
       };
 
-      this.data.push(obj);
+      this.data.push(patternData);
     }
 
     // Instantiate the bloodhound suggestion engine.
@@ -104,14 +104,14 @@ export default class PatternFinder {
   }
 
   passPath(item) {
-    const obj = {
+    const messageObj = {
       event: 'patternlab.updatePath',
       path: item.patternPath
     };
 
     // Update the iframe via the history api handler.
     this.closeFinder();
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, this.uiProps.targetOrigin);
+    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
   }
 
   toggleFinder() {

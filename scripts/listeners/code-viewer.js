@@ -5,9 +5,23 @@ export default class CodeViewer {
     this.#fepperUi = fepperUi;
 
     this.$orgs = fepperUi.requerio.$orgs;
+    this.patternPartial = null;
+  }
+
+  // Getters for fepperUi instance props in case they are undefined at instantiation.
+
+  get uiData() {
+    return this.#fepperUi.uiData;
+  }
+
+  get urlHandler() {
+    return this.#fepperUi.urlHandler;
   }
 
   listen() {
+    const searchParams = this.urlHandler.getSearchParams();
+    this.patternPartial = searchParams.p;
+
     // e2e test this by triggering the pattern to postMessage to be received here.
     window.addEventListener('message', this.#fepperUi.codeViewer.receiveIframeMessage);
 
@@ -20,6 +34,10 @@ export default class CodeViewer {
 
       this.$orgs['#sg-code-tab-markdown'].on('click', () => {
         this.#fepperUi.codeViewer.activateTabAndPanel('markdown');
+      });
+
+      this.$orgs['#sg-code-tab-git'].on('click', () => {
+        this.#fepperUi.codeViewer.activateTabAndPanel('git');
       });
 
       // Select and copy the relative path to the pattern.
@@ -65,7 +83,7 @@ export default class CodeViewer {
       this.$orgs['#sg-code-btn-markdown-save'].on('click', () => {
         const markdownTextareaState = this.$orgs['#sg-code-textarea-markdown'].getState();
         const body = 'markdown_edited=' + encodeURIComponent(markdownTextareaState.val) + '&rel_path=' +
-          encodeURIComponent(this.uiData.sourceFiles[this.codeViewer.patternPartial]);
+          encodeURIComponent(this.uiData.sourceFiles[this.patternPartial]);
         const codeViewer = this;
 
         const xhr = new window.XMLHttpRequest();

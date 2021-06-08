@@ -25,14 +25,14 @@
   // Only process this block to postMessage if there are patternData in the footer, i.e. not a viewall.
   if (patternData) {
     // Notify the UI what pattern this is so it updates itself appropriately.
-    const obj = {event: 'patternlab.pageLoad'};
-    obj.patternPartial = patternData.patternPartial;
+    const messageObj = {event: 'patternlab.pageLoad'};
+    messageObj.patternPartial = patternData.patternPartial;
 
     if (patternData.lineage) {
-      obj.lineage = patternData.lineage;
+      messageObj.lineage = patternData.lineage;
     }
 
-    parent.postMessage(obj, targetOrigin);
+    parent.postMessage(messageObj, targetOrigin);
   }
 
   /* BEGIN FUNCTION DECLARATIONS. */
@@ -118,8 +118,8 @@
 
   for (const key of keysAlt) {
     Mousetrap.bind('ctrl+alt+' + key, (e) => {
-      const obj = {event: 'patternlab.keyPress', keyPress: 'ctrl+alt+' + key};
-      parent.postMessage(obj, targetOrigin);
+      const messageObj = {event: 'patternlab.keyPress', keyPress: 'ctrl+alt+' + key};
+      parent.postMessage(messageObj, targetOrigin);
 
       e.preventDefault();
       return false;
@@ -139,8 +139,8 @@
 
   for (const key of keysShift) {
     Mousetrap.bind('ctrl+shift+' + key, (e) => {
-      const obj = {event: 'patternlab.keyPress', keyPress: 'ctrl+shift+' + key};
-      parent.postMessage(obj, targetOrigin);
+      const messageObj = {event: 'patternlab.keyPress', keyPress: 'ctrl+shift+' + key};
+      parent.postMessage(messageObj, targetOrigin);
 
       e.preventDefault();
       return false;

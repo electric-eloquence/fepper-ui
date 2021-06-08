@@ -61,9 +61,9 @@
                     e.stopPropagation();
 
                     // If an element was clicked while the overlay was already on, swap it.
-                    const obj = {annotationNumber: annotation_.displayNumber};
+                    const messageObj = {annotationNumber: annotation_.displayNumber};
 
-                    parent.postMessage(obj, targetOrigin);
+                    parent.postMessage(messageObj, targetOrigin);
                   }
                 };
               })(annotation)
@@ -224,14 +224,14 @@
 
         activateAnnotationTips();
 
-        const obj = {
+        const messageObj = {
           annotationsOverlay: 'on',
           annotations: annotations,
           patternPartial,
           viewall
         };
 
-        parent.postMessage(obj, targetOrigin);
+        parent.postMessage(messageObj, targetOrigin);
       }
 
       // data.annotationsToggle off.
@@ -294,13 +294,13 @@
           }
         }
 
-        const obj = {
+        const messageObj = {
           annotationsOverlay: 'on',
           annotations: annotations,
           viewall
         };
 
-        parent.postMessage(obj, targetOrigin);
+        parent.postMessage(messageObj, targetOrigin);
       },
       200
     );
@@ -346,9 +346,9 @@
 
   // Toggle the annotations panel with keyboard shortcut.
   Mousetrap.bind('ctrl+shift+a', (e) => {
-    const obj = {event: 'patternlab.keyPress', keyPress: 'ctrl+shift+a'};
+    const messageObj = {event: 'patternlab.keyPress', keyPress: 'ctrl+shift+a'};
 
-    parent.postMessage(obj, targetOrigin);
+    parent.postMessage(messageObj, targetOrigin);
 
     e.preventDefault();
     return false;

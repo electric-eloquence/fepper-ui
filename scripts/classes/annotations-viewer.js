@@ -118,11 +118,11 @@ export default class AnnotationsViewer {
   }
 
   closeAnnotations() {
-    const obj = {annotationsToggle: 'off'};
+    const messageObj = {annotationsToggle: 'off'};
     this.annotationsActive = false;
 
     this.viewerHandler.closeViewer();
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, this.uiProps.targetOrigin);
+    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
     this.$orgs['#sg-t-annotations'].dispatchAction('removeClass', 'active');
     this.$orgs['#sg-annotations-container'].dispatchAction('removeClass', 'active');
   }
@@ -146,14 +146,14 @@ export default class AnnotationsViewer {
 
   openAnnotations() {
     // Tell the pattern that annotations viewer has been turned on.
-    const objAnnotationsToggle = {annotationsToggle: 'on'};
+    const messageObj = {annotationsToggle: 'on'};
     // Flag that viewer is active.
     this.annotationsActive = true;
 
     // Make sure the code viewer is off before showing annotations.
     this.codeViewer.closeCode();
     this.viewerHandler.openViewer();
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(objAnnotationsToggle, this.uiProps.targetOrigin);
+    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
     this.$orgs['#sg-t-annotations'].dispatchAction('addClass', 'active');
     this.$orgs['#sg-annotations-container'].dispatchAction('addClass', 'active');
 
