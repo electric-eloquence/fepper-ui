@@ -14,7 +14,7 @@ export default class UrlHandler {
     this.#fepperUi = fepperUi;
     this.#root = root;
     this.#searchParams = null;
-    this.#searchString = '';
+    this.#searchString = null;
 
     this.$orgs = fepperUi.requerio.$orgs;
     this.skipBack = false;

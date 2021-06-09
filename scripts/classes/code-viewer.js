@@ -181,21 +181,13 @@ export default class CodeViewer {
     this.tabActive = type;
 
     this.$orgs['.sg-code-tab'].dispatchAction('removeClass', 'sg-code-tab-active');
+    this.$orgs['#sg-code-tab-' + type].dispatchAction('addClass', 'sg-code-tab-active');
     this.$orgs['.sg-code-panel'].dispatchAction('removeClass', 'sg-code-panel-active');
+    this.$orgs['#sg-code-panel-' + type].dispatchAction('addClass', 'sg-code-panel-active');
     this.dataSaver.updateValue('tabActive', type);
 
     switch (type) {
-      case 'feplet': {
-        this.$orgs['#sg-code-tab-feplet'].dispatchAction('addClass', 'sg-code-tab-active');
-        this.$orgs['#sg-code-panel-feplet'].dispatchAction('addClass', 'sg-code-panel-active');
-        this.setPanelContent(type);
-
-        break;
-      }
       case 'markdown': {
-        this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-active');
-        this.$orgs['#sg-code-panel-markdown'].dispatchAction('addClass', 'sg-code-panel-active');
-
         const panelMarkdown = this.$orgs['#sg-code-panel-markdown'].getState().html;
 
         if (!panelMarkdown) {
@@ -206,11 +198,10 @@ export default class CodeViewer {
       }
       /* istanbul ignore next */
       case 'requerio': {
-
         break;
       }
-      /* istanbul ignore next */
-      case 'git': {
+      default: {
+        this.setPanelContent(type);
 
         break;
       }
@@ -312,6 +303,38 @@ export default class CodeViewer {
 
         xhr.open('GET', mdPath + '?' + Date.now());
         xhr.send();
+
+        break;
+      }
+      case 'git': {
+        fetch(
+          '/git-api', {
+            method: 'POST',
+            body: new URLSearchParams('args[0]=--version')
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              return response.text();
+            }
+            else {
+              reject();
+            }
+          })
+          .then((text) => {
+            if (text.startsWith('git version')) {
+              this.$orgs['#sg-code-panel-git'].dispatchAction('text', text);
+            }
+            else {
+              reject();
+            }
+          })
+          .catch((err) => {
+            if (err) {
+              console.error(err);
+            }
+
+            this.$orgs['#sg-code-panel-git'].dispatchAction('text', 'Git has not been set up for this project');
+          });
 
         break;
       }
