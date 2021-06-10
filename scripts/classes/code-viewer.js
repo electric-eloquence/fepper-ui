@@ -50,7 +50,7 @@ export default class CodeViewer {
 
         this.updateCode(data.lineage, data.lineageR, data.patternPartial, data.patternState, data.missingPartials);
 
-        if (data.openCode && !this.codeActive) {
+        if (!this.codeActive) {
           this.openCode();
         }
       }
@@ -148,10 +148,9 @@ export default class CodeViewer {
     const searchParams = this.urlHandler.getSearchParams();
     const tabActive = this.dataSaver.findValue('tabActive');
     this.tabActive = tabActive || this.tabActive;
-    this.patternPartial = searchParams.p;
+    this.patternPartial = searchParams.p || this.uiData.config.defaultPattern;
 
     if (searchParams.view === 'code' || searchParams.view === 'c' || this.uiData.config.defaultShowPatternInfo) {
-      this.activateTabAndPanel(this.tabActive);
       this.openCode();
     }
 
@@ -232,7 +231,7 @@ export default class CodeViewer {
   /**
    * When loading the code view, make sure the active tab is highlighted and filled in appropriately.
    *
-   * @param {string} type - Single letter that refers to classes and types.
+   * @param {string} type - The panel to activate.
    */
   activateTabAndPanel(type) {
     this.tabActive = type;
@@ -288,13 +287,10 @@ export default class CodeViewer {
   }
 
   closeCode() {
-    // Tell the pattern that code viewer has been turned off.
-    const messageObj = {codeToggle: 'off'};
     // Flag that viewer is inactive.
     this.codeActive = false;
 
     this.viewerHandler.closeViewer();
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
     this.$orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
     this.$orgs['#sg-code-container'].dispatchAction('removeClass', 'active');
   }
@@ -305,15 +301,13 @@ export default class CodeViewer {
   }
 
   openCode() {
-    // Tell the pattern that code viewer has been turned on.
-    const messageObj = {codeToggle: 'on'};
     // Flag that viewer is active.
     this.codeActive = true;
 
     // Make sure the annotations viewer is off before showing code.
     this.annotationsViewer.closeAnnotations();
+    this.activateTabAndPanel(this.tabActive);
     this.viewerHandler.openViewer();
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
     this.$orgs['#sg-t-code'].dispatchAction('addClass', 'active');
     this.$orgs['#sg-code-container'].dispatchAction('addClass', 'active');
   }
@@ -330,13 +324,19 @@ export default class CodeViewer {
     this.$orgs['#sg-viewport'][0].contentWindow.postMessage({codeScrollViewall: true}, this.uiProps.targetOrigin);
   }
 
-  setPanelContent(type) {
+  /**
+   * Set the content for the activated panel.
+   *
+   * @param {string} type - The panel to activate.
+   * @param {[string]} patternPartial - Single letter that refers to classes and types.
+   */
+  setPanelContent(type, patternPartial) {
     switch (type) {
       case 'feplet': {
         /* istanbul ignore else */
         if (this.$orgs['#sg-code-panel-feplet'].length) {
           this.$orgs['#sg-code-panel-feplet'][0]
-            .contentWindow.location.replace(`/mustache-browser?partial=${this.patternPartial}`);
+            .contentWindow.location.replace(`/mustache-browser?partial=${patternPartial || this.patternPartial}`);
           this.$orgs['#sg-code-panel-feplet'][0]
             .addEventListener('load', () => {
               const height = this.$orgs['#sg-code-panel-feplet'][0].contentWindow.document.documentElement.offsetHeight;
@@ -511,5 +511,7 @@ export default class CodeViewer {
     this.#root.$('#sg-code-pattern-info-rel-path').html(this.uiData.sourceFiles[patternPartial]);
     this.#root.$('#sg-code-pattern-info-pattern-name').html(`<strong>${patternPartial}</strong> at`);
     this.#root.$('#sg-code-lineage-pattern-name, #sg-code-lineager-pattern-name').html(patternPartial);
+
+    this.setPanelContent('feplet', patternPartial);
   }
 }

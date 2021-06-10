@@ -105,34 +105,12 @@
           patternData.viewall = true;
         }
 
-        // Pattern.
-        else {
-          const patternDataEl = d.querySelector('.sg-pattern-data');
-
-          if (patternDataEl) {
-            try {
-              patternData = JSON.parse(patternDataEl.innerHTML);
-            }
-            catch (err) {
-              // Fail gracefully.
-            }
-          }
-
-          if (!patternData) {
-            patternData = {};
-          }
-        }
-
         patternData.codeOverlay = 'on';
 
         parent.postMessage(patternData, targetOrigin);
       }
-
-      // data.codeToggle off.
       else {
-        sgPatternToggleCode.forEach((el) => {
-          el.classList.remove('active');
-        });
+        parent.postMessage({codeOverlay: 'off'}, targetOrigin);
       }
     }
     else if (data.codeScrollViewall) {
@@ -180,7 +158,6 @@
         }
 
         patternData.codeOverlay = 'on';
-        patternData.openCode = true;
         patternData.viewall = true;
 
         parent.postMessage(patternData, targetOrigin);

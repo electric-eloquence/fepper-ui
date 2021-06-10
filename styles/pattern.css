@@ -88,13 +88,9 @@
 }
 .sg-pattern-info-toggle:hover,
 .sg-pattern-info-toggle:focus,
-.sg-pattern-info-toggle.active,
 .sg-pattern-info-toggle.focused {
   background: #eee;
   color: #000;
-}
-.sg-pattern-info-toggle.active {
-  border-bottom-color: #eee;
 }
 
 .sg-pattern-toggle-annotations {
