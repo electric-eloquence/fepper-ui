@@ -42,10 +42,18 @@ export default class CodeViewer {
 
       this.$orgs['#sg-code-input-git-off'].on('change', () => {
         this.$orgs['#sg-code-pane-git'].toggleClass('git-integration-on');
+
+        if (this.#fepperUi.dataSaver.findValue('gitIntegration') === 'true') {
+          this.#fepperUi.dataSaver.updateValue('gitIntegration', 'false');
+        }
       });
 
       this.$orgs['#sg-code-input-git-on'].on('change', () => {
         this.$orgs['#sg-code-pane-git'].toggleClass('git-integration-on');
+
+        if (this.#fepperUi.dataSaver.findValue('gitIntegration') === 'false') {
+          this.#fepperUi.dataSaver.updateValue('gitIntegration', 'true');
+        }
       });
 
       // Select and copy the relative path to the pattern.

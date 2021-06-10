@@ -179,17 +179,11 @@
           // Fail gracefully.
         }
 
-        const obj = {
-          codeOverlay: 'on',
-          lineage: patternData.lineage,
-          lineageR: patternData.lineageR,
-          openCode: true,
-          patternPartial: patternData.patternPartial,
-          patternState: patternData.patternState,
-          viewall: true
-        };
+        patternData.codeOverlay = 'on';
+        patternData.openCode = true;
+        patternData.viewall = true;
 
-        parent.postMessage(obj, targetOrigin);
+        parent.postMessage(patternData, targetOrigin);
 
         scrollViewall();
       }

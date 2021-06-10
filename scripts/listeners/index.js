@@ -65,6 +65,7 @@ export default class Listeners {
 
       if (this.#fepperUi.uiProps.dockPosition === 'left' || this.#fepperUi.uiProps.dockPosition === 'right') {
         this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
+        this.#fepperUi.codeViewer.activateTabAndPanel(this.#fepperUi.codeViewer.tabActive);
         this.#fepperUi.codeViewer.openCode();
       }
 

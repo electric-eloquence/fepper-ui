@@ -100,7 +100,7 @@ export default class DataSaver {
    * Find the value using the given key.
    *
    * @param {string} name - The name of the key.
-   * @returns {string} The value of the key or empty string if the value isn't found.
+   * @returns {string|null} The value of the key or null if the value isn't found.
    */
   findValue(name) {
     const cookieVal = this.cookies.get(this.cookieName) || '';
@@ -114,6 +114,6 @@ export default class DataSaver {
       }
     }
 
-    return '';
+    return null;
   }
 }

@@ -49,7 +49,6 @@ export default class CodeViewer {
         this.viewall = data.viewall || false;
 
         this.updateCode(data.lineage, data.lineageR, data.patternPartial, data.patternState, data.missingPartials);
-        this.activateTabAndPanel(this.tabActive);
 
         if (data.openCode && !this.codeActive) {
           this.openCode();
@@ -151,11 +150,8 @@ export default class CodeViewer {
     this.tabActive = tabActive || this.tabActive;
     this.patternPartial = searchParams.p;
 
-    if (searchParams.view === 'code' || searchParams.view === 'c') {
-      this.openCode();
-    }
-    // Open code panel on page load if config.defaultShowPatternInfo === true.
-    else if (this.uiData.config.defaultShowPatternInfo) {
+    if (searchParams.view === 'code' || searchParams.view === 'c' || this.uiData.config.defaultShowPatternInfo) {
+      this.activateTabAndPanel(this.tabActive);
       this.openCode();
     }
 
@@ -166,12 +162,15 @@ export default class CodeViewer {
         body: new URLSearchParams('args[0]=--version')
       })
       .then((response) => {
-        if (response.status === 200) {
-          return response.text();
-        }
-        else {
-          return Promise.reject();
-        }
+        return new Promise(
+          (resolve, reject) => {
+            if (response.status === 200) {
+              resolve();
+            }
+            else {
+              reject();
+            }
+          });
       })
       .then(() => {
         return fetch(
@@ -181,37 +180,38 @@ export default class CodeViewer {
           });
       })
       .then((response) => {
-        if (response.status === 200) {
-          return response.text();
-        }
-        else {
-          return Promise.reject();
-        }
+        return new Promise(
+          (resolve, reject) => {
+            if (response.status === 200) {
+              resolve();
+            }
+            else {
+              reject();
+            }
+          });
       })
       .then(() => {
         this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: ''});
         this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: 'block'});
 
-        let gitIntegrationOn;
-
         if (
           this.#fepperUi.dataSaver.findValue('gitIntegration') === 'true' ||
           this.uiData.config.gitIntegration
         ) {
-          gitIntegrationOn = true;
-        }
-
-        if (gitIntegrationOn) {
           this.$orgs['#sg-code-pane-git'].dispatchAction('addClass', 'git-integration-on');
           this.$orgs['#sg-code-input-git-on'].dispatchAction('prop', {checked: true});
         }
 
-        if (this.uiData.config.gitIntegration) {
+        if (
+          this.#fepperUi.dataSaver.findValue('gitIntegration') === null &&
+          this.uiData.config.gitIntegration
+        ) {
           this.#fepperUi.dataSaver.updateValue('gitIntegration', 'true');
         }
       })
       .catch((err) => {
         if (err) {
+          // eslint-disable-next-line no-console
           console.error(err);
         }
       });
@@ -247,14 +247,36 @@ export default class CodeViewer {
       case 'markdown': {
         const panelMarkdown = this.$orgs['#sg-code-panel-markdown'].getState().html;
 
+        // On first load of the Markdown panel, git pull.
         if (!panelMarkdown) {
+          if (this.#fepperUi.dataSaver.findValue('gitIntegration') === 'true') {
+            fetch(
+              'git-api', {
+                method: 'POST',
+                body: new URLSearchParams('args[0]=pull')
+              })
+              .then((response) => {
+                return new Promise(
+                  (resolve, reject) => {
+                    if (response.status === 200) {
+                      resolve();
+                    }
+                    else {
+                      reject();
+                    }
+                  });
+              })
+              .catch((err) => {
+                if (err) {
+                  // eslint-disable-next-line no-console
+                  console.error(err);
+                }
+              });
+          }
+
           this.setPanelContent(type);
         }
 
-        break;
-      }
-      /* istanbul ignore next */
-      case 'requerio': {
         break;
       }
       default: {
@@ -301,8 +323,6 @@ export default class CodeViewer {
 
     this.unsetPanelContent('feplet');
     this.unsetPanelContent('markdown');
-    this.unsetPanelContent('requerio');
-    this.unsetPanelContent('git');
     this.setPanelContent(this.tabActive);
   }
 
@@ -364,12 +384,6 @@ export default class CodeViewer {
 
         break;
       }
-      case 'git': {
-        const config = this.uiData.config;
-console.warn(config.git_integration)
-
-        break;
-      }
     }
   }
 
@@ -401,9 +415,6 @@ console.warn(config.git_integration)
         }
 
         break;
-
-      default:
-        this.$orgs['#sg-code-panel-' + type].dispatchAction('html', '');
     }
   }
 
