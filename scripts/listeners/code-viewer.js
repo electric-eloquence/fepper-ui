@@ -40,6 +40,14 @@ export default class CodeViewer {
         this.#fepperUi.codeViewer.activateTabAndPanel('git');
       });
 
+      this.$orgs['#sg-code-input-git-off'].on('change', () => {
+        this.$orgs['#sg-code-pane-git'].toggleClass('git-integration-on');
+      });
+
+      this.$orgs['#sg-code-input-git-on'].on('change', () => {
+        this.$orgs['#sg-code-pane-git'].toggleClass('git-integration-on');
+      });
+
       // Select and copy the relative path to the pattern.
       this.$orgs['#sg-code-pattern-info-rel-path'].on('click', () => {
         let selection;
@@ -111,8 +119,11 @@ export default class CodeViewer {
         };
 
         xhr.open('POST', '/markdown-editor');
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        xhr.send(body);
+        xhr.send(new URLSearchParams(body));
+      });
+
+      this.$orgs['#sg-code-btn-markdown-cancel'].on('click', () => {
+        this.#fepperUi.codeViewer.deActivateMarkdownTextarea();
       });
     });
 

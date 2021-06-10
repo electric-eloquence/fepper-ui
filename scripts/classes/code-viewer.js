@@ -158,6 +158,63 @@ export default class CodeViewer {
     else if (this.uiData.config.defaultShowPatternInfo) {
       this.openCode();
     }
+
+    // Determine if the project has been set up with Git.
+    fetch(
+      'git-api', {
+        method: 'POST',
+        body: new URLSearchParams('args[0]=--version')
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.text();
+        }
+        else {
+          return Promise.reject();
+        }
+      })
+      .then(() => {
+        return fetch(
+          'git-api', {
+            method: 'POST',
+            body: new URLSearchParams('args[0]=remote')
+          });
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.text();
+        }
+        else {
+          return Promise.reject();
+        }
+      })
+      .then(() => {
+        this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: ''});
+        this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: 'block'});
+
+        let gitIntegrationOn;
+
+        if (
+          this.#fepperUi.dataSaver.findValue('gitIntegration') === 'true' ||
+          this.uiData.config.gitIntegration
+        ) {
+          gitIntegrationOn = true;
+        }
+
+        if (gitIntegrationOn) {
+          this.$orgs['#sg-code-pane-git'].dispatchAction('addClass', 'git-integration-on');
+          this.$orgs['#sg-code-input-git-on'].dispatchAction('prop', {checked: true});
+        }
+
+        if (this.uiData.config.gitIntegration) {
+          this.#fepperUi.dataSaver.updateValue('gitIntegration', 'true');
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
   }
 
   activateMarkdownTextarea() {
@@ -218,6 +275,11 @@ export default class CodeViewer {
     this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
     this.$orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
     this.$orgs['#sg-code-container'].dispatchAction('removeClass', 'active');
+  }
+
+  deActivateMarkdownTextarea() {
+    this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+    this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
   }
 
   openCode() {
@@ -282,17 +344,13 @@ export default class CodeViewer {
           if (this.status === 200) {
             const markdownTextareaState = codeViewer.$orgs['#sg-code-textarea-markdown'].getState();
 
-            codeViewer.$orgs['#sg-code-pane-no-markdown'].dispatchAction('css', {display: ''});
+            codeViewer.$orgs['#sg-code-pane-markdown-na'].dispatchAction('css', {display: ''});
             codeViewer.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', this.responseText);
             codeViewer.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
 
             if (!markdownTextareaState.html) {
               codeViewer.$orgs['#sg-code-textarea-markdown'].dispatchAction('html', this.responseText);
             }
-          }
-          else {
-            codeViewer.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
-            codeViewer.$orgs['#sg-code-pane-no-markdown'].dispatchAction('css', {display: 'block'});
           }
         };
         /* istanbul ignore next */
@@ -307,34 +365,8 @@ export default class CodeViewer {
         break;
       }
       case 'git': {
-        fetch(
-          '/git-api', {
-            method: 'POST',
-            body: new URLSearchParams('args[0]=--version')
-          })
-          .then((response) => {
-            if (response.status === 200) {
-              return response.text();
-            }
-            else {
-              reject();
-            }
-          })
-          .then((text) => {
-            if (text.startsWith('git version')) {
-              this.$orgs['#sg-code-panel-git'].dispatchAction('text', text);
-            }
-            else {
-              reject();
-            }
-          })
-          .catch((err) => {
-            if (err) {
-              console.error(err);
-            }
-
-            this.$orgs['#sg-code-panel-git'].dispatchAction('text', 'Git has not been set up for this project');
-          });
+        const config = this.uiData.config;
+console.warn(config.git_integration)
 
         break;
       }
