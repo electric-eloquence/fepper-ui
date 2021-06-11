@@ -25,12 +25,10 @@
   // Only process this block to postMessage if there are patternData in the footer, i.e. not a viewall.
   if (patternData) {
     // Notify the UI what pattern this is so it updates itself appropriately.
-    const messageObj = {event: 'patternlab.pageLoad'};
-    messageObj.patternPartial = patternData.patternPartial;
-
-    if (patternData.lineage) {
-      messageObj.lineage = patternData.lineage;
-    }
+    const messageObj = {
+      event: 'patternlab.pageLoad',
+      patternPartial: patternData.patternPartial
+    };
 
     parent.postMessage(messageObj, targetOrigin);
   }

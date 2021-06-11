@@ -21,21 +21,14 @@
   }
 
   function scrollViewall() {
-    const focusedEl = d.querySelector('.sg-pattern-toggle-code.focused');
+    let focusedEl = d.querySelector('.sg-pattern-toggle-code.focused');
 
-    if (focusedEl) {
-      focusedEl.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
+    if (!focusedEl) {
+      focusedEl = sgPatternFirst.querySelector('.sg-pattern-toggle-code');
+      focusedEl.classList.add('focused');
     }
-    else {
-      if (!sgPatternFirst) {
-        parent.postMessage({annotationsViewall: false, codeViewall: false, targetOrigin});
 
-        return;
-      }
-
-      sgPatternFirst.querySelector('.sg-pattern-toggle-code').classList.add('focused');
-      window.scrollTo({top: 0, behavior: 'smooth'});
-    }
+    focusedEl.scrollIntoView({behavior: 'smooth', block: 'start', inline: 'nearest'});
   }
 
   function receiveIframeMessage(event) {
@@ -56,64 +49,7 @@
       // Fail gracefully.
     }
 
-    if (data.codeToggle) {
-
-      // Get and post data for selected pattern.
-      if (data.codeToggle === 'on') {
-        const sgPatterns = d.querySelectorAll('.sg-pattern');
-        let patternData;
-
-        // Viewall.
-        if (viewall) {
-          sgPatterns.forEach((el) => {
-            const sgPatternToggle = el.querySelector('.sg-pattern-toggle-code');
-
-            if (!sgPatternToggle || !sgPatternToggle.classList.contains('focused')) {
-              return;
-            }
-
-            const patternDataEl = el.querySelector('.sg-pattern-data');
-
-            if (patternDataEl) {
-              try {
-                patternData = JSON.parse(patternDataEl.innerHTML);
-              }
-              catch (err) {
-                // Fail gracefully.
-              }
-            }
-          });
-
-          // If none of the toggles are focused, get the data from the first one.
-          if (!patternData && sgPatterns[0]) {
-            const patternDataEl = sgPatterns[0].querySelector('.sg-pattern-data');
-
-            if (patternDataEl) {
-              try {
-                patternData = JSON.parse(patternDataEl.innerHTML);
-              }
-              catch (err) {
-                // Fail gracefully.
-              }
-            }
-          }
-
-          if (!patternData) {
-            patternData = {};
-          }
-
-          patternData.viewall = true;
-        }
-
-        patternData.codeOverlay = 'on';
-
-        parent.postMessage(patternData, targetOrigin);
-      }
-      else {
-        parent.postMessage({codeOverlay: 'off'}, targetOrigin);
-      }
-    }
-    else if (data.codeScrollViewall) {
+    if (data.codeScrollViewall) {
       scrollViewall();
     }
   }
@@ -184,11 +120,79 @@
 
   for (const key of keys) {
     Mousetrap.bind('ctrl+' + key, (e) => {
-      const obj = {event: 'patternlab.keyPress', keyPress: 'ctrl+' + key};
-      parent.postMessage(obj, targetOrigin);
+      const messageObj = {event: 'patternlab.keyPress', keyPress: 'ctrl+' + key};
+      parent.postMessage(messageObj, targetOrigin);
 
       e.preventDefault();
       return false;
     });
   }
+
+  /* END LISTENERS. EXECUTE THE FOLLOWING ONLOAD */
+  /* INFORM THE PARENT OF THE VIEWALL/PATTERN INFO. */
+
+  const sgPatterns = d.querySelectorAll('.sg-pattern');
+  let patternData;
+
+  // Viewall.
+  if (viewall) {
+    sgPatterns.forEach((el) => {
+      const sgPatternToggle = el.querySelector('.sg-pattern-toggle-code');
+
+      if (!sgPatternToggle || !sgPatternToggle.classList.contains('focused')) {
+        return;
+      }
+
+      const patternDataEl = el.querySelector('.sg-pattern-data');
+
+      if (patternDataEl) {
+        try {
+          patternData = JSON.parse(patternDataEl.innerHTML);
+        }
+        catch (err) {
+          // Fail gracefully.
+        }
+      }
+    });
+
+    // If none of the toggles are focused, get the data from the first one.
+    if (!patternData && sgPatterns[0]) {
+      const patternDataEl = sgPatterns[0].querySelector('.sg-pattern-data');
+
+      if (patternDataEl) {
+        try {
+          patternData = JSON.parse(patternDataEl.innerHTML);
+        }
+        catch (err) {
+          // Fail gracefully.
+        }
+      }
+    }
+
+    if (!patternData) {
+      patternData = {};
+    }
+
+    patternData.viewall = true;
+  }
+
+  // Pattern.
+  else {
+    const patternDataEl = d.querySelector('.sg-pattern-data');
+
+    if (patternDataEl) {
+      try {
+        patternData = JSON.parse(patternDataEl.innerHTML);
+      }
+      catch (err) {
+        // Fail gracefully.
+      }
+    }
+
+    if (!patternData) {
+      patternData = {};
+    }
+  }
+
+  parent.postMessage(patternData, targetOrigin);
 })(document);

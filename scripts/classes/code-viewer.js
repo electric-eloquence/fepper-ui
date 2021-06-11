@@ -39,17 +39,8 @@ export default class CodeViewer {
       return;
     }
 
-    if (data.viewall === true) {
-      // This is necessary so the Markdown "Edit" button isn't displayed.
-      this.$orgs['#patternlab-body'].dispatchAction('addClass', 'viewall');
-    }
-
     if (data.codeOverlay) { // This condition must come first.
       if (data.codeOverlay === 'on') {
-        this.viewall = data.viewall || false;
-
-        this.updateCode(data.lineage, data.lineageR, data.patternPartial, data.patternState, data.missingPartials);
-
         if (!this.codeActive) {
           this.openCode();
         }
@@ -58,8 +49,16 @@ export default class CodeViewer {
         this.closeCode();
       }
     }
-    else if (typeof data.codeViewall === 'boolean') {
-      this.viewall = data.codeViewall;
+
+    if (data.lineage) {
+      this.updateCode(data.lineage, data.lineageR, data.patternPartial, data.patternState, data.missingPartials);
+    }
+
+    if (data.viewall === true) {
+      this.viewall = data.viewall;
+
+      // This is necessary so the Markdown "Edit" button isn't displayed.
+      this.$orgs['#patternlab-body'].dispatchAction('addClass', 'viewall');
     }
 
     switch (data.event) {

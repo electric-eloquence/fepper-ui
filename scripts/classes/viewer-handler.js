@@ -106,7 +106,9 @@ export default class ViewerHandler {
     }
 
     const dockPosition = this.uiProps.dockPosition = 'bottom';
+    this.uiProps.halfMode = false;
 
+    this.dataSaver.removeValue('halfMode');
     this.dataSaver.updateValue('dockPosition', dockPosition);
     this.$orgs['#patternlab-body']
       .dispatchAction('removeClass', 'dock-left dock-right')

@@ -57,15 +57,12 @@ export default class Listeners {
         // Set iframe width on halfMode === true.
         this.#fepperUi.uiFns
           .sizeIframe((this.#fepperUi.uiProps.sw / 2) - this.#fepperUi.uiProps.sgRightpullWidth, false, false, true);
+        // Open code viewer.
+        this.#fepperUi.codeViewer.openCode();
       }
       else if (vpWidth) {
         // .updateViewportWidth() also sizes the iframe, but with fewer bells and whistles.
         this.#fepperUi.uiFns.updateViewportWidth(Number(vpWidth));
-      }
-
-      if (this.#fepperUi.uiProps.dockPosition === 'left' || this.#fepperUi.uiProps.dockPosition === 'right') {
-        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
-        this.#fepperUi.codeViewer.openCode();
       }
 
       this.$orgs.window.on('resize', () => {

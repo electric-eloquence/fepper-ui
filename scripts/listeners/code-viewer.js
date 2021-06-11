@@ -139,20 +139,11 @@ export default class CodeViewer {
 
     // Toggle the code panel.
     Mousetrap.bind('ctrl+shift+c', (e) => {
+      this.#fepperUi.codeViewer.toggleCode();
+
       // If viewall, scroll to the focused pattern.
-
       if (this.#fepperUi.codeViewer.viewall) {
-        if (this.#fepperUi.codeViewer.codeActive) {
-          this.$orgs['#sg-viewport'][0].contentWindow.postMessage({codeToggle: 'off'});
-        }
-        else {
-          this.$orgs['#sg-viewport'][0].contentWindow.postMessage({codeToggle: 'on'});
-        }
-
         this.#fepperUi.codeViewer.scrollViewall();
-      }
-      else {
-        this.#fepperUi.codeViewer.toggleCode();
       }
 
       e.preventDefault();
