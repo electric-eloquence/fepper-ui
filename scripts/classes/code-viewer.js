@@ -55,7 +55,9 @@ export default class CodeViewer {
     }
 
     if (data.viewall === true) {
-      this.viewall = data.viewall;
+      this.uiProps.viewall = data.viewall;
+      this.viewall = data.viewall; // DEPRECATED.
+      this.annotationsViewer.viewall = data.viewall; // DEPRECATED.
 
       // This is necessary so the Markdown "Edit" button isn't displayed.
       this.$orgs['#patternlab-body'].dispatchAction('addClass', 'viewall');
@@ -66,12 +68,6 @@ export default class CodeViewer {
         switch (data.keyPress) {
           case 'ctrl+shift+c':
             this.toggleCode();
-
-            // If viewall, scroll to the focused pattern.
-            /* istanbul ignore if */
-            if (this.viewall && this.codeActive) {
-              this.scrollViewall();
-            }
 
             break;
 
@@ -106,7 +102,7 @@ export default class CodeViewer {
     this.patternPartial = null;
     this.requerio = fepperUi.requerio;
     this.tabActive = 'feplet';
-    this.viewall = false;
+    this.viewall = false; // DEPRECATED.
   }
 
   // Getters for fepperUi instance props in case they are undefined at instantiation.
@@ -309,6 +305,12 @@ export default class CodeViewer {
     this.viewerHandler.openViewer();
     this.$orgs['#sg-t-code'].dispatchAction('addClass', 'active');
     this.$orgs['#sg-code-container'].dispatchAction('addClass', 'active');
+
+    // If viewall, scroll to the focused pattern.
+    /* istanbul ignore if */
+    if (this.uiProps.viewall) {
+      this.scrollViewall();
+    }
   }
 
   resetPanels(patternPartial) {

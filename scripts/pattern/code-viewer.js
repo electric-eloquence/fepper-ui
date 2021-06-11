@@ -15,11 +15,6 @@
     (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
   const viewall = Boolean(sgPatternToggleCode.length);
 
-  // Before declaring and running anything else, postMessage to the UI.
-  if (viewall) {
-    parent.postMessage({codeViewall: viewall}, targetOrigin);
-  }
-
   function scrollViewall() {
     let focusedEl = d.querySelector('.sg-pattern-toggle-code.focused');
 
@@ -97,8 +92,6 @@
         patternData.viewall = true;
 
         parent.postMessage(patternData, targetOrigin);
-
-        scrollViewall();
       }
     });
   });

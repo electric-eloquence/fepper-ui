@@ -14,6 +14,10 @@ export default class CodeViewer {
     return this.#fepperUi.uiData;
   }
 
+  get uiProps() {
+    return this.#fepperUi.uiProps;
+  }
+
   get urlHandler() {
     return this.#fepperUi.urlHandler;
   }
@@ -140,11 +144,6 @@ export default class CodeViewer {
     // Toggle the code panel.
     Mousetrap.bind('ctrl+shift+c', (e) => {
       this.#fepperUi.codeViewer.toggleCode();
-
-      // If viewall, scroll to the focused pattern.
-      if (this.#fepperUi.codeViewer.viewall) {
-        this.#fepperUi.codeViewer.scrollViewall();
-      }
 
       e.preventDefault();
       return false;

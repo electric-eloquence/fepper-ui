@@ -18,8 +18,6 @@ export default class AnnotationsViewer {
 
     if (data.annotationsOverlay) { // This condition must come first.
       if (data.annotationsOverlay === 'on') {
-        this.viewall = data.viewall || false;
-
         // Update code.
         this.updateAnnotations(data.annotations, data.patternPartial);
       }
@@ -30,9 +28,6 @@ export default class AnnotationsViewer {
     else if (data.annotationNumber) {
       this.moveTo(data.annotationNumber);
     }
-    else if (typeof data.annotationsViewall === 'boolean') {
-      this.viewall = data.annotationsViewall;
-    }
     else if (data.annotationsViewallClick) {
       this.openAnnotations();
     }
@@ -41,13 +36,7 @@ export default class AnnotationsViewer {
       case 'patternlab.keyPress':
         switch (data.keyPress) {
           case 'ctrl+shift+a':
-            this.toggleAnnotations();
-
-            // If viewall, scroll to the focused pattern.
-            /* istanbul ignore if */
-            if (this.viewall && this.annotationsActive) {
-              this.scrollViewall();
-            }
+            this.toggleAnnotations(data.annotationsViewall);
 
             break;
 
@@ -76,7 +65,7 @@ export default class AnnotationsViewer {
     this.annotationsActive = false;
     this.moveToNumber = 0;
     this.$orgs = fepperUi.requerio.$orgs;
-    this.viewall = false;
+    this.viewall = false; // DEPRECATED.
   }
 
   /* GETTERS for fepperUi instance props in case they are undefined at instantiation. */
@@ -145,9 +134,9 @@ export default class AnnotationsViewer {
   }
 
   openAnnotations() {
-    // Tell the pattern that annotations viewer has been turned on.
+    // Tell the pattern that the annotations viewer has been turned on.
     const messageObj = {annotationsToggle: 'on'};
-    // Flag that viewer is active.
+    // Flag that the viewer is active.
     this.annotationsActive = true;
 
     // Make sure the code viewer is off before showing annotations.
@@ -160,13 +149,18 @@ export default class AnnotationsViewer {
     if (this.moveToNumber !== 0) {
       this.moveTo(this.moveToNumber);
 
-      // Only unset this.moveToNumber if annotations html has been loaded.
+      // Only unset this.moveToNumber if the annotations html has been loaded.
       if (this.$orgs['#sg-annotations'].getState().html) {
         this.moveToNumber = 0;
       }
     }
-  }
 
+    // If viewall, scroll to the focused pattern.
+    /* istanbul ignore if */
+    if (this.uiProps.viewall) {
+      this.scrollViewall();
+    }
+  }
 
   scrollViewall() /* istanbul ignore next */ {
     this.$orgs['#sg-viewport'][0].contentWindow

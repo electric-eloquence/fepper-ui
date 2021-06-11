@@ -15,11 +15,6 @@
     (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
   const viewall = Boolean(sgPatternToggleAnnotations.length);
 
-  // Before declaring and running anything else, postMessage to the UI.
-  if (viewall) {
-    parent.postMessage({annotationsViewall: viewall}, targetOrigin);
-  }
-
   let annotations = [];
   let annotationsActive = false;
   let bodyWidth = d.body.clientWidth;
@@ -96,8 +91,6 @@
     }
     else {
       if (!sgPatternFirst) {
-        parent.postMessage({annotationsViewall: false, codeViewall: false, targetOrigin});
-
         return;
       }
 
@@ -293,14 +286,6 @@
             }
           }
         }
-
-        const messageObj = {
-          annotationsOverlay: 'on',
-          annotations: annotations,
-          viewall
-        };
-
-        parent.postMessage(messageObj, targetOrigin);
       },
       200
     );
@@ -333,7 +318,6 @@
         this.classList.add('active');
         hideAnnotationTips();
         parent.postMessage({annotationsViewallClick: true}, targetOrigin);
-        scrollViewall();
       }
     });
   });
@@ -346,11 +330,16 @@
 
   // Toggle the annotations panel with keyboard shortcut.
   Mousetrap.bind('ctrl+shift+a', (e) => {
-    const messageObj = {event: 'patternlab.keyPress', keyPress: 'ctrl+shift+a'};
-
-    parent.postMessage(messageObj, targetOrigin);
+    parent.postMessage({event: 'patternlab.keyPress', keyPress: 'ctrl+shift+a'}, targetOrigin);
 
     e.preventDefault();
     return false;
   });
+
+  /* END LISTENERS. EXECUTE THE FOLLOWING ONLOAD */
+
+  // DEPRECATED: Will be removed.
+  if (viewall) {
+    parent.postMessage({annotationsViewall: viewall}, targetOrigin);
+  }
 })(document);
