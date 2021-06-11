@@ -20,13 +20,11 @@
   let bodyWidth = d.body.clientWidth;
   let viewallFocus = '';
 
-  /* BEGIN FUNCTION DECLARATIONS. */
-
   function activateAnnotationTips() {
     let count = 0;
     let context;
 
-    if (viewall) {
+    if (viewall && viewallFocus) {
       context = d.getElementById(viewallFocus);
     }
     else {
@@ -55,10 +53,8 @@
                     e.preventDefault();
                     e.stopPropagation();
 
-                    // If an element was clicked while the overlay was already on, swap it.
-                    const messageObj = {annotationNumber: annotation_.displayNumber};
-
-                    parent.postMessage(messageObj, targetOrigin);
+                    // .annotationNumber invokes annotationsViewer.moveTo().
+                    parent.postMessage({annotationNumber: annotation_.displayNumber}, targetOrigin);
                   }
                 };
               })(annotation)
@@ -218,7 +214,7 @@
         activateAnnotationTips();
 
         const messageObj = {
-          annotationsOverlay: 'on',
+          annotationsUpdate: true,
           annotations: annotations,
           patternPartial,
           viewall
@@ -305,7 +301,7 @@
       if (this.classList.contains('active')) {
         this.classList.remove('active');
         hideAnnotationTips();
-        parent.postMessage({annotationsOverlay: 'off'}, targetOrigin);
+        parent.postMessage({annotationsViewallClick: 'off'}, targetOrigin);
       }
       else {
         sgPatternToggleAnnotations.forEach((el1) => {
@@ -317,29 +313,18 @@
 
         this.classList.add('active');
         hideAnnotationTips();
-        parent.postMessage({annotationsViewallClick: true}, targetOrigin);
+        parent.postMessage({annotationsViewallClick: 'on'}, targetOrigin);
       }
     });
   });
 
-  if (!window.Mousetrap) {
-    return;
-  }
-
-  const Mousetrap = window.Mousetrap;
-
   // Toggle the annotations panel with keyboard shortcut.
-  Mousetrap.bind('ctrl+shift+a', (e) => {
-    parent.postMessage({event: 'patternlab.keyPress', keyPress: 'ctrl+shift+a'}, targetOrigin);
+  window.Mousetrap.bind('ctrl+shift+a', (e) => {
+    const messageObj = {event: 'patternlab.keyPress', keyPress: 'ctrl+shift+a'};
+
+    parent.postMessage(messageObj, targetOrigin);
 
     e.preventDefault();
     return false;
   });
-
-  /* END LISTENERS. EXECUTE THE FOLLOWING ONLOAD */
-
-  // DEPRECATED: Will be removed.
-  if (viewall) {
-    parent.postMessage({annotationsViewall: viewall}, targetOrigin);
-  }
 })(document);

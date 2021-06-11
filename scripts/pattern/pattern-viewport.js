@@ -11,30 +11,6 @@
   const targetOrigin =
     (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
 
-  // Before declaring and running anything else, postMessage to the UI to add pattern to history or update pattern info.
-  const patternDataEl = d.getElementById('sg-pattern-data-footer');
-  let patternData;
-
-  try {
-    patternData = JSON.parse(patternDataEl.innerHTML);
-  }
-  catch (err) {
-    // Fail gracefully.
-  }
-
-  // Only process this block to postMessage if there are patternData in the footer, i.e. not a viewall.
-  if (patternData) {
-    // Notify the UI what pattern this is so it updates itself appropriately.
-    const messageObj = {
-      event: 'patternlab.pageLoad',
-      patternPartial: patternData.patternPartial
-    };
-
-    parent.postMessage(messageObj, targetOrigin);
-  }
-
-  /* BEGIN FUNCTION DECLARATIONS. */
-
   function receiveIframeMessage(event) {
     // Return if the origin sending the message does not match the current host.
     if (
@@ -99,12 +75,6 @@
     });
   }
 
-  if (!window.Mousetrap) {
-    return;
-  }
-
-  const Mousetrap = window.Mousetrap;
-
   // Bind Mousetrap keyboard shortcuts using ctrl+alt.
   const keysAlt = [
     '0', // XXSmall.
@@ -115,7 +85,7 @@
   ];
 
   for (const key of keysAlt) {
-    Mousetrap.bind('ctrl+alt+' + key, (e) => {
+    window.Mousetrap.bind('ctrl+alt+' + key, (e) => {
       const messageObj = {event: 'patternlab.keyPress', keyPress: 'ctrl+alt+' + key};
       parent.postMessage(messageObj, targetOrigin);
 
@@ -136,12 +106,32 @@
   ];
 
   for (const key of keysShift) {
-    Mousetrap.bind('ctrl+shift+' + key, (e) => {
+    window.Mousetrap.bind('ctrl+shift+' + key, (e) => {
       const messageObj = {event: 'patternlab.keyPress', keyPress: 'ctrl+shift+' + key};
       parent.postMessage(messageObj, targetOrigin);
 
       e.preventDefault();
       return false;
     });
+  }
+
+  /* END LISTENERS. EXECUTE THE FOLLOWING ONLOAD. */
+  /* INFORM THE PARENT OF THE VIEWALL/PATTERN INFO. */
+
+  const patternDataEl = d.getElementById('sg-pattern-data-footer');
+  let patternData;
+
+  try {
+    patternData = JSON.parse(patternDataEl.innerHTML);
+  }
+  catch (err) {
+    // Fail gracefully.
+  }
+
+  if (patternData) {
+    // Notify the UI what pattern this is so it updates its history appropriately.
+    const messageObj = {event: 'patternlab.pageLoad', patternPartial: patternData.patternPartial};
+
+    parent.postMessage(messageObj, targetOrigin);
   }
 })(document);

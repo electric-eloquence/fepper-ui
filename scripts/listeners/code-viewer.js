@@ -139,10 +139,8 @@ export default class CodeViewer {
       });
     });
 
-    const Mousetrap = window.Mousetrap;
-
     // Toggle the code panel.
-    Mousetrap.bind('ctrl+shift+c', (e) => {
+    window.Mousetrap.bind('ctrl+shift+c', (e) => {
       this.#fepperUi.codeViewer.toggleCode();
 
       e.preventDefault();

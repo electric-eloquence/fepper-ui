@@ -13,8 +13,6 @@
     return main;
   }
 
-  /* MAIN EXECUTION */
-
   // First, load styles. We don't want these styles to be applied to any viewall.
   // Since CSS can't perform such negative logic, we'll use this sandboxed stylesheet.
   const link = document.createElement('link');

@@ -143,9 +143,7 @@ export default class Listeners {
       }));
     });
 
-    const Mousetrap = window.Mousetrap;
-
-    Mousetrap.bind('esc', () => {
+    window.Mousetrap.bind('esc', () => {
       if (this.#fepperUi.annotationsViewer.annotationsActive && this.#fepperUi.uiProps.dockPosition === 'bottom') {
         this.#fepperUi.annotationsViewer.closeAnnotations();
       }

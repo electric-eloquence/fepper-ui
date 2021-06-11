@@ -65,7 +65,7 @@
 
       if (this.classList.contains('active')) {
         this.classList.remove('active');
-        parent.postMessage({codeOverlay: 'off'}, targetOrigin);
+        parent.postMessage({codeViewallClick: 'off'}, targetOrigin);
       }
       else {
         sgPatternToggleAnnotations.forEach((el1) => {
@@ -88,19 +88,12 @@
           // Fail gracefully.
         }
 
-        patternData.codeOverlay = 'on';
-        patternData.viewall = true;
+        patternData.codeViewallClick = 'on';
 
         parent.postMessage(patternData, targetOrigin);
       }
     });
   });
-
-  if (!window.Mousetrap) {
-    return;
-  }
-
-  const Mousetrap = window.Mousetrap;
 
   // Bind Mousetrap keyboard shortcuts using ctrl+shift.
   const keys = [
@@ -112,7 +105,7 @@
   ];
 
   for (const key of keys) {
-    Mousetrap.bind('ctrl+' + key, (e) => {
+    window.Mousetrap.bind('ctrl+' + key, (e) => {
       const messageObj = {event: 'patternlab.keyPress', keyPress: 'ctrl+' + key};
       parent.postMessage(messageObj, targetOrigin);
 
@@ -121,8 +114,8 @@
     });
   }
 
-  /* END LISTENERS. EXECUTE THE FOLLOWING ONLOAD */
-  /* INFORM THE PARENT OF THE VIEWALL/PATTERN INFO. */
+  /* END LISTENERS. EXECUTE THE FOLLOWING ONLOAD. */
+  /* INFORM THE PARENT OF THE PATTERN/VIEWALL INFO. */
 
   const sgPatterns = d.querySelectorAll('.sg-pattern');
   let patternData;

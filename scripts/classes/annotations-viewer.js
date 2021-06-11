@@ -16,27 +16,29 @@ export default class AnnotationsViewer {
       return;
     }
 
-    if (data.annotationsOverlay) { // This condition must come first.
-      if (data.annotationsOverlay === 'on') {
-        // Update code.
-        this.updateAnnotations(data.annotations, data.patternPartial);
+    // This condition must come first.
+    if (data.annotationsUpdate) {
+      this.updateAnnotations(data.annotations, data.patternPartial);
+    }
+
+    if (data.annotationNumber) {
+      this.moveTo(data.annotationNumber);
+    }
+
+    if (data.annotationsViewallClick) {
+      if (data.annotationsViewallClick === 'on') {
+        this.openAnnotations();
       }
       else {
         this.closeAnnotations();
       }
-    }
-    else if (data.annotationNumber) {
-      this.moveTo(data.annotationNumber);
-    }
-    else if (data.annotationsViewallClick) {
-      this.openAnnotations();
     }
 
     switch (data.event) {
       case 'patternlab.keyPress':
         switch (data.keyPress) {
           case 'ctrl+shift+a':
-            this.toggleAnnotations(data.annotationsViewall);
+            this.toggleAnnotations();
 
             break;
 
@@ -107,11 +109,10 @@ export default class AnnotationsViewer {
   }
 
   closeAnnotations() {
-    const messageObj = {annotationsToggle: 'off'};
     this.annotationsActive = false;
 
     this.viewerHandler.closeViewer();
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
+    this.$orgs['#sg-viewport'][0].contentWindow.postMessage({annotationsToggle: 'off'}, this.uiProps.targetOrigin);
     this.$orgs['#sg-t-annotations'].dispatchAction('removeClass', 'active');
     this.$orgs['#sg-annotations-container'].dispatchAction('removeClass', 'active');
   }
@@ -134,17 +135,16 @@ export default class AnnotationsViewer {
   }
 
   openAnnotations() {
-    // Tell the pattern that the annotations viewer has been turned on.
-    const messageObj = {annotationsToggle: 'on'};
     // Flag that the viewer is active.
     this.annotationsActive = true;
 
     // Make sure the code viewer is off before showing annotations.
     this.codeViewer.closeCode();
-    this.viewerHandler.openViewer();
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
+    // Tell the pattern that the annotations viewer has been turned on.
+    this.$orgs['#sg-viewport'][0].contentWindow.postMessage({annotationsToggle: 'on'}, this.uiProps.targetOrigin);
     this.$orgs['#sg-t-annotations'].dispatchAction('addClass', 'active');
     this.$orgs['#sg-annotations-container'].dispatchAction('addClass', 'active');
+    this.viewerHandler.openViewer();
 
     if (this.moveToNumber !== 0) {
       this.moveTo(this.moveToNumber);
@@ -205,13 +205,20 @@ export default class AnnotationsViewer {
 </div>`;
       }
 
-      this.$orgs['#sg-annotations'].dispatchAction('html', html);
+      this.$orgs['#sg-annotations-na'].dispatchAction('css', {display: 'none'});
+      this.$orgs['#sg-annotations']
+        .dispatchAction('html', html)
+        .dispatchAction('css', {display: 'block'});
 
       if (this.annotationsActive && this.moveToNumber !== 0) {
         this.moveTo(this.moveToNumber);
 
         this.moveToNumber = 0;
       }
+    }
+    else {
+      this.$orgs['#sg-annotations-na'].dispatchAction('css', {display: 'block'});
+      this.$orgs['#sg-annotations'].dispatchAction('css', {display: 'none'});
     }
   }
 }

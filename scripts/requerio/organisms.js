@@ -12,6 +12,7 @@ export default {
   '#patternlab-body': null,
   '#sg-annotations': null,
   '#sg-annotations-container': null,
+  '#sg-annotations-na': null,
   '#sg-code-btn-markdown-cancel': null,
   '#sg-code-btn-markdown-edit': null,
   '#sg-code-btn-markdown-save': null,

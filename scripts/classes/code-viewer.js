@@ -39,11 +39,9 @@ export default class CodeViewer {
       return;
     }
 
-    if (data.codeOverlay) { // This condition must come first.
-      if (data.codeOverlay === 'on') {
-        if (!this.codeActive) {
-          this.openCode();
-        }
+    if (data.codeViewallClick) { // This condition must come first.
+      if (data.codeViewallClick === 'on') {
+        this.openCode();
       }
       else {
         this.closeCode();
