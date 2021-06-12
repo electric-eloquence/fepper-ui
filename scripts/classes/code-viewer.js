@@ -149,7 +149,7 @@ export default class CodeViewer {
 
     // Determine if the project has been set up with Git.
     fetch(
-      'git-api', {
+      '/git-api', {
         method: 'POST',
         body: new URLSearchParams('args[0]=--version')
       })
@@ -166,7 +166,7 @@ export default class CodeViewer {
       })
       .then(() => {
         return fetch(
-          'git-api', {
+          '/git-api', {
             method: 'POST',
             body: new URLSearchParams('args[0]=remote')
           });
@@ -311,8 +311,13 @@ export default class CodeViewer {
     }
   }
 
+  /**
+   * Invoke this.unsetPanelContent() and this.setPanelContent().
+   *
+   * @param {[string]} patternPartial - The pattern for which the panel content is being set.
+   */
   resetPanels(patternPartial) {
-    this.patternPartial = patternPartial;
+    this.patternPartial = patternPartial || this.patternPartial;
 
     this.unsetPanelContent('feplet');
     this.unsetPanelContent('markdown');
@@ -327,15 +332,17 @@ export default class CodeViewer {
    * Set the content for the activated panel.
    *
    * @param {string} type - The panel to activate.
-   * @param {[string]} patternPartial - Single letter that refers to classes and types.
+   * @param {[string]} patternPartial - The pattern for which the panel content is being set.
    */
   setPanelContent(type, patternPartial) {
+    this.patternPartial = patternPartial || this.patternPartial;
+
     switch (type) {
       case 'feplet': {
         /* istanbul ignore else */
         if (this.$orgs['#sg-code-panel-feplet'].length) {
           this.$orgs['#sg-code-panel-feplet'][0]
-            .contentWindow.location.replace(`/mustache-browser?partial=${patternPartial || this.patternPartial}`);
+            .contentWindow.location.replace(`/mustache-browser?partial=${this.patternPartial}`);
           this.$orgs['#sg-code-panel-feplet'][0]
             .addEventListener('load', () => {
               const height = this.$orgs['#sg-code-panel-feplet'][0].contentWindow.document.documentElement.offsetHeight;
@@ -378,7 +385,7 @@ export default class CodeViewer {
           console.error(`Status ${this.status}: ${this.statusText}`);
         };
 
-        xhr.open('GET', mdPath + '?' + Date.now());
+        xhr.open('GET', `/${mdPath}?${Date.now()}`);
         xhr.send();
 
         break;
@@ -511,6 +518,6 @@ export default class CodeViewer {
     this.#root.$('#sg-code-pattern-info-pattern-name').html(`<strong>${patternPartial}</strong> at`);
     this.#root.$('#sg-code-lineage-pattern-name, #sg-code-lineager-pattern-name').html(patternPartial);
 
-    this.setPanelContent('feplet', patternPartial);
+    this.setPanelContent('feplet', this.patternPartial);
   }
 }

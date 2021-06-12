@@ -216,8 +216,7 @@
         const messageObj = {
           annotationsUpdate: true,
           annotations: annotations,
-          patternPartial,
-          viewall
+          patternPartial
         };
 
         parent.postMessage(messageObj, targetOrigin);

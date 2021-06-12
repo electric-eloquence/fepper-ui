@@ -172,12 +172,10 @@ describe('codeViewer', function () {
 
       expect(panelLocationHrefBefore).to.not.equal(panelLocationHrefAfter);
       expect(panelStateBefore.classArray).to.not.include('sg-code-panel-active');
-      expect(panelStateBefore.css.height).to.not.equal(panelStateAfter.css.height);
       expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
 
       expect(panelLocationHrefAfter).to.equal('/mustache-browser?partial=compounds-block');
       expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
-      expect(panelStateAfter.css.height).to.equal('100px');
       expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
     });
 
@@ -196,7 +194,7 @@ also tests .resetPanels()', function () {
       codeViewer.receiveIframeMessage({
         origin: 'http://localhost:3000',
         data: {
-          codeOverlay: 'on',
+          codeViewallClick: 'on',
           lineage: [],
           lineageR: [
             {
@@ -205,6 +203,7 @@ also tests .resetPanels()', function () {
               isHidden: false
             }
           ],
+          missingPatterns: [],
           patternPartial: 'elements-paragraph',
           patternState: ''
         }
@@ -266,24 +265,20 @@ also tests .resetPanels()', function () {
 
       setTimeout(() => {
         const codeActiveBefore = codeViewer.codeActive;
-        const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
         const sgTCodeBefore = $orgs['#sg-t-code'].getState();
         const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
         codeViewer.toggleCode();
 
         setTimeout(() => {
-          const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
           const sgTCodeAfter = $orgs['#sg-t-code'].getState();
           const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
 
           expect(codeActiveBefore).to.be.false;
-          expect(patternlabBodyBefore.classArray).to.not.include('dock-open');
           expect(sgTCodeBefore.classArray).to.not.include('active');
           expect(sgViewContainerBefore.classArray).to.not.include('anim-ready');
 
           expect(codeViewer.codeActive).to.be.true;
-          expect(patternlabBodyAfter.classArray).to.include('dock-open');
           expect(sgTCodeAfter.classArray).to.include('active');
           expect(sgViewContainerAfter.classArray).to.include('anim-ready');
 
@@ -671,28 +666,7 @@ also tests .resetPanels()', function () {
       expect(codeViewer.viewall).to.be.true;
     });
 
-    it('sets .viewall on data.codeViewall = true', function () {
-      event.data = {
-        codeViewall: true
-      };
-
-      codeViewer.receiveIframeMessage(event);
-
-      expect(codeViewer.viewall).to.be.true;
-    });
-
-    it('sets .viewall on data.codeViewall = false', function () {
-      event.data = {
-        codeViewall: false
-      };
-
-      codeViewer.receiveIframeMessage(event);
-
-      expect(codeViewer.viewall).to.be.false;
-    });
-
-    it('opens and updates code on data.codeOverlay = "on", data.viewall = true, and data.openCode = true\
-', function (done) {
+    it('updates code when submitting pattern data from pattern', function (done) {
       codeViewer.closeCode();
       $orgs['#sg-code-container'].dispatchAction('attr', {'data-patternpartial': null});
       $orgs['#sg-code-pattern-info-state'].dispatchAction('html', null);
@@ -703,48 +677,36 @@ also tests .resetPanels()', function () {
 
       setTimeout(() => {
         event.data = {
-          codeOverlay: 'on',
           lineage: [],
           lineageR: [],
-          openCode: true,
+          missingPartials: [],
           patternPartial: 'compounds-block',
           patternState: '',
           viewall: true
         };
-        const codeActiveBefore = codeViewer.codeActive;
-        const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
         const sgCodePatternInfoBefore = $orgs['#sg-code-pattern-info-state'].getState();
         const sgCodeLineageBefore = $orgs['#sg-code-lineage'].getState();
         const sgCodeLineageFillBefore = $orgs['#sg-code-lineage-fill'].getState();
         const sgCodeLineagerBefore = $orgs['#sg-code-lineager'].getState();
         const sgCodeLineagerFillBefore = $orgs['#sg-code-lineager-fill'].getState();
-        const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
         codeViewer.receiveIframeMessage(event);
 
         setTimeout(() => {
-          const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
           const sgCodePatternInfoAfter = $orgs['#sg-code-pattern-info-state'].getState();
           const sgCodeLineageAfter = $orgs['#sg-code-lineage'].getState();
           const sgCodeLineageFillAfter = $orgs['#sg-code-lineage-fill'].getState();
           const sgCodeLineagerAfter = $orgs['#sg-code-lineager'].getState();
           const sgCodeLineagerFillAfter = $orgs['#sg-code-lineager-fill'].getState();
-          const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
 
-          expect(codeActiveBefore).to.be.false;
-          expect(patternlabBodyBefore.classArray).to.not.include('dock-open');
           expect(sgCodePatternInfoBefore.html).to.equal(sgCodePatternInfoAfter.html);
           expect(sgCodeLineageBefore.css.display).to.not.equal(sgCodeLineageAfter.css.display);
           expect(sgCodeLineageFillBefore.html).to.equal(sgCodeLineageFillAfter.html);
           expect(sgCodeLineagerBefore.css.display).to.not.equal(sgCodeLineagerAfter.css.display);
-          expect(sgViewContainerBefore.classArray).to.not.include('anim-ready');
 
-          expect(codeViewer.codeActive).to.be.true;
-          expect(patternlabBodyAfter.classArray).to.include('dock-open');
           expect(sgCodeLineageAfter.css.display).to.equal('none');
           expect(sgCodeLineagerAfter.css.display).to.equal('none');
           expect(sgCodeLineagerFillBefore.html).to.equal(sgCodeLineagerFillAfter.html);
-          expect(sgViewContainerAfter.classArray).to.include('anim-ready');
           expect(codeViewer.viewall).to.be.true;
 
           done();
@@ -752,9 +714,44 @@ also tests .resetPanels()', function () {
       }, timeout);
     });
 
-    it('closes code on data.codeOverlay = "off"', function (done) {
+    it('opens code on data.codeViewallClick = "on"', function (done) {
       event.data = {
-        codeOverlay: 'off'
+        codeViewallClick: 'on'
+      };
+
+      codeViewer.closeCode();
+
+      setTimeout(() => {
+        const codeActiveBefore = codeViewer.codeActive;
+        const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
+        const sgTCodeBefore = $orgs['#sg-t-code'].getState();
+        const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
+
+        codeViewer.receiveIframeMessage(event);
+
+        setTimeout(() => {
+          const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+          const sgTCodeAfter = $orgs['#sg-t-code'].getState();
+          const sgViewContainerAfter = $orgs['#sg-view-container'].getState();
+
+          expect(codeActiveBefore).to.be.false;
+          expect(patternlabBodyBefore.classArray).to.not.include('dock-open');
+          expect(sgTCodeBefore.classArray).to.not.include('active');
+          expect(sgViewContainerBefore.classArray).to.not.include('anim-ready');
+
+          expect(codeViewer.codeActive).to.be.true;
+          expect(patternlabBodyAfter.classArray).to.include('dock-open');
+          expect(sgTCodeAfter.classArray).to.include('active');
+          expect(sgViewContainerAfter.classArray).to.include('anim-ready');
+
+          done();
+        }, timeout);
+      }, timeout);
+    });
+
+    it('closes code on data.codeViewallClick = "off"', function (done) {
+      event.data = {
+        codeViewallClick: 'off'
       };
 
       codeViewer.openCode();

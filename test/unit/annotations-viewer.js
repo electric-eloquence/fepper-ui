@@ -5,7 +5,8 @@ import fepperUi from '../unit';
 const $orgs = fepperUi.requerio.$orgs;
 const {
   annotationsViewer,
-  codeViewer
+  codeViewer,
+  uiProps
 } = fepperUi;
 
 const timeout = 10;
@@ -324,9 +325,9 @@ menu anchor.</p>
       };
     });
 
-    it('updates annotations on data.annotationsOverlay = "on"', function () {
+    it('updates annotations on data.annotationsUpdate = true', function () {
       event.data = {
-        annotationsOverlay: 'on',
+        annotationsUpdate: true,
         annotations,
         patternPartial: 'compounds-block',
         viewall: false
@@ -354,10 +355,10 @@ menu anchor.</p>
 </div>`);
     });
 
-    it('denotes that an annotated element is hidden on data.annotationsOverlay = "on"', function () {
+    it('denotes that an annotated element is hidden on data.annotationsUpdate = true', function () {
       const annotationsClone = annotations.slice();
       event.data = {
-        annotationsOverlay: 'on',
+        annotationsUpdate: true,
         annotations: annotationsClone.concat({
           el: '#foo',
           title: 'Foo',
@@ -386,37 +387,6 @@ menu anchor.</p>
 </div>`);
     });
 
-    it('updates annotations on data.annotationsOverlay = "on" and data.viewall = true', function () {
-      event.data = {
-        annotationsOverlay: 'on',
-        annotations,
-        patternPartial: 'compounds-block',
-        viewall: true
-      };
-
-      $orgs['#sg-annotations'].dispatchAction('html', '');
-
-      const sgAnnotationsBefore = $orgs['#sg-annotations'].getState();
-
-      annotationsViewer.receiveIframeMessage(event);
-
-      const sgAnnotationsAfter = $orgs['#sg-annotations'].getState();
-
-      expect(sgAnnotationsBefore.html).to.equal('');
-
-      expect(sgAnnotationsAfter.html).to.equal(`<div id="annotation-1" class="sg-annotation">
-<h2>1. Navigation</h2>
-<div><p>Navigation for responsive web experiences can be tricky. Large navigation menus 
-are typical on desktop sites, but mobile screen sizes don't give us the luxury 
-of space. We're dealing with this situation by creating a simple menu anchor 
-that toggles the main navigation on small screens. Once the screen size is large 
-enough to accommodate the nav, we show the main navigation links and hide the 
-menu anchor.</p>
-</div>
-</div>`);
-      expect(annotationsViewer.viewall).to.be.true;
-    });
-
     it('sets .moveToNumber when data.annotationNumber is set', function () {
       event.data = {
         annotationNumber: 4
@@ -432,33 +402,14 @@ menu anchor.</p>
       expect(moveToNumberAfter).to.equal(4);
     });
 
-    it('sets .viewall on data.annotationsViewall = true', function () {
+    it('opens annotations on data.annotationsViewallClick = "on"', function (done) {
       event.data = {
-        annotationsViewall: true
+        annotationsViewallClick: 'on'
       };
 
-      annotationsViewer.receiveIframeMessage(event);
-
-      expect(annotationsViewer.viewall).to.be.true;
-    });
-
-    it('sets .viewall on data.annotationsViewall = false', function () {
-      event.data = {
-        annotationsViewall: false
-      };
-
-      annotationsViewer.receiveIframeMessage(event);
-
-      expect(annotationsViewer.viewall).to.be.false;
-    });
-
-    it('opens annotations on data.annotationsViewallClick = true', function (done) {
       annotationsViewer.closeAnnotations();
 
       setTimeout(() => {
-        event.data = {
-          annotationsViewallClick: true
-        };
         const annotationsActiveBefore = annotationsViewer.annotationsActive;
         const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
         const sgTAnnotationsBefore = $orgs['#sg-t-annotations'].getState();
@@ -488,7 +439,7 @@ menu anchor.</p>
 
     it('closes annotations on data.annotationsOverlay = "off"', function (done) {
       event.data = {
-        annotationsOverlay: 'off'
+        annotationsViewallClick: 'off'
       };
 
       annotationsViewer.openAnnotations();

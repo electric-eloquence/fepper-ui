@@ -158,6 +158,7 @@ export default class AnnotationsViewer {
     // If viewall, scroll to the focused pattern.
     /* istanbul ignore if */
     if (this.uiProps.viewall) {
+      this.viewall = this.uiProps.viewall; // DEPRECATED.
       this.scrollViewall();
     }
   }

@@ -317,7 +317,7 @@ describe('uiFns', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal('320px');
       expect(sgSizePxStateBefore.val).to.not.equal('320');
       expect(sgSizeEmStateBefore.val).to.not.equal('20.00');
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(wholeModeAfter).to.be.false;
       expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
@@ -358,7 +358,7 @@ describe('uiFns', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal('480px');
       expect(sgSizePxStateBefore.val).to.not.equal('480');
       expect(sgSizeEmStateBefore.val).to.not.equal('30.00');
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(wholeModeAfter).to.be.false;
       expect(sgGenContainerStateAfter.classArray).to.not.include('vp-animate');
@@ -399,7 +399,7 @@ describe('uiFns', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal('767px');
       expect(sgSizePxStateBefore.val).to.not.equal('767');
       expect(sgSizeEmStateBefore.val).to.not.equal('47.94');
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(wholeModeAfter).to.be.true;
       expect(sgGenContainerStateAfter.classArray).to.include('vp-animate');
@@ -440,7 +440,7 @@ describe('uiFns', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal('1024px');
       expect(sgSizePxStateBefore.val).to.not.equal('1024');
       expect(sgSizeEmStateBefore.val).to.not.equal('64.00');
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(wholeModeAfter).to.be.true;
       expect(sgGenContainerStateAfter.classArray).to.not.include('vp-animate');
@@ -473,7 +473,7 @@ describe('uiFns', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(uiProps.maxViewportWidth + 'px');
       expect(sgSizePxStateBefore.val).to.not.equal(uiProps.maxViewportWidth.toString());
       expect(sgSizeEmStateBefore.val).to.not.equal('162.50');
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(sgGenContainerStateAfter.css.width).to.equal('2614px');
       expect(sgViewportStateAfter.css.width).to.equal(uiProps.maxViewportWidth + 'px');
@@ -503,7 +503,7 @@ describe('uiFns', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(uiProps.minViewportWidth + 'px');
       expect(sgSizePxStateBefore.val).to.not.equal(uiProps.minViewportWidth.toString());
       expect(sgSizeEmStateBefore.val).to.not.equal('15.00');
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(sgGenContainerStateAfter.css.width).to.equal('254px');
       expect(sgViewportStateAfter.css.width).to.equal(uiProps.minViewportWidth + 'px');
