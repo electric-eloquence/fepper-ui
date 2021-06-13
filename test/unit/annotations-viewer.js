@@ -275,17 +275,32 @@ describe('annotationsViewer', function () {
   describe('.updateAnnotations()', function () {
     beforeEach(function () {
       $orgs['#sg-annotations-container'].dispatchAction('attr', {'data-patternpartial': null});
-      $orgs['#sg-annotations'].dispatchAction('html', '');
+    });
+
+    it('displays "No Annotations" for no annotations', function () {
+      const sgAnnotationsNaBefore = $orgs['#sg-annotations-na'].getState();
+      const sgAnnotationsBefore = $orgs['#sg-annotations'].getState();
+
+      annotationsViewer.updateAnnotations([]);
+
+      const sgAnnotationsNaAfter = $orgs['#sg-annotations-na'].getState();
+      const sgAnnotationsAfter = $orgs['#sg-annotations'].getState();
+
+      expect(sgAnnotationsNaBefore.css.diplay).to.be.undefined;
+      expect(sgAnnotationsBefore.css.diplay).to.be.undefined;
+
+      expect(sgAnnotationsNaAfter.css.display).to.equal('block');
+      expect(sgAnnotationsAfter.css.display).to.equal('none');
     });
 
     it('fills HTML for one or more annotations', function () {
       const sgAnnotationsBefore = $orgs['#sg-annotations'].getState();
 
-      annotationsViewer.updateAnnotations(annotations, 'compounds-block');
+      annotationsViewer.updateAnnotations(annotations);
 
       const sgAnnotationsAfter = $orgs['#sg-annotations'].getState();
 
-      expect(sgAnnotationsBefore.html).to.equal('');
+      expect(sgAnnotationsBefore.html).to.be.null;
 
       expect(sgAnnotationsAfter.html).to.equal(`<div id="annotation-1" class="sg-annotation">
 <h2>1. Navigation</h2>

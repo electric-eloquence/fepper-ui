@@ -156,6 +156,7 @@ export default class CodeViewer {
       .then((response) => {
         return new Promise(
           (resolve, reject) => {
+            /* istanbul ignore else */
             if (response.status === 200) {
               resolve();
             }
@@ -174,6 +175,7 @@ export default class CodeViewer {
       .then((response) => {
         return new Promise(
           (resolve, reject) => {
+            /* istanbul ignore else */
             if (response.status === 200) {
               resolve();
             }
@@ -202,6 +204,7 @@ export default class CodeViewer {
         }
       })
       .catch((err) => {
+        /* istanbul ignore if */
         if (err) {
           // eslint-disable-next-line no-console
           console.error(err);
@@ -259,6 +262,7 @@ export default class CodeViewer {
                   });
               })
               .catch((err) => {
+                /* istanbul ignore if */
                 if (err) {
                   // eslint-disable-next-line no-console
                   console.error(err);
