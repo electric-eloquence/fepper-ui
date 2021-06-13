@@ -5,8 +5,7 @@ import fepperUi from '../unit';
 const $orgs = fepperUi.requerio.$orgs;
 const {
   annotationsViewer,
-  codeViewer,
-  uiProps
+  codeViewer
 } = fepperUi;
 
 const timeout = 10;

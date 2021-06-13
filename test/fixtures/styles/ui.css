@@ -726,18 +726,24 @@ body {
   cursor: default;
   pointer-events: none;
 }
+#sg-annotations-na,
 #sg-annotations {
   padding-bottom: 0.7rem;
 }
-#sg-code-pattern-info p,
-#sg-code-lineage p,
-#sg-code-lineager p {
-  margin: 0 0 0.8rem;
+#sg-annotations {
+  display: none;
+}
+#sg-code-container > div > p {
+  margin: 0 0 0.4rem;
 }
 
 #sg-code-lineage a,
 #sg-code-lineager a {
   text-decoration: none;
+}
+
+#sg-code-missing-partials-fill {
+  color: red;
 }
 
 .sg-code-pattern-name strong {
@@ -755,7 +761,7 @@ body {
   display: flex;
   align-items: flex-start;
   list-style: none;
-  margin: 0;
+  margin: 1.2rem 0 0;
   padding: 0;
 }
 
@@ -810,10 +816,10 @@ body {
   width: 100%;
 }
 
-.sg-code-outcome {
+.sg-code-pane {
   display: none;
 }
-.sg-code-outcome pre {
+.sg-code-pane pre {
   border: 0;
 }
 
@@ -823,7 +829,7 @@ body {
   content: " ";
   display: table;
 }
-#sg-code-pane-markdown pre.language-markdown {
+#sg-code-pre-language-markdown {
   background: none;
 }
 
@@ -834,7 +840,8 @@ body {
   font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
   font-size: 1em;
   line-height: 1.5;
-  padding: 0.7rem 1.4rem;
+  margin-bottom: 0.3rem;
+  padding: 0.6rem 1.4rem;
 }
 #sg-code-textarea-markdown:focus {
   outline: #188f08 solid thin;
@@ -856,7 +863,7 @@ body {
   float: right;
   font-size: 1.6rem;
   font-weight: 600;
-  margin: 0 1em 1em;
+  margin: 0 1em 1em 0;
   padding: 0.5rem 1rem;
 }
 
@@ -865,4 +872,22 @@ body {
 }
 .viewall #sg-code-btn-markdown-edit {
   display: none;
+}
+
+#sg-code-pane-git.git-integration-on {
+  color: white;
+}
+
+#sg-code-pane-git-na {
+  margin: 1em;
+}
+
+#sg-code-input-container-git {
+  display: flex;
+  align-items: flex-start;
+  margin: 1em 1em 1em 1.2rem;
+}
+
+.sg-code-input-git:hover {
+  cursor: pointer;
 }

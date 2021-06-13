@@ -115,7 +115,7 @@
 <div id="sg-annotations-na">
   <div class="sg-annotation-na">
     <h2>No Annotations</h2>
-    <div>There are no annotations for this pattern</div>
+    <div><p>There are no annotations for this pattern.</p></div>
   </div>
 </div>
 <div id="sg-annotations"></div>
@@ -136,12 +136,14 @@
     sgVpWrap.appendChild(deprecationMessage);
 
     window.addEventListener('load', () => {
-      window.FEPPER_UI.patternViewport = {
-        goRandom: window.FEPPER_UI.patternlabViewer.goRandom.bind(window.FEPPER_UI.patternlabViewer),
-        goWhole: window.FEPPER_UI.patternlabViewer.goWhole.bind(window.FEPPER_UI.patternlabViewer)
-      };
+      if (!window.FEPPER_UI.patternViewport) {
+        window.FEPPER_UI.patternViewport = {
+          goRandom: window.FEPPER_UI.patternlabViewer.goRandom.bind(window.FEPPER_UI.patternlabViewer),
+          goWhole: window.FEPPER_UI.patternlabViewer.goWhole.bind(window.FEPPER_UI.patternlabViewer)
+        };
 
-      deprecationMessage.style.opacity = '1';
+        deprecationMessage.style.opacity = '1';
+      }
     });
   })();
 </script>
@@ -177,7 +179,7 @@
 <div id="sg-code-panels">
   <iframe id="sg-code-panel-feplet" class="sg-code-panel sg-code-panel-active" sandbox="allow-same-origin allow-scripts allow-top-navigation"></iframe>
   <div id="sg-code-panel-markdown" class="sg-code-panel">
-    <div id="sg-code-pane-markdown-na" class="sg-code-pane">
+    <div id="sg-code-pane-markdown-na" class="sg-code-pane" style="display: block;">
       <p>There is no .md file associated with this pattern.</p>
       <p>Please refer to <a href="/readme#markdown-content" target="_blank">the docs</a> for additional information.</p>
     </div>
@@ -192,10 +194,10 @@
     </div>
   </div>
   <div id="sg-code-panel-git" class="sg-code-panel">
-    <div id="sg-code-pane-git-na" class="sg-code-pane">
+    <div id="sg-code-pane-git-na" class="sg-code-pane" style="display: block;">
       Git has not been set up for this project.
     </div>
-    <div id="sg-code-pane-git" class="sg-code-pane" style="display: none;">
+    <div id="sg-code-pane-git" class="sg-code-pane">
       <form id="sg-code-input-container-git">
         <legend id="sg-code-input-legend-git">Git integration:</legend>
         <input id="sg-code-input-git-off" class="sg-code-input-git" name="sg-code-input-git" type="radio" checked><label>OFF</label>

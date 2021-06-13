@@ -316,15 +316,15 @@ export default class CodeViewer {
   }
 
   /**
-   * Invoke this.unsetPanelContent() and this.setPanelContent().
+   * Invoke this.unSetPanelContent() and this.setPanelContent().
    *
    * @param {[string]} patternPartial - The pattern for which the panel content is being set.
    */
   resetPanels(patternPartial) {
     this.patternPartial = patternPartial || this.patternPartial;
 
-    this.unsetPanelContent('feplet');
-    this.unsetPanelContent('markdown');
+    this.unSetPanelContent('feplet');
+    this.unSetPanelContent('markdown');
     this.setPanelContent(this.tabActive);
   }
 
@@ -409,7 +409,7 @@ export default class CodeViewer {
     }
   }
 
-  unsetPanelContent(type) {
+  unSetPanelContent(type) {
     switch (type) {
       case 'feplet':
         this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: '', visibility: 'hidden'});
