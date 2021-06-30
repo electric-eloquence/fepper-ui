@@ -44,7 +44,7 @@
     "he": "1.2.0",
     "jquery": "^3.5.1",
     "mousetrap": "1.6.5",
-    "prismjs": "1.23.0",
+    "prismjs": "1.24.0",
     "redux": "^4.0.5",
     "requerio": "*",
     "typeahead.js": "0.10.5",
