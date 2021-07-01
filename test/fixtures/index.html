@@ -174,7 +174,7 @@
   <li id="sg-code-tab-feplet" class="sg-code-tab sg-code-tab-active" title="Browse Fepper's Mustache templates">Feplet</li>
   <li id="sg-code-tab-markdown" class="sg-code-tab" title="Edit this pattern's Markdown content">Markdown</li>
   <li id="sg-code-tab-git" class="sg-code-tab" title="Download and upload revisions to this project">Git</li>
-  <li id="sg-code-tab-requerio" class="sg-code-tab" title="Time-travel through Fepper's application states">Requerio</li>
+  <li id="sg-code-tab-requerio" class="sg-code-tab" title="Time-travel through this pattern's application states">Requerio</li>
 </ul>
 <div id="sg-code-panels">
   <iframe id="sg-code-panel-feplet" class="sg-code-panel sg-code-panel-active" sandbox="allow-same-origin allow-scripts allow-top-navigation"></iframe>
@@ -188,20 +188,37 @@
       <button id="sg-code-btn-markdown-edit" class="sg-code-btn" title="Edit this pattern's Markdown content">Edit</button>
     </div>
     <div id="sg-code-pane-markdown-edit" class="sg-code-pane">
-      <textarea id="sg-code-textarea-markdown" class="language-markdown" name="markdown_edited"></textarea>
+      <textarea id="sg-code-textarea-markdown" name="markdown_edited"></textarea>
       <button id="sg-code-btn-markdown-save" class="sg-code-btn" title="Save Markdown content">Save</button>
-      <button id="sg-code-btn-markdown-cancel" class="sg-code-btn" title="Cancel Markdown edit">Cancel</button>
+      <button id="sg-code-btn-markdown-save-cancel" class="sg-code-btn" title="Cancel">Cancel</button>
+    </div>
+    <div id="sg-code-pane-markdown-load-anim" class="sg-code-load-anim">
+      <div></div><div></div><div></div><div></div>
+    </div>
+    <div id="sg-code-pane-markdown-commit" class="sg-code-pane">
+      <label id="sg-code-label-commit-message" for="sg-code-textarea-commit-message">Please describe this edit:</label>
+      <textarea id="sg-code-textarea-commit-message" name="commit_message"></textarea>
+      <button id="sg-code-btn-markdown-commit" class="sg-code-btn" title="Commit this revision">Commit</button>
+      <button id="sg-code-btn-markdown-commit-cancel" class="sg-code-btn" title="Cancel">Cancel</button>
+    </div>
+    <div id="sg-code-pane-markdown-console" class="sg-code-pane">
+      <pre id="sg-code-console-markdown-log"></pre>
+      <pre id="sg-code-console-markdown-error"></pre>
+      <button id="sg-code-btn-markdown-continue" class="sg-code-btn" title="Continue">Continue</button>
+      <div id="sg-code-console-markdown-load-anim" class="sg-code-load-anim">
+        <div></div><div></div><div></div><div></div>
+      </div>
     </div>
   </div>
   <div id="sg-code-panel-git" class="sg-code-panel">
-    <div id="sg-code-pane-git-na" class="sg-code-pane" style="display: block;">
-      Git has not been set up for this project.
+    <div id="sg-code-pane-git-na" class="sg-code-pane">
+      <pre>Git has not been set up for this project.</pre>
     </div>
     <div id="sg-code-pane-git" class="sg-code-pane">
-      <form id="sg-code-input-container-git">
-        <legend id="sg-code-input-legend-git">Git integration:</legend>
-        <input id="sg-code-input-git-off" class="sg-code-input-git" name="sg-code-input-git" type="radio" checked><label>OFF</label>
-        <input id="sg-code-input-git-on" class="sg-code-input-git" name="sg-code-input-git" type="radio"><label>ON</label>
+      <form id="sg-code-radio-git">
+        <legend id="sg-code-radio-git-legend">Git Integrator:</legend>
+        <input id="sg-code-radio-git-off" class="sg-code-radio-git" name="sg-code-radio-git" type="radio" checked><label>OFF</label>
+        <input id="sg-code-radio-git-on" class="sg-code-radio-git" name="sg-code-radio-git" type="radio"><label>ON</label>
       </form>
       <p>Fepper's Markdown Editor offers integration with Git.</p>
       <p>By integrating Git, Fepper will automatically pull edits made by other team members each time the Markdown Editor is opened.</p>
@@ -214,6 +231,7 @@
         <li>Restrict editors to their own Git branch, which a developer will merge into a main branch.</li>
       </ul>
     </div>
+    <button id="sg-code-btn-git-disable" class="sg-code-btn" title="Disable Git Integrator">Disable Git</button>
   </div>
   <div id="sg-code-panel-requerio" class="sg-code-panel"></div>
 </div>

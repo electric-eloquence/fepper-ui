@@ -20,14 +20,11 @@
   link.href = '/node_modules/fepper-ui/styles/html-scraper.css';
   document.getElementsByTagName('head')[0].appendChild(link);
 
-  // Since the HTML scraper won't work on any non-Express served environment, we can safely assume that Fepper will be
-  // served from the document root.
-  const baseUrl = window.location.protocol + '//' + window.location.host;
   const emptyFrag = new DocumentFragment();
 
   // First, make sure the HTML scraper is being requested from the same machine that's running the Express app.
-  fetch(baseUrl + '/gatekeeper')
-    .then(() => fetch(baseUrl + '/html-scraper-xhr' + window.location.search))
+  fetch('/gatekeeper?tool=the+HTML+Scraper')
+    .then(() => fetch('/html-scraper-xhr' + window.location.search))
     .then((response) => response.text())
     .then((responseText) => {
       return new Promise((resolve) => {
@@ -94,12 +91,12 @@
       });
     })
     .catch(() => {
-      return fetch(baseUrl + '/html-scraper-xhr/forbidden' + window.location.search)
+      return fetch('/html-scraper-xhr/forbidden' + window.location.search)
         .then((response) => response.text())
         .then((responseText) => {
           const parser = new DOMParser();
           const doc = parser.parseFromString(responseText, 'text/html');
-          const forbidden = doc.getElementById('forbidden');
+          const forbidden = doc.querySelector('section#forbidden');
           let main = d.getElementById('main');
 
           if (main) {

@@ -115,7 +115,7 @@ export default class UiFns {
     }
 
     // Populate sorting array.
-    const bpArr = Object.values(bpObjTmp).map(value => value);
+    const bpArr = Object.values(bpObjTmp);
 
     // Sort array from largest to smallest.
     bpArr.sort((a, b) => b - a);

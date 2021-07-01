@@ -25,6 +25,7 @@ const $ = global.$ = cheerio.load(html);
 require('fepper/excludes/profiles/base/source/_scripts/src/variables.styl');
 require('./mocks/bloodhound');
 require('./mocks/document');
+require('./mocks/DOMParser');
 require('./mocks/fetch');
 require('./mocks/he');
 require('./mocks/history');

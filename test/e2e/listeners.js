@@ -117,11 +117,11 @@ menu anchor.</p>
 
       it('dock-bottom button docks the viewer to the bottom', function () {
         $('#sg-view-btn-dock-bottom').click();
-        browser.pause(100);
+        browser.pause(700);
         $('#sg-form-label').click();
         browser.pause(100);
         $('#sg-size-w').click();
-        browser.pause(1000);
+        browser.pause(700);
         expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-bottom');
       });
 
@@ -168,6 +168,64 @@ menu anchor.</p>
         browser.pause(100);
         expect($('#sg-code-pane-markdown').getCSSProperty('display').value).to.equal('none');
         expect($('#sg-code-pane-markdown-edit').getCSSProperty('display').value).to.equal('block');
+      });
+
+      it('the markdown edit cancel button exits the markdown edit pane', function () {
+        $('#sg-t-toggle').click();
+        browser.pause(100);
+        $('#sg-t-code').click();
+        browser.pause(700);
+        $('#sg-code-tab-markdown').click();
+        browser.pause(100);
+        $('#sg-code-btn-markdown-edit').click();
+        browser.pause(100);
+        $('#sg-code-btn-markdown-save-cancel').click();
+        browser.pause(100);
+        expect($('#sg-code-pane-markdown').getCSSProperty('display').value).to.equal('block');
+        expect($('#sg-code-pane-markdown-edit').getCSSProperty('display').value).to.equal('none');
+      });
+
+      it('the markdown edit save button exits the markdown edit pane if markdown unchanged', function () {
+        $('#sg-t-toggle').click();
+        browser.pause(100);
+        $('#sg-t-code').click();
+        browser.pause(700);
+        $('#sg-code-tab-markdown').click();
+        browser.pause(100);
+        $('#sg-code-btn-markdown-edit').click();
+        browser.pause(100);
+        $('#sg-code-btn-markdown-save').click();
+        browser.pause(100);
+        expect($('#sg-code-pane-markdown').getCSSProperty('display').value).to.equal('block');
+        expect($('#sg-code-pane-markdown-edit').getCSSProperty('display').value).to.equal('none');
+      });
+
+      it('the markdown edit save button exits the markdown edit pane if edited markdown is saved', function () {
+        $('#sg-t-toggle').click();
+        browser.pause(100);
+        $('#sg-t-code').click();
+        browser.pause(700);
+        $('#sg-code-tab-markdown').click();
+        browser.pause(100);
+        $('#sg-code-btn-markdown-edit').click();
+        browser.pause(100);
+        $('#sg-code-textarea-markdown').addValue('\n');
+        browser.pause(100);
+        $('#sg-code-btn-markdown-save').click();
+        browser.pause(100);
+        expect($('#sg-code-pane-markdown').getCSSProperty('display').value).to.equal('block');
+        expect($('#sg-code-pane-markdown-edit').getCSSProperty('display').value).to.equal('none');
+      });
+
+      it('the git tab activates the git panel', function () {
+        $('#sg-t-toggle').click();
+        browser.pause(100);
+        $('#sg-t-code').click();
+        browser.pause(700);
+        $('#sg-code-tab-git').click();
+        browser.pause(100);
+        expect($('#sg-code-panel-git').getCSSProperty('display').value).to.equal('block');
+        expect($('#sg-code-pane-git-na').getCSSProperty('display').value).to.equal('block');
       });
     });
 

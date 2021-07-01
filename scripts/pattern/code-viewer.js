@@ -178,6 +178,8 @@
     if (!patternData) {
       patternData = {};
     }
+
+    patternData.viewall = false;
   }
 
   parent.postMessage(patternData, targetOrigin);

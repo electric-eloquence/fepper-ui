@@ -78,6 +78,7 @@
     "rollup": "^2.21.0",
     "sinon": "9.x",
     "wdio-chromedriver-service": "7.1.0",
-    "webdriverio": "7.7.3"
+    "webdriverio": "7.7.3",
+    "xmldom": "^0.6.0"
   }
 }

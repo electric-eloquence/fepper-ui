@@ -285,8 +285,8 @@ describe('annotationsViewer', function () {
       const sgAnnotationsNaAfter = $orgs['#sg-annotations-na'].getState();
       const sgAnnotationsAfter = $orgs['#sg-annotations'].getState();
 
-      expect(sgAnnotationsNaBefore.css.diplay).to.be.undefined;
-      expect(sgAnnotationsBefore.css.diplay).to.be.undefined;
+      expect(sgAnnotationsNaBefore.css).to.not.have.key('display');
+      expect(sgAnnotationsBefore.css).to.not.have.key('display');
 
       expect(sgAnnotationsNaAfter.css.display).to.equal('block');
       expect(sgAnnotationsAfter.css.display).to.equal('none');
