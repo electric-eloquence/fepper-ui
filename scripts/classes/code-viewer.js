@@ -689,6 +689,10 @@ export default class CodeViewer {
           }
         }
       }
+      case 'requerio': {
+        // TODO: Time-travel.
+        return Promise.resolve();
+      }
     }
   }
 

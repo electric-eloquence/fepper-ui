@@ -224,7 +224,6 @@ describe('codeViewer', function () {
       expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
     });
 
-    // No need to test the following when stoked because .stoke() invokes .activateTabAndPanel().
     it('activates Git tab and panel but does not set panel content if not stoked', function () {
       codeViewer.patternPartial = 'elements-paragraph';
       codeViewer.stoked = false;
@@ -247,6 +246,51 @@ describe('codeViewer', function () {
           expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
 
           expect(paneStateAfter.html).to.be.null;
+          expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
+          expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
+        });
+    });
+
+    it('activates Git tab and panel and sets panel content if stoked', function () {
+      codeViewer.patternPartial = 'elements-paragraph';
+      codeViewer.stoked = true;
+
+      $orgs['.sg-code-panel'].dispatchAction('removeClass', 'sg-code-panel-active');
+      $orgs['.sg-code-tab'].dispatchAction('removeClass', 'sg-code-tab-active');
+
+      const paneStateBefore = $orgs['#sg-code-pane-git'].getState();
+      const panelStateBefore = $orgs['#sg-code-panel-git'].getState();
+      const tabStateBefore = $orgs['#sg-code-tab-git'].getState();
+
+      return codeViewer.activateTabAndPanel('git')
+        .then(() => {
+          const paneStateAfter = $orgs['#sg-code-pane-git'].getState();
+          const panelStateAfter = $orgs['#sg-code-panel-git'].getState();
+          const tabStateAfter = $orgs['#sg-code-tab-git'].getState();
+
+          expect(paneStateBefore.html).to.equal(paneStateAfter.html);
+          expect(panelStateBefore.classArray).to.not.include('sg-code-panel-active');
+          expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
+
+          expect(paneStateAfter.html).to.be.null;
+          expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
+          expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
+        });
+    });
+
+    it('activates the Requerio tab and panel - also tests .setPanelContent()', function () {
+      const panelStateBefore = $orgs['#sg-code-panel-requerio'].getState();
+      const tabStateBefore = $orgs['#sg-code-tab-requerio'].getState();
+      codeViewer.patternPartial = 'components-region';
+
+      return codeViewer.activateTabAndPanel('requerio')
+        .then(() => {
+          const panelStateAfter = $orgs['#sg-code-panel-requerio'].getState();
+          const tabStateAfter = $orgs['#sg-code-tab-requerio'].getState();
+
+          expect(panelStateBefore.classArray).to.not.include('sg-code-panel-active');
+          expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
+
           expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
           expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
         });

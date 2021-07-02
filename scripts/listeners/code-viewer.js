@@ -32,34 +32,6 @@ export default class CodeViewer {
     document.addEventListener('DOMContentLoaded', () => {
       this.$orgs['#sg-code-container'].dispatchAction('css', 'bottom'); // Set this measurement in state.
 
-      this.$orgs['#sg-code-tab-feplet'].on('click', () => {
-        this.#fepperUi.codeViewer.activateTabAndPanel('feplet');
-      });
-
-      this.$orgs['#sg-code-tab-markdown'].on('click', () => {
-        this.#fepperUi.codeViewer.activateTabAndPanel('markdown');
-      });
-
-      this.$orgs['#sg-code-tab-git'].on('click', () => {
-        this.#fepperUi.codeViewer.activateTabAndPanel('git');
-      });
-
-      this.$orgs['#sg-code-radio-git-off'].on('change', () => {
-        this.$orgs['#sg-code-pane-git'].toggleClass('git-integrator-on');
-
-        if (this.#fepperUi.dataSaver.findValue('gitIntegrator') === 'true') {
-          this.#fepperUi.dataSaver.updateValue('gitIntegrator', 'false');
-        }
-      });
-
-      this.$orgs['#sg-code-radio-git-on'].on('change', () => {
-        this.$orgs['#sg-code-pane-git'].toggleClass('git-integrator-on');
-
-        if (this.#fepperUi.dataSaver.findValue('gitIntegrator') === 'false') {
-          this.#fepperUi.dataSaver.updateValue('gitIntegrator', 'true');
-        }
-      });
-
       // Select and copy the relative path to the pattern.
       this.$orgs['#sg-code-pattern-info-rel-path'].on('click', () => {
         let selection;
@@ -96,6 +68,22 @@ export default class CodeViewer {
 
           return;
         }
+      });
+
+      this.$orgs['#sg-code-tab-feplet'].on('click', () => {
+        this.#fepperUi.codeViewer.activateTabAndPanel('feplet');
+      });
+
+      this.$orgs['#sg-code-tab-markdown'].on('click', () => {
+        this.#fepperUi.codeViewer.activateTabAndPanel('markdown');
+      });
+
+      this.$orgs['#sg-code-tab-git'].on('click', () => {
+        this.#fepperUi.codeViewer.activateTabAndPanel('git');
+      });
+
+      this.$orgs['#sg-code-tab-requerio'].on('click', () => {
+        this.#fepperUi.codeViewer.activateTabAndPanel('requerio');
       });
 
       this.$orgs['#sg-code-btn-markdown-edit'].on('click', () => {
@@ -185,6 +173,22 @@ export default class CodeViewer {
         this.$orgs['#sg-code-console-markdown-error'].dispatchAction('html', '');
         this.$orgs['#sg-code-pane-markdown-console'].dispatchAction('css', {display: ''});
         this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+      });
+
+      this.$orgs['#sg-code-radio-git-off'].on('change', () => {
+        this.$orgs['#sg-code-pane-git'].toggleClass('git-integrator-on');
+
+        if (this.#fepperUi.dataSaver.findValue('gitIntegrator') === 'true') {
+          this.#fepperUi.dataSaver.updateValue('gitIntegrator', 'false');
+        }
+      });
+
+      this.$orgs['#sg-code-radio-git-on'].on('change', () => {
+        this.$orgs['#sg-code-pane-git'].toggleClass('git-integrator-on');
+
+        if (this.#fepperUi.dataSaver.findValue('gitIntegrator') === 'false') {
+          this.#fepperUi.dataSaver.updateValue('gitIntegrator', 'true');
+        }
       });
 
       this.$orgs['#sg-code-btn-git-disable'].on('click', () => {
