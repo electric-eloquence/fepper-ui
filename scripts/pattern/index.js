@@ -6,13 +6,12 @@ import './pattern-finder.js';
 import './pattern-viewport.js';
 
 if (parent !== window && window.Mousetrap) {
-  const Mousetrap = window.Mousetrap;
   const targetOrigin =
     (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
 
-  Mousetrap.bind('esc', () => {
-    const obj = {event: 'patternlab.keyPress', keyPress: 'esc'};
+  window.Mousetrap.bind('esc', () => {
+    const messageObj = {event: 'patternlab.keyPress', keyPress: 'esc'};
 
-    parent.postMessage(obj, targetOrigin);
+    parent.postMessage(messageObj, targetOrigin);
   });
 }

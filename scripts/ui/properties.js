@@ -46,6 +46,7 @@ export default class UiProps {
     this.sgRightpullWidth = this.isMobile ? 0 : 14;
     this.timeoutDefault = 200;
     this.titleSeparator = ' : ';
+    this.viewall = false;
     this.vpWidth = null;
   }
 

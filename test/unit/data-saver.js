@@ -28,7 +28,7 @@ describe('dataSaver', function () {
 
       const valueAfter = dataSaver.findValue('foo');
 
-      expect(valueBefore).to.equal('');
+      expect(valueBefore).to.be.null;
 
       expect(valueAfter).to.equal('bar');
     });
@@ -40,7 +40,7 @@ describe('dataSaver', function () {
 
       const valueAfter = dataSaver.findValue('vpWidth');
 
-      expect(valueBefore).to.equal('');
+      expect(valueBefore).to.be.null;
 
       expect(valueAfter).to.equal('1337');
     });
@@ -80,7 +80,7 @@ describe('dataSaver', function () {
 
       const valueAfter = dataSaver.findValue('vpWidth');
 
-      expect(valueBefore).to.equal('');
+      expect(valueBefore).to.be.null;
 
       expect(valueAfter).to.equal('1970');
     });
@@ -98,7 +98,7 @@ describe('dataSaver', function () {
 
       expect(fooBefore).to.not.equal(fooAfter);
 
-      expect(fooAfter).to.equal('');
+      expect(fooAfter).to.be.null;
     });
   });
 
@@ -108,7 +108,7 @@ describe('dataSaver', function () {
 
       const value = dataSaver.findValue('vpWidth');
 
-      expect(value).to.equal('');
+      expect(value).to.be.null;
     });
 
     it('returns the value if it exists', function () {

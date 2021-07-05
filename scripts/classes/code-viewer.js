@@ -8,19 +8,19 @@ let root;
 // Declared outside class scope because it requires function-scoped `this` context.
 // Not in the listeners directory, because we don't need class scoping.
 function addLineageListeners($orgs, uiProps) {
-  // Must be jQuery, not Requerio, because the HTML was dynamically inserted by the .updateCode() method on the class.
+  // Must be jQuery, not Requerio, because the HTML was dynamically inserted by .updateMetadata() on the class.
   // Since it will be repeatedly generated, the following cannot be in a listeners class, where they are added but once.
   /* istanbul ignore if */
   if (typeof window === 'object') {
     root.$('#sg-code-lineage-fill a, #sg-code-lineager-fill a').on('click', function (e) {
       e.preventDefault();
 
-      const obj = {
+      const messageObj = {
         event: 'patternlab.updatePath',
         path: root.$(this).attr('href')
       };
 
-      $orgs['#sg-viewport'][0].contentWindow.postMessage(obj, uiProps.targetOrigin);
+      $orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, uiProps.targetOrigin);
     });
   }
 }
@@ -39,31 +39,30 @@ export default class CodeViewer {
       return;
     }
 
-    if (data.viewall) {
-      // This is necessary so the Markdown "Edit" button isn't displayed.
-      this.$orgs['#patternlab-body'].dispatchAction('addClass', 'viewall');
-    }
-    else {
-      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'viewall');
-    }
+    if (data.codeViewallClick) { // This condition must come first.
+      if (data.codeViewallClick === 'on') {
+        this.patternPartial = data.patternPartial;
 
-    if (data.codeOverlay) { // This condition must come first.
-      if (data.codeOverlay === 'on') {
-        this.viewall = data.viewall || false;
-
-        this.updateCode(data.lineage, data.lineageR, data.patternPartial, data.patternState);
-        this.activateTabAndPanel(this.tabActive);
-
-        if (data.openCode && !this.codeActive) {
-          this.openCode();
-        }
+        this.openCode();
       }
       else {
         this.closeCode();
       }
     }
-    else if (typeof data.codeViewall === 'boolean') {
-      this.viewall = data.codeViewall;
+
+    if (data.viewall === true) {
+      this.uiProps.viewall = data.viewall;
+      this.viewall = data.viewall; // DEPRECATED.
+      this.annotationsViewer.viewall = data.viewall; // DEPRECATED.
+
+      // This is necessary so the Markdown "Edit" button is not displayed.
+      this.$orgs['#patternlab-body'].dispatchAction('addClass', 'viewall');
+    }
+    else if (data.viewall === false) {
+      this.viewall = data.viewall; // DEPRECATED.
+
+      // This is necessary so the Markdown "Edit" button is displayed.
+      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'viewall');
     }
 
     switch (data.event) {
@@ -71,12 +70,6 @@ export default class CodeViewer {
         switch (data.keyPress) {
           case 'ctrl+shift+c':
             this.toggleCode();
-
-            // If viewall, scroll to the focused pattern.
-            /* istanbul ignore if */
-            if (this.viewall && this.codeActive) {
-              this.scrollViewall();
-            }
 
             break;
 
@@ -91,6 +84,17 @@ export default class CodeViewer {
         }
 
         break;
+    }
+
+    if (data.lineage) {
+      this.updateMetadata(data.lineage, data.lineageR, data.patternPartial, data.patternState, data.missingPartials);
+
+      const paneMarkdownCommitDisplay = this.$orgs['#sg-code-pane-markdown-commit'].getState().css.display;
+      const paneMarkdownLoadAnimDisplay = this.$orgs['#sg-code-pane-markdown-load-anim'].getState().css.display;
+
+      if (!paneMarkdownCommitDisplay && !paneMarkdownLoadAnimDisplay) {
+        this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+      }
     }
   };
 
@@ -107,11 +111,13 @@ export default class CodeViewer {
     this.#root = root;
 
     this.codeActive = false;
+    this.mdPath = null;
     this.$orgs = fepperUi.requerio.$orgs;
     this.patternPartial = null;
     this.requerio = fepperUi.requerio;
+    this.stoked = false;
     this.tabActive = 'feplet';
-    this.viewall = false;
+    this.viewall = false; // DEPRECATED.
   }
 
   // Getters for fepperUi instance props in case they are undefined at instantiation.
@@ -149,18 +155,114 @@ export default class CodeViewer {
   // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
   stoke() {
     // Load the query strings in case code view has to show by default.
+    const dataSaverGitIntegrator = this.#fepperUi.dataSaver.findValue('gitIntegrator');
     const searchParams = this.urlHandler.getSearchParams();
     const tabActive = this.dataSaver.findValue('tabActive');
+    let gitIntegrator = dataSaverGitIntegrator === 'true';
     this.tabActive = tabActive || this.tabActive;
-    this.patternPartial = searchParams.p;
+    this.patternPartial = searchParams.p || this.uiData.config.defaultPattern;
 
-    if (searchParams.view === 'code' || searchParams.view === 'c') {
+    if (searchParams.view === 'code' || searchParams.view === 'c' || this.uiData.config.defaultShowPatternInfo) {
       this.openCode();
     }
-    // Open code panel on page load if config.defaultShowPatternInfo === true.
-    else if (this.uiData.config.defaultShowPatternInfo) {
-      this.openCode();
+
+    if (gitIntegrator) {
+      // If integrating Git, preemptively hide the Markdown edit button.
+      // Reenable after a git pull with no conflicts.
+      // Not easy to test because reenablement requires a git pull on the shell, and we aren't mocking shell commands.
+      // However, this is very easy to see during actual user interaction.
+      /* istanbul ignore next */
+      this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
     }
+
+    // Determine if the project has been set up with Git.
+    return this.activateTabAndPanel(this.tabActive)
+      .then(() => {
+        return fetch(
+          '/git-integrator', {
+            method: 'POST',
+            body: new URLSearchParams('args[0]=--version')
+          })
+          .then((response) => {
+            /* istanbul ignore else */
+            if (response.status === 200) {
+              return Promise.resolve();
+            }
+            else {
+              return response.text();
+            }
+          })
+          .then((responseText) => {
+            if (responseText) {
+              return Promise.reject(responseText);
+            }
+            else {
+              return fetch(
+                '/git-integrator', {
+                  method: 'POST',
+                  body: new URLSearchParams('args[0]=remote')
+                });
+            }
+          })
+          .then((response) => {
+            /* istanbul ignore else */
+            if (response.status === 200) {
+              return Promise.resolve();
+            }
+            else {
+              return response.text();
+            }
+          })
+          .then((responseText) => {
+            if (responseText) {
+              return Promise.reject(responseText);
+            }
+            else {
+              if (dataSaverGitIntegrator === 'true' || this.uiData.config.gitIntegrator) {
+                this.$orgs['#sg-code-radio-git-on'].dispatchAction('prop', {checked: true});
+                this.$orgs['#sg-code-pane-git'].dispatchAction('addClass', 'git-integrator-on');
+              }
+
+              if (dataSaverGitIntegrator === null && this.uiData.config.gitIntegrator) {
+                gitIntegrator = true;
+
+                // If integrating Git, preemptively hide the Markdown edit button.
+                // Reenable after a git pull with no conflicts.
+                this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
+                this.#fepperUi.dataSaver.updateValue('gitIntegrator', 'true');
+              }
+            }
+
+            this.stoked = true;
+
+            return this.setPanelContent('git', this.patternPartial, gitIntegrator);
+          })
+          .catch((rejection) => {
+            if (typeof rejection === 'string' && rejection.includes('section id="forbidden"')) {
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(rejection, 'text/html');
+              const forbidden = doc.getElementById('forbidden');
+              const forbiddenClassName = forbidden.getAttribute('class');
+
+              forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
+              this.$orgs['#sg-code-pane-git-na'].dispatchAction('html', forbidden);
+            }
+            /* istanbul ignore else if */
+            else if (typeof rejection === 'string' && rejection.startsWith('fatal:')) {
+              this.#fepperUi.dataSaver.updateValue('gitIntegrator', 'false');
+            }
+            else if (rejection) {
+              // eslint-disable-next-line no-console
+              console.error(rejection);
+            }
+
+            this.stoked = true;
+
+            this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: 'block'});
+
+            return this.setPanelContent('git', this.patternPartial, gitIntegrator);
+          });
+      });
   }
 
   activateMarkdownTextarea() {
@@ -178,144 +280,418 @@ export default class CodeViewer {
   /**
    * When loading the code view, make sure the active tab is highlighted and filled in appropriately.
    *
-   * @param {string} type - Single letter that refers to classes and types.
+   * @param {string} type - The panel to activate.
+   * @returns {promise} A promise on which to perform additional actions.
    */
   activateTabAndPanel(type) {
+    const gitIntegrator = this.#fepperUi.dataSaver.findValue('gitIntegrator') === 'true';
     this.tabActive = type;
 
     this.$orgs['.sg-code-tab'].dispatchAction('removeClass', 'sg-code-tab-active');
+    this.$orgs['#sg-code-tab-' + type].dispatchAction('addClass', 'sg-code-tab-active');
     this.$orgs['.sg-code-panel'].dispatchAction('removeClass', 'sg-code-panel-active');
+    this.$orgs['#sg-code-panel-' + type].dispatchAction('addClass', 'sg-code-panel-active');
     this.dataSaver.updateValue('tabActive', type);
 
     switch (type) {
-      case 'feplet': {
-        this.$orgs['#sg-code-tab-feplet'].dispatchAction('addClass', 'sg-code-tab-active');
-        this.$orgs['#sg-code-panel-feplet'].dispatchAction('addClass', 'sg-code-panel-active');
-        this.setPanelContent(type);
+      case 'markdown': {
+        if (!this.patternPartial.startsWith('viewall')) {
+          return this.setPanelContent(type)
+            .then(() => {
+              if (this.stoked && this.mdPath) {
+                return this.setPanelContent('git', this.patternPartial, gitIntegrator);
+              }
+              else {
+                return Promise.resolve();
+              }
+            });
+        }
 
+        /* istanbul ignore next */
         break;
       }
-      case 'markdown': {
-        // TODO: Viewall behavior:
-        //       To replicate:
-        //         1. Open compounds-text viewall
-        //         2. Activate markdown tab and panel
-        //         3. Click code button for footer
-        //
-        //       While clicking code buttons on viewall, update markdown panel.
-        //       Try editing while on viewall.
-        this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-active');
-        this.$orgs['#sg-code-panel-markdown'].dispatchAction('addClass', 'sg-code-panel-active');
-
-        const panelMarkdown = this.$orgs['#sg-code-panel-markdown'].getState().html;
-
-        if (!panelMarkdown) {
-          this.setPanelContent(type);
+      case 'git': {
+        if (this.stoked) {
+          return this.setPanelContent(type, this.patternPartial, gitIntegrator);
         }
 
         break;
       }
-      /* istanbul ignore next */
-      case 'requerio': {
-
-        break;
-      }
-      /* istanbul ignore next */
-      case 'git': {
-
-        break;
+      default: {
+        return this.setPanelContent(type, this.patternPartial, gitIntegrator);
       }
     }
+
+    return Promise.resolve();
+  }
+
+  addRevision() {
+    return fetch(
+      '/git-integrator', {
+        method: 'POST',
+        body: new URLSearchParams('args[0]=add')
+      })
+      .then(response => response.text())
+      .then(responseText => responseText)
+      .catch((err) => /* istanbul ignore next */ {
+        // eslint-disable-next-line no-console
+        console.error(err);
+      });
   }
 
   closeCode() {
-    // Tell the pattern that code viewer has been turned off.
-    const obj = {codeToggle: 'off'};
     // Flag that viewer is inactive.
     this.codeActive = false;
 
     this.viewerHandler.closeViewer();
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, this.uiProps.targetOrigin);
     this.$orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
     this.$orgs['#sg-code-container'].dispatchAction('removeClass', 'active');
   }
 
+  commitRevision(body) {
+    return fetch(
+      '/git-integrator', {
+        method: 'POST',
+        body: new URLSearchParams(body)
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.text();
+        }
+        else {
+          return response.json();
+        }
+      })
+      .then((response) => {
+        return new Promise(
+          (resolve, reject) => {
+            if (typeof response === 'string') {
+              resolve(response);
+            }
+            else {
+              reject(response.stack);
+            }
+          });
+      });
+  }
+
+  deActivateMarkdownTextarea() {
+    this.$orgs['#sg-code-textarea-markdown'].blur();
+    this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
+    this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+  }
+
   openCode() {
-    // Tell the pattern that code viewer has been turned on.
-    const objCodeToggle = {codeToggle: 'on'};
     // Flag that viewer is active.
     this.codeActive = true;
 
     // Make sure the annotations viewer is off before showing code.
     this.annotationsViewer.closeAnnotations();
     this.viewerHandler.openViewer();
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(objCodeToggle, this.uiProps.targetOrigin);
     this.$orgs['#sg-t-code'].dispatchAction('addClass', 'active');
     this.$orgs['#sg-code-container'].dispatchAction('addClass', 'active');
+
+    // If viewall, scroll to the focused pattern.
+    /* istanbul ignore if */
+    if (this.uiProps.viewall) {
+      this.scrollViewall();
+    }
   }
 
-  resetPanels(patternPartial) {
-    this.patternPartial = patternPartial;
+  pushRevision() {
+    return fetch(
+      '/git-integrator', {
+        method: 'POST',
+        body: new URLSearchParams('args[0]=push')
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.text();
+        }
+        else {
+          return response.json();
+        }
+      })
+      .then((response) => {
+        return new Promise(
+          (resolve, reject) => {
+            if (typeof response === 'string') {
+              resolve(response);
+            }
+            else {
+              reject(response.stack);
+            }
+          });
+      });
+  }
 
-    this.unsetPanelContent('feplet');
-    this.unsetPanelContent('markdown');
-    this.unsetPanelContent('requerio');
-    this.unsetPanelContent('git');
-    this.setPanelContent(this.tabActive);
+  saveMarkdown() {
+    let gitIntegrator;
+
+    return fetch('/gatekeeper')
+      .then((response) => {
+        if (response.status === 200) {
+          this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html');
+
+          const markdownBefore = this.$orgs['#sg-code-code-language-markdown'].getState().html;
+          const markdownTextareaVal = this.$orgs['#sg-code-textarea-markdown'].getState().val;
+
+          if (markdownTextareaVal !== markdownBefore) {
+            const body = 'markdown_edited=' + encodeURIComponent(markdownTextareaVal) + '&rel_path=' +
+              encodeURIComponent(this.uiData.sourceFiles[this.patternPartial]);
+
+            return fetch(
+              '/markdown-editor', {
+                method: 'POST',
+                body: new URLSearchParams(body)
+              });
+          }
+          else {
+            return Promise.reject();
+          }
+        }
+        else {
+          return Promise.reject(response);
+        }
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          return this.setPanelContent('markdown', this.patternPartial);
+        }
+        else {
+          /* istanbul ignore next */
+          return Promise.reject(response);
+        }
+      })
+      .then(() => {
+        gitIntegrator = this.#fepperUi.dataSaver.findValue('gitIntegrator') === 'true';
+
+        if (gitIntegrator) {
+          this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
+
+          return this.setPanelContent('git', this.patternPartial, gitIntegrator);
+        }
+        else {
+          return Promise.resolve();
+        }
+      })
+      .then((response) => {
+        this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
+
+        if (gitIntegrator) {
+          this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
+          // If integrating Git, preemptively hide the Markdown edit button.
+          // Reenable after a git pull with no conflicts.
+          this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
+        }
+
+        if (response && response.status === 200) {
+          this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
+          this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: 'block'});
+          this.$orgs['#sg-code-textarea-commit-message'].dispatchAction('focus');
+        }
+        else {
+          this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+        }
+      })
+      .catch((response) => {
+        if (response && response.status === 403) {
+          this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
+          this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: 'none'});
+        }
+
+        if (response && response.status && response.statusText) {
+          // eslint-disable-next-line no-console
+          console.error(`Status ${response.status}: ${response.statusText}`);
+        }
+        else {
+          /* istanbul ignore if */
+          if (response) {
+            // eslint-disable-next-line no-console
+            console.error(response);
+          }
+
+          this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+          this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
+          this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
+          this.$orgs['#sg-code-textarea-commit-message'].dispatchAction('val', '');
+        }
+      });
   }
 
   scrollViewall() /* istanbul ignore next */ {
     this.$orgs['#sg-viewport'][0].contentWindow.postMessage({codeScrollViewall: true}, this.uiProps.targetOrigin);
   }
 
-  setPanelContent(type) {
+  /**
+   * Set the content for the activated panel.
+   *
+   * @param {string} type - The panel to activate.
+   * @param {[string]} patternPartial - The pattern for which the panel content is being set.
+   * @param {[boolean]} gitIntegrator - Whether Git Integrator is on or off.
+   * @returns {promise} A promise on which to perform additional actions.
+   */
+  setPanelContent(type, patternPartial, gitIntegrator) {
+    this.patternPartial = patternPartial || this.patternPartial;
+
     switch (type) {
       case 'feplet': {
-        this.$orgs['#sg-code-panel-feplet'][0]
-          .contentWindow.location.replace(`/mustache-browser?partial=${this.patternPartial}`);
-        this.$orgs['#sg-code-panel-feplet'][0]
-          .addEventListener('load', () => {
-            const height = this.$orgs['#sg-code-panel-feplet'][0].contentWindow.document.documentElement.offsetHeight;
+        /* istanbul ignore else */
+        if (this.$orgs['#sg-code-panel-feplet'].length) {
+          this.$orgs['#sg-code-panel-feplet'][0]
+            .contentWindow.location.replace(`/mustache-browser?partial=${this.patternPartial}`);
+          this.$orgs['#sg-code-panel-feplet'][0]
+            .addEventListener('load', () => {
+              const height = this.$orgs['#sg-code-panel-feplet'][0].contentWindow.document.documentElement.offsetHeight;
 
-            this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: `${height}px`, visibility: ''});
-          });
+              this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: `${height}px`, visibility: ''});
+            });
+        }
+        // DEPRECATED: Here for backward-compatibility. Will be removed.
+        else {
+          this.$orgs['#sg-code-fill']
+            .dispatchAction('text', 'Update Fepper NPM to make this work correctly.')
+            .dispatchAction('css', {color: 'red'});
+        }
 
-        break;
+        return Promise.resolve();
       }
       case 'markdown': {
-        const codeViewer = this;
         const config = this.uiData.config;
         const patternPath = this.uiData.patternPaths[this.patternPartial];
         const mdPath = patternPath.slice(0, -(config.outfileExtension.length)) + config.frontMatterExtension;
+        let textareaMarkdownHtml;
 
-        const xhr = new root.XMLHttpRequest();
-        xhr.onload = function () {
-          if (this.status === 200) {
-            const markdownTextareaState = codeViewer.$orgs['#sg-code-textarea-markdown'].getState();
-
-            codeViewer.$orgs['#sg-code-pane-no-markdown'].dispatchAction('css', {display: ''});
-            codeViewer.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', this.responseText);
-            codeViewer.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
-
-            if (!markdownTextareaState.html) {
-              codeViewer.$orgs['#sg-code-textarea-markdown'].dispatchAction('html', this.responseText);
+        return fetch('/gatekeeper?tool=the+Markdown+Editor')
+          .then((response) => {
+            if (response.status === 200) {
+              return fetch(
+                `/${mdPath}?${Date.now()}`, {
+                  method: 'GET'
+                });
             }
+            else {
+              return response.text();
+            }
+          })
+          .then((response) => {
+            if (response instanceof Object) {
+              if (response.status === 200) {
+                this.mdPath = mdPath;
+
+                return response.text();
+              }
+              else {
+                this.mdPath = null;
+
+                return Promise.reject();
+              }
+            }
+            else if (typeof response === 'string') {
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(response, 'text/html');
+              const forbidden = doc.getElementById('forbidden');
+              const forbiddenClassName = forbidden.getAttribute('class');
+
+              forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
+              this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('html', forbidden);
+
+              return Promise.reject();
+            }
+          })
+          .then((responseText) => {
+            if (responseText) {
+              textareaMarkdownHtml = responseText;
+
+              this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('css', {display: ''});
+              this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', textareaMarkdownHtml);
+              this.$orgs['#sg-code-textarea-markdown'].dispatchAction('html', textareaMarkdownHtml);
+
+              // After this promise fully resolves, determine whether or not to display #sg-code-pane-markdown
+              // This needs to occur per invocation of .setPanelContent('markdown', ...)
+            }
+
+            return Promise.resolve();
+          })
+          .catch((err) => {
+            /* istanbul ignore if */
+            if (err) {
+              // eslint-disable-next-line no-console
+              console.error(err);
+            }
+
+            this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
+            this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('css', {display: 'block'});
+          });
+      }
+      case 'git': {
+        const gitNaDisplay = this.$orgs['#sg-code-pane-git-na'].getState().css.display;
+
+        if (gitNaDisplay === 'block') {
+          return Promise.resolve();
+        }
+        else {
+          if (gitIntegrator) {
+            let gitIntegratorResponse;
+
+            return fetch(
+              '/git-integrator', {
+                method: 'POST',
+                body: new URLSearchParams('args[0]=pull')
+              })
+              .then((response) => {
+                if (response && response.status === 200) {
+                  gitIntegratorResponse = response;
+
+                  return Promise.resolve();
+                }
+                else {
+                  return response.json();
+                }
+              })
+              .then((responseJson) => {
+                if (responseJson) {
+                  return Promise.reject(responseJson);
+                }
+                else {
+                  // Since we know there are no Git conflicts, reenable Markdown edit button.
+                  this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: ''});
+                  this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: ''});
+                  this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: 'block'});
+
+                  return Promise.resolve(gitIntegratorResponse);
+                }
+              })
+              .catch((err) => {
+                this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: ''});
+
+                if (
+                  gitIntegrator &&
+                  err && err.message && err.message.startsWith('Command failed:')
+                ) {
+                  this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
+                  this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
+                  this.$orgs['#sg-code-pane-git-na'].dispatchAction('html',
+                    '<pre class="sg-code-pane-content-warning"><code>' + err.message + '</code></pre>');
+                  this.$orgs['#sg-code-btn-git-disable'].dispatchAction('css', {display: 'block'});
+                }
+
+                this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: 'block'});
+              });
           }
           else {
-            codeViewer.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
-            codeViewer.$orgs['#sg-code-pane-no-markdown'].dispatchAction('css', {display: 'block'});
+            return new Promise(
+              (resolve) => {
+                this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: 'block'});
+
+                resolve();
+              });
           }
-        };
-        /* istanbul ignore next */
-        xhr.onerror = function () {
-          // eslint-disable-next-line no-console
-          console.error(`Status ${this.status}: ${this.statusText}`);
-        };
-
-        xhr.open('GET', mdPath + '?' + Date.now());
-        xhr.send();
-
-        break;
+        }
+      }
+      case 'requerio': {
+        // TODO: Time-travel.
+        return Promise.resolve();
       }
     }
   }
@@ -332,28 +708,6 @@ export default class CodeViewer {
     }
   }
 
-  unsetPanelContent(type) {
-    switch (type) {
-      case 'feplet':
-        this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: '', visibility: 'hidden'});
-        this.$orgs['#sg-code-panel-feplet'][0].contentWindow.location.replace('about:blank');
-
-        break;
-
-      case 'markdown':
-        this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', '');
-
-        if (this.$orgs['#sg-code-textarea-markdown'].length) {
-          this.$orgs['#sg-code-textarea-markdown'].dispatchAction('html', '');
-        }
-
-        break;
-
-      default:
-        this.$orgs['#sg-code-panel-' + type].dispatchAction('html', '');
-    }
-  }
-
   /**
    * When turning on or switching between patterns with code viewer on, make sure we get the code from the pattern via
    * postMessage.
@@ -362,8 +716,9 @@ export default class CodeViewer {
    * @param {array} lineageR - Reverse lineage array.
    * @param {string} patternPartial - The shorthand partials syntax for a given pattern.
    * @param {string} patternState - inprogress, inreview, complete
+   * @param {array} missingPartials - Array of missing partials.
    */
-  updateCode(lineage, lineageR, patternPartial, patternState) {
+  updateMetadata(lineage, lineageR, patternPartial, patternState, missingPartials) {
     this.patternPartial = patternPartial;
 
     // Draw lineage.
@@ -410,6 +765,22 @@ export default class CodeViewer {
     }
     else {
       this.$orgs['#sg-code-lineager'].dispatchAction('css', {display: 'none'});
+    }
+
+    // Identify any missing partials.
+    if (missingPartials && missingPartials.length) {
+      let missingPartialsList = '';
+
+      for (let i = 0; i < missingPartials.length; i++) {
+        missingPartialsList += (i === 0) ? '' : ', ';
+        missingPartialsList += missingPartials[i];
+      }
+
+      this.$orgs['#sg-code-missing-partials'].dispatchAction('css', {display: 'block'});
+      this.$orgs['#sg-code-missing-partials-fill'].dispatchAction('html', missingPartialsList);
+    }
+    else {
+      this.$orgs['#sg-code-missing-partials'].dispatchAction('css', {display: 'none'});
     }
 
     // When clicking on a lineage item update the iframe.

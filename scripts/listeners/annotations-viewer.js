@@ -15,16 +15,9 @@ export default class AnnotationsViewer {
       this.$orgs['#sg-annotations-container'].dispatchAction('css', 'bottom'); // Set this measurement in state.
     });
 
-    const Mousetrap = window.Mousetrap;
-
     // Toggle the annotations panel.
-    Mousetrap.bind('ctrl+shift+a', (e) => {
+    window.Mousetrap.bind('ctrl+shift+a', (e) => {
       this.#fepperUi.annotationsViewer.toggleAnnotations();
-
-      // If viewall, scroll to the focused pattern.
-      if (this.#fepperUi.annotationsViewer.viewall && this.#fepperUi.annotationsViewer.annotationsActive) {
-        this.#fepperUi.annotationsViewer.scrollViewall();
-      }
 
       e.preventDefault();
       return false;

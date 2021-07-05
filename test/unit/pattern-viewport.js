@@ -472,6 +472,8 @@ describe('patternViewport', function () {
     });
 
     describe('loads pattern', function () {
+      const defaultPatternOrig = patternViewport.uiData.config.defaultPattern;
+
       beforeEach(function () {
         sandbox.spy($orgs['#sg-viewport'][0].contentWindow.location, 'replace');
 
@@ -482,6 +484,10 @@ describe('patternViewport', function () {
 
       afterEach(function () {
         sandbox.restore();
+      });
+
+      after(function () {
+        patternViewport.uiData.config.defaultPattern = defaultPatternOrig;
       });
 
       it('with a "p" search param', function () {
@@ -609,7 +615,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal('1337px');
       expect(sgSizeEmStateBefore.val).to.not.equal('83.56');
       expect(sgSizePxStateBefore.val).to.not.equal(1337);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(discoModeAfter).to.be.false;
       expect(discoIdAfter).to.be.undefined;
@@ -666,7 +672,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(sgViewportStateAfter.css.width);
       expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
       expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-xx');
       expect(discoModeAfter).to.be.false;
@@ -724,7 +730,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(sgViewportStateAfter.css.width);
       expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
       expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-xs');
       expect(discoModeAfter).to.be.false;
@@ -782,7 +788,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(sgViewportStateAfter.css.width);
       expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
       expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-sm');
       expect(discoModeAfter).to.be.false;
@@ -840,7 +846,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(sgViewportStateAfter.css.width);
       expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
       expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-md');
       expect(discoModeAfter).to.be.false;
@@ -898,7 +904,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(sgViewportStateAfter.css.width);
       expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
       expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-lg');
       expect(discoModeAfter).to.be.false;
@@ -956,7 +962,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(sgViewportStateAfter.css.width);
       expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
       expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-w');
       expect(discoModeAfter).to.be.false;
@@ -1117,7 +1123,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(sgViewportStateAfter.css.width);
       expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
       expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-xx');
       expect(discoModeAfter).to.be.false;
@@ -1178,7 +1184,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(sgViewportStateAfter.css.width);
       expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
       expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-xs');
       expect(discoModeAfter).to.be.false;
@@ -1239,7 +1245,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(sgViewportStateAfter.css.width);
       expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
       expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-xx');
       expect(discoModeAfter).to.be.false;
@@ -1300,7 +1306,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(sgViewportStateAfter.css.width);
       expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
       expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-sm');
       expect(discoModeAfter).to.be.false;
@@ -1361,7 +1367,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(sgViewportStateAfter.css.width);
       expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
       expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-md');
       expect(discoModeAfter).to.be.false;
@@ -1409,7 +1415,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(sgViewportStateAfter.css.width);
       expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
       expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-lg');
       expect(discoModeAfter).to.be.false;
@@ -1470,7 +1476,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(sgViewportStateAfter.css.width);
       expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
       expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-w');
       expect(discoModeAfter).to.be.false;
@@ -1521,7 +1527,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(sgViewportStateAfter.css.width);
       expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
       expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-lg');
       expect(discoModeAfter).to.be.false;
@@ -1582,7 +1588,7 @@ describe('patternViewport', function () {
       expect(sgViewportStateBefore.css.width).to.not.equal(sgViewportStateAfter.css.width);
       expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
       expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
-      expect(dataSaverVpWidthBefore).to.equal('');
+      expect(dataSaverVpWidthBefore).to.be.null;
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-size-w');
       expect(discoModeAfter).to.be.false;

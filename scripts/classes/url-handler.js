@@ -7,20 +7,20 @@
 export default class UrlHandler {
   #fepperUi;
   #root;
+  #searchParams;
+  #searchString;
 
   constructor(fepperUi, root) {
     this.#fepperUi = fepperUi;
     this.#root = root;
+    this.#searchParams = null;
+    this.#searchString = null;
 
     this.$orgs = fepperUi.requerio.$orgs;
     this.skipBack = false;
   }
 
   /* GETTERS for fepperUi instance props in case they are undefined at instantiation. */
-
-  get codeViewer() {
-    return this.#fepperUi.codeViewer;
-  }
 
   get uiData() {
     return this.#fepperUi.uiData;
@@ -63,14 +63,18 @@ export default class UrlHandler {
    * @returns {object} An object containing to keys and values of window.location.search.
    */
   getSearchParams() {
-    const paramsObj = {};
-    const paramsItr = new URLSearchParams(this.#root.location.search);
+    if (this.#searchString !== this.#root.location.search) {
+      this.#searchParams = {};
+      this.#searchString = this.#root.location.search;
 
-    for (const param of paramsItr) {
-      paramsObj[param[0]] = param[1];
+      const paramsItr = new URLSearchParams(this.#root.location.search);
+
+      for (const param of paramsItr) {
+        this.#searchParams[param[0]] = param[1];
+      }
     }
 
-    return paramsObj;
+    return this.#searchParams;
   }
 
   /**
@@ -92,7 +96,7 @@ export default class UrlHandler {
     }
 
     const iframePath = this.uiData.patternPaths[patternPartial];
-    const obj = {event: 'patternlab.updatePath', path: iframePath};
+    const messageObj = {event: 'patternlab.updatePath', path: iframePath};
     const pParam = this.getSearchParams().p;
 
     if (pParam && pParam !== patternPartial) {
@@ -102,7 +106,7 @@ export default class UrlHandler {
     }
 
     this.uiFns.updatePatternInfo(patternPartial, iframePath);
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, this.uiProps.targetOrigin);
+    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
   }
 
   /**
@@ -115,7 +119,6 @@ export default class UrlHandler {
     const data = {pattern: patternPartial};
 
     this.#root.history.pushState(data, null, addressReplacement);
-    this.codeViewer.resetPanels(patternPartial);
     this.uiFns.updatePatternInfo(patternPartial, this.uiData.patternPaths[patternPartial]);
   }
 }

@@ -17,8 +17,10 @@ process.env.PORT = port;
 module.exports = new Promise((resolve) => {
   const server = http.createServer((req, res) => {
     if (req.method === 'POST') {
-      /* eslint-disable max-len */
-      let responseData = `
+      switch (req.url) {
+        case '/html-scraper': {
+          /* eslint-disable max-len */
+          let responseData = `
 <!DOCTYPE html>
 <html class="">
   <head>
@@ -39,16 +41,15 @@ module.exports = new Promise((resolve) => {
 
   <body class="text ">
     <main id="fepper-html-scraper" class="">`;
-      /* eslint-enable max-len */
+          /* eslint-enable max-len */
 
-      req.on('data', (chunk) => {
-        const urlObj = urlParse(req.url + '?' + chunk.toString(), true);
-        const {filename, url, selector_raw} = urlObj.query;
+          req.on('data', (chunk) => {
+            const urlObj = urlParse(req.url + '?' + chunk.toString(), true);
+            const {filename, url, selector_raw} = urlObj.query;
 
-        if (req.url === '/html-scraper') {
-          if (!filename) {
-            /* eslint-disable max-len */
-            responseData += `
+            if (!filename) {
+              /* eslint-disable max-len */
+              responseData += `
       <div id="message" class="message "></div>
       <div id="load-anim">
         <div></div><div></div><div></div><div></div>
@@ -95,28 +96,43 @@ module.exports = new Promise((resolve) => {
       </div>
       <iframe id="scraper__stage" sandbox="allow-same-origin allow-scripts"></iframe>
       <script src ="/scripts/pattern/html-scraper-dhtml.js"></script>`;
-            /* eslint-enable max-len */
-          }
-          else {
-            /* eslint-disable max-len */
-            responseData += `
+              /* eslint-enable max-len */
+            }
+            else {
+              /* eslint-disable max-len */
+              responseData += `
       <div id="message" class="message success">SUCCESS! Refresh the browser to check that your template appears under the &quot;Scrape&quot; menu.</div>
       <script src="/scripts/pattern/html-scraper-ajax.js"></script>`;
-            /* eslint-enable max-len */
-          }
-        }
-      });
+              /* eslint-enable max-len */
+            }
+          });
 
-      req.on('end', () => {
-        responseData += `
+          req.on('end', () => {
+            responseData += `
     </main>
     
   </body>
 </html>`;
 
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(responseData);
-      });
+            res.writeHead(200, {'Content-Type': 'text/html'});
+            res.end(responseData);
+          });
+
+          return;
+        }
+
+        case '/git-integrator': {
+          res.writeHead(501).end('Not Implemented');
+
+          return;
+        }
+
+        case '/markdown-editor': {
+          res.writeHead(200).end('OK');
+
+          return;
+        }
+      }
     }
 
     else {
@@ -292,12 +308,10 @@ module.exports = new Promise((resolve) => {
       fs.readFile(filePath, (err, data) => {
         if (err) {
           if (err.code === 'ENOENT') {
-            res.writeHead(404);
-            res.end('HTTP 404: Not Found');
+            res.writeHead(404).end('Not Found');
           }
           else {
-            res.writeHead(500);
-            res.end('HTTP 500: Internal Server Error');
+            res.writeHead(500).end('Internal Server Error');
           }
         }
         else {

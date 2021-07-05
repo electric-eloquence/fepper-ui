@@ -15,23 +15,16 @@
     (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
   const viewall = Boolean(sgPatternToggleAnnotations.length);
 
-  // Before declaring and running anything else, postMessage to the UI.
-  if (viewall) {
-    parent.postMessage({annotationsViewall: viewall}, targetOrigin);
-  }
-
   let annotations = [];
   let annotationsActive = false;
   let bodyWidth = d.body.clientWidth;
   let viewallFocus = '';
 
-  /* BEGIN FUNCTION DECLARATIONS. */
-
   function activateAnnotationTips() {
     let count = 0;
     let context;
 
-    if (viewall) {
+    if (viewall && viewallFocus) {
       context = d.getElementById(viewallFocus);
     }
     else {
@@ -60,10 +53,8 @@
                     e.preventDefault();
                     e.stopPropagation();
 
-                    // If an element was clicked while the overlay was already on, swap it.
-                    const obj = {annotationNumber: annotation_.displayNumber};
-
-                    parent.postMessage(obj, targetOrigin);
+                    // .annotationNumber invokes annotationsViewer.moveTo().
+                    parent.postMessage({annotationNumber: annotation_.displayNumber}, targetOrigin);
                   }
                 };
               })(annotation)
@@ -96,8 +87,6 @@
     }
     else {
       if (!sgPatternFirst) {
-        parent.postMessage({annotationsViewall: false, codeViewall: false, targetOrigin});
-
         return;
       }
 
@@ -224,14 +213,13 @@
 
         activateAnnotationTips();
 
-        const obj = {
-          annotationsOverlay: 'on',
+        const messageObj = {
+          annotationsUpdate: true,
           annotations: annotations,
-          patternPartial,
-          viewall
+          patternPartial
         };
 
-        parent.postMessage(obj, targetOrigin);
+        parent.postMessage(messageObj, targetOrigin);
       }
 
       // data.annotationsToggle off.
@@ -293,14 +281,6 @@
             }
           }
         }
-
-        const obj = {
-          annotationsOverlay: 'on',
-          annotations: annotations,
-          viewall
-        };
-
-        parent.postMessage(obj, targetOrigin);
       },
       200
     );
@@ -320,7 +300,7 @@
       if (this.classList.contains('active')) {
         this.classList.remove('active');
         hideAnnotationTips();
-        parent.postMessage({annotationsOverlay: 'off'}, targetOrigin);
+        parent.postMessage({annotationsViewallClick: 'off'}, targetOrigin);
       }
       else {
         sgPatternToggleAnnotations.forEach((el1) => {
@@ -332,23 +312,16 @@
 
         this.classList.add('active');
         hideAnnotationTips();
-        parent.postMessage({annotationsViewallClick: true}, targetOrigin);
-        scrollViewall();
+        parent.postMessage({annotationsViewallClick: 'on'}, targetOrigin);
       }
     });
   });
 
-  if (!window.Mousetrap) {
-    return;
-  }
-
-  const Mousetrap = window.Mousetrap;
-
   // Toggle the annotations panel with keyboard shortcut.
-  Mousetrap.bind('ctrl+shift+a', (e) => {
-    const obj = {event: 'patternlab.keyPress', keyPress: 'ctrl+shift+a'};
+  window.Mousetrap.bind('ctrl+shift+a', (e) => {
+    const messageObj = {event: 'patternlab.keyPress', keyPress: 'ctrl+shift+a'};
 
-    parent.postMessage(obj, targetOrigin);
+    parent.postMessage(messageObj, targetOrigin);
 
     e.preventDefault();
     return false;

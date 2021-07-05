@@ -472,13 +472,13 @@ menu anchor.</p>
         $('.sg-nav-pages').$('.sg-pop').click();
         browser.pause(100);
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
+          .to.equal('patterns/04-pages-00-homepage/04-pages-00-homepage.html');
         browser.switchToFrame($('#sg-viewport'));
         $('a').click();
         browser.pause(100);
         browser.switchToParentFrame();
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/02-components-region/02-components-region.html');
+          .to.equal('patterns/02-components-region/02-components-region.html');
       });
     });
 

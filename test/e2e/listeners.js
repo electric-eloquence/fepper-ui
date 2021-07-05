@@ -117,11 +117,11 @@ menu anchor.</p>
 
       it('dock-bottom button docks the viewer to the bottom', function () {
         $('#sg-view-btn-dock-bottom').click();
-        browser.pause(100);
+        browser.pause(700);
         $('#sg-form-label').click();
         browser.pause(100);
         $('#sg-size-w').click();
-        browser.pause(1000);
+        browser.pause(700);
         expect($('#patternlab-body').getAttribute('class')).to.have.string('dock-bottom');
       });
 
@@ -169,6 +169,64 @@ menu anchor.</p>
         expect($('#sg-code-pane-markdown').getCSSProperty('display').value).to.equal('none');
         expect($('#sg-code-pane-markdown-edit').getCSSProperty('display').value).to.equal('block');
       });
+
+      it('the markdown edit cancel button exits the markdown edit pane', function () {
+        $('#sg-t-toggle').click();
+        browser.pause(100);
+        $('#sg-t-code').click();
+        browser.pause(700);
+        $('#sg-code-tab-markdown').click();
+        browser.pause(100);
+        $('#sg-code-btn-markdown-edit').click();
+        browser.pause(100);
+        $('#sg-code-btn-markdown-save-cancel').click();
+        browser.pause(100);
+        expect($('#sg-code-pane-markdown').getCSSProperty('display').value).to.equal('block');
+        expect($('#sg-code-pane-markdown-edit').getCSSProperty('display').value).to.equal('none');
+      });
+
+      it('the markdown edit save button exits the markdown edit pane if markdown unchanged', function () {
+        $('#sg-t-toggle').click();
+        browser.pause(100);
+        $('#sg-t-code').click();
+        browser.pause(700);
+        $('#sg-code-tab-markdown').click();
+        browser.pause(100);
+        $('#sg-code-btn-markdown-edit').click();
+        browser.pause(100);
+        $('#sg-code-btn-markdown-save').click();
+        browser.pause(100);
+        expect($('#sg-code-pane-markdown').getCSSProperty('display').value).to.equal('block');
+        expect($('#sg-code-pane-markdown-edit').getCSSProperty('display').value).to.equal('none');
+      });
+
+      it('the markdown edit save button exits the markdown edit pane if edited markdown is saved', function () {
+        $('#sg-t-toggle').click();
+        browser.pause(100);
+        $('#sg-t-code').click();
+        browser.pause(700);
+        $('#sg-code-tab-markdown').click();
+        browser.pause(100);
+        $('#sg-code-btn-markdown-edit').click();
+        browser.pause(100);
+        $('#sg-code-textarea-markdown').addValue('\n');
+        browser.pause(100);
+        $('#sg-code-btn-markdown-save').click();
+        browser.pause(100);
+        expect($('#sg-code-pane-markdown').getCSSProperty('display').value).to.equal('block');
+        expect($('#sg-code-pane-markdown-edit').getCSSProperty('display').value).to.equal('none');
+      });
+
+      it('the git tab activates the git panel', function () {
+        $('#sg-t-toggle').click();
+        browser.pause(100);
+        $('#sg-t-code').click();
+        browser.pause(700);
+        $('#sg-code-tab-git').click();
+        browser.pause(100);
+        expect($('#sg-code-panel-git').getCSSProperty('display').value).to.equal('block');
+        expect($('#sg-code-pane-git-na').getCSSProperty('display').value).to.equal('block');
+      });
     });
 
     describe('Mousetrap', function () {
@@ -209,7 +267,7 @@ menu anchor.</p>
         browser.pause(100);
         browser.switchToParentFrame();
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/03-templates-page/03-templates-page.html');
+          .to.equal('patterns/03-templates-page/03-templates-page.html');
       });
     });
   });
@@ -292,7 +350,7 @@ menu anchor.</p>
         $('.sg-nav-elements').$('.sg-pop').click();
         browser.pause(100);
         expect($('#sg-raw').getAttribute('href'))
-          .to.equal('http://localhost:8080/patterns/00-elements-paragraph/00-elements-paragraph.html');
+          .to.equal('patterns/00-elements-paragraph/00-elements-paragraph.html');
       });
 
       it('closes open nav menu', function () {
@@ -465,16 +523,16 @@ menu anchor.</p>
       browser.pause(100);
       browser.back();
       expect($('#sg-raw').getAttribute('href'))
-        .to.equal('http://localhost:8080/patterns/01-compounds-block/01-compounds-block.html');
+        .to.equal('patterns/01-compounds-block/01-compounds-block.html');
       browser.back();
       expect($('#sg-raw').getAttribute('href'))
-        .to.equal('http://localhost:8080/patterns/00-elements-paragraph/00-elements-paragraph.html');
+        .to.equal('patterns/00-elements-paragraph/00-elements-paragraph.html');
       browser.forward();
       expect($('#sg-raw').getAttribute('href'))
-        .to.equal('http://localhost:8080/patterns/01-compounds-block/01-compounds-block.html');
+        .to.equal('patterns/01-compounds-block/01-compounds-block.html');
       browser.forward();
       expect($('#sg-raw').getAttribute('href'))
-        .to.equal('http://localhost:8080/patterns/02-components-region/02-components-region.html');
+        .to.equal('patterns/02-components-region/02-components-region.html');
     });
   });
 });

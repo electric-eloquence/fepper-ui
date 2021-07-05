@@ -19,7 +19,7 @@
       url = url_;
     }
 
-    return fetch(baseUrl + '/html-scraper-xhr/cors?url=' + encodeURIComponent(url))
+    return fetch('/html-scraper-xhr/cors?url=' + encodeURIComponent(url))
       .then((response) => {
         return new Promise((resolve, reject) => {
           if (response.ok) {
@@ -36,7 +36,10 @@
           }
         });
       })
-      .catch((err) => void console.error(err)); // eslint-disable-line no-console
+      .catch((err) => {
+        // eslint-disable-next-line curly, no-console
+        if (err) console.error(err);
+      });
   }
 
   function nodeListToJson(nodeItem, jsonToRecurse) {

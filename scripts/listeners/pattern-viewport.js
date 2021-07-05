@@ -22,12 +22,12 @@ export default class PatternlabViewer {
           e.preventDefault();
 
           // Update the iframe via the history api handler.
-          const obj = {
+          const messageObj = {
             event: 'patternlab.updatePath',
             path: window.$(this).attr('href')
           };
 
-          e.data.this.$orgs['#sg-viewport'][0].contentWindow.postMessage(obj, fepperUi.uiProps.targetOrigin);
+          e.data.this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, fepperUi.uiProps.targetOrigin);
           fepperUi.uiFns.closeAllPanels();
         }
       );
