@@ -334,6 +334,7 @@ export default class UiFns {
    */
   updatePath(messageObj, patternPartial) {
     this.codeViewer.setPanelContent('feplet', patternPartial);
+    this.codeViewer.setPanelContent('markdown', patternPartial);
     this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
   }
 

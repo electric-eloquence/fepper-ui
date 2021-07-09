@@ -90,10 +90,11 @@ export default class CodeViewer {
     if (data.lineage) {
       this.updateMetadata(data.lineage, data.lineageR, data.patternPartial, data.patternState, data.missingPartials);
 
+      const paneMarkdownNaDisplay = this.$orgs['#sg-code-pane-markdown-na'].getState().css.display;
       const paneMarkdownCommitDisplay = this.$orgs['#sg-code-pane-markdown-commit'].getState().css.display;
       const paneMarkdownLoadAnimDisplay = this.$orgs['#sg-code-pane-markdown-load-anim'].getState().css.display;
 
-      if (!paneMarkdownCommitDisplay && !paneMarkdownLoadAnimDisplay) {
+      if (!paneMarkdownNaDisplay && !paneMarkdownCommitDisplay && !paneMarkdownLoadAnimDisplay) {
         this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
       }
     }
