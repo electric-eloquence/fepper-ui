@@ -106,7 +106,7 @@ export default class UrlHandler {
     }
 
     this.uiFns.updatePatternInfo(patternPartial, iframePath);
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
+    this.uiFns.updatePath(messageObj, patternPartial);
   }
 
   /**

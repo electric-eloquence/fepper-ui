@@ -111,7 +111,7 @@ export default class PatternFinder {
 
     // Update the iframe via the history api handler.
     this.closeFinder();
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
+    this.uiFns.updatePath(messageObj, item.patternPartial);
   }
 
   toggleFinder() {

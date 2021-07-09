@@ -7,7 +7,7 @@ let root;
 
 // Declared outside class scope because it requires function-scoped `this` context.
 // Not in the listeners directory, because we don't need class scoping.
-function addLineageListeners($orgs, uiProps) {
+function addLineageListeners($orgs, uiFns) {
   // Must be jQuery, not Requerio, because the HTML was dynamically inserted by .updateMetadata() on the class.
   // Since it will be repeatedly generated, the following cannot be in a listeners class, where they are added but once.
   /* istanbul ignore if */
@@ -19,8 +19,9 @@ function addLineageListeners($orgs, uiProps) {
         event: 'patternlab.updatePath',
         path: root.$(this).attr('href')
       };
+      const patternPartial = this.textContent.trim();
 
-      $orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, uiProps.targetOrigin);
+      uiFns.updatePath(messageObj, patternPartial);
     });
   }
 }
@@ -785,7 +786,7 @@ export default class CodeViewer {
 
     // When clicking on a lineage item update the iframe.
     // Abstracted to a function outside any class scope, so there's no ambiguity about the `this` keyword.
-    addLineageListeners(this.$orgs, this.uiProps);
+    addLineageListeners(this.$orgs, this.uiFns);
 
     // Show pattern state.
     if (patternState) {

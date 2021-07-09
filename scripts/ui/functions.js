@@ -17,6 +17,10 @@ export default class UiFns {
 
   /* GETTERS for fepperUi instance props in case they are undefined at instantiation. */
 
+  get codeViewer() {
+    return this.#fepperUi.codeViewer;
+  }
+
   get dataSaver() {
     return this.#fepperUi.dataSaver;
   }
@@ -320,6 +324,17 @@ export default class UiFns {
     this.#root.document.title = titleSplit[0] + this.uiProps.titleSeparator + patternPartial;
 
     this.$orgs['#sg-raw'].dispatchAction('attr', {href: path});
+  }
+
+  /**
+   * Update the URL path location of the iframe.
+   *
+   * @param {object} messageObj - The data being messaged to the iframe.
+   * @param {string} patternPartial - The pattern to update to.
+   */
+  updatePath(messageObj, patternPartial) {
+    this.codeViewer.setPanelContent('feplet', patternPartial);
+    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
   }
 
   /**
