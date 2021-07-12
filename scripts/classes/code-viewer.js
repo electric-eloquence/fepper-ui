@@ -85,6 +85,11 @@ export default class CodeViewer {
         }
 
         break;
+
+      case 'patternlab.updatePath':
+        this.uiFns.updatePath(data, data.patternPartial);
+
+        break;
     }
 
     if (data.lineage) {
