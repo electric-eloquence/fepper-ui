@@ -272,6 +272,9 @@ module.exports = new Promise((resolve) => {
       else if (urlObj.pathname.startsWith('/annotations/')) {
         filePath = `${__dirname}/fixtures${filePath}`;
       }
+      else if (urlObj.pathname.startsWith('/webserved/')) {
+        filePath = `${__dirname}/../node_modules/fepper/core/webserved${filePath}`;
+      }
       else if (urlObj.pathname.startsWith('/_scripts/')) {
         filePath = `${__dirname}/../node_modules/fepper/excludes/profiles/base/source${filePath}`;
       }
