@@ -30,10 +30,6 @@ export default class UrlHandler {
     return this.#fepperUi.uiFns;
   }
 
-  get uiProps() {
-    return this.#fepperUi.uiProps;
-  }
-
   /* METHODS */
 
   /**
