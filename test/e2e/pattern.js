@@ -143,8 +143,12 @@ menu anchor.</p>
     <meta http-equiv="pragma" content="no-cache">
 
     
-    <link rel="stylesheet" href="/styles/html-scraper.css">
-    
+    <link rel="stylesheet" href="/webserved/pattern.css">
+    <link rel="stylesheet" href="/_styles/bld/style.css">
+    <link rel="stylesheet" href="/webserved/html-scraper.css">
+    <script src="/node_modules/mousetrap/mousetrap.min.js"></script>
+    <script src="/annotations/annotations.js"></script>
+    <script src="/_scripts/src/variables.styl" type="text/javascript"></script>
   </head>
 
   <body class="text ">
@@ -194,7 +198,7 @@ menu anchor.</p>
         <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save .mustache and .json files by that name in your patterns\' scrape directory, also viewable under the Scrape menu of the toolbar.</p>
       </div>
       <iframe id="scraper__stage" sandbox="allow-same-origin allow-scripts"></iframe>
-      <script src="/scripts/pattern/html-scraper-dhtml.js"></script>
+      <script src="/webserved/html-scraper-dhtml.js"></script>
     </main>
     
   
@@ -216,6 +220,7 @@ menu anchor.</p>
       $('[name="filename"]').setValue('test');
       $('[name="submit_importer"]').click();
       browser.pause(200);
+
       expect($('html').getHTML(false)).to.equal(`<head>
     <title id="title">Fepper HTML Scraper</title>
     <meta charset="utf-8">
@@ -228,14 +233,17 @@ menu anchor.</p>
     <meta http-equiv="pragma" content="no-cache">
 
     
-    <link rel="stylesheet" href="/styles/html-scraper.css">
-    
-  <link rel="stylesheet" href="/node_modules/fepper-ui/styles/html-scraper.css"></head>
+    <link rel="stylesheet" href="/webserved/pattern.css">
+    <link rel="stylesheet" href="/_styles/bld/style.css">
+    <script src="/node_modules/mousetrap/mousetrap.min.js"></script>
+    <script src="/annotations/annotations.js"></script>
+    <script src="/_scripts/src/variables.styl" type="text/javascript"></script>
+  <link rel="stylesheet" href="/webserved/html-scraper.css"></head>
 
   <body class="text ">
     <main id="fepper-html-scraper" class="">
       <div id="message" class="message success">SUCCESS! Refresh the browser to check that your template appears under the "Scrape" menu.</div>
-      <script src="/scripts/pattern/html-scraper-ajax.js"></script>
+      <script src="/webserved/html-scraper-ajax.js"></script>
     <div id="load-anim">
         <div></div><div></div><div></div><div></div>
       </div><h1 id="scraper__heading">Fepper HTML Scraper</h1><form id="scraper__targeter" action="/html-scraper" method="post" name="targeter">
@@ -252,7 +260,7 @@ menu anchor.</p>
         <textarea name="html2json"></textarea>
         <input id="scraper__targeter__submit" name="submit_targeter" type="submit" value="Submit">
         <button id="help-hide">Hide</button><button id="help-show">Help</button>
-      </form><script src="/node_modules/fepper-ui/scripts/pattern/html-scraper-dhtml.js"></script><div id="help-text">
+      </form><script src="/webserved/html-scraper-dhtml.js"></script><div id="help-text">
         <p></p>
         <p>Use this tool to scrape and import .mustache templates and .json data files from actual web pages, preferably the actual backend CMS that Fepper is prototyping for. Simply enter the URL of the page you wish to scrape. Then, enter the CSS selector you wish to target (prepended with "#" for IDs and "." for classes). Classnames and tagnames may be appended with array index notation ([n]). Otherwise, the Scraper will scrape all elements of that class or tag sequentially. Such a loosely targeted scrape will save many of the targeted fields to the .json file, but will only save the first instance of the target to a .mustache template.</p>
         <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save .mustache and .json files by that name in your patterns\' scrape directory, also viewable under the Scrape menu of the toolbar.</p>
@@ -288,8 +296,12 @@ menu anchor.</p>
     <meta http-equiv="pragma" content="no-cache">
 
     
-    <link rel="stylesheet" href="/styles/html-scraper.css">
-    
+    <link rel="stylesheet" href="/webserved/pattern.css">
+    <link rel="stylesheet" href="/_styles/bld/style.css">
+    <link rel="stylesheet" href="/webserved/html-scraper.css">
+    <script src="/node_modules/mousetrap/mousetrap.min.js"></script>
+    <script src="/annotations/annotations.js"></script>
+    <script src="/_scripts/src/variables.styl" type="text/javascript"></script>
   </head>
 
   <body class="text ">
@@ -339,7 +351,7 @@ menu anchor.</p>
         <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save .mustache and .json files by that name in your patterns\' scrape directory, also viewable under the Scrape menu of the toolbar.</p>
       </div>
       <iframe id="scraper__stage" sandbox="allow-same-origin allow-scripts"></iframe>
-      <script src="/scripts/pattern/html-scraper-dhtml.js"></script>
+      <script src="/webserved/html-scraper-dhtml.js"></script>
     </main>
     
   

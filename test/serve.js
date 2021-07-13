@@ -35,12 +35,8 @@ module.exports = new Promise((resolve) => {
     <meta http-equiv="pragma" content="no-cache">
 
     
-    <link rel="stylesheet" href="/styles/html-scraper.css">
-    
-  </head>
-
-  <body class="text ">
-    <main id="fepper-html-scraper" class="">`;
+    <link rel="stylesheet" href="/webserved/pattern.css">
+    <link rel="stylesheet" href="/_styles/bld/style.css">`;
           /* eslint-enable max-len */
 
           req.on('data', (chunk) => {
@@ -50,6 +46,14 @@ module.exports = new Promise((resolve) => {
             if (!filename) {
               /* eslint-disable max-len */
               responseData += `
+    <link rel="stylesheet" href="/webserved/html-scraper.css">
+    <script src="/node_modules/mousetrap/mousetrap.min.js"></script>
+    <script src="/annotations/annotations.js"></script>
+    <script src="/_scripts/src/variables.styl" type="text/javascript"></script>
+  </head>
+
+  <body class="text ">
+    <main id="fepper-html-scraper" class="">
       <div id="message" class="message "></div>
       <div id="load-anim">
         <div></div><div></div><div></div><div></div>
@@ -95,14 +99,21 @@ module.exports = new Promise((resolve) => {
         <p>Upon submit, you should be able to review the scraped output on the subsequent page. If the output looks correct, enter a filename and submit again. The Scraper will save .mustache and .json files by that name in your patterns&apos; scrape directory, also viewable under the Scrape menu of the toolbar.</p>
       </div>
       <iframe id="scraper__stage" sandbox="allow-same-origin allow-scripts"></iframe>
-      <script src ="/scripts/pattern/html-scraper-dhtml.js"></script>`;
+      <script src ="/webserved/html-scraper-dhtml.js"></script>`;
               /* eslint-enable max-len */
             }
             else {
               /* eslint-disable max-len */
               responseData += `
+    <script src="/node_modules/mousetrap/mousetrap.min.js"></script>
+    <script src="/annotations/annotations.js"></script>
+    <script src="/_scripts/src/variables.styl" type="text/javascript"></script>
+  </head>
+
+  <body class="text ">
+    <main id="fepper-html-scraper" class="">
       <div id="message" class="message success">SUCCESS! Refresh the browser to check that your template appears under the &quot;Scrape&quot; menu.</div>
-      <script src="/scripts/pattern/html-scraper-ajax.js"></script>`;
+      <script src="/webserved/html-scraper-ajax.js"></script>`;
               /* eslint-enable max-len */
             }
           });
@@ -228,16 +239,16 @@ module.exports = new Promise((resolve) => {
     <meta http-equiv="pragma" content="no-cache">
 
     
-    <link rel="stylesheet" href="/styles/prism-twilight.css">
-    <link rel="stylesheet" href="/styles/mustache-browser.css">
-    
+    <link rel="stylesheet" href="/webserved/prism-twilight.css">
+    <link rel="stylesheet" href="/webserved/mustache-browser.css">
+    <script src="/webserved/mustache-browser.js"></script>
   </head>
 
   <body class="mustache-browser__body">
     <main id="" class="mustache-browser__main">
       <div id="message" class="message "></div>
 <pre><code class="language-markup">{{{ content }}}
-<a href="/?p=templates-page" target="_top">{{> 03-templates/00-page }}</a>
+<a href="/?p=templates-page" target="_top" data-path="patterns/03-templates-page/03-templates-page.html" data-patternpartial="templates-page" class="mustache-browser__link">{{> 03-templates/page }}</a>
 </code></pre>
 
     </main>
@@ -273,7 +284,7 @@ module.exports = new Promise((resolve) => {
         filePath = `${__dirname}/fixtures${filePath}`;
       }
       else if (urlObj.pathname.startsWith('/webserved/')) {
-        filePath = `${__dirname}/../node_modules/fepper/core/webserved${filePath}`;
+        filePath = `${__dirname}/../node_modules/fepper/core${filePath}`;
       }
       else if (urlObj.pathname.startsWith('/_scripts/')) {
         filePath = `${__dirname}/../node_modules/fepper/excludes/profiles/base/source${filePath}`;
