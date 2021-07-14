@@ -383,8 +383,13 @@ export default class CodeViewer {
   }
 
   deActivateMarkdownTextarea() {
+    const markdownTextareaVal = this.$orgs['#sg-code-textarea-markdown'].getState().val;
+
     this.$orgs['#sg-code-textarea-markdown'].blur();
     this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
+    this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
+    this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', markdownTextareaVal);
+    this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'block'});
     this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
   }
 
@@ -474,6 +479,7 @@ export default class CodeViewer {
         gitIntegrator = this.#fepperUi.dataSaver.findValue('gitIntegrator') === 'true';
 
         if (gitIntegrator) {
+          this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
           this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
 
           return this.setPanelContent('git', this.patternPartial, gitIntegrator);
@@ -483,13 +489,14 @@ export default class CodeViewer {
         }
       })
       .then((response) => {
-        this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
-
         if (gitIntegrator) {
           this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
           // If integrating Git, preemptively hide the Markdown edit button.
           // Reenable after a git pull with no conflicts.
           this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
+        }
+        else {
+          this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
         }
 
         if (response && response.status === 200) {
