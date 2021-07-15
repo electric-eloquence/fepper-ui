@@ -94,6 +94,8 @@ export default class CodeViewer {
 
     if (data.lineage) {
       this.updateMetadata(data.lineage, data.lineageR, data.patternPartial, data.patternState, data.missingPartials);
+      this.setPanelContent('feplet', data.patternPartial);
+      this.setPanelContent('markdown', data.patternPartial);
 
       const paneMarkdownNaDisplay = this.$orgs['#sg-code-pane-markdown-na'].getState().css.display;
       const paneMarkdownCommitDisplay = this.$orgs['#sg-code-pane-markdown-commit'].getState().css.display;
