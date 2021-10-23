@@ -247,6 +247,7 @@ export default class CodeViewer {
             return this.setPanelContent('git', this.patternPartial, gitIntegrator);
           })
           .catch((rejection) => {
+            /* istanbul ignore else */
             if (typeof rejection === 'string' && rejection.includes('section id="forbidden"')) {
               const parser = new DOMParser();
               const doc = parser.parseFromString(rejection, 'text/html');
@@ -256,7 +257,6 @@ export default class CodeViewer {
               forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
               this.$orgs['#sg-code-pane-git-na'].dispatchAction('html', forbidden);
             }
-            /* istanbul ignore else if */
             else if (typeof rejection === 'string' && rejection.startsWith('fatal:')) {
               this.#fepperUi.dataSaver.updateValue('gitIntegrator', 'false');
             }
