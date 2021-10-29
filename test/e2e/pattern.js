@@ -90,7 +90,6 @@ menu anchor.</p>
         const sgViewport = await $('#sg-viewport');
         const sgVpWrap = await $('#sg-vp-wrap');
         const sgViewContainer = await $('#sg-view-container');
-        const sgAnnotations = await $('#sg-annotations');
         const sgPatternToggleCodeComponentsRegion = await $('#sg-pattern-toggle-code-components-region');
 
         await (await $('.sg-pop[data-patternpartial="viewall"]')).click();
@@ -450,7 +449,6 @@ menu anchor.</p>
       const sgNavScrape = await $('.sg-nav-scrape');
       const nameUrl = await $('[name="url"]');
       const nameSelectorRaw = await $('[name="selector_raw"]');
-      const scraperTargeter = await $('#scraper__targeter');
       const message = await $('#message');
 
       // Just testing error case because that is the only client-side JS logic driven by the listener.

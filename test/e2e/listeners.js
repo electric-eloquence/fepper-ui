@@ -159,7 +159,7 @@ menu anchor.</p>
         expect((await sgGenContainer.getSize()).width).to.equal(512);
       });
 
-      it('dock-bottom button docks the viewer to the bottom', async () =>  {
+      it('dock-bottom button docks the viewer to the bottom', async () => {
         const patternlabBody = await $('#patternlab-body');
 
         await (await $('#sg-view-btn-dock-bottom')).click();
@@ -722,10 +722,10 @@ menu anchor.</p>
       await browser.pause(100);
       await sgPopComponents.click();
       await browser.pause(100);
-      await browser.back()
+      await browser.back();
 
       expect(await sgRaw.getAttribute('href'))
-        .to.equal('patterns/01-compounds-block/01-compounds-block.html')
+        .to.equal('patterns/01-compounds-block/01-compounds-block.html');
 
       await browser.back();
 
