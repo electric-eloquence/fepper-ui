@@ -30,10 +30,6 @@ export default class UrlHandler {
     return this.#fepperUi.uiFns;
   }
 
-  get uiProps() {
-    return this.#fepperUi.uiProps;
-  }
-
   /* METHODS */
 
   /**
@@ -106,7 +102,7 @@ export default class UrlHandler {
     }
 
     this.uiFns.updatePatternInfo(patternPartial, iframePath);
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
+    this.uiFns.updatePath(messageObj, patternPartial);
   }
 
   /**

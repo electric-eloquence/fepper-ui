@@ -7,7 +7,7 @@ let root;
 
 // Declared outside class scope because it requires function-scoped `this` context.
 // Not in the listeners directory, because we don't need class scoping.
-function addLineageListeners($orgs, uiProps) {
+function addLineageListeners($orgs, uiFns) {
   // Must be jQuery, not Requerio, because the HTML was dynamically inserted by .updateMetadata() on the class.
   // Since it will be repeatedly generated, the following cannot be in a listeners class, where they are added but once.
   /* istanbul ignore if */
@@ -19,8 +19,9 @@ function addLineageListeners($orgs, uiProps) {
         event: 'patternlab.updatePath',
         path: root.$(this).attr('href')
       };
+      const patternPartial = this.textContent.trim();
 
-      $orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, uiProps.targetOrigin);
+      uiFns.updatePath(messageObj, patternPartial);
     });
   }
 }
@@ -84,15 +85,23 @@ export default class CodeViewer {
         }
 
         break;
+
+      case 'patternlab.updatePath':
+        this.uiFns.updatePath(data, data.patternPartial);
+
+        break;
     }
 
     if (data.lineage) {
       this.updateMetadata(data.lineage, data.lineageR, data.patternPartial, data.patternState, data.missingPartials);
+      this.setPanelContent('feplet', data.patternPartial);
+      this.setPanelContent('markdown', data.patternPartial);
 
+      const paneMarkdownNaDisplay = this.$orgs['#sg-code-pane-markdown-na'].getState().css.display;
       const paneMarkdownCommitDisplay = this.$orgs['#sg-code-pane-markdown-commit'].getState().css.display;
       const paneMarkdownLoadAnimDisplay = this.$orgs['#sg-code-pane-markdown-load-anim'].getState().css.display;
 
-      if (!paneMarkdownCommitDisplay && !paneMarkdownLoadAnimDisplay) {
+      if (!paneMarkdownNaDisplay && !paneMarkdownCommitDisplay && !paneMarkdownLoadAnimDisplay) {
         this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
       }
     }
@@ -238,6 +247,7 @@ export default class CodeViewer {
             return this.setPanelContent('git', this.patternPartial, gitIntegrator);
           })
           .catch((rejection) => {
+            /* istanbul ignore else */
             if (typeof rejection === 'string' && rejection.includes('section id="forbidden"')) {
               const parser = new DOMParser();
               const doc = parser.parseFromString(rejection, 'text/html');
@@ -247,7 +257,6 @@ export default class CodeViewer {
               forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
               this.$orgs['#sg-code-pane-git-na'].dispatchAction('html', forbidden);
             }
-            /* istanbul ignore else if */
             else if (typeof rejection === 'string' && rejection.startsWith('fatal:')) {
               this.#fepperUi.dataSaver.updateValue('gitIntegrator', 'false');
             }
@@ -376,8 +385,13 @@ export default class CodeViewer {
   }
 
   deActivateMarkdownTextarea() {
+    const markdownTextareaVal = this.$orgs['#sg-code-textarea-markdown'].getState().val;
+
     this.$orgs['#sg-code-textarea-markdown'].blur();
     this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
+    this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
+    this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', markdownTextareaVal);
+    this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'block'});
     this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
   }
 
@@ -467,6 +481,7 @@ export default class CodeViewer {
         gitIntegrator = this.#fepperUi.dataSaver.findValue('gitIntegrator') === 'true';
 
         if (gitIntegrator) {
+          this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
           this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
 
           return this.setPanelContent('git', this.patternPartial, gitIntegrator);
@@ -476,13 +491,14 @@ export default class CodeViewer {
         }
       })
       .then((response) => {
-        this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
-
         if (gitIntegrator) {
           this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
           // If integrating Git, preemptively hide the Markdown edit button.
           // Reenable after a git pull with no conflicts.
           this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
+        }
+        else {
+          this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
         }
 
         if (response && response.status === 200) {
@@ -785,7 +801,7 @@ export default class CodeViewer {
 
     // When clicking on a lineage item update the iframe.
     // Abstracted to a function outside any class scope, so there's no ambiguity about the `this` keyword.
-    addLineageListeners(this.$orgs, this.uiProps);
+    addLineageListeners(this.$orgs, this.uiFns);
 
     // Show pattern state.
     if (patternState) {

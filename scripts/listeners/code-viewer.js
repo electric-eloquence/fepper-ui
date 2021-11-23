@@ -186,7 +186,7 @@ export default class CodeViewer {
       this.$orgs['#sg-code-radio-git-on'].on('change', () => {
         this.$orgs['#sg-code-pane-git'].toggleClass('git-integrator-on');
 
-        if (this.#fepperUi.dataSaver.findValue('gitIntegrator') === 'false') {
+        if (this.#fepperUi.dataSaver.findValue('gitIntegrator') !== 'true') {
           this.#fepperUi.dataSaver.updateValue('gitIntegrator', 'true');
         }
       });

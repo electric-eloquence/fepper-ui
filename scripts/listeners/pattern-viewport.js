@@ -27,7 +27,7 @@ export default class PatternlabViewer {
             path: window.$(this).attr('href')
           };
 
-          e.data.this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, fepperUi.uiProps.targetOrigin);
+          fepperUi.uiFns.updatePath(messageObj, this.dataset.patternpartial);
           fepperUi.uiFns.closeAllPanels();
         }
       );

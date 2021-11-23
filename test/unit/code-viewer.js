@@ -995,5 +995,56 @@ describe('codeViewer', function () {
         }, timeout);
       }, timeout);
     });
+
+    it('sets panel content with patternlab.updatePath', function (done) {
+      const expectedMarkdown =
+`---
+content_key: content
+---
+[Component](../../patterns/02-components-region/02-components-region.html)
+`;
+      global.mockResponse = {
+        gatekeeperStatus: 200
+      };
+
+      $orgs['#sg-code-pane-markdown-na'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-code-language-markdown'].dispatchAction('html', '');
+      $orgs['#sg-code-textarea-markdown'].dispatchAction('html', '');
+      codeViewer.openCode();
+
+      setTimeout(() => {
+        event.data = {
+          event: 'patternlab.updatePath',
+          path: 'patterns/04-pages-00-homepage/04-pages-00-homepage.html',
+          patternPartial: 'pages-homepage'
+        };
+        const fepletLocationHrefBefore = $orgs['#sg-code-panel-feplet'][0].contentWindow.location.href;
+        const paneMarkdownNaStateBefore = $orgs['#sg-code-pane-markdown-na'].getState();
+        const codeMarkdownStateBefore = $orgs['#sg-code-code-language-markdown'].getState();
+        const textareaMarkdownStateBefore = $orgs['#sg-code-textarea-markdown'].getState();
+
+        codeViewer.receiveIframeMessage(event);
+
+        setTimeout(() => {
+          const fepletLocationHrefAfter = $orgs['#sg-code-panel-feplet'][0].contentWindow.location.href;
+          const paneMarkdownNaStateAfter = $orgs['#sg-code-pane-markdown-na'].getState();
+          const codeMarkdownStateAfter = $orgs['#sg-code-code-language-markdown'].getState();
+          const textareaMarkdownStateAfter = $orgs['#sg-code-textarea-markdown'].getState();
+
+          expect(fepletLocationHrefBefore).to.not.equal(fepletLocationHrefAfter);
+          expect(paneMarkdownNaStateBefore.css.display).to.not.equal(paneMarkdownNaStateAfter.css.display);
+          expect(codeMarkdownStateBefore.html).to.not.equal(codeMarkdownStateAfter.html);
+          expect(textareaMarkdownStateBefore.html).to.not.equal(textareaMarkdownStateAfter.html);
+
+          expect(fepletLocationHrefAfter).to.equal('/mustache-browser?partial=pages-homepage');
+          expect(paneMarkdownNaStateAfter.css.display).to.be.undefined;
+          expect(codeMarkdownStateAfter.html).to.equal(expectedMarkdown);
+          expect(textareaMarkdownStateAfter.html).to.equal(expectedMarkdown);
+
+          codeViewer.closeCode();
+          done();
+        }, timeout);
+      }, timeout);
+    });
   });
 });
