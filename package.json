@@ -70,7 +70,7 @@
     "chromedriver": "^94.0.0",
     "coveralls": "3.x",
     "eslint": "8.x",
-    "fepper": "*",
+    "fepper": "0.40.0-rc.0",
     "husky": "4.x",
     "mkdirp": "^1.0.3",
     "mocha": "8.x",
