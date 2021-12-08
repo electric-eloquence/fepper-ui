@@ -101,8 +101,14 @@ export default class ViewerHandler {
   }
 
   dockBottom() {
+    let dockOpen = false;
+
     if (this.uiProps.dockPosition !== 'bottom') {
-      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-open');
+      dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
+
+      if (dockOpen) {
+        this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-open');
+      }
     }
 
     const dockPosition = this.uiProps.dockPosition = 'bottom';
@@ -114,9 +120,11 @@ export default class ViewerHandler {
       .dispatchAction('removeClass', 'dock-left dock-right')
       .dispatchAction('addClass', 'dock-' + dockPosition);
 
-    setTimeout(() => {
-      this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
-    }, 10);
+    if (dockOpen) {
+      setTimeout(() => {
+        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
+      }, 10);
+    }
   }
 
   dockRight() {
