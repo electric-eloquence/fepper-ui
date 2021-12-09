@@ -261,8 +261,12 @@ describe('viewerHandler', function () {
     // i.e. shrink for .dockLeft(), expand for .dockBottom(), shrink for .dockRight().
     it('.dockLeft() docks the codeViewer to the left of the browser', function (done) {
       const dockPositionBefore = uiProps.dockPosition;
+      codeViewer.codeActive = true;
 
       uiFns.sizeIframe(1024);
+      // Dispatching addClass instead of calling viewerHandler.openViewer()
+      // because viewerHandler.openViewer() uses setTimeout().
+      $orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
 
       const halfModeBefore = uiProps.halfMode;
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
@@ -296,8 +300,12 @@ describe('viewerHandler', function () {
       const dockPositionBefore = uiProps.dockPosition;
       const halfModeBefore = uiProps.halfMode;
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
+      codeViewer.codeActive = true;
 
       uiFns.sizeIframe(1024);
+      // Dispatching addClass instead of calling viewerHandler.openViewer()
+      // because viewerHandler.openViewer() uses setTimeout().
+      $orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
 
       const vpWidthBefore = uiProps.vpWidth;
 
@@ -324,13 +332,15 @@ describe('viewerHandler', function () {
         done();
       }, timeout);
     });
-  });
 
-  describe('.dockRight()', function () {
     it('.dockRight() docks the codeViewer to the right of the browser', function (done) {
       const dockPositionBefore = uiProps.dockPosition;
+      codeViewer.codeActive = true;
 
       uiFns.sizeIframe(1024);
+      // Dispatching addClass instead of calling viewerHandler.openViewer()
+      // because viewerHandler.openViewer() uses setTimeout().
+      $orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
 
       const halfModeBefore = uiProps.halfMode;
       const vpWidthBefore = uiProps.vpWidth;
