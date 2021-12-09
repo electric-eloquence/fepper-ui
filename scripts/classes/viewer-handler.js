@@ -82,8 +82,14 @@ export default class ViewerHandler {
   }
 
   dockLeft() {
+    let dockOpen = false;
+
     if (this.uiProps.dockPosition !== 'left') {
-      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-open');
+      dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
+
+      if (dockOpen) {
+        this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-open');
+      }
     }
 
     const dockPosition = this.uiProps.dockPosition = 'left';
@@ -95,9 +101,11 @@ export default class ViewerHandler {
       .dispatchAction('addClass', 'dock-' + dockPosition);
     this.uiFns.sizeIframe(widthHalf - this.uiProps.sgRightpullWidth, true, false, true);
 
-    setTimeout(() => {
-      this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
-    }, this.transitionDuration * 1.25);
+    if (dockOpen) {
+      setTimeout(() => {
+        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
+      }, this.transitionDuration * 1.25);
+    }
   }
 
   dockBottom() {
@@ -128,8 +136,14 @@ export default class ViewerHandler {
   }
 
   dockRight() {
+    let dockOpen = false;
+
     if (this.uiProps.dockPosition !== 'right') {
-      this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-open');
+      dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
+
+      if (dockOpen) {
+        this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-open');
+      }
     }
 
     const dockPosition = this.uiProps.dockPosition = 'right';
@@ -141,9 +155,11 @@ export default class ViewerHandler {
       .dispatchAction('addClass', 'dock-' + dockPosition);
     this.uiFns.sizeIframe(widthHalf - this.uiProps.sgRightpullWidth, true, false, true);
 
-    setTimeout(() => {
-      this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
-    }, this.transitionDuration * 1.25);
+    if (dockOpen) {
+      setTimeout(() => {
+        this.$orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
+      }, this.transitionDuration * 1.25);
+    }
   }
 
   openViewer() {
