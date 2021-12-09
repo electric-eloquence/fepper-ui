@@ -737,7 +737,9 @@ menu anchor.</p>
       expect(await sgRaw.getAttribute('href'))
         .to.equal('patterns/01-compounds-block/01-compounds-block.html');
 
+      await browser.pause(10);
       await browser.forward();
+      await browser.pause(500);
 
       expect(await sgRaw.getAttribute('href'))
         .to.equal('patterns/02-components-region/02-components-region.html');
