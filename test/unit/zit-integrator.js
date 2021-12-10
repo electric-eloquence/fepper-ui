@@ -203,7 +203,7 @@ describe('Git Integrator', function () {
         });
     });
 
-    it('forbidden by Gatekeeper', function () {
+    it('forbidden by gatekeeper', function () {
       global.location = {
         search: '?view=code'
       };

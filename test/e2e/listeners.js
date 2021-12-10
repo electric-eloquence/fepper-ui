@@ -738,7 +738,10 @@ menu anchor.</p>
         .to.equal('patterns/01-compounds-block/01-compounds-block.html');
 
       await browser.forward();
-      await browser.refresh(); // Refreshing because there is tendency to fail without it.
+      // Refreshing because there is tendency to fail without it in ChromeDriver.
+      // Chromium-based browsers are buggy with back-button behavior after navigation via patternlab.updatePath.
+      // The 2nd back-button press frequently fails to update the iframe while the parent does get updated.
+      await browser.refresh();
 
       expect(await sgRaw.getAttribute('href'))
         .to.equal('patterns/02-components-region/02-components-region.html');
