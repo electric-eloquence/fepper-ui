@@ -164,10 +164,10 @@ export default class CodeViewer {
   // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
   stoke() {
     // Load the query strings in case code view has to show by default.
-    const dataSaverGitIntegrator = this.#fepperUi.dataSaver.findValue('gitIntegrator');
+    const dataSaverGitInterface = this.#fepperUi.dataSaver.findValue('gitInterface');
     const searchParams = this.urlHandler.getSearchParams();
     const tabActive = this.dataSaver.findValue('tabActive');
-    let gitIntegrator = dataSaverGitIntegrator === 'true';
+    let gitInterface = dataSaverGitInterface === 'true';
     this.tabActive = tabActive || this.tabActive;
     this.patternPartial = searchParams.p || this.uiData.config.defaultPattern;
 
@@ -175,8 +175,8 @@ export default class CodeViewer {
       this.openCode();
     }
 
-    if (gitIntegrator) {
-      // If integrating Git, preemptively hide the Markdown edit button.
+    if (gitInterface) {
+      // If interfacing with Git, preemptively hide the Markdown edit button.
       // Reenable after a git pull with no conflicts.
       // Not easy to test because reenablement requires a git pull on the shell, and we aren't mocking shell commands.
       // However, this is very easy to see during actual user interaction.
@@ -188,7 +188,7 @@ export default class CodeViewer {
     return this.activateTabAndPanel(this.tabActive)
       .then(() => {
         return fetch(
-          '/git-integrator', {
+          '/git-interface', {
             method: 'POST',
             body: new URLSearchParams('args[0]=--version')
           })
@@ -207,7 +207,7 @@ export default class CodeViewer {
             }
             else {
               return fetch(
-                '/git-integrator', {
+                '/git-interface', {
                   method: 'POST',
                   body: new URLSearchParams('args[0]=remote')
                 });
@@ -227,24 +227,24 @@ export default class CodeViewer {
               return Promise.reject(responseText);
             }
             else {
-              if (dataSaverGitIntegrator === 'true' || this.uiData.config.gitIntegrator) {
+              if (dataSaverGitInterface === 'true' || this.uiData.config.gitInterface) {
                 this.$orgs['#sg-code-radio-git-on'].dispatchAction('prop', {checked: true});
-                this.$orgs['#sg-code-pane-git'].dispatchAction('addClass', 'git-integrator-on');
+                this.$orgs['#sg-code-pane-git'].dispatchAction('addClass', 'git-interface-on');
               }
 
-              if (dataSaverGitIntegrator === null && this.uiData.config.gitIntegrator) {
-                gitIntegrator = true;
+              if (dataSaverGitInterface === null && this.uiData.config.gitInterface) {
+                gitInterface = true;
 
-                // If integrating Git, preemptively hide the Markdown edit button.
+                // If interfacing with Git, preemptively hide the Markdown edit button.
                 // Reenable after a git pull with no conflicts.
                 this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
-                this.#fepperUi.dataSaver.updateValue('gitIntegrator', 'true');
+                this.#fepperUi.dataSaver.updateValue('gitInterface', 'true');
               }
             }
 
             this.stoked = true;
 
-            return this.setPanelContent('git', this.patternPartial, gitIntegrator);
+            return this.setPanelContent('git', this.patternPartial, gitInterface);
           })
           .catch((rejection) => {
             /* istanbul ignore else */
@@ -258,7 +258,7 @@ export default class CodeViewer {
               this.$orgs['#sg-code-pane-git-na'].dispatchAction('html', forbidden);
             }
             else if (typeof rejection === 'string' && rejection.startsWith('fatal:')) {
-              this.#fepperUi.dataSaver.updateValue('gitIntegrator', 'false');
+              this.#fepperUi.dataSaver.updateValue('gitInterface', 'false');
             }
             else if (rejection) {
               // eslint-disable-next-line no-console
@@ -269,7 +269,7 @@ export default class CodeViewer {
 
             this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: 'block'});
 
-            return this.setPanelContent('git', this.patternPartial, gitIntegrator);
+            return this.setPanelContent('git', this.patternPartial, gitInterface);
           });
       });
   }
@@ -293,7 +293,7 @@ export default class CodeViewer {
    * @returns {promise} A promise on which to perform additional actions.
    */
   activateTabAndPanel(type) {
-    const gitIntegrator = this.#fepperUi.dataSaver.findValue('gitIntegrator') === 'true';
+    const gitInterface = this.#fepperUi.dataSaver.findValue('gitInterface') === 'true';
     this.tabActive = type;
 
     this.$orgs['.sg-code-tab'].dispatchAction('removeClass', 'sg-code-tab-active');
@@ -308,7 +308,7 @@ export default class CodeViewer {
           return this.setPanelContent(type)
             .then(() => {
               if (this.stoked && this.mdPath) {
-                return this.setPanelContent('git', this.patternPartial, gitIntegrator);
+                return this.setPanelContent('git', this.patternPartial, gitInterface);
               }
               else {
                 return Promise.resolve();
@@ -321,13 +321,13 @@ export default class CodeViewer {
       }
       case 'git': {
         if (this.stoked) {
-          return this.setPanelContent(type, this.patternPartial, gitIntegrator);
+          return this.setPanelContent(type, this.patternPartial, gitInterface);
         }
 
         break;
       }
       default: {
-        return this.setPanelContent(type, this.patternPartial, gitIntegrator);
+        return this.setPanelContent(type, this.patternPartial, gitInterface);
       }
     }
 
@@ -336,7 +336,7 @@ export default class CodeViewer {
 
   addRevision() {
     return fetch(
-      '/git-integrator', {
+      '/git-interface', {
         method: 'POST',
         body: new URLSearchParams('args[0]=add')
       })
@@ -359,7 +359,7 @@ export default class CodeViewer {
 
   commitRevision(body) {
     return fetch(
-      '/git-integrator', {
+      '/git-interface', {
         method: 'POST',
         body: new URLSearchParams(body)
       })
@@ -414,7 +414,7 @@ export default class CodeViewer {
 
   pushRevision() {
     return fetch(
-      '/git-integrator', {
+      '/git-interface', {
         method: 'POST',
         body: new URLSearchParams('args[0]=push')
       })
@@ -440,7 +440,7 @@ export default class CodeViewer {
   }
 
   saveMarkdown() {
-    let gitIntegrator;
+    let gitInterface;
 
     return fetch('/gatekeeper')
       .then((response) => {
@@ -478,22 +478,22 @@ export default class CodeViewer {
         }
       })
       .then(() => {
-        gitIntegrator = this.#fepperUi.dataSaver.findValue('gitIntegrator') === 'true';
+        gitInterface = this.#fepperUi.dataSaver.findValue('gitInterface') === 'true';
 
-        if (gitIntegrator) {
+        if (gitInterface) {
           this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
           this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
 
-          return this.setPanelContent('git', this.patternPartial, gitIntegrator);
+          return this.setPanelContent('git', this.patternPartial, gitInterface);
         }
         else {
           return Promise.resolve();
         }
       })
       .then((response) => {
-        if (gitIntegrator) {
+        if (gitInterface) {
           this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
-          // If integrating Git, preemptively hide the Markdown edit button.
+          // If interfacing with Git, preemptively hide the Markdown edit button.
           // Reenable after a git pull with no conflicts.
           this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
         }
@@ -544,10 +544,10 @@ export default class CodeViewer {
    *
    * @param {string} type - The panel to activate.
    * @param {[string]} patternPartial - The pattern for which the panel content is being set.
-   * @param {[boolean]} gitIntegrator - Whether Git Integrator is on or off.
+   * @param {[boolean]} gitInterface - Whether Git Interface is on or off.
    * @returns {promise} A promise on which to perform additional actions.
    */
-  setPanelContent(type, patternPartial, gitIntegrator) {
+  setPanelContent(type, patternPartial, gitInterface) {
     this.patternPartial = patternPartial || this.patternPartial;
 
     switch (type) {
@@ -647,17 +647,17 @@ export default class CodeViewer {
           return Promise.resolve();
         }
         else {
-          if (gitIntegrator) {
-            let gitIntegratorResponse;
+          if (gitInterface) {
+            let gitInterfaceResponse;
 
             return fetch(
-              '/git-integrator', {
+              '/git-interface', {
                 method: 'POST',
                 body: new URLSearchParams('args[0]=pull')
               })
               .then((response) => {
                 if (response && response.status === 200) {
-                  gitIntegratorResponse = response;
+                  gitInterfaceResponse = response;
 
                   return Promise.resolve();
                 }
@@ -675,14 +675,14 @@ export default class CodeViewer {
                   this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: ''});
                   this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: 'block'});
 
-                  return Promise.resolve(gitIntegratorResponse);
+                  return Promise.resolve(gitInterfaceResponse);
                 }
               })
               .catch((err) => {
                 this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: ''});
 
                 if (
-                  gitIntegrator &&
+                  gitInterface &&
                   err && err.message && err.message.startsWith('Command failed:')
                 ) {
                   this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});

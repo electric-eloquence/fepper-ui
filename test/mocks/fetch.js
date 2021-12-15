@@ -25,7 +25,7 @@ global.fetch = (url, init) => {
         return;
       }
 
-      if (url === '/git-integrator') {
+      if (url === '/git-interface') {
         const args0 = init.body.get('args[0]');
 
         switch (args0) {

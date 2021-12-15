@@ -132,7 +132,7 @@ module.exports = new Promise((resolve) => {
           return;
         }
 
-        case '/git-integrator': {
+        case '/git-interface': {
           res.writeHead(501).end('Not Implemented');
 
           return;

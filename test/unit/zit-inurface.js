@@ -1,7 +1,6 @@
 /**
  * We need to run this after the other unit tests so the dataSaver value doesn't interfere with other tests.
- * Since the easiest way to ensure this is by putting this in last place alphabetically, it is named zit-integrator.js
- * instead of git-integrator.js
+ * Since the easiest way to ensure this is by putting this in last place alphabetically, it is named zit-inurface.js.
  */
 import {expect} from 'chai';
 
@@ -13,17 +12,17 @@ const {
   dataSaver
 } = fepperUi;
 
-describe('Git Integrator', function () {
-  describe('git_integrator conf true', function () {
+describe('Git Interface', function () {
+  describe('git_interface conf true', function () {
     before(function () {
-      fepperUi.uiData.config.gitIntegrator = true;
+      fepperUi.uiData.config.gitInterface = true;
     });
 
     beforeEach(function () {
       $orgs['#sg-code-btn-git-disable'].dispatchAction('css', {display: ''});
       $orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: ''});
       $orgs['#sg-code-pane-git'].dispatchAction('css', {display: ''});
-      $orgs['#sg-code-pane-git'].dispatchAction('removeClass', 'git-integrator-on');
+      $orgs['#sg-code-pane-git'].dispatchAction('removeClass', 'git-interface-on');
       $orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: ''});
       $orgs['#sg-code-pane-git-na'].dispatchAction(
         'html', '<pre>Git has not been set up for this project.</pre>');
@@ -32,7 +31,7 @@ describe('Git Integrator', function () {
     });
 
     after(function () {
-      fepperUi.uiData.config.gitIntegrator = false;
+      fepperUi.uiData.config.gitInterface = false;
     });
 
     it('Git not installed', function () {
@@ -43,20 +42,20 @@ describe('Git Integrator', function () {
         gitVersionStatus: 501
       };
 
-      dataSaver.updateValue('gitIntegrator', 'true');
+      dataSaver.updateValue('gitInterface', 'true');
 
-      const dataSaverGitIntegratorBefore = dataSaver.findValue('gitIntegrator');
+      const dataSaverGitInterfaceBefore = dataSaver.findValue('gitInterface');
       const paneGitNaStateBefore = $orgs['#sg-code-pane-git-na'].getState();
 
       return codeViewer.stoke()
         .then(() => {
-          const dataSaverGitIntegratorAfter = dataSaver.findValue('gitIntegrator');
+          const dataSaverGitInterfaceAfter = dataSaver.findValue('gitInterface');
           const paneGitNaStateAfter = $orgs['#sg-code-pane-git-na'].getState();
 
-          expect(dataSaverGitIntegratorBefore).to.equal('true');
+          expect(dataSaverGitInterfaceBefore).to.equal('true');
           expect(paneGitNaStateBefore.css).to.not.have.key('display');
 
-          expect(dataSaverGitIntegratorAfter).to.equal('false');
+          expect(dataSaverGitInterfaceAfter).to.equal('false');
           expect(paneGitNaStateAfter.css.display).to.equal('block');
         });
     });
@@ -70,20 +69,20 @@ describe('Git Integrator', function () {
         gitRemoteStatus: 501
       };
 
-      dataSaver.updateValue('gitIntegrator', 'true');
+      dataSaver.updateValue('gitInterface', 'true');
 
-      const dataSaverGitIntegratorBefore = dataSaver.findValue('gitIntegrator');
+      const dataSaverGitInterfaceBefore = dataSaver.findValue('gitInterface');
       const paneGitNaStateBefore = $orgs['#sg-code-pane-git-na'].getState();
 
       return codeViewer.stoke()
         .then(() => {
-          const dataSaverGitIntegratorAfter = dataSaver.findValue('gitIntegrator');
+          const dataSaverGitInterfaceAfter = dataSaver.findValue('gitInterface');
           const paneGitNaStateAfter = $orgs['#sg-code-pane-git-na'].getState();
 
-          expect(dataSaverGitIntegratorBefore).to.not.equal(dataSaverGitIntegratorAfter);
+          expect(dataSaverGitInterfaceBefore).to.not.equal(dataSaverGitInterfaceAfter);
           expect(paneGitNaStateBefore.css.display).to.not.equal(paneGitNaStateAfter.css.display);
 
-          expect(dataSaverGitIntegratorAfter).to.equal('false');
+          expect(dataSaverGitInterfaceAfter).to.equal('false');
           expect(paneGitNaStateAfter.css.display).to.equal('block');
         });
     });
@@ -98,7 +97,7 @@ describe('Git Integrator', function () {
         gitPullStatus: 200
       };
 
-      dataSaver.removeValue('gitIntegrator');
+      dataSaver.removeValue('gitInterface');
 
       const paneGitStateBefore = $orgs['#sg-code-pane-git'].getState();
       const radioGitOnStateBefore = $orgs['#sg-code-radio-git-on'].getState();
@@ -110,11 +109,11 @@ describe('Git Integrator', function () {
           const radioGitOnStateAfter = $orgs['#sg-code-radio-git-on'].getState();
 
           expect(paneGitStateBefore.css).to.not.have.key('display');
-          expect(paneGitStateBefore.classArray).to.not.include('git-integrator-on');
+          expect(paneGitStateBefore.classArray).to.not.include('git-interface-on');
           expect(radioGitOnStateBefore.prop.checked).to.not.equal(radioGitOnStateAfter.prop.checked);
 
           expect(paneGitStateAfter.css.display).to.equal('block');
-          expect(paneGitStateAfter.classArray).to.include('git-integrator-on');
+          expect(paneGitStateAfter.classArray).to.include('git-interface-on');
           expect(paneGitNaStateAfter.css).to.not.have.key('display');
           expect(radioGitOnStateAfter.prop.checked).to.be.true;
         });
@@ -132,7 +131,7 @@ describe('Git Integrator', function () {
 
       $orgs['#sg-code-radio-git-on'].dispatchAction('prop', {checked: ''});
 
-      const dataSaverGitIntegrator = dataSaver.findValue('gitIntegrator');
+      const dataSaverGitInterface = dataSaver.findValue('gitInterface');
       const paneGitStateBefore = $orgs['#sg-code-pane-git'].getState();
       const radioGitOnStateBefore = $orgs['#sg-code-radio-git-on'].getState();
 
@@ -142,13 +141,13 @@ describe('Git Integrator', function () {
           const paneGitNaStateAfter = $orgs['#sg-code-pane-git-na'].getState();
           const radioGitOnStateAfter = $orgs['#sg-code-radio-git-on'].getState();
 
-          expect(dataSaverGitIntegrator).to.equal('true');
+          expect(dataSaverGitInterface).to.equal('true');
           expect(paneGitStateBefore.css).to.not.have.key('display');
-          expect(paneGitStateBefore.classArray).to.not.include('git-integrator-on');
+          expect(paneGitStateBefore.classArray).to.not.include('git-interface-on');
           expect(radioGitOnStateBefore.prop.checked).to.not.equal(radioGitOnStateAfter.prop.checked);
 
           expect(paneGitStateAfter.css.display).to.equal('block');
-          expect(paneGitStateAfter.classArray).to.include('git-integrator-on');
+          expect(paneGitStateAfter.classArray).to.include('git-interface-on');
           expect(paneGitNaStateAfter.css).to.not.have.key('display');
           expect(radioGitOnStateAfter.prop.checked).to.be.true;
         });
@@ -166,7 +165,7 @@ describe('Git Integrator', function () {
 
       $orgs['#sg-code-radio-git-on'].dispatchAction('prop', {checked: ''});
 
-      const dataSaverGitIntegrator = dataSaver.findValue('gitIntegrator');
+      const dataSaverGitInterface = dataSaver.findValue('gitInterface');
       const btnGitDisableStateBefore = $orgs['#sg-code-btn-git-disable'].getState();
       const btnMarkdownEditStateBefore = $orgs['#sg-code-btn-markdown-edit'].getState();
       const paneGitStateBefore = $orgs['#sg-code-pane-git'].getState();
@@ -183,10 +182,10 @@ describe('Git Integrator', function () {
           const radioGitOnStateAfter = $orgs['#sg-code-radio-git-on'].getState();
           const tabGitStateAfter = $orgs['#sg-code-tab-git'].getState();
 
-          expect(dataSaverGitIntegrator).to.equal('true');
+          expect(dataSaverGitInterface).to.equal('true');
           expect(btnGitDisableStateBefore.css.display).to.not.equal(btnGitDisableStateAfter.css.display);
           expect(btnMarkdownEditStateBefore.css.display).to.not.equal(btnMarkdownEditStateAfter.css.display);
-          expect(paneGitStateBefore.classArray).to.not.include('git-integrator-on');
+          expect(paneGitStateBefore.classArray).to.not.include('git-interface-on');
           expect(paneGitNaStateBefore.css.display).to.not.equal(paneGitNaStateAfter.css.display);
           expect(paneGitNaStateBefore.html).to.not.equal(paneGitNaStateAfter.html);
           expect(radioGitOnStateBefore.prop.checked).to.not.equal(radioGitOnStateAfter.prop.checked);
@@ -197,7 +196,7 @@ describe('Git Integrator', function () {
           expect(paneGitNaStateAfter.css.display).to.equal('block');
           expect(paneGitNaStateAfter.html).to.equal(
             '<pre class="sg-code-pane-content-warning"><code>Command failed:</code></pre>');
-          expect(paneGitStateAfter.classArray).to.include('git-integrator-on');
+          expect(paneGitStateAfter.classArray).to.include('git-interface-on');
           expect(radioGitOnStateAfter.prop.checked).to.be.true;
           expect(tabGitStateAfter.classArray).to.include('sg-code-tab-warning');
         });
@@ -318,7 +317,7 @@ describe('Git Integrator', function () {
         });
     });
 
-    it('saves Markdown but does not prompt to `git commit` if Git is not integrated', function () {
+    it('saves Markdown but does not prompt to `git commit` if Git is not interfaced', function () {
       const expectedMarkdown =
 `---
 content_key: content
@@ -333,7 +332,7 @@ content_key: content
       $orgs['#sg-code-code-language-markdown'].dispatchAction('html', expectedMarkdown);
       $orgs['#sg-code-textarea-markdown'].dispatchAction('val', '');
 
-      dataSaver.updateValue('gitIntegrator', 'false');
+      dataSaver.updateValue('gitInterface', 'false');
 
       const paneGitStateBefore = $orgs['#sg-code-pane-git'].getState();
       const paneMarkdownCommitStateBefore = $orgs['#sg-code-pane-markdown-commit'].getState();
@@ -398,7 +397,7 @@ content_key: content
         });
     });
 
-    it('saves Markdown and prompts to `git commit` if Git is integrated', function () {
+    it('saves Markdown and prompts to `git commit` if Git is interfaced', function () {
       const expectedMarkdown =
 `---
 content_key: content
@@ -413,7 +412,7 @@ content_key: content
       $orgs['#sg-code-code-language-markdown'].dispatchAction('html', expectedMarkdown);
       $orgs['#sg-code-textarea-markdown'].dispatchAction('val', '');
 
-      dataSaver.updateValue('gitIntegrator', 'true');
+      dataSaver.updateValue('gitInterface', 'true');
 
       const paneGitStateBefore = $orgs['#sg-code-pane-git'].getState();
       const paneMarkdownCommitStateBefore = $orgs['#sg-code-pane-markdown-commit'].getState();

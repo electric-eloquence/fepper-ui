@@ -176,23 +176,23 @@ export default class CodeViewer {
       });
 
       this.$orgs['#sg-code-radio-git-off'].on('change', () => {
-        this.$orgs['#sg-code-pane-git'].toggleClass('git-integrator-on');
+        this.$orgs['#sg-code-pane-git'].toggleClass('git-interface-on');
 
-        if (this.#fepperUi.dataSaver.findValue('gitIntegrator') === 'true') {
-          this.#fepperUi.dataSaver.updateValue('gitIntegrator', 'false');
+        if (this.#fepperUi.dataSaver.findValue('gitInterface') === 'true') {
+          this.#fepperUi.dataSaver.updateValue('gitInterface', 'false');
         }
       });
 
       this.$orgs['#sg-code-radio-git-on'].on('change', () => {
-        this.$orgs['#sg-code-pane-git'].toggleClass('git-integrator-on');
+        this.$orgs['#sg-code-pane-git'].toggleClass('git-interface-on');
 
-        if (this.#fepperUi.dataSaver.findValue('gitIntegrator') !== 'true') {
-          this.#fepperUi.dataSaver.updateValue('gitIntegrator', 'true');
+        if (this.#fepperUi.dataSaver.findValue('gitInterface') !== 'true') {
+          this.#fepperUi.dataSaver.updateValue('gitInterface', 'true');
         }
       });
 
       this.$orgs['#sg-code-btn-git-disable'].on('click', () => {
-        this.#fepperUi.dataSaver.updateValue('gitIntegrator', 'false');
+        this.#fepperUi.dataSaver.updateValue('gitInterface', 'false');
         window.location.reload();
       });
     });
