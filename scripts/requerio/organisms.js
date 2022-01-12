@@ -31,6 +31,7 @@ export default {
   '#sg-code-lineage-fill': null,
   '#sg-code-lineager': null,
   '#sg-code-lineager-fill': null,
+  '#sg-code-message-git-na': null,
   '#sg-code-missing-partials': null,
   '#sg-code-missing-partials-fill': null,
   '#sg-code-pane-git': null,

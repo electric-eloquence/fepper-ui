@@ -98,10 +98,16 @@ export default class CodeViewer {
       this.setPanelContent('markdown', data.patternPartial);
 
       const paneMarkdownNaDisplay = this.$orgs['#sg-code-pane-markdown-na'].getState().css.display;
-      const paneMarkdownCommitDisplay = this.$orgs['#sg-code-pane-markdown-commit'].getState().css.display;
+      const paneMarkdownEditDisplay = this.$orgs['#sg-code-pane-markdown-edit'].getState().css.display;
       const paneMarkdownLoadAnimDisplay = this.$orgs['#sg-code-pane-markdown-load-anim'].getState().css.display;
+      const paneMarkdownCommitDisplay = this.$orgs['#sg-code-pane-markdown-commit'].getState().css.display;
 
-      if (!paneMarkdownNaDisplay && !paneMarkdownCommitDisplay && !paneMarkdownLoadAnimDisplay) {
+      if (
+        !paneMarkdownNaDisplay &&
+        !paneMarkdownEditDisplay &&
+        !paneMarkdownLoadAnimDisplay &&
+        !paneMarkdownCommitDisplay
+      ) {
         this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
       }
     }
@@ -120,6 +126,7 @@ export default class CodeViewer {
     this.#root = root;
 
     this.codeActive = false;
+    this.gitInterface = null; // This can be different from the dataSaver and uiData.config values.
     this.mdPath = null;
     this.$orgs = fepperUi.requerio.$orgs;
     this.patternPartial = null;
@@ -167,15 +174,17 @@ export default class CodeViewer {
     const dataSaverGitInterface = this.#fepperUi.dataSaver.findValue('gitInterface');
     const searchParams = this.urlHandler.getSearchParams();
     const tabActive = this.dataSaver.findValue('tabActive');
-    let gitInterface = dataSaverGitInterface === 'true';
-    this.tabActive = tabActive || this.tabActive;
+    // First, set this.gitInterface according to hard-coded config, but allow browser override.
+    this.gitInterface = this.uiData.config.gitInterface;
+    this.gitInterface = dataSaverGitInterface !== null ? (dataSaverGitInterface === 'true') : this.gitInterface;
     this.patternPartial = searchParams.p || this.uiData.config.defaultPattern;
+    this.tabActive = tabActive || this.tabActive;
 
     if (searchParams.view === 'code' || searchParams.view === 'c' || this.uiData.config.defaultShowPatternInfo) {
       this.openCode();
     }
 
-    if (gitInterface) {
+    if (this.gitInterface) {
       // If interfacing with Git, preemptively hide the Markdown edit button.
       // Reenable after a git pull with no conflicts.
       // Not easy to test because reenablement requires a git pull on the shell, and we aren't mocking shell commands.
@@ -184,93 +193,12 @@ export default class CodeViewer {
       this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
     }
 
-    // Determine if the project has been set up with Git.
     return this.activateTabAndPanel(this.tabActive)
       .then(() => {
-        return fetch(
-          '/git-interface', {
-            method: 'POST',
-            body: new URLSearchParams('args[0]=--version')
-          })
-          .then((response) => {
-            /* istanbul ignore else */
-            if (response.status === 200) {
-              return Promise.resolve();
-            }
-            else {
-              return response.text();
-            }
-          })
-          .then((responseText) => {
-            if (responseText) {
-              return Promise.reject(responseText);
-            }
-            else {
-              return fetch(
-                '/git-interface', {
-                  method: 'POST',
-                  body: new URLSearchParams('args[0]=remote')
-                });
-            }
-          })
-          .then((response) => {
-            /* istanbul ignore else */
-            if (response.status === 200) {
-              return Promise.resolve();
-            }
-            else {
-              return response.text();
-            }
-          })
-          .then((responseText) => {
-            if (responseText) {
-              return Promise.reject(responseText);
-            }
-            else {
-              if (dataSaverGitInterface === 'true' || this.uiData.config.gitInterface) {
-                this.$orgs['#sg-code-radio-git-on'].dispatchAction('prop', {checked: true});
-                this.$orgs['#sg-code-pane-git'].dispatchAction('addClass', 'git-interface-on');
-              }
-
-              if (dataSaverGitInterface === null && this.uiData.config.gitInterface) {
-                gitInterface = true;
-
-                // If interfacing with Git, preemptively hide the Markdown edit button.
-                // Reenable after a git pull with no conflicts.
-                this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
-                this.#fepperUi.dataSaver.updateValue('gitInterface', 'true');
-              }
-            }
-
-            this.stoked = true;
-
-            return this.setPanelContent('git', this.patternPartial, gitInterface);
-          })
-          .catch((rejection) => {
-            /* istanbul ignore else */
-            if (typeof rejection === 'string' && rejection.includes('section id="forbidden"')) {
-              const parser = new DOMParser();
-              const doc = parser.parseFromString(rejection, 'text/html');
-              const forbidden = doc.getElementById('forbidden');
-              const forbiddenClassName = forbidden.getAttribute('class');
-
-              forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
-              this.$orgs['#sg-code-pane-git-na'].dispatchAction('html', forbidden);
-            }
-            else if (typeof rejection === 'string' && rejection.startsWith('fatal:')) {
-              this.#fepperUi.dataSaver.updateValue('gitInterface', 'false');
-            }
-            else if (rejection) {
-              // eslint-disable-next-line no-console
-              console.error(rejection);
-            }
-
-            this.stoked = true;
-
-            this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: 'block'});
-
-            return this.setPanelContent('git', this.patternPartial, gitInterface);
-          });
+        this.stoked = true;
+      })
+      .catch(() => {
+        this.stoked = true;
       });
   }
 
@@ -293,7 +221,6 @@ export default class CodeViewer {
    * @returns {promise} A promise on which to perform additional actions.
    */
   activateTabAndPanel(type) {
-    const gitInterface = this.#fepperUi.dataSaver.findValue('gitInterface') === 'true';
     this.tabActive = type;
 
     this.$orgs['.sg-code-tab'].dispatchAction('removeClass', 'sg-code-tab-active');
@@ -306,46 +233,18 @@ export default class CodeViewer {
       case 'markdown': {
         if (!this.patternPartial.startsWith('viewall')) {
           return this.setPanelContent(type)
-            .then(() => {
-              if (this.stoked && this.mdPath) {
-                return this.setPanelContent('git', this.patternPartial, gitInterface);
-              }
-              else {
-                return Promise.resolve();
-              }
-            });
+            .then(() => this.gitPullMarkdown());
         }
 
         /* istanbul ignore next */
         break;
       }
-      case 'git': {
-        if (this.stoked) {
-          return this.setPanelContent(type, this.patternPartial, gitInterface);
-        }
-
-        break;
-      }
       default: {
-        return this.setPanelContent(type, this.patternPartial, gitInterface);
+        return this.setPanelContent(type, this.patternPartial);
       }
     }
 
     return Promise.resolve();
-  }
-
-  addRevision() {
-    return fetch(
-      '/git-interface', {
-        method: 'POST',
-        body: new URLSearchParams('args[0]=add')
-      })
-      .then(response => response.text())
-      .then(responseText => responseText)
-      .catch((err) => /* istanbul ignore next */ {
-        // eslint-disable-next-line no-console
-        console.error(err);
-      });
   }
 
   closeCode() {
@@ -357,14 +256,26 @@ export default class CodeViewer {
     this.$orgs['#sg-code-container'].dispatchAction('removeClass', 'active');
   }
 
-  commitRevision(body) {
+  deActivateMarkdownTextarea() {
+    const markdownTextareaVal = this.$orgs['#sg-code-textarea-markdown'].getState().val;
+
+    this.$orgs['#sg-code-textarea-markdown'].blur();
+    this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
+    this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
+    this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', markdownTextareaVal);
+    this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'block'});
+    this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+  }
+
+  fetchGitCommand(body) {
     return fetch(
-      '/git-interface', {
+      '/git-interface',
+      {
         method: 'POST',
-        body: new URLSearchParams(body)
+        body
       })
       .then((response) => {
-        if (response.status === 200) {
+        if (response && response.status === 200) {
           return response.text();
         }
         else {
@@ -378,21 +289,57 @@ export default class CodeViewer {
               resolve(response);
             }
             else {
-              reject(response.stack);
+              reject(response);
             }
           });
       });
   }
 
-  deActivateMarkdownTextarea() {
-    const markdownTextareaVal = this.$orgs['#sg-code-textarea-markdown'].getState().val;
+  gitPullMarkdown() {
+    const gitNaDisplay = this.$orgs['#sg-code-pane-git-na'].getState().css.display;
 
-    this.$orgs['#sg-code-textarea-markdown'].blur();
-    this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
-    this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
-    this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', markdownTextareaVal);
-    this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'block'});
-    this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+    if (!this.gitInterface || gitNaDisplay === 'block') {
+      return Promise.resolve();
+    }
+    else {
+      return this.fetchGitCommand(new URLSearchParams('args[0]=pull'))
+        .then((response) => {
+          if (typeof response === 'string') {
+            // Since we know there are no Git conflicts, reenable Markdown edit button.
+            this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: ''});
+            this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: ''});
+            this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: 'block'});
+
+            return Promise.resolve(response);
+          }
+          else {
+            return Promise.reject(response);
+          }
+        })
+        .catch((err) => {
+          /* istanbul ignore if */
+          if (err instanceof Error) {
+            // eslint-disable-next-line no-console
+            console.error(err);
+          }
+
+          this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: ''});
+
+          if (
+            this.gitInterface &&
+            err && err.message && err.message.startsWith('Command failed:')
+          ) {
+            this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
+            this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
+            this.$orgs['#sg-code-message-git-na'].dispatchAction('html',
+              '<pre class="sg-code-pane-content-warning"><code>' + err.message + '</code></pre>');
+          }
+
+          this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: 'block'});
+
+          return Promise.resolve();
+        });
+    }
   }
 
   openCode() {
@@ -412,126 +359,113 @@ export default class CodeViewer {
     }
   }
 
-  pushRevision() {
-    return fetch(
-      '/git-interface', {
-        method: 'POST',
-        body: new URLSearchParams('args[0]=push')
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          return response.text();
-        }
-        else {
-          return response.json();
-        }
-      })
-      .then((response) => {
-        return new Promise(
-          (resolve, reject) => {
-            if (typeof response === 'string') {
-              resolve(response);
-            }
-            else {
-              reject(response.stack);
-            }
-          });
-      });
+  revisionAdd() {
+    return this.fetchGitCommand(new URLSearchParams('args[0]=add'));
+  }
+
+  revisionCommit(body) {
+    return this.fetchGitCommand(new URLSearchParams(body));
+  }
+
+  revisionPush() {
+    return this.fetchGitCommand(new URLSearchParams('args[0]=push'));
   }
 
   saveMarkdown() {
-    let gitInterface;
-
-    return fetch('/gatekeeper')
+    return fetch('/gatekeeper?tool=the+Markdown+Editor')
       .then((response) => {
+        this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
+
         if (response.status === 200) {
           this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html');
 
-          const markdownBefore = this.$orgs['#sg-code-code-language-markdown'].getState().html;
           const markdownTextareaVal = this.$orgs['#sg-code-textarea-markdown'].getState().val;
+          const body = 'markdown_edited=' + encodeURIComponent(markdownTextareaVal) + '&rel_path=' +
+            encodeURIComponent(this.uiData.sourceFiles[this.patternPartial]);
 
-          if (markdownTextareaVal !== markdownBefore) {
-            const body = 'markdown_edited=' + encodeURIComponent(markdownTextareaVal) + '&rel_path=' +
-              encodeURIComponent(this.uiData.sourceFiles[this.patternPartial]);
-
-            return fetch(
-              '/markdown-editor', {
-                method: 'POST',
-                body: new URLSearchParams(body)
-              });
-          }
-          else {
-            return Promise.reject();
-          }
+          return fetch(
+            '/markdown-editor',
+            {
+              method: 'POST',
+              body: new URLSearchParams(body)
+            });
         }
         else {
           return Promise.reject(response);
         }
       })
       .then((response) => {
-        if (response.status === 200) {
-          return this.setPanelContent('markdown', this.patternPartial);
+        if (response && response.status === 200) {
+          this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
+
+          if (this.gitInterface) {
+            return this.setPanelContent('markdown', this.patternPartial)
+              .then(() => this.gitPullMarkdown());
+          }
+          else {
+            return response.text();
+          }
         }
         else {
           /* istanbul ignore next */
           return Promise.reject(response);
         }
       })
-      .then(() => {
-        gitInterface = this.#fepperUi.dataSaver.findValue('gitInterface') === 'true';
+      .then((response) => {
+        if (typeof response === 'string') {
+          this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
 
-        if (gitInterface) {
-          this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
-          this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
+          if (this.gitInterface) {
+            this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: 'block'});
+            this.$orgs['#sg-code-textarea-commit-message'].dispatchAction('focus');
+          }
+          else {
+            this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+          }
 
-          return this.setPanelContent('git', this.patternPartial, gitInterface);
-        }
-        else {
           return Promise.resolve();
         }
-      })
-      .then((response) => {
-        if (gitInterface) {
-          this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
-          // If interfacing with Git, preemptively hide the Markdown edit button.
-          // Reenable after a git pull with no conflicts.
-          this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
-        }
         else {
-          this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
-        }
-
-        if (response && response.status === 200) {
-          this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
-          this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: 'block'});
-          this.$orgs['#sg-code-textarea-commit-message'].dispatchAction('focus');
-        }
-        else {
-          this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+          return Promise.reject(response);
         }
       })
       .catch((response) => {
-        if (response && response.status === 403) {
-          this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
-          this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: 'none'});
-        }
+        this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
 
-        if (response && response.status && response.statusText) {
-          // eslint-disable-next-line no-console
-          console.error(`Status ${response.status}: ${response.statusText}`);
-        }
-        else {
-          /* istanbul ignore if */
-          if (response) {
+        if (response) {
+          if (response.status && response.statusText) {
+            // eslint-disable-next-line no-console
+            console.error(`Status ${response.status}: ${response.statusText}`);
+          }
+          else {
             // eslint-disable-next-line no-console
             console.error(response);
           }
 
+          if (response.status === 403) {
+            return response.text()
+              .then((responseText) => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(responseText, 'text/html');
+                const forbidden = doc.getElementById('forbidden');
+                const forbiddenClassName = forbidden.getAttribute('class');
+
+                forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
+                this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('html', forbidden);
+
+                return Promise.resolve();
+              });
+          }
+        }
+
+        if (!response || response.status !== 403) {
           this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
           this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
           this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
           this.$orgs['#sg-code-textarea-commit-message'].dispatchAction('val', '');
         }
+
+        return Promise.resolve();
       });
   }
 
@@ -544,33 +478,50 @@ export default class CodeViewer {
    *
    * @param {string} type - The panel to activate.
    * @param {[string]} patternPartial - The pattern for which the panel content is being set.
-   * @param {[boolean]} gitInterface - Whether Git Interface is on or off.
    * @returns {promise} A promise on which to perform additional actions.
    */
-  setPanelContent(type, patternPartial, gitInterface) {
+  setPanelContent(type, patternPartial) {
     this.patternPartial = patternPartial || this.patternPartial;
 
     switch (type) {
       case 'feplet': {
-        /* istanbul ignore else */
-        if (this.$orgs['#sg-code-panel-feplet'].length) {
-          this.$orgs['#sg-code-panel-feplet'][0]
-            .contentWindow.location.replace(`/mustache-browser?partial=${this.patternPartial}`);
-          this.$orgs['#sg-code-panel-feplet'][0]
-            .addEventListener('load', () => {
-              const height = this.$orgs['#sg-code-panel-feplet'][0].contentWindow.document.documentElement.offsetHeight;
+        return new Promise(
+          (resolve) => {
+            /* istanbul ignore else */
+            if (this.$orgs['#sg-code-panel-feplet'].length) {
+              this.$orgs['#sg-code-panel-feplet'][0]
+                .contentWindow.location.replace(`/mustache-browser?partial=${this.patternPartial}`);
+              this.$orgs['#sg-code-panel-feplet'][0]
+                .addEventListener('load', () => {
+                  const height =
+                    this.$orgs['#sg-code-panel-feplet'][0].contentWindow.document.documentElement.offsetHeight;
 
-              this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: `${height}px`, visibility: ''});
-            });
-        }
-        // DEPRECATED: Here for backward-compatibility. Will be removed.
-        else {
-          this.$orgs['#sg-code-fill']
-            .dispatchAction('text', 'Update Fepper NPM to make this work correctly.')
-            .dispatchAction('css', {color: 'red'});
-        }
+                  if (height > 150) {
+                    this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: `${height}px`, visibility: ''});
+                  }
+                  else {
+                    this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: '', visibility: ''});
+                  }
+                });
+            }
+            // DEPRECATED: Here for backward-compatibility. Will be removed.
+            else {
+              this.$orgs['#sg-code-fill']
+                .dispatchAction('text', 'Update Fepper NPM to make this work correctly.')
+                .dispatchAction('css', {color: 'red'});
+            }
 
-        return Promise.resolve();
+            resolve();
+          })
+          .catch((err) => {
+            /* istanbul ignore if */
+            if (err) {
+              // eslint-disable-next-line no-console
+              console.error(err);
+            }
+
+            return Promise.resolve();
+          });
       }
       case 'markdown': {
         const config = this.uiData.config;
@@ -629,6 +580,8 @@ export default class CodeViewer {
 
             return Promise.resolve();
           })
+          .then(() => {
+          })
           .catch((err) => {
             /* istanbul ignore if */
             if (err) {
@@ -638,75 +591,93 @@ export default class CodeViewer {
 
             this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
             this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('css', {display: 'block'});
+
+            return Promise.resolve();
           });
       }
       case 'git': {
-        const gitNaDisplay = this.$orgs['#sg-code-pane-git-na'].getState().css.display;
+        const gitNaHtml = this.$orgs['#sg-code-message-git-na'].getState().html;
 
-        if (gitNaDisplay === 'block') {
+        if (gitNaHtml && gitNaHtml.includes('Command failed: git pull') && gitNaHtml.includes('Aborting')) {
           return Promise.resolve();
         }
         else {
-          if (gitInterface) {
-            let gitInterfaceResponse;
-
-            return fetch(
-              '/git-interface', {
-                method: 'POST',
-                body: new URLSearchParams('args[0]=pull')
-              })
-              .then((response) => {
-                if (response && response.status === 200) {
-                  gitInterfaceResponse = response;
-
+          return fetch(
+            '/git-interface', {
+              method: 'POST'
+            })
+            .then((response) => {
+              switch (response.status) {
+                case 200:
                   return Promise.resolve();
-                }
-                else {
+                case 500:
                   return response.json();
-                }
-              })
-              .then((responseJson) => {
-                if (responseJson) {
-                  return Promise.reject(responseJson);
-                }
-                else {
-                  // Since we know there are no Git conflicts, reenable Markdown edit button.
-                  this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: ''});
-                  this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: ''});
-                  this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: 'block'});
-
-                  return Promise.resolve(gitInterfaceResponse);
-                }
-              })
-              .catch((err) => {
-                this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: ''});
-
-                if (
-                  gitInterface &&
-                  err && err.message && err.message.startsWith('Command failed:')
-                ) {
-                  this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
-                  this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
-                  this.$orgs['#sg-code-pane-git-na'].dispatchAction('html',
-                    '<pre class="sg-code-pane-content-warning"><code>' + err.message + '</code></pre>');
-                  this.$orgs['#sg-code-btn-git-disable'].dispatchAction('css', {display: 'block'});
-                }
-
-                this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: 'block'});
-              });
-          }
-          else {
-            return new Promise(
-              (resolve) => {
+                default:
+                  return response.text();
+              }
+            })
+            .then((response) => {
+              if (response) {
+                return Promise.reject(response);
+              }
+              else {
+                this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: ''});
                 this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: 'block'});
 
-                resolve();
-              });
-          }
+                if (this.gitInterface) {
+                  this.$orgs['#sg-code-radio-git-on'].dispatchAction('prop', {checked: true});
+                  this.$orgs['#sg-code-pane-git'].dispatchAction('addClass', 'git-interface-on');
+                }
+
+                // If dataSaver value of this.gitInterface is unset, and hard-coded value is true.
+                if (this.#fepperUi.dataSaver.findValue('gitInterface') === null && this.uiData.config.gitInterface) {
+                  this.#fepperUi.dataSaver.updateValue('gitInterface', 'true');
+                }
+
+                return Promise.resolve();
+              }
+            })
+            .catch((rejection) => {
+              /* istanbul ignore if */
+              if (rejection instanceof Error) {
+                // eslint-disable-next-line no-console
+                console.error(rejection);
+              }
+
+              this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: ''});
+
+              /* istanbul ignore else */
+              if (typeof rejection === 'string' && rejection.includes('section id="forbidden"')) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(rejection, 'text/html');
+                const forbidden = doc.getElementById('forbidden');
+                const forbiddenClassName = forbidden.getAttribute('class');
+
+                forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
+                this.$orgs['#sg-code-pane-git-na'].dispatchAction('html', forbidden);
+              }
+              else if (typeof rejection === 'string' && rejection.startsWith('fatal:')) {
+                this.#fepperUi.dataSaver.updateValue('gitInterface', 'false');
+              }
+
+              if (
+                this.gitInterface &&
+                rejection && rejection.message && rejection.message.startsWith('Command failed:')
+              ) {
+                this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
+                this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
+                this.$orgs['#sg-code-message-git-na'].dispatchAction('html',
+                  '<pre class="sg-code-pane-content-warning"><code>' + rejection.message + '</code></pre>');
+              }
+
+              this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: 'block'});
+
+              return Promise.resolve();
+            });
         }
       }
       case 'requerio': {
-        // TODO: Time-travel.
+        // TODO: Inspect Requerio organisms.
         return Promise.resolve();
       }
     }

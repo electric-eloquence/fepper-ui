@@ -133,8 +133,8 @@ export default class CodeViewer {
         commitMessageEncoded = encodeURIComponent(commitMessageEncoded);
         const body = 'args[0]=commit&args[1]=-a&args[2]=-m&args[3]=\'' + commitMessageEncoded + '\'';
 
-        this.#fepperUi.codeViewer.addRevision()
-          .then(() => this.#fepperUi.codeViewer.commitRevision(body))
+        this.#fepperUi.codeViewer.revisionAdd()
+          .then(() => this.#fepperUi.codeViewer.revisionCommit(body))
           .then((responseText) => {
             this.$orgs['#sg-code-console-markdown-log'].dispatchAction('html', responseText);
             this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
@@ -143,7 +143,7 @@ export default class CodeViewer {
 
             return Promise.resolve();
           })
-          .then(() => this.#fepperUi.codeViewer.pushRevision())
+          .then(() => this.#fepperUi.codeViewer.revisionPush())
           .then((responseText) => {
             this.$orgs['#sg-code-console-markdown-load-anim'].dispatchAction('css', {display: ''});
             this.$orgs['#sg-code-console-markdown-log'].dispatchAction('append', responseText);
@@ -151,7 +151,7 @@ export default class CodeViewer {
           })
           .catch((err) => {
             this.$orgs['#sg-code-console-markdown-load-anim'].dispatchAction('css', {display: ''});
-            this.$orgs['#sg-code-console-markdown-error'].dispatchAction('html', err);
+            this.$orgs['#sg-code-console-markdown-error'].dispatchAction('html', err.stack);
             this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
             this.$orgs['#sg-code-pane-markdown-console'].dispatchAction('css', {display: 'block'});
             this.$orgs['#sg-code-btn-markdown-continue'].dispatchAction('css', {display: 'block'});
