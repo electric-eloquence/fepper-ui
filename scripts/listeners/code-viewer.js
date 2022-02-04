@@ -101,7 +101,7 @@ export default class CodeViewer {
           .catch((response) => {
             if (response && response.status && response.statusText) {
               // eslint-disable-next-line no-console
-              console.warn(`Status ${response.status}: ${response.statusText}`);
+              console.error(`Status ${response.status}: ${response.statusText}`);
             }
             else {
               // eslint-disable-next-line curly, no-console
@@ -120,7 +120,6 @@ export default class CodeViewer {
 
       this.$orgs['#sg-code-btn-markdown-commit'].on('click', () => {
         const commitMessageVal = this.$orgs['#sg-code-textarea-commit-message'].getState().val.trim();
-        let commitMessageEncoded;
 
         if (!commitMessageVal) {
           this.$orgs['#sg-code-label-commit-message'].dispatchAction('css', {color: 'red'});
@@ -129,15 +128,20 @@ export default class CodeViewer {
           return;
         }
 
-        commitMessageEncoded = commitMessageVal.replace(/'/g, '\\\'');
-        commitMessageEncoded = encodeURIComponent(commitMessageEncoded);
-        const body = 'args[0]=commit&args[1]=-a&args[2]=-m&args[3]=\'' + commitMessageEncoded + '\'';
+        const body = 'args[0]=commit&args[1]=-m&args[2]=' + encodeURIComponent(commitMessageVal);
+        const markdownData = this.$orgs['#sg-code-panel-markdown'].getState().data;
+        let markdownSource;
 
-        this.#fepperUi.codeViewer.revisionAdd()
+        if (markdownData) {
+          markdownSource = markdownData.markdownSource;
+        }
+
+        this.#fepperUi.codeViewer.revisionAdd(markdownSource)
           .then(() => this.#fepperUi.codeViewer.revisionCommit(body))
           .then((responseText) => {
             this.$orgs['#sg-code-console-markdown-log'].dispatchAction('html', responseText);
             this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
+            this.$orgs['#sg-code-textarea-commit-message'].dispatchAction('val', '');
             this.$orgs['#sg-code-pane-markdown-console'].dispatchAction('css', {display: 'block'});
             this.$orgs['#sg-code-console-markdown-load-anim'].dispatchAction('css', {display: 'block'});
 
@@ -153,8 +157,15 @@ export default class CodeViewer {
             this.$orgs['#sg-code-console-markdown-load-anim'].dispatchAction('css', {display: ''});
             this.$orgs['#sg-code-console-markdown-error'].dispatchAction('html', err.stack);
             this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
+            this.$orgs['#sg-code-textarea-commit-message'].dispatchAction('val', '');
             this.$orgs['#sg-code-pane-markdown-console'].dispatchAction('css', {display: 'block'});
             this.$orgs['#sg-code-btn-markdown-continue'].dispatchAction('css', {display: 'block'});
+            this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
+            this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
+            this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: 'block'});
+            this.$orgs['#sg-code-message-git-na'].dispatchAction('html',
+              '<pre class="sg-code-pane-content-warning"><code>' + err.stack + '</code></pre>');
+            this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: ''});
           });
       });
 
@@ -176,6 +187,8 @@ export default class CodeViewer {
       });
 
       this.$orgs['#sg-code-radio-git-off'].on('change', () => {
+        this.#fepperUi.codeViewer.gitInterface = false;
+
         this.$orgs['#sg-code-pane-git'].toggleClass('git-interface-on');
 
         if (this.#fepperUi.dataSaver.findValue('gitInterface') === 'true') {
@@ -184,6 +197,8 @@ export default class CodeViewer {
       });
 
       this.$orgs['#sg-code-radio-git-on'].on('change', () => {
+        this.#fepperUi.codeViewer.gitInterface = true;
+
         this.$orgs['#sg-code-pane-git'].toggleClass('git-interface-on');
 
         if (this.#fepperUi.dataSaver.findValue('gitInterface') !== 'true') {

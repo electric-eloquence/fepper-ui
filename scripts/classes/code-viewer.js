@@ -86,6 +86,36 @@ export default class CodeViewer {
 
         break;
 
+      case 'patternlab.pageLoad':
+        // If showing loading anim, hide it and show the Markdown pane.
+        // This is the usual procedure for saving Markdown without Git, as this event will get triggered by LiveReload.
+        if (
+          !this.saving &&
+          this.$orgs['#sg-code-pane-markdown-load-anim'].getState().css.display === 'block'
+        ) {
+          setTimeout(() => {
+            this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
+
+            if (!this.$orgs['#sg-code-console-markdown-error'].getState().html) {
+              this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+            }
+          }, 500);
+        }
+        else if (
+          this.$orgs['#sg-code-console-markdown-log'].getState().html ||
+          this.$orgs['#sg-code-console-markdown-error'].getState().html
+        ) {
+          this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: ''});
+          this.$orgs['#sg-code-pane-markdown-console'].dispatchAction('css', {display: ''});
+          this.$orgs['#sg-code-console-markdown-log'].dispatchAction('html', '');
+          this.$orgs['#sg-code-console-markdown-error'].dispatchAction('html', '');
+          this.$orgs['#sg-code-btn-markdown-continue'].dispatchAction('css', {display: ''});
+          this.$orgs['#sg-code-tab-git'].dispatchAction('removeClass', 'sg-code-tab-warning');
+          this.$orgs['#sg-code-message-git-na'].dispatchAction('html', '');
+        }
+
+        break;
+
       case 'patternlab.updatePath':
         this.uiFns.updatePath(data, data.patternPartial);
 
@@ -127,10 +157,12 @@ export default class CodeViewer {
 
     this.codeActive = false;
     this.gitInterface = null; // This can be different from the dataSaver and uiData.config values.
-    this.mdPath = null;
+    this.markdownHttpPath = null;
+    this.markdownSource = null;
     this.$orgs = fepperUi.requerio.$orgs;
     this.patternPartial = null;
     this.requerio = fepperUi.requerio;
+    this.saving = false;
     this.stoked = false;
     this.tabActive = 'feplet';
     this.viewall = false; // DEPRECATED.
@@ -204,14 +236,16 @@ export default class CodeViewer {
 
   activateMarkdownTextarea() {
     const markdownPreState = this.$orgs['#sg-code-pre-language-markdown'].getState();
+    const markdownHtml = this.$orgs['#sg-code-code-language-markdown'].getState().html;
 
     this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
     this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: 'block'});
 
     this.$orgs['#sg-code-textarea-markdown']
       .dispatchAction('width', markdownPreState.width)
-      .dispatchAction('height', markdownPreState.height + 21); // line-height is 21px.
-    this.$orgs['#sg-code-textarea-markdown'].focus();
+      .dispatchAction('height', markdownPreState.height + 21) // line-height is 21px.
+      .dispatchAction('val', markdownHtml)
+      .dispatchAction('focus');
   }
 
   /**
@@ -257,13 +291,10 @@ export default class CodeViewer {
   }
 
   deActivateMarkdownTextarea() {
-    const markdownTextareaVal = this.$orgs['#sg-code-textarea-markdown'].getState().val;
-
-    this.$orgs['#sg-code-textarea-markdown'].blur();
+    this.$orgs['#sg-code-textarea-markdown'].dispatchAction('blur');
     this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
     this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
-    this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', markdownTextareaVal);
-    this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'block'});
+    this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: ''});
     this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
   }
 
@@ -318,21 +349,34 @@ export default class CodeViewer {
         })
         .catch((err) => {
           /* istanbul ignore if */
-          if (err instanceof Error) {
+          if (err instanceof Object) {
             // eslint-disable-next-line no-console
             console.error(err);
           }
 
           this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: ''});
 
-          if (
-            this.gitInterface &&
-            err && err.message && err.message.startsWith('Command failed:')
-          ) {
-            this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
-            this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
-            this.$orgs['#sg-code-message-git-na'].dispatchAction('html',
-              '<pre class="sg-code-pane-content-warning"><code>' + err.message + '</code></pre>');
+          if (this.gitInterface && err instanceof Object) {
+            if (typeof err.message === 'string' && err.message.startsWith('Command failed:')) {
+              this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
+              this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
+              this.$orgs['#sg-code-message-git-na'].dispatchAction('html',
+                '<pre class="sg-code-pane-content-warning"><code>' + err.message + '</code></pre>');
+            }
+            else if (typeof err.code === 'string' && err.code === 'ENOENT') {
+              this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
+              this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
+
+              if (typeof err.message === 'string') {
+                this.$orgs['#sg-code-message-git-na'].dispatchAction('html',
+                  '<pre class="sg-code-pane-content-warning"><code>Error: ' + err.message + '</code></pre>');
+              }
+
+              if (typeof err.stack === 'string') {
+                // eslint-disable-next-line no-console
+                console.error(err.stack);
+              }
+            }
           }
 
           this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: 'block'});
@@ -359,8 +403,8 @@ export default class CodeViewer {
     }
   }
 
-  revisionAdd() {
-    return this.fetchGitCommand(new URLSearchParams('args[0]=add'));
+  revisionAdd(relPath) {
+    return this.fetchGitCommand(new URLSearchParams('args[0]=add&rel_path=' + relPath));
   }
 
   revisionCommit(body) {
@@ -380,8 +424,12 @@ export default class CodeViewer {
           this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html');
 
           const markdownTextareaVal = this.$orgs['#sg-code-textarea-markdown'].getState().val;
-          const body = 'markdown_edited=' + encodeURIComponent(markdownTextareaVal) + '&rel_path=' +
-            encodeURIComponent(this.uiData.sourceFiles[this.patternPartial]);
+          const body = 'markdown_edited=' + encodeURIComponent(markdownTextareaVal) + '&markdown_source=' +
+            encodeURIComponent(this.markdownSource);
+
+          if (this.gitInterface) {
+            this.saving = true;
+          }
 
           return fetch(
             '/markdown-editor',
@@ -406,20 +454,31 @@ export default class CodeViewer {
             return response.text();
           }
         }
+        else if (response && response.status === 304) {
+          this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
+
+          return response;
+        }
         else {
           /* istanbul ignore next */
           return Promise.reject(response);
         }
       })
       .then((response) => {
-        if (typeof response === 'string') {
-          this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
+        this.saving = false;
 
+        if (typeof response === 'string') {
           if (this.gitInterface) {
+            this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
             this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: 'block'});
             this.$orgs['#sg-code-textarea-commit-message'].dispatchAction('focus');
           }
-          else {
+
+          return Promise.resolve();
+        }
+        else if (typeof response === 'object') {
+          if (response.statusText === 'Not Modified') {
+            this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
             this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
           }
 
@@ -430,19 +489,15 @@ export default class CodeViewer {
         }
       })
       .catch((response) => {
+        this.saving = false;
+
         this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
 
         if (response) {
-          if (response.status && response.statusText) {
+          if (response.status === 403) {
             // eslint-disable-next-line no-console
             console.error(`Status ${response.status}: ${response.statusText}`);
-          }
-          else {
-            // eslint-disable-next-line no-console
-            console.error(response);
-          }
 
-          if (response.status === 403) {
             return response.text()
               .then((responseText) => {
                 const parser = new DOMParser();
@@ -455,6 +510,10 @@ export default class CodeViewer {
 
                 return Promise.resolve();
               });
+          }
+          else {
+            // eslint-disable-next-line no-console
+            console.error(response);
           }
         }
 
@@ -526,14 +585,13 @@ export default class CodeViewer {
       case 'markdown': {
         const config = this.uiData.config;
         const patternPath = this.uiData.patternPaths[this.patternPartial];
-        const mdPath = patternPath.slice(0, -(config.outfileExtension.length)) + config.frontMatterExtension;
-        let textareaMarkdownHtml;
+        const markdownHttpPath = patternPath.slice(0, -(config.outfileExtension.length)) + config.frontMatterExtension;
 
         return fetch('/gatekeeper?tool=the+Markdown+Editor')
           .then((response) => {
             if (response.status === 200) {
               return fetch(
-                `/${mdPath}?${Date.now()}`, {
+                `/${markdownHttpPath}?${Date.now()}`, {
                   method: 'GET'
                 });
             }
@@ -544,12 +602,17 @@ export default class CodeViewer {
           .then((response) => {
             if (response instanceof Object) {
               if (response.status === 200) {
-                this.mdPath = mdPath;
+                this.markdownHttpPath = markdownHttpPath;
+                this.markdownSource =
+                  this.uiData.sourceFiles[this.patternPartial].slice(0, -(config.patternExtension.length)) +
+                  config.frontMatterExtension;
+                this.$orgs['#sg-code-panel-markdown'].dispatchAction('data', {markdownSource: this.markdownSource});
 
                 return response.text();
               }
               else {
-                this.mdPath = null;
+                this.markdownHttpPath = null;
+                this.markdownSource = null;
 
                 return Promise.reject();
               }
@@ -559,6 +622,8 @@ export default class CodeViewer {
               const doc = parser.parseFromString(response, 'text/html');
               const forbidden = doc.getElementById('forbidden');
               const forbiddenClassName = forbidden.getAttribute('class');
+              this.markdownHttpPath = null;
+              this.markdownSource = null;
 
               forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
               this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('html', forbidden);
@@ -568,19 +633,11 @@ export default class CodeViewer {
           })
           .then((responseText) => {
             if (responseText) {
-              textareaMarkdownHtml = responseText;
-
               this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('css', {display: ''});
-              this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', textareaMarkdownHtml);
-              this.$orgs['#sg-code-textarea-markdown'].dispatchAction('html', textareaMarkdownHtml);
-
-              // After this promise fully resolves, determine whether or not to display #sg-code-pane-markdown
-              // This needs to occur per invocation of .setPanelContent('markdown', ...)
+              this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html', responseText);
             }
 
             return Promise.resolve();
-          })
-          .then(() => {
           })
           .catch((err) => {
             /* istanbul ignore if */
@@ -588,6 +645,9 @@ export default class CodeViewer {
               // eslint-disable-next-line no-console
               console.error(err);
             }
+
+            this.markdownHttpPath = null;
+            this.markdownSource = null;
 
             this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
             this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('css', {display: 'block'});
@@ -598,7 +658,10 @@ export default class CodeViewer {
       case 'git': {
         const gitNaHtml = this.$orgs['#sg-code-message-git-na'].getState().html;
 
-        if (gitNaHtml && gitNaHtml.includes('Command failed: git pull') && gitNaHtml.includes('Aborting')) {
+        if (
+          gitNaHtml &&
+          (gitNaHtml.includes('Command failed: git pull') || gitNaHtml.includes('Command failed: git push'))
+        ) {
           return Promise.resolve();
         }
         else {
@@ -639,7 +702,7 @@ export default class CodeViewer {
             })
             .catch((rejection) => {
               /* istanbul ignore if */
-              if (rejection instanceof Error) {
+              if (rejection instanceof Object) {
                 // eslint-disable-next-line no-console
                 console.error(rejection);
               }

@@ -14,14 +14,13 @@ export default class PatternlabViewer {
     document.addEventListener('DOMContentLoaded', () => {
       const fepperUi = this.#fepperUi;
 
-      // Click handler for elements in pull down menus. Update the iframe. Also close the menu.
+      // Click handler for links in accordion menus.
       this.$orgs['.sg-pop'].on(
         'click',
         {this: this},
         function (e) {
           e.preventDefault();
 
-          // Update the iframe via the history api handler.
           const messageObj = {
             event: 'patternlab.updatePath',
             path: window.$(this).attr('href')
