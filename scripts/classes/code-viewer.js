@@ -229,7 +229,7 @@ export default class CodeViewer {
       .then(() => {
         this.stoked = true;
       })
-      .catch(() => {
+      .catch(() => /* istanbul ignore next */ {
         this.stoked = true;
       });
   }
@@ -277,8 +277,6 @@ export default class CodeViewer {
         return this.setPanelContent(type, this.patternPartial);
       }
     }
-
-    return Promise.resolve();
   }
 
   closeCode() {
@@ -299,6 +297,7 @@ export default class CodeViewer {
   }
 
   fetchGitCommand(body) {
+    // Note: git-interface gatekeeps on the server.
     return fetch(
       '/git-interface',
       {
@@ -335,6 +334,7 @@ export default class CodeViewer {
     else {
       return this.fetchGitCommand(new URLSearchParams('args[0]=pull'))
         .then((response) => {
+          /* istanbul ignore else */
           if (typeof response === 'string') {
             // Since we know there are no Git conflicts, reenable Markdown edit button.
             this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: ''});
@@ -354,36 +354,139 @@ export default class CodeViewer {
             console.error(err);
           }
 
-          this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: ''});
-
           if (this.gitInterface && err instanceof Object) {
-            if (typeof err.message === 'string' && err.message.startsWith('Command failed:')) {
-              this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
-              this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
+            this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
+            this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
+
+            if (typeof err.message === 'string') {
               this.$orgs['#sg-code-message-git-na'].dispatchAction('html',
-                '<pre class="sg-code-pane-content-warning"><code>' + err.message + '</code></pre>');
+                '<pre class="sg-code-pane-content-warning"><code>Error: ' + err.message + '</code></pre>');
             }
-            else if (typeof err.code === 'string' && err.code === 'ENOENT') {
-              this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
-              this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
 
-              if (typeof err.message === 'string') {
-                this.$orgs['#sg-code-message-git-na'].dispatchAction('html',
-                  '<pre class="sg-code-pane-content-warning"><code>Error: ' + err.message + '</code></pre>');
-              }
-
-              if (typeof err.stack === 'string') {
-                // eslint-disable-next-line no-console
-                console.error(err.stack);
-              }
+            if (typeof err.stack === 'string') {
+              // eslint-disable-next-line no-console
+              console.error(err.stack);
             }
           }
 
+          this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: ''});
           this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: 'block'});
 
           return Promise.resolve();
         });
     }
+  }
+
+  markdownSave() {
+    // Fetching gatekeeper before fetching markdown-editor in order to ensure that it is safe to prepare the body for
+    // posting to markdown-editor.
+    return fetch('/gatekeeper?tool=the+Markdown+Editor')
+      .then((response) => {
+        this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
+
+        if (response.status === 200) {
+          this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html');
+
+          const markdownTextareaVal = this.$orgs['#sg-code-textarea-markdown'].getState().val;
+          const body = 'markdown_edited=' + encodeURIComponent(markdownTextareaVal) + '&markdown_source=' +
+            encodeURIComponent(this.markdownSource);
+
+          if (this.gitInterface) {
+            this.saving = true;
+          }
+
+          // Note: markdown-editor gatekeeps on the server as well.
+          return fetch(
+            '/markdown-editor',
+            {
+              method: 'POST',
+              body: new URLSearchParams(body)
+            });
+        }
+        else {
+          return Promise.reject(response);
+        }
+      })
+      .then((response) => {
+        if (response && response.status === 200) {
+          this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
+
+          if (this.gitInterface) {
+            return this.setPanelContent('markdown', this.patternPartial)
+              .then(() => this.gitPullMarkdown());
+          }
+          else {
+            return response.text();
+          }
+        }
+        else if (response && response.status === 304) { // Not Modified
+          return Promise.resolve(response);
+        }
+        else {
+          return Promise.reject(response);
+        }
+      })
+      .then((response) => {
+        this.saving = false;
+
+        if (typeof response === 'string') {
+          if (this.gitInterface) {
+            this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
+            this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: 'block'});
+            this.$orgs['#sg-code-textarea-commit-message'].dispatchAction('focus');
+          }
+
+          return Promise.resolve({statusText: 'OK'});
+        }
+        else if (typeof response === 'object') {
+          if (response.status === 304) { // Not Modified
+            this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+          }
+
+          return Promise.resolve(response);
+        }
+        else /* istanbul ignore next */ {
+          return Promise.reject(response);
+        }
+      })
+      .catch((response) => {
+        this.saving = false;
+
+        this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
+
+        if (response) {
+          if (response.status === 403) {
+            // eslint-disable-next-line no-console
+            console.error(`Status ${response.status}: ${response.statusText}`);
+
+            return response.text()
+              .then((responseText) => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(responseText, 'text/html');
+                const forbidden = doc.getElementById('forbidden');
+                const forbiddenClassName = forbidden.getAttribute('class');
+
+                forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
+                this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('html', forbidden);
+
+                return Promise.resolve(response);
+              });
+          }
+          else {
+            // eslint-disable-next-line no-console
+            console.error(response);
+          }
+        }
+
+        if (!response || response.status !== 403) {
+          this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+          this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
+          this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
+          this.$orgs['#sg-code-textarea-commit-message'].dispatchAction('val', '');
+        }
+
+        return Promise.resolve(response);
+      });
   }
 
   openCode() {
@@ -415,119 +518,6 @@ export default class CodeViewer {
     return this.fetchGitCommand(new URLSearchParams('args[0]=push'));
   }
 
-  saveMarkdown() {
-    return fetch('/gatekeeper?tool=the+Markdown+Editor')
-      .then((response) => {
-        this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
-
-        if (response.status === 200) {
-          this.$orgs['#sg-code-code-language-markdown'].dispatchAction('html');
-
-          const markdownTextareaVal = this.$orgs['#sg-code-textarea-markdown'].getState().val;
-          const body = 'markdown_edited=' + encodeURIComponent(markdownTextareaVal) + '&markdown_source=' +
-            encodeURIComponent(this.markdownSource);
-
-          if (this.gitInterface) {
-            this.saving = true;
-          }
-
-          return fetch(
-            '/markdown-editor',
-            {
-              method: 'POST',
-              body: new URLSearchParams(body)
-            });
-        }
-        else {
-          return Promise.reject(response);
-        }
-      })
-      .then((response) => {
-        if (response && response.status === 200) {
-          this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
-
-          if (this.gitInterface) {
-            return this.setPanelContent('markdown', this.patternPartial)
-              .then(() => this.gitPullMarkdown());
-          }
-          else {
-            return response.text();
-          }
-        }
-        else if (response && response.status === 304) {
-          this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
-
-          return response;
-        }
-        else {
-          /* istanbul ignore next */
-          return Promise.reject(response);
-        }
-      })
-      .then((response) => {
-        this.saving = false;
-
-        if (typeof response === 'string') {
-          if (this.gitInterface) {
-            this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
-            this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: 'block'});
-            this.$orgs['#sg-code-textarea-commit-message'].dispatchAction('focus');
-          }
-
-          return Promise.resolve();
-        }
-        else if (typeof response === 'object') {
-          if (response.statusText === 'Not Modified') {
-            this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
-            this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
-          }
-
-          return Promise.resolve();
-        }
-        else {
-          return Promise.reject(response);
-        }
-      })
-      .catch((response) => {
-        this.saving = false;
-
-        this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
-
-        if (response) {
-          if (response.status === 403) {
-            // eslint-disable-next-line no-console
-            console.error(`Status ${response.status}: ${response.statusText}`);
-
-            return response.text()
-              .then((responseText) => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(responseText, 'text/html');
-                const forbidden = doc.getElementById('forbidden');
-                const forbiddenClassName = forbidden.getAttribute('class');
-
-                forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
-                this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('html', forbidden);
-
-                return Promise.resolve();
-              });
-          }
-          else {
-            // eslint-disable-next-line no-console
-            console.error(response);
-          }
-        }
-
-        if (!response || response.status !== 403) {
-          this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
-          this.$orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
-          this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
-          this.$orgs['#sg-code-textarea-commit-message'].dispatchAction('val', '');
-        }
-
-        return Promise.resolve();
-      });
-  }
-
   scrollViewall() /* istanbul ignore next */ {
     this.$orgs['#sg-viewport'][0].contentWindow.postMessage({codeScrollViewall: true}, this.uiProps.targetOrigin);
   }
@@ -555,6 +545,7 @@ export default class CodeViewer {
                   const height =
                     this.$orgs['#sg-code-panel-feplet'][0].contentWindow.document.documentElement.offsetHeight;
 
+                  /* istanbul ignore if */
                   if (height > 150) {
                     this.$orgs['#sg-code-panel-feplet'].dispatchAction('css', {height: `${height}px`, visibility: ''});
                   }
@@ -572,8 +563,7 @@ export default class CodeViewer {
 
             resolve();
           })
-          .catch((err) => {
-            /* istanbul ignore if */
+          .catch((err) => /* istanbul ignore next */ {
             if (err) {
               // eslint-disable-next-line no-console
               console.error(err);
@@ -665,6 +655,7 @@ export default class CodeViewer {
           return Promise.resolve();
         }
         else {
+          // Note: git-interface gatekeeps on the server.
           return fetch(
             '/git-interface', {
               method: 'POST'
@@ -674,6 +665,7 @@ export default class CodeViewer {
                 case 200:
                   return Promise.resolve();
                 case 500:
+                case 501:
                   return response.json();
                 default:
                   return response.text();

@@ -255,7 +255,7 @@ menu anchor.</p>
       });
 
       it('the markdown edit save button exits the markdown edit pane if markdown unchanged', async () => {
-        const sgCodePaneMarkdown = await $('#sg-code-pane-markdown');
+        const sgCodePaneMarkdownLoadAnim = await $('#sg-code-pane-markdown-load-anim');
         const sgCodePaneMarkdownEdit = await $('#sg-code-pane-markdown-edit');
 
         await (await $('#sg-t-toggle')).click();
@@ -269,12 +269,12 @@ menu anchor.</p>
         await (await $('#sg-code-btn-markdown-save')).click();
         await browser.pause(100);
 
-        expect((await sgCodePaneMarkdown.getCSSProperty('display')).value).to.equal('block');
+        expect((await sgCodePaneMarkdownLoadAnim.getCSSProperty('display')).value).to.equal('block');
         expect((await sgCodePaneMarkdownEdit.getCSSProperty('display')).value).to.equal('none');
       });
 
       it('the markdown edit save button exits the markdown edit pane if edited markdown is saved', async () => {
-        const sgCodePaneMarkdown = await $('#sg-code-pane-markdown');
+        const sgCodePaneMarkdownLoadAnim = await $('#sg-code-pane-markdown-load-anim');
         const sgCodePaneMarkdownEdit = await $('#sg-code-pane-markdown-edit');
 
         await (await $('#sg-t-toggle')).click();
@@ -290,7 +290,7 @@ menu anchor.</p>
         await (await $('#sg-code-btn-markdown-save')).click();
         await browser.pause(100);
 
-        expect((await sgCodePaneMarkdown.getCSSProperty('display')).value).to.equal('block');
+        expect((await sgCodePaneMarkdownLoadAnim.getCSSProperty('display')).value).to.equal('block');
         expect((await sgCodePaneMarkdownEdit.getCSSProperty('display')).value).to.equal('none');
       });
 

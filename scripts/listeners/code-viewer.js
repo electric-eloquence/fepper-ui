@@ -111,7 +111,7 @@ export default class CodeViewer {
       });
 
       this.$orgs['#sg-code-btn-markdown-save'].on('click', () => {
-        this.#fepperUi.codeViewer.saveMarkdown();
+        this.#fepperUi.codeViewer.markdownSave();
       });
 
       this.$orgs['#sg-code-btn-markdown-save-cancel'].on('click', () => {
