@@ -4,149 +4,122 @@ global.fetch = (url, init) => {
   return new Promise(
     (resolve) => {
       if (url.startsWith('/gatekeeper')) {
-        if (global.mockResponse && global.mockResponse.gatekeeperStatus === 403) {
-          resolve({
-            status: 403,
-            statusText: 'Forbidden',
-            /* eslint-disable max-len */
-            text: () => `
+        switch (global.mockResponse.gatekeeper_status) {
+          case 403:
+            resolve({
+              status: global.mockResponse.gatekeeper_status,
+              statusText: 'Forbidden',
+              /* eslint-disable max-len */
+              text: () => Promise.resolve(`
 <section id="forbidden" class="error">
-  <p>ERROR! You can only use %s on the machine that is running this Fepper instance!</p>
+  <p>ERROR! You can only use the Markdown Editor on the machine that is running this Fepper instance!</p>
   <p>If you <em>are</em> on this machine, you may need to resync this browser with Fepper.</p>
   <p>Please go to the command line and quit this Fepper instance. Then run <code>fp</code> (not <code>fp restart</code>).</p>
-</section>`
-            /* eslint-enable max-len */
-          });
-        }
-        else {
-          resolve({status: 200});
+</section>`)
+              /* eslint-enable max-len */
+            });
+
+            break;
+
+          default:
+            resolve({
+              status: 200,
+              statusText: 'OK',
+              text: () => Promise.resolve('')
+            });
         }
 
         return;
       }
 
-      if (url === '/git-integrator') {
-        const args0 = init.body.get('args[0]');
+      if (url === '/git-interface') {
+        const command = init.body ? init.body.get('args[0]') : 'remote';
+        let message = `Command failed: git ${command}`;
+        let relPath;
+        let resolveObj = {
+          status: global.mockResponse[`git_${command}_status`]
+        };
 
-        switch (args0) {
-          case 'add': {
-            resolve({
-              status: 200,
-              text: () => {
-                return 'OK';
-              }
+        if (init.body && init.body.has('rel_path')) {
+          relPath = init.body.get('rel_path') || '.';
+        }
+
+        if (relPath) {
+          message += ` ${relPath}`;
+        }
+
+        switch (resolveObj.status) {
+          case 403:
+            Object.assign(resolveObj, {
+              json: () => Promise.resolve({message, stack: message}),
+              statusText: 'Forbidden',
+              /* eslint-disable max-len */
+              text: () => Promise.resolve(`
+<section id="forbidden" class="error">
+  <p>ERROR! You can only use the Git Interface on the machine that is running this Fepper instance!</p>
+  <p>If you <em>are</em> on this machine, you may need to resync this browser with Fepper.</p>
+  <p>Please go to the command line and quit this Fepper instance. Then run <code>fp</code> (not <code>fp restart</code>).</p>
+</section>`)
+              /* eslint-enable max-len */
             });
 
             break;
-          }
-          case 'commit': {
-            if (global.mockResponse && global.mockResponse.gitCommitStatus === 500) {
-              resolve({
-                json: () => {
-                  return {message: 'Command failed:', stack: 'Command failed:'};
-                },
-                status: 500
-              });
-            }
-            else {
-              resolve({
-                status: 200,
-                text: () => {
-                  return 'OK';
-                }
-              });
-            }
+
+          case 500:
+            Object.assign(resolveObj, {
+              json: () => Promise.resolve({message, stack: message}),
+              statusText: 'Internal Server Error'
+            });
 
             break;
-          }
-          case 'pull': {
-            if (global.mockResponse && global.mockResponse.gitPullStatus === 500) {
-              resolve({
-                json: () => {
-                  return {message: 'Command failed:', stack: 'Command failed:'};
-                },
-                status: 500
-              });
-            }
-            else {
-              resolve({status: 200});
-            }
+
+          case 501:
+            Object.assign(resolveObj, {
+              json: () => Promise.resolve({
+                message: `Command failed: git remote --verbose
+'git' is not recognized as an internal or external command, operable program or batch file.`
+              }),
+              statusText: 'Not Implemented'
+            });
 
             break;
-          }
-          case 'push': {
-            if (global.mockResponse && global.mockResponse.gitPushStatus === 500) {
-              resolve({
-                json: () => {
-                  return {message: 'Command failed:', stack: 'Command failed:'};
-                },
-                status: 500
-              });
-            }
-            else {
-              resolve({
-                status: 200,
-                text: () => {
-                  return 'OK';
-                }
-              });
-            }
 
-            break;
-          }
-          case 'remote': {
-            if (global.mockResponse && global.mockResponse.gitRemoteStatus === 501) {
-              resolve({
-                status: 501,
-                text: () => 'fatal:'
-              });
-            }
-            else {
-              resolve({status: 200});
-            }
-
-            break;
-          }
-          case '--version': {
-            if (global.mockResponse && global.mockResponse.gitVersionStatus === 403) {
-              resolve({
-                status: 403,
-                /* eslint-disable max-len */
-                text: () => `
-<section id="forbidden" class="error">
-  <p>ERROR! You can only use %s on the machine that is running this Fepper instance!</p>
-  <p>If you <em>are</em> on this machine, you may need to resync this browser with Fepper.</p>
-  <p>Please go to the command line and quit this Fepper instance. Then run <code>fp</code> (not <code>fp restart</code>).</p>
-</section>`
-                /* eslint-enable max-len */
-              });
-            }
-            else if (global.mockResponse && global.mockResponse.gitVersionStatus === 501) {
-              resolve({
-                status: 501,
-                text: () => 'fatal:'
-              });
-            }
-            else {
-              resolve({status: 200});
-            }
-
-            break;
-          }
+          default:
+            resolveObj = {
+              status: 200,
+              statusText: 'OK',
+              text: () => Promise.resolve('OK')
+            };
         }
 
+        resolve(resolveObj);
         return;
       }
 
       if (url === '/markdown-editor') {
-        if (global.mockResponse && global.mockResponse.markdownSaveStatus === 500) {
-          resolve({
-            status: 500,
-            statusText: 'Internal Server Error'
-          });
-        }
-        else {
-          resolve({status: 200});
+        switch (global.mockResponse.markdown_save_status) {
+          case 304:
+            resolve({
+              status: global.mockResponse.markdown_save_status,
+              statusText: 'Not Modified'
+            });
+
+            break;
+
+          case 500:
+            resolve({
+              status: global.mockResponse.markdown_save_status,
+              statusText: 'Internal Server Error'
+            });
+
+            break;
+
+          default:
+            resolve({
+              status: 200,
+              statusText: 'OK',
+              text: () => Promise.resolve('')
+            });
         }
 
         return;
@@ -158,13 +131,14 @@ global.fetch = (url, init) => {
         if (fs.existsSync(path)) {
           resolve({
             status: 200,
-            text: () => fs.readFileSync(path, 'utf8')
+            text: () => Promise.resolve(fs.readFileSync(path, 'utf8'))
           });
         }
         else {
           resolve({
             status: 404,
-            statusText: 'Not Found'
+            statusText: 'Not Found',
+            text: () => Promise.resolve('')
           });
         }
 

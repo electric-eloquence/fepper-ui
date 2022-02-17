@@ -5,7 +5,8 @@ import fepperUi from '../unit';
 const $orgs = fepperUi.requerio.$orgs;
 const {
   annotationsViewer,
-  codeViewer
+  codeViewer,
+  dataSaver
 } = fepperUi;
 
 const timeout = 10;
@@ -14,13 +15,16 @@ describe('codeViewer', function () {
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
       expect(codeViewer.constructor.name).to.equal('CodeViewer');
-      expect(Object.keys(codeViewer).length).to.equal(9);
+      expect(Object.keys(codeViewer).length).to.equal(12);
       expect(codeViewer).to.have.property('receiveIframeMessage');
       expect(codeViewer).to.have.property('codeActive');
-      expect(codeViewer).to.have.property('mdPath');
+      expect(codeViewer).to.have.property('gitInterface');
+      expect(codeViewer).to.have.property('markdownHttpPath');
+      expect(codeViewer).to.have.property('markdownSource');
       expect(codeViewer).to.have.property('$orgs');
       expect(codeViewer).to.have.property('patternPartial');
       expect(codeViewer).to.have.property('requerio');
+      expect(codeViewer).to.have.property('saving');
       expect(codeViewer).to.have.property('stoked');
       expect(codeViewer).to.have.property('tabActive');
       expect(codeViewer).to.have.property('viewall');
@@ -146,6 +150,10 @@ describe('codeViewer', function () {
 
     // Must test a tab + panel besides the Feplet default first. This way the Feplet tab + panel test can be accurate.
     it('activates the Markdown tab and panel for a pattern with Markdown - also tests .setPanelContent()', function () {
+      global.mockResponse = {
+        gatekeeper_status: 200
+      };
+
       const panelStateBefore = $orgs['#sg-code-panel-markdown'].getState();
       const tabStateBefore = $orgs['#sg-code-tab-markdown'].getState();
 
@@ -225,6 +233,10 @@ describe('codeViewer', function () {
     });
 
     it('activates Git tab and panel but does not set panel content if not stoked', function () {
+      global.mockResponse = {
+        gatekeeper_status: 200,
+        git_remote_status: 200
+      };
       codeViewer.patternPartial = 'elements-paragraph';
       codeViewer.stoked = false;
 
@@ -248,6 +260,62 @@ describe('codeViewer', function () {
           expect(paneStateAfter.html).to.be.null;
           expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
           expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
+        });
+    });
+
+    it('activates Git tab and panel but does not set panel content if git pull fails', function () {
+      codeViewer.patternPartial = 'elements-paragraph';
+
+      dataSaver.removeValue('tabActive');
+      $orgs['.sg-code-panel'].dispatchAction('removeClass', 'sg-code-panel-active');
+      $orgs['.sg-code-tab'].dispatchAction('removeClass', 'sg-code-tab-active');
+      $orgs['#sg-code-message-git-na'].dispatchAction('html', 'Command failed: git pull');
+
+      const tabGitStateBefore = $orgs['#sg-code-tab-git'].getState();
+      const panelGitStateBefore = $orgs['#sg-code-panel-git'].getState();
+      const tabActiveBefore = dataSaver.findValue('tabActive');
+
+      return codeViewer.activateTabAndPanel('git')
+        .then(() => {
+          const tabGitStateAfter = $orgs['#sg-code-tab-git'].getState();
+          const panelGitStateAfter = $orgs['#sg-code-panel-git'].getState();
+          const tabActiveAfter = dataSaver.findValue('tabActive');
+
+          expect(tabGitStateBefore.classArray).to.not.include('sg-code-tab-active');
+          expect(panelGitStateBefore.classArray).to.not.include('sg-code-panel-active');
+          expect(tabActiveBefore).to.be.null;
+
+          expect(tabGitStateAfter.classArray).to.include('sg-code-tab-active');
+          expect(panelGitStateAfter.classArray).to.include('sg-code-panel-active');
+          expect(tabActiveAfter).to.equal('git');
+        });
+    });
+
+    it('activates Git tab and panel but does not set panel content if git push fails', function () {
+      codeViewer.patternPartial = 'elements-paragraph';
+
+      dataSaver.removeValue('tabActive');
+      $orgs['.sg-code-panel'].dispatchAction('removeClass', 'sg-code-panel-active');
+      $orgs['.sg-code-tab'].dispatchAction('removeClass', 'sg-code-tab-active');
+      $orgs['#sg-code-message-git-na'].dispatchAction('html', 'Command failed: git push');
+
+      const tabGitStateBefore = $orgs['#sg-code-tab-git'].getState();
+      const panelGitStateBefore = $orgs['#sg-code-panel-git'].getState();
+      const tabActiveBefore = dataSaver.findValue('tabActive');
+
+      return codeViewer.activateTabAndPanel('git')
+        .then(() => {
+          const tabGitStateAfter = $orgs['#sg-code-tab-git'].getState();
+          const panelGitStateAfter = $orgs['#sg-code-panel-git'].getState();
+          const tabActiveAfter = dataSaver.findValue('tabActive');
+
+          expect(tabGitStateBefore.classArray).to.not.include('sg-code-tab-active');
+          expect(panelGitStateBefore.classArray).to.not.include('sg-code-panel-active');
+          expect(tabActiveBefore).to.be.null;
+
+          expect(tabGitStateAfter.classArray).to.include('sg-code-tab-active');
+          expect(panelGitStateAfter.classArray).to.include('sg-code-panel-active');
+          expect(tabActiveAfter).to.equal('git');
         });
     });
 
@@ -345,10 +413,356 @@ describe('codeViewer', function () {
     });
   });
 
+  // Tests .fetchGitCommand()
+  describe('.revisionAdd()', function () {
+    const relPath = '04-pages/00-homepage.mustache';
+
+    it('rejects with error on gatekeeper fail', function () {
+      global.mockResponse = {
+        git_add_status: 403
+      };
+
+      return codeViewer.revisionAdd(relPath)
+        .catch((err) => {
+          expect(err.message).to.equal('Command failed: git add 04-pages/00-homepage.mustache');
+        });
+    });
+
+    it('rejects with statusText "Not Implemented" if git not installed on server', function () {
+      global.mockResponse = {
+        git_add_status: 501
+      };
+
+      return codeViewer.revisionAdd(relPath)
+        .catch((err) => {
+          expect(err.message).to.equal(`Command failed: git remote --verbose
+'git' is not recognized as an internal or external command, operable program or batch file.`);
+        });
+    });
+
+    it('rejects with statusText "Internal Server Error" if server errors while running command', function () {
+      global.mockResponse = {
+        git_add_status: 500
+      };
+
+      return codeViewer.revisionAdd(relPath)
+        .catch((err) => {
+          expect(err.message).to.equal('Command failed: git add 04-pages/00-homepage.mustache');
+        });
+    });
+
+    it('responds with statusText "OK" on success', function () {
+      global.mockResponse = {
+        git_add_status: 200
+      };
+
+      return codeViewer.revisionAdd(relPath)
+        .then((responseText) => {
+          expect(responseText).to.equal('OK');
+        });
+    });
+  });
+
+  // Tests .fetchGitCommand()
+  describe('.revisionCommit()', function () {
+    const body = 'args[0]=commit&args[1]=-m&args[2]=message';
+
+    it('rejects with error on gatekeeper fail', function () {
+      global.mockResponse = {
+        git_commit_status: 403
+      };
+
+      return codeViewer.revisionCommit(body)
+        .catch((err) => {
+          expect(err.message).to.equal('Command failed: git commit');
+        });
+    });
+
+    it('rejects with statusText "Not Implemented" if git not installed on server', function () {
+      global.mockResponse = {
+        git_commit_status: 501
+      };
+
+      return codeViewer.revisionCommit(body)
+        .catch((err) => {
+          expect(err.message).to.equal(`Command failed: git remote --verbose
+'git' is not recognized as an internal or external command, operable program or batch file.`);
+        });
+    });
+
+    it('rejects with statusText "Internal Server Error" if server errors while running command', function () {
+      global.mockResponse = {
+        git_commit_status: 500
+      };
+
+      return codeViewer.revisionCommit(body)
+        .catch((err) => {
+          expect(err.message).to.equal('Command failed: git commit');
+        });
+    });
+
+    it('responds with statusText "OK" on success', function () {
+      global.mockResponse = {
+        git_commit_status: 200
+      };
+
+      return codeViewer.revisionCommit(body)
+        .then((responseText) => {
+          expect(responseText).to.equal('OK');
+        });
+    });
+  });
+
+  // Tests .fetchGitCommand()
+  describe('.revisionPush()', function () {
+    it('rejects with error on gatekeeper fail', function () {
+      global.mockResponse = {
+        git_push_status: 403
+      };
+
+      return codeViewer.revisionPush()
+        .catch((err) => {
+          expect(err.message).to.equal('Command failed: git push');
+        });
+    });
+
+    it('rejects with statusText "Not Implemented" if git not installed on server', function () {
+      global.mockResponse = {
+        git_push_status: 501
+      };
+
+      return codeViewer.revisionPush()
+        .catch((err) => {
+          expect(err.message).to.equal(`Command failed: git remote --verbose
+'git' is not recognized as an internal or external command, operable program or batch file.`);
+        });
+    });
+
+    it('rejects with statusText "Internal Server Error" if server errors while running command', function () {
+      global.mockResponse = {
+        git_push_status: 500
+      };
+
+      return codeViewer.revisionPush()
+        .catch((err) => {
+          expect(err.message).to.equal('Command failed: git push');
+        });
+    });
+
+    it('responds with statusText "OK" on success', function () {
+      global.mockResponse = {
+        git_push_status: 200
+      };
+
+      return codeViewer.revisionPush()
+        .then((responseText) => {
+          expect(responseText).to.equal('OK');
+        });
+    });
+  });
+
+  describe('.markdownSave()', function () {
+    it('rejects with statusText "Forbidden" on gatekeeper fail', function () {
+      global.mockResponse = {
+        gatekeeper_status: 403
+      };
+      codeViewer.saving = true;
+
+      $orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
+      $orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-textarea-commit-message'].dispatchAction('val', 'message');
+
+      const codeViewerSavingBefore = codeViewer.saving;
+      const paneMarkdownLoadAnimStateBefore = $orgs['#sg-code-pane-markdown-load-anim'].getState();
+      const paneMarkdownNaStateBefore = $orgs['#sg-code-pane-markdown-na'].getState();
+      const paneMarkdownStateBefore = $orgs['#sg-code-pane-markdown'].getState();
+      const paneMarkdownCommitStateBefore = $orgs['#sg-code-pane-markdown-commit'].getState();
+      const textareaCommitMessageStateBefore = $orgs['#sg-code-textarea-commit-message'].getState();
+
+      return codeViewer.markdownSave()
+        .then((rejection) => {
+          expect(rejection.statusText).to.equal('Forbidden');
+
+          const codeViewerSavingAfter = codeViewer.saving;
+          const paneMarkdownLoadAnimStateAfter = $orgs['#sg-code-pane-markdown-load-anim'].getState();
+          const paneMarkdownNaStateAfter = $orgs['#sg-code-pane-markdown-na'].getState();
+          const paneMarkdownStateAfter = $orgs['#sg-code-pane-markdown'].getState();
+          const paneMarkdownCommitStateAfter = $orgs['#sg-code-pane-markdown-commit'].getState();
+          const textareaCommitMessageStateAfter = $orgs['#sg-code-textarea-commit-message'].getState();
+
+          expect(codeViewerSavingBefore).to.be.true;
+          expect(paneMarkdownLoadAnimStateBefore.css.display).to.not.equal(paneMarkdownLoadAnimStateAfter.css.display);
+          expect(paneMarkdownNaStateBefore.textContent).to.not.equal(paneMarkdownNaStateAfter.textContent);
+          expect(paneMarkdownStateBefore.css.display).to.equal(paneMarkdownStateAfter.css.display);
+          expect(paneMarkdownCommitStateBefore.css.display).to.equal(paneMarkdownCommitStateAfter.css.display);
+          expect(textareaCommitMessageStateBefore.val).to.equal(textareaCommitMessageStateAfter.val);
+
+          expect(codeViewerSavingAfter).to.be.false;
+          expect(paneMarkdownLoadAnimStateAfter.css).to.not.have.key('display');
+          expect(paneMarkdownNaStateAfter.textContent).to.equal(`
+  ERROR! You can only use the Markdown Editor on the machine that is running this Fepper instance!
+  If you are on this machine, you may need to resync this browser with Fepper.
+  Please go to the command line and quit this Fepper instance. Then run fp (not fp restart).
+`);
+        });
+    });
+
+    it('rejects with statusText "Internal Server Error" if server errors while running command', function () {
+      global.mockResponse = {
+        markdown_save_status: 500
+      };
+      codeViewer.saving = true;
+
+      $orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
+      $orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-textarea-commit-message'].dispatchAction('val', 'message');
+
+      const codeViewerSavingBefore = codeViewer.saving;
+      const paneMarkdownLoadAnimStateBefore = $orgs['#sg-code-pane-markdown-load-anim'].getState();
+      const paneMarkdownStateBefore = $orgs['#sg-code-pane-markdown'].getState();
+      const paneMarkdownEditStateBefore = $orgs['#sg-code-pane-markdown-edit'].getState();
+      const paneMarkdownCommitStateBefore = $orgs['#sg-code-pane-markdown-commit'].getState();
+      const textareaCommitMessageStateBefore = $orgs['#sg-code-textarea-commit-message'].getState();
+
+      return codeViewer.markdownSave()
+        .then((rejection) => {
+          expect(rejection.statusText).to.equal('Internal Server Error');
+
+          const codeViewerSavingAfter = codeViewer.saving;
+          const paneMarkdownLoadAnimStateAfter = $orgs['#sg-code-pane-markdown-load-anim'].getState();
+          const paneMarkdownStateAfter = $orgs['#sg-code-pane-markdown'].getState();
+          const paneMarkdownEditStateAfter = $orgs['#sg-code-pane-markdown-edit'].getState();
+          const paneMarkdownCommitStateAfter = $orgs['#sg-code-pane-markdown-commit'].getState();
+          const textareaCommitMessageStateAfter = $orgs['#sg-code-textarea-commit-message'].getState();
+
+          expect(codeViewerSavingBefore).to.be.true;
+          expect(paneMarkdownLoadAnimStateBefore.css.display).to.not.equal(paneMarkdownLoadAnimStateAfter.css.display);
+          expect(paneMarkdownStateBefore.css.display).to.not.equal(paneMarkdownStateAfter.css.display);
+          expect(paneMarkdownEditStateBefore.css.display).to.not.equal(paneMarkdownEditStateAfter.css.display);
+          expect(paneMarkdownCommitStateBefore.css.display).to.not.equal(paneMarkdownCommitStateAfter.css.display);
+          expect(textareaCommitMessageStateBefore.val).to.not.equal(textareaCommitMessageStateAfter.val);
+
+          expect(codeViewerSavingAfter).to.be.false;
+          expect(paneMarkdownLoadAnimStateAfter.css).to.not.have.key('display');
+          expect(paneMarkdownStateAfter.css.display).to.equal('block');
+          expect(paneMarkdownEditStateAfter.css).to.not.have.key('display');
+          expect(paneMarkdownCommitStateAfter.css).to.not.have.key('display');
+          expect(textareaCommitMessageStateAfter.val).to.equal('');
+        });
+    });
+
+    it('responds with statusText "Not Modified" if the Markdown was not modified', function () {
+      global.mockResponse = {
+        markdown_save_status: 304
+      };
+      codeViewer.saving = true;
+
+      $orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
+
+      const codeViewerSavingBefore = codeViewer.saving;
+      const paneMarkdownStateBefore = $orgs['#sg-code-pane-markdown'].getState();
+
+      return codeViewer.markdownSave()
+        .then((response) => {
+          expect(response.statusText).to.equal('Not Modified');
+
+          const codeViewerSavingAfter = codeViewer.saving;
+          const paneMarkdownStateAfter = $orgs['#sg-code-pane-markdown'].getState();
+
+          expect(codeViewerSavingBefore).to.be.true;
+          expect(paneMarkdownStateBefore.css.display).to.not.equal(paneMarkdownStateAfter.css.display);
+
+          expect(codeViewerSavingAfter).to.be.false;
+          expect(paneMarkdownStateAfter.css.display).to.equal('block');
+        });
+    });
+
+    it('responds with statusText "OK" and prompts for git commit message after saving correctly with gitInterface on\
+', function () {
+      global.mockResponse = {
+        markdown_save_status: 200
+      };
+      codeViewer.gitInterface = true;
+      codeViewer.patternPartial = 'pages-homepage';
+      codeViewer.saving = true;
+
+      $orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: ''});
+      $orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-panel-markdown'].dispatchAction('data', {markdownSource: null});
+      $orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
+
+      const codeViewerSavingBefore = codeViewer.saving;
+      const paneMarkdownLoadAnimStateBefore = $orgs['#sg-code-pane-markdown-load-anim'].getState();
+      const panelMarkdownStateBefore = $orgs['#sg-code-panel-markdown'].getState();
+      const paneMarkdownEditStateBefore = $orgs['#sg-code-pane-markdown-edit'].getState();
+      const paneMarkdownCommitStateBefore = $orgs['#sg-code-pane-markdown-commit'].getState();
+      const documentStateBefore = $orgs.document.getState();
+
+      return codeViewer.markdownSave()
+        .then((response) => {
+          expect(response.statusText).to.equal('OK');
+
+          const codeViewerSavingAfter = codeViewer.saving;
+          const paneMarkdownLoadAnimStateAfter = $orgs['#sg-code-pane-markdown-load-anim'].getState();
+          const panelMarkdownStateAfter = $orgs['#sg-code-panel-markdown'].getState();
+          const paneMarkdownEditStateAfter = $orgs['#sg-code-pane-markdown-edit'].getState();
+          const paneMarkdownCommitStateAfter = $orgs['#sg-code-pane-markdown-commit'].getState();
+          const documentStateAfter = $orgs.document.getState();
+
+          expect(codeViewerSavingBefore).to.be.true;
+          expect(paneMarkdownLoadAnimStateBefore.css.display).to.not.equal(paneMarkdownLoadAnimStateAfter.css.display);
+          expect(panelMarkdownStateBefore.data.markdownSource)
+            .to.not.equal(panelMarkdownStateAfter.data.markdownSource);
+          expect(paneMarkdownEditStateBefore.css.display).to.not.equal(paneMarkdownEditStateAfter.css.display);
+          expect(paneMarkdownCommitStateBefore.css.display).to.not.equal(paneMarkdownCommitStateAfter.css.display);
+          expect(documentStateBefore.activeOrganism).to.be.null;
+
+          expect(codeViewerSavingAfter).to.be.false;
+          expect(paneMarkdownLoadAnimStateAfter.css).to.not.have.key('display');
+          expect(panelMarkdownStateAfter.data.markdownSource).to.equal('04-pages/00-homepage.md');
+          expect(paneMarkdownEditStateAfter.css).to.not.have.key('display');
+          expect(paneMarkdownCommitStateAfter.css.display).to.equal('block');
+          expect(documentStateAfter.activeOrganism).to.equal('#sg-code-textarea-commit-message');
+        });
+    });
+
+    it('responds with statusText "OK" after saving correctly with gitInterface off', function () {
+      global.mockResponse = {
+        markdown_save_status: 200
+      };
+      codeViewer.gitInterface = false;
+      codeViewer.saving = true;
+
+      $orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: 'block'});
+
+      const codeViewerSavingBefore = codeViewer.saving;
+      const paneMarkdownEditStateBefore = $orgs['#sg-code-pane-markdown-edit'].getState();
+
+      return codeViewer.markdownSave()
+        .then((response) => {
+          expect(response.statusText).to.equal('OK');
+
+          const codeViewerSavingAfter = codeViewer.saving;
+          const paneMarkdownEditStateAfter = $orgs['#sg-code-pane-markdown-edit'].getState();
+
+          expect(codeViewerSavingBefore).to.be.true;
+          expect(paneMarkdownEditStateBefore.css.display).to.not.equal(paneMarkdownEditStateAfter.css.display);
+
+          expect(codeViewerSavingAfter).to.be.false;
+          expect(paneMarkdownEditStateAfter.css).to.not.have.key('display');
+        });
+    });
+  });
+
   describe('.setPanelContent(\'markdown\')', function () {
     it('fails if it does not pass gatekeeper', function () {
       global.mockResponse = {
-        gatekeeperStatus: 403
+        gatekeeper_status: 403
       };
 
       $orgs['#sg-code-pane-markdown-na'].dispatchAction('css', {display: ''});
@@ -704,6 +1118,32 @@ describe('codeViewer', function () {
       };
     });
 
+    it('displays Markdown panel content in a fresh state (although the code viewer might be closed)', function () {
+      event.data = {
+        lineage: [],
+        lineageR: [],
+        missingPartials: [],
+        patternPartial: 'pages-homepage',
+        patternState: ''
+      };
+
+      $orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
+      $orgs['#sg-code-pane-markdown-na'].dispatchAction('css', {display: ''});
+      $orgs['#sg-code-pane-markdown-edit'].dispatchAction('css', {display: ''});
+      $orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
+      $orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
+
+      const paneMarkdownStateBefore = $orgs['#sg-code-pane-markdown'].getState();
+
+      codeViewer.receiveIframeMessage(event);
+
+      const paneMarkdownStateAfter = $orgs['#sg-code-pane-markdown'].getState();
+
+      expect(paneMarkdownStateBefore.css).to.not.have.key('display');
+
+      expect(paneMarkdownStateAfter.css.display).to.equal('block');
+    });
+
     it('updates code when submitting pattern data from viewall', function () {
       codeViewer.closeCode();
       $orgs['#sg-code-container'].dispatchAction('attr', {'data-patternpartial': ''});
@@ -996,6 +1436,176 @@ describe('codeViewer', function () {
       }, timeout);
     });
 
+    it('sets Markdown panel content with patternlab.pageLoad, but with error', function (done) {
+      event.data = {
+        event: 'patternlab.pageLoad'
+      };
+
+      $orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-console-markdown-error'].dispatchAction('html', 'fatal error');
+      $orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
+
+      const paneMarkdownLoadAnimStateBefore = $orgs['#sg-code-pane-markdown-load-anim'].getState();
+      const paneMarkdownStateBefore = $orgs['#sg-code-pane-markdown'].getState();
+
+      codeViewer.receiveIframeMessage(event);
+
+      setTimeout(() => {
+        const paneMarkdownLoadAnimStateAfter = $orgs['#sg-code-pane-markdown-load-anim'].getState();
+        const paneMarkdownStateAfter = $orgs['#sg-code-pane-markdown'].getState();
+
+        expect(paneMarkdownLoadAnimStateBefore.css.display).to.equal('block');
+        expect(paneMarkdownStateBefore.css).to.not.have.key('display');
+
+        expect(paneMarkdownLoadAnimStateAfter.css).to.not.have.key('display');
+        expect(paneMarkdownStateAfter.css).to.not.have.key('display');
+
+        done();
+      }, 500 + timeout);
+    });
+
+    it('sets Markdown panel content with patternlab.pageLoad, and no error', function (done) {
+      event.data = {
+        event: 'patternlab.pageLoad'
+      };
+
+      $orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-console-markdown-error'].dispatchAction('html', '');
+      $orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
+
+      const paneMarkdownLoadAnimStateBefore = $orgs['#sg-code-pane-markdown-load-anim'].getState();
+      const paneMarkdownStateBefore = $orgs['#sg-code-pane-markdown'].getState();
+
+      codeViewer.receiveIframeMessage(event);
+
+      setTimeout(() => {
+        const paneMarkdownLoadAnimStateAfter = $orgs['#sg-code-pane-markdown-load-anim'].getState();
+        const paneMarkdownStateAfter = $orgs['#sg-code-pane-markdown'].getState();
+
+        expect(paneMarkdownLoadAnimStateBefore.css.display).to.equal('block');
+        expect(paneMarkdownStateBefore.css).to.not.have.key('display');
+
+        expect(paneMarkdownLoadAnimStateAfter.css).to.not.have.key('display');
+        expect(paneMarkdownStateAfter.css.display).to.equal('block');
+
+        done();
+      }, 500 + timeout);
+    });
+
+    it('clears old log errors in the Markdown panel content upon patternlab.pageLoad', function (done) {
+      event.data = {
+        event: 'patternlab.pageLoad'
+      };
+
+      $orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
+      $orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-pane-markdown-console'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-console-markdown-log'].dispatchAction('html', 'Error');
+      $orgs['#sg-code-console-markdown-error'].dispatchAction('empty');
+      $orgs['#sg-code-btn-markdown-continue'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
+      $orgs['#sg-code-message-git-na'].dispatchAction('html', 'Error');
+
+      const paneMarkdownLoadAnimStateBefore = $orgs['#sg-code-pane-markdown-load-anim'].getState();
+      const btnMarkdownEditStateBefore = $orgs['#sg-code-btn-markdown-edit'].getState();
+      const paneMarkdownConsoleStateBefore = $orgs['#sg-code-pane-markdown-console'].getState();
+      const consoleMarkdownLogStateBefore = $orgs['#sg-code-console-markdown-log'].getState();
+      const consoleMarkdownErrorStateBefore = $orgs['#sg-code-console-markdown-error'].getState();
+      const btnMarkdownContinueStateBefore = $orgs['#sg-code-btn-markdown-continue'].getState();
+      const tabGitStateBefore = $orgs['#sg-code-tab-git'].getState();
+      const messageGitNaStateBefore = $orgs['#sg-code-message-git-na'].getState();
+
+      codeViewer.receiveIframeMessage(event);
+
+      setTimeout(() => {
+        const paneMarkdownLoadAnimStateAfter = $orgs['#sg-code-pane-markdown-load-anim'].getState();
+        const btnMarkdownEditStateAfter = $orgs['#sg-code-btn-markdown-edit'].getState();
+        const paneMarkdownConsoleStateAfter = $orgs['#sg-code-pane-markdown-console'].getState();
+        const consoleMarkdownLogStateAfter = $orgs['#sg-code-console-markdown-log'].getState();
+        const consoleMarkdownErrorStateAfter = $orgs['#sg-code-console-markdown-error'].getState();
+        const btnMarkdownContinueStateAfter = $orgs['#sg-code-btn-markdown-continue'].getState();
+        const tabGitStateAfter = $orgs['#sg-code-tab-git'].getState();
+        const messageGitNaStateAfter = $orgs['#sg-code-message-git-na'].getState();
+
+        expect(paneMarkdownLoadAnimStateBefore.css).to.not.have.key('display');
+        expect(btnMarkdownEditStateBefore.css.display).to.equal('block');
+        expect(paneMarkdownConsoleStateBefore.css.display).to.equal('block');
+        expect(consoleMarkdownLogStateBefore.html).to.not.be.empty;
+        expect(consoleMarkdownErrorStateBefore.html).to.be.empty;
+        expect(btnMarkdownContinueStateBefore.css.display).to.equal('block');
+        expect(tabGitStateBefore.classArray).to.include('sg-code-tab-warning');
+        expect(messageGitNaStateBefore.html).to.not.be.empty;
+
+        expect(paneMarkdownLoadAnimStateAfter.css).to.not.have.key('display');
+        expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
+        expect(paneMarkdownConsoleStateAfter.css).to.not.have.key('display');
+        expect(consoleMarkdownLogStateAfter.html).to.be.empty;
+        expect(consoleMarkdownErrorStateAfter.html).to.be.empty;
+        expect(btnMarkdownContinueStateAfter.css).to.not.have.key('display');
+        expect(tabGitStateAfter.classArray).to.not.include('sg-code-tab-warning');
+        expect(messageGitNaStateAfter.html).to.be.empty;
+
+        done();
+      }, 500 + timeout);
+    });
+
+    it('clears old console errors in the Markdown panel content upon patternlab.pageLoad', function (done) {
+      event.data = {
+        event: 'patternlab.pageLoad'
+      };
+
+      $orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
+      $orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-pane-markdown-console'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-console-markdown-log'].dispatchAction('empty');
+      $orgs['#sg-code-console-markdown-error'].dispatchAction('html', 'Error');
+      $orgs['#sg-code-btn-markdown-continue'].dispatchAction('css', {display: 'block'});
+      $orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
+      $orgs['#sg-code-message-git-na'].dispatchAction('html', 'Error');
+
+      const paneMarkdownLoadAnimStateBefore = $orgs['#sg-code-pane-markdown-load-anim'].getState();
+      const btnMarkdownEditStateBefore = $orgs['#sg-code-btn-markdown-edit'].getState();
+      const paneMarkdownConsoleStateBefore = $orgs['#sg-code-pane-markdown-console'].getState();
+      const consoleMarkdownLogStateBefore = $orgs['#sg-code-console-markdown-log'].getState();
+      const consoleMarkdownErrorStateBefore = $orgs['#sg-code-console-markdown-error'].getState();
+      const btnMarkdownContinueStateBefore = $orgs['#sg-code-btn-markdown-continue'].getState();
+      const tabGitStateBefore = $orgs['#sg-code-tab-git'].getState();
+      const messageGitNaStateBefore = $orgs['#sg-code-message-git-na'].getState();
+
+      codeViewer.receiveIframeMessage(event);
+
+      setTimeout(() => {
+        const paneMarkdownLoadAnimStateAfter = $orgs['#sg-code-pane-markdown-load-anim'].getState();
+        const btnMarkdownEditStateAfter = $orgs['#sg-code-btn-markdown-edit'].getState();
+        const paneMarkdownConsoleStateAfter = $orgs['#sg-code-pane-markdown-console'].getState();
+        const consoleMarkdownLogStateAfter = $orgs['#sg-code-console-markdown-log'].getState();
+        const consoleMarkdownErrorStateAfter = $orgs['#sg-code-console-markdown-error'].getState();
+        const btnMarkdownContinueStateAfter = $orgs['#sg-code-btn-markdown-continue'].getState();
+        const tabGitStateAfter = $orgs['#sg-code-tab-git'].getState();
+        const messageGitNaStateAfter = $orgs['#sg-code-message-git-na'].getState();
+
+        expect(paneMarkdownLoadAnimStateBefore.css).to.not.have.key('display');
+        expect(btnMarkdownEditStateBefore.css.display).to.equal('block');
+        expect(paneMarkdownConsoleStateBefore.css.display).to.equal('block');
+        expect(consoleMarkdownLogStateBefore.html).to.be.empty;
+        expect(consoleMarkdownErrorStateBefore.html).to.not.be.empty;
+        expect(btnMarkdownContinueStateBefore.css.display).to.equal('block');
+        expect(tabGitStateBefore.classArray).to.include('sg-code-tab-warning');
+        expect(messageGitNaStateBefore.html).to.not.be.empty;
+
+        expect(paneMarkdownLoadAnimStateAfter.css).to.not.have.key('display');
+        expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
+        expect(paneMarkdownConsoleStateAfter.css).to.not.have.key('display');
+        expect(consoleMarkdownLogStateAfter.html).to.be.empty;
+        expect(consoleMarkdownErrorStateAfter.html).to.be.empty;
+        expect(btnMarkdownContinueStateAfter.css).to.not.have.key('display');
+        expect(tabGitStateAfter.classArray).to.not.include('sg-code-tab-warning');
+        expect(messageGitNaStateAfter.html).to.be.empty;
+
+        done();
+      }, 500 + timeout);
+    });
+
     it('sets panel content with patternlab.updatePath', function (done) {
       const expectedMarkdown =
 `---
@@ -1004,7 +1614,7 @@ content_key: content
 [Component](../../patterns/02-components-region/02-components-region.html)
 `;
       global.mockResponse = {
-        gatekeeperStatus: 200
+        gatekeeper_status: 200
       };
 
       $orgs['#sg-code-pane-markdown-na'].dispatchAction('css', {display: 'block'});
@@ -1021,7 +1631,6 @@ content_key: content
         const fepletLocationHrefBefore = $orgs['#sg-code-panel-feplet'][0].contentWindow.location.href;
         const paneMarkdownNaStateBefore = $orgs['#sg-code-pane-markdown-na'].getState();
         const codeMarkdownStateBefore = $orgs['#sg-code-code-language-markdown'].getState();
-        const textareaMarkdownStateBefore = $orgs['#sg-code-textarea-markdown'].getState();
 
         codeViewer.receiveIframeMessage(event);
 
@@ -1029,17 +1638,14 @@ content_key: content
           const fepletLocationHrefAfter = $orgs['#sg-code-panel-feplet'][0].contentWindow.location.href;
           const paneMarkdownNaStateAfter = $orgs['#sg-code-pane-markdown-na'].getState();
           const codeMarkdownStateAfter = $orgs['#sg-code-code-language-markdown'].getState();
-          const textareaMarkdownStateAfter = $orgs['#sg-code-textarea-markdown'].getState();
 
           expect(fepletLocationHrefBefore).to.not.equal(fepletLocationHrefAfter);
           expect(paneMarkdownNaStateBefore.css.display).to.not.equal(paneMarkdownNaStateAfter.css.display);
           expect(codeMarkdownStateBefore.html).to.not.equal(codeMarkdownStateAfter.html);
-          expect(textareaMarkdownStateBefore.html).to.not.equal(textareaMarkdownStateAfter.html);
 
           expect(fepletLocationHrefAfter).to.equal('/mustache-browser?partial=pages-homepage');
           expect(paneMarkdownNaStateAfter.css.display).to.be.undefined;
           expect(codeMarkdownStateAfter.html).to.equal(expectedMarkdown);
-          expect(textareaMarkdownStateAfter.html).to.equal(expectedMarkdown);
 
           codeViewer.closeCode();
           done();

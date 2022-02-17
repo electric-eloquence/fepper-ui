@@ -33,6 +33,9 @@
 
     switch (data.event) {
       case 'patternlab.updatePath':
+        // Must use location.replace() and not location.href in order to retain forward-button functionality.
+        // However, this makes back-button functionality buggy in Chromium-based browsers.
+        // The 2nd back-button press frequently fails to update the iframe while the parent does get updated.
         window.location.replace('../../' + data.path);
 
         break;
@@ -71,6 +74,9 @@
         return;
       }
 
+      // Must use location.replace() and not location.href in order to retain forward-button functionality.
+      // However, this makes back-button functionality buggy in Chromium-based browsers.
+      // The 2nd back-button press frequently fails to update the iframe while the parent does get updated.
       window.location.replace(href);
     });
   }

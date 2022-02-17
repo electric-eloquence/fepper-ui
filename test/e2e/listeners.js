@@ -255,7 +255,7 @@ menu anchor.</p>
       });
 
       it('the markdown edit save button exits the markdown edit pane if markdown unchanged', async () => {
-        const sgCodePaneMarkdown = await $('#sg-code-pane-markdown');
+        const sgCodePaneMarkdownLoadAnim = await $('#sg-code-pane-markdown-load-anim');
         const sgCodePaneMarkdownEdit = await $('#sg-code-pane-markdown-edit');
 
         await (await $('#sg-t-toggle')).click();
@@ -269,12 +269,12 @@ menu anchor.</p>
         await (await $('#sg-code-btn-markdown-save')).click();
         await browser.pause(100);
 
-        expect((await sgCodePaneMarkdown.getCSSProperty('display')).value).to.equal('block');
+        expect((await sgCodePaneMarkdownLoadAnim.getCSSProperty('display')).value).to.equal('block');
         expect((await sgCodePaneMarkdownEdit.getCSSProperty('display')).value).to.equal('none');
       });
 
       it('the markdown edit save button exits the markdown edit pane if edited markdown is saved', async () => {
-        const sgCodePaneMarkdown = await $('#sg-code-pane-markdown');
+        const sgCodePaneMarkdownLoadAnim = await $('#sg-code-pane-markdown-load-anim');
         const sgCodePaneMarkdownEdit = await $('#sg-code-pane-markdown-edit');
 
         await (await $('#sg-t-toggle')).click();
@@ -290,7 +290,7 @@ menu anchor.</p>
         await (await $('#sg-code-btn-markdown-save')).click();
         await browser.pause(100);
 
-        expect((await sgCodePaneMarkdown.getCSSProperty('display')).value).to.equal('block');
+        expect((await sgCodePaneMarkdownLoadAnim.getCSSProperty('display')).value).to.equal('block');
         expect((await sgCodePaneMarkdownEdit.getCSSProperty('display')).value).to.equal('none');
       });
 
@@ -700,7 +700,11 @@ menu anchor.</p>
       await browser.setWindowSize(1024, 768);
     });
 
-    it('handles history correctly for back and forward buttons', async () => {
+    // Chromium-based browsers are buggy with back/forward button behavior after navigation via patternlab.updatePath.
+    // The 2nd back or forward button press frequently fails to update the iframe while the parent does get updated.
+    // Disabling the following because it unpredictably sometimes passes, and sometimes fails.
+    // Will re-enable if Chromium-based browsers ever fix this broken behavior.
+    xit('handles history correctly for back and forward buttons', async () => {
       const sgNavElements = await $('.sg-nav-elements');
       const sgNavCompounds = await $('.sg-nav-compounds');
       const sgNavComponents = await $('.sg-nav-components');
@@ -738,7 +742,6 @@ menu anchor.</p>
         .to.equal('patterns/01-compounds-block/01-compounds-block.html');
 
       await browser.forward();
-      await browser.refresh(); // Refreshing because there is tendency to fail without it.
 
       expect(await sgRaw.getAttribute('href'))
         .to.equal('patterns/02-components-region/02-components-region.html');
