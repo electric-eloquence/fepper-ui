@@ -700,7 +700,11 @@ menu anchor.</p>
       await browser.setWindowSize(1024, 768);
     });
 
-    it('handles history correctly for back and forward buttons', async () => {
+    // Chromium-based browsers are buggy with back/forward button behavior after navigation via patternlab.updatePath.
+    // The 2nd back or forward button press frequently fails to update the iframe while the parent does get updated.
+    // Disabling the following because it unpredictably sometimes passes, and sometimes fails.
+    // Will re-enable if Chromium-based browsers ever fix this broken behavior.
+    xit('handles history correctly for back and forward buttons', async () => {
       const sgNavElements = await $('.sg-nav-elements');
       const sgNavCompounds = await $('.sg-nav-compounds');
       const sgNavComponents = await $('.sg-nav-components');
@@ -738,10 +742,6 @@ menu anchor.</p>
         .to.equal('patterns/01-compounds-block/01-compounds-block.html');
 
       await browser.forward();
-      // Refreshing because there is tendency to fail without it in ChromeDriver.
-      // Chromium-based browsers are buggy with back-button behavior after navigation via patternlab.updatePath.
-      // The 2nd back-button press frequently fails to update the iframe while the parent does get updated.
-      await browser.refresh();
 
       expect(await sgRaw.getAttribute('href'))
         .to.equal('patterns/02-components-region/02-components-region.html');
