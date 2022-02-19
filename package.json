@@ -5,7 +5,7 @@
   "scripts": {
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint scripts && eslint test",
-    "test": "npm run test:unit && npm run test:e2e",
+    "test": "npm run test:unit",
     "test:e2e": "node test/e2e",
     "test:unit": "nyc mocha --exit --require @babel/register test/unit"
   },
