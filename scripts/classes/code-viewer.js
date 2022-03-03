@@ -110,6 +110,7 @@ export default class CodeViewer {
           this.$orgs['#sg-code-console-markdown-log'].dispatchAction('html', '');
           this.$orgs['#sg-code-console-markdown-error'].dispatchAction('html', '');
           this.$orgs['#sg-code-btn-markdown-continue'].dispatchAction('css', {display: ''});
+          this.$orgs['#sg-code-tab-markdown'].dispatchAction('removeClass', 'sg-code-tab-warning');
           this.$orgs['#sg-code-tab-git'].dispatchAction('removeClass', 'sg-code-tab-warning');
           this.$orgs['#sg-code-message-git-na'].dispatchAction('html', '');
         }
@@ -468,6 +469,7 @@ export default class CodeViewer {
 
                 forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
                 this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('html', forbidden);
+                this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-warning');
 
                 return Promise.resolve(response);
               });
@@ -617,6 +619,7 @@ export default class CodeViewer {
 
               forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
               this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('html', forbidden);
+              this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-warning');
 
               return Promise.reject();
             }
