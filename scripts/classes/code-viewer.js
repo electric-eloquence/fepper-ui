@@ -105,13 +105,13 @@ export default class CodeViewer {
           this.$orgs['#sg-code-console-markdown-log'].getState().html ||
           this.$orgs['#sg-code-console-markdown-error'].getState().html
         ) {
+          this.$orgs['#sg-code-tab-markdown'].dispatchAction('removeClass', 'sg-code-tab-warning');
+          this.$orgs['#sg-code-tab-git'].dispatchAction('removeClass', 'sg-code-tab-warning');
           this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: ''});
           this.$orgs['#sg-code-pane-markdown-console'].dispatchAction('css', {display: ''});
           this.$orgs['#sg-code-console-markdown-log'].dispatchAction('html', '');
           this.$orgs['#sg-code-console-markdown-error'].dispatchAction('html', '');
           this.$orgs['#sg-code-btn-markdown-continue'].dispatchAction('css', {display: ''});
-          this.$orgs['#sg-code-tab-markdown'].dispatchAction('removeClass', 'sg-code-tab-warning');
-          this.$orgs['#sg-code-tab-git'].dispatchAction('removeClass', 'sg-code-tab-warning');
           this.$orgs['#sg-code-message-git-na'].dispatchAction('html', '');
         }
 
@@ -326,6 +326,29 @@ export default class CodeViewer {
       });
   }
 
+  gitDiff() {
+    const gitNaDisplay = this.$orgs['#sg-code-pane-git-na'].getState().css.display;
+
+    if (!this.gitInterface || gitNaDisplay === 'block') {
+      return Promise.resolve();
+    }
+    else {
+      return this.fetchGitCommand(new URLSearchParams('args[0]=diff&rel_path=' + this.markdownSource))
+        .then((response) => {
+          return new Promise(
+            (resolve) => {
+              if (response) {
+                resolve(response);
+              }
+              else {
+                resolve({status: 304});
+              }
+            });
+        });
+
+    }
+  }
+
   gitPullMarkdown() {
     const gitNaDisplay = this.$orgs['#sg-code-pane-git-na'].getState().css.display;
 
@@ -337,6 +360,7 @@ export default class CodeViewer {
         .then((response) => {
           /* istanbul ignore else */
           if (typeof response === 'string') {
+            this.$orgs['#sg-code-tab-git'].dispatchAction('removeClass', 'sg-code-tab-warning');
             // Since we know there are no Git conflicts, reenable Markdown edit button.
             this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: ''});
             this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: ''});
@@ -356,8 +380,8 @@ export default class CodeViewer {
           }
 
           if (this.gitInterface && err instanceof Object) {
-            this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
             this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
+            this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
 
             if (typeof err.message === 'string') {
               this.$orgs['#sg-code-message-git-na'].dispatchAction('html',
@@ -370,8 +394,8 @@ export default class CodeViewer {
             }
           }
 
-          this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: ''});
           this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: 'block'});
+          this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: ''});
 
           return Promise.resolve();
         });
@@ -414,7 +438,8 @@ export default class CodeViewer {
 
           if (this.gitInterface) {
             return this.setPanelContent('markdown', this.patternPartial)
-              .then(() => this.gitPullMarkdown());
+              .then(() => this.gitPullMarkdown())
+              .then(() => this.gitDiff());
           }
           else {
             return response.text();
@@ -442,6 +467,7 @@ export default class CodeViewer {
         else if (typeof response === 'object') {
           if (response.status === 304) { // Not Modified
             this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
+            this.$orgs['#sg-code-pane-markdown-load-anim'].dispatchAction('css', {display: ''});
           }
 
           return Promise.resolve(response);
@@ -468,8 +494,8 @@ export default class CodeViewer {
                 const forbiddenClassName = forbidden.getAttribute('class');
 
                 forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
-                this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('html', forbidden);
                 this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-warning');
+                this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('html', forbidden);
 
                 return Promise.resolve(response);
               });
@@ -618,8 +644,10 @@ export default class CodeViewer {
               this.markdownSource = null;
 
               forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
-              this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('html', forbidden);
               this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-warning');
+              this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('html', forbidden);
+              // If Markdown Editor is forbidden, also forbid Git Interface.
+              this.setPanelContent('git');
 
               return Promise.reject();
             }
@@ -679,6 +707,7 @@ export default class CodeViewer {
                 return Promise.reject(response);
               }
               else {
+                this.$orgs['#sg-code-tab-git'].dispatchAction('removeClass', 'sg-code-tab-warning');
                 this.$orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: ''});
                 this.$orgs['#sg-code-pane-git'].dispatchAction('css', {display: 'block'});
 
@@ -712,6 +741,7 @@ export default class CodeViewer {
                 const forbiddenClassName = forbidden.getAttribute('class');
 
                 forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
+                this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
                 this.$orgs['#sg-code-pane-git-na'].dispatchAction('html', forbidden);
               }
               else if (typeof rejection === 'string' && rejection.startsWith('fatal:')) {
@@ -722,8 +752,8 @@ export default class CodeViewer {
                 this.gitInterface &&
                 rejection && rejection.message && rejection.message.startsWith('Command failed:')
               ) {
-                this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
                 this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
+                this.$orgs['#sg-code-btn-markdown-edit'].dispatchAction('css', {display: 'none'});
                 this.$orgs['#sg-code-message-git-na'].dispatchAction('html',
                   '<pre class="sg-code-pane-content-warning"><code>' + rejection.message + '</code></pre>');
               }
