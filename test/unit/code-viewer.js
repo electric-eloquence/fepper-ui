@@ -413,6 +413,57 @@ describe('codeViewer', function () {
     });
   });
 
+  describe('.gitDiff()', function () {
+    before(function () {
+      codeViewer.gitInterface = true;
+      codeViewer.markdownSource = '04-pages/00-homepage.md';
+    });
+
+    it('responds with status 304 if the Markdown edit is not different from the last version', function () {
+      global.mockResponse = {
+        git_diff_status: 304
+      };
+
+      return codeViewer.gitDiff()
+        .then((response) => {
+          expect(response).to.be.an('object');
+          expect(response.status).to.equal(304);
+        });
+    });
+
+    it('responds with a non-empty string if the Markdown edit is different from the last version', function () {
+      global.mockResponse = {
+        git_diff_status: 200
+      };
+
+      return codeViewer.gitDiff()
+        .then((response) => {
+          expect(response).to.be.a('string');
+          expect(response).to.not.be.empty;
+        });
+    });
+
+    it('responds with undefined if the GUI shows that Git is not available', function () {
+      $orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: 'block'});
+
+      return codeViewer.gitDiff()
+        .then((response) => {
+          expect(response).to.be.undefined;
+
+          $orgs['#sg-code-pane-git-na'].dispatchAction('css', {display: ''});
+        });
+    });
+
+    it('responds with undefined if gitInterface is off', function () {
+      codeViewer.gitInterface = false;
+
+      return codeViewer.gitDiff()
+        .then((response) => {
+          expect(response).to.be.undefined;
+        });
+    });
+  });
+
   // Tests .fetchGitCommand()
   describe('.revisionAdd()', function () {
     const relPath = '04-pages/00-homepage.mustache';
