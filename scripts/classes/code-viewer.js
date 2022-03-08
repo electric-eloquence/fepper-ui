@@ -676,11 +676,11 @@ export default class CodeViewer {
           });
       }
       case 'git': {
-        const gitNaHtml = this.$orgs['#sg-code-message-git-na'].getState().html;
+        const gitNa = this.$orgs['#sg-code-message-git-na'].getState();
 
         if (
-          gitNaHtml &&
-          (gitNaHtml.includes('Command failed: git pull') || gitNaHtml.includes('Command failed: git push'))
+          gitNa && gitNa.html &&
+          (gitNa.html.includes('Command failed: git pull') || gitNa.html.includes('Command failed: git push'))
         ) {
           return Promise.resolve();
         }
