@@ -49,6 +49,14 @@ global.fetch = (url, init) => {
         }
 
         switch (resolveObj.status) {
+          case 304: // Not Modified mock.
+            resolveObj = {
+              status: 200,
+              text: () => Promise.resolve('')
+            };
+
+            break;
+
           case 403:
             Object.assign(resolveObj, {
               json: () => Promise.resolve({message, stack: message}),
