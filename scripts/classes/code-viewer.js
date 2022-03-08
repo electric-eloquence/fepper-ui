@@ -306,7 +306,7 @@ export default class CodeViewer {
         body
       })
       .then((response) => {
-        if (response && response.status === 200) {
+        if (response && (response.status === 200 || response.status === 403)) {
           return response.text();
         }
         else {
