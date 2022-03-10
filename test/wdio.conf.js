@@ -57,12 +57,8 @@ exports.config = {
     browserName: 'chrome',
     'goog:chromeOptions': {
       args: [
-        '--browser-test',
-        '--disable-features=site-per-process',
         '--disable-gpu',
-        '--disable-site-isolation-trials',
-        '--disable-webgl',
-        '--no-sandbox'
+        '--disable-gpu-program-cache'
       ]
     }
     // If outputDir is provided WebdriverIO can capture driver session logs
