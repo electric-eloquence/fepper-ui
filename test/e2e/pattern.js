@@ -1,3 +1,7 @@
+const pauseLg = 1000;
+const pauseMd = 500;
+const pauseSm = 100;
+
 describe('Pattern end-to-end tests', () => {
   describe('annotations-viewer.js', () => {
     describe('click', () => {
@@ -6,16 +10,21 @@ describe('Pattern end-to-end tests', () => {
       });
 
       it('viewall annotations viewer button toggles annotations viewer', async () => {
+        const sgPop = await $('.sg-pop[data-patternpartial="viewall"]');
         const sgViewport = await $('#sg-viewport');
+        const sgPatternToggleAnnotationsComponentsRegion = await $('#sg-pattern-toggle-annotations-components-region');
+
+        await sgPop.waitForClickable();
+        await sgPop.click();
+        await browser.switchToFrame(sgViewport);
+        await sgPatternToggleAnnotationsComponentsRegion.waitForClickable();
+        await sgPatternToggleAnnotationsComponentsRegion.click();
+        await browser.pause(pauseMd);
+        await browser.switchToParentFrame();
+
         const sgVpWrap = await $('#sg-vp-wrap');
         const sgViewContainer = await $('#sg-view-container');
         const sgAnnotations = await $('#sg-annotations');
-
-        await (await $('.sg-pop[data-patternpartial="viewall"]')).click();
-        await browser.switchToFrame(sgViewport);
-        await (await $('#sg-pattern-toggle-annotations-components-region')).click();
-        await browser.pause(700);
-        await browser.switchToParentFrame();
 
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
@@ -31,8 +40,9 @@ menu anchor.</p>
 </div>`);
 
         await browser.switchToFrame(sgViewport);
-        await (await $('#sg-pattern-toggle-annotations-components-region')).click();
-        await browser.pause(700);
+        await sgPatternToggleAnnotationsComponentsRegion.waitForClickable();
+        await sgPatternToggleAnnotationsComponentsRegion.click();
+        await browser.pause(pauseMd);
         await browser.switchToParentFrame();
 
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('0px');
@@ -47,14 +57,15 @@ menu anchor.</p>
 
       it('"ctrl+shift+a" toggles annotations viewer', async () => {
         const sgViewport = await $('#sg-viewport');
-        const sgVpWrap = await $('#sg-vp-wrap');
-        const sgViewContainer = await $('#sg-view-container');
-        const sgAnnotations = await $('#sg-annotations');
 
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Shift', 'a']);
-        await browser.pause(700);
+        await browser.pause(pauseMd);
         await browser.switchToParentFrame();
+
+        const sgVpWrap = await $('#sg-vp-wrap');
+        const sgViewContainer = await $('#sg-view-container');
+        const sgAnnotations = await $('#sg-annotations');
 
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
@@ -71,7 +82,7 @@ menu anchor.</p>
 
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Shift', 'a']);
-        await browser.pause(700);
+        await browser.pause(pauseMd);
         await browser.switchToParentFrame();
 
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('0px');
@@ -87,16 +98,20 @@ menu anchor.</p>
       });
 
       it('viewall code viewer button toggles code viewer', async () => {
+        const sgPop = await $('.sg-pop[data-patternpartial="viewall"]');
         const sgViewport = await $('#sg-viewport');
-        const sgVpWrap = await $('#sg-vp-wrap');
-        const sgViewContainer = await $('#sg-view-container');
         const sgPatternToggleCodeComponentsRegion = await $('#sg-pattern-toggle-code-components-region');
 
-        await (await $('.sg-pop[data-patternpartial="viewall"]')).click();
+        await sgPop.waitForClickable();
+        await sgPop.click();
         await browser.switchToFrame(sgViewport);
+        await sgPatternToggleCodeComponentsRegion.waitForClickable();
         await sgPatternToggleCodeComponentsRegion.click();
-        await browser.pause(700);
+        await browser.pause(pauseMd);
         await browser.switchToParentFrame();
+
+        const sgVpWrap = await $('#sg-vp-wrap');
+        const sgViewContainer = await $('#sg-view-container');
 
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
@@ -104,7 +119,7 @@ menu anchor.</p>
 
         await browser.switchToFrame(sgViewport);
         await sgPatternToggleCodeComponentsRegion.click();
-        await browser.pause(700);
+        await browser.pause(pauseMd);
         await browser.switchToParentFrame();
 
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('0px');
@@ -120,13 +135,14 @@ menu anchor.</p>
 
       it('"ctrl+shift+c" toggles code viewer', async () => {
         const sgViewport = await $('#sg-viewport');
-        const sgVpWrap = await $('#sg-vp-wrap');
-        const sgViewContainer = await $('#sg-view-container');
 
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Shift', 'c']);
-        await browser.pause(700);
+        await browser.pause(pauseMd);
         await browser.switchToParentFrame();
+
+        const sgVpWrap = await $('#sg-vp-wrap');
+        const sgViewContainer = await $('#sg-view-container');
 
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
@@ -134,7 +150,7 @@ menu anchor.</p>
 
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Shift', 'c']);
-        await browser.pause(700);
+        await browser.pause(pauseMd);
         await browser.switchToParentFrame();
 
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('0px');
@@ -153,20 +169,27 @@ menu anchor.</p>
 
     it('pre-import submit button posts correctly', async () => {
       const sgNavScrape = await $('.sg-nav-scrape');
+      const sgAccHandle = await sgNavScrape.$('.sg-acc-handle');
+      const sgPop = await sgNavScrape.$('.sg-pop');
       const sgViewport = await $('#sg-viewport');
       const nameUrl = await $('[name="url"]');
       const nameSelectorRaw = await $('[name="selector_raw"]');
+      const nameSubmitTargeter = await $('[name="submit_targeter"]');
 
-      await (await sgNavScrape.$('.sg-acc-handle')).click();
-      await browser.pause(100);
-      await (await sgNavScrape.$('.sg-pop')).click();
+      await sgAccHandle.waitForClickable();
+      await sgAccHandle.click();
+      await sgPop.waitForClickable();
+      await sgPop.click();
       await browser.switchToFrame(sgViewport);
+      await nameUrl.waitForClickable();
       await nameUrl.click();
       await nameUrl.setValue('/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
+      await nameSelectorRaw.waitForClickable();
       await nameSelectorRaw.click();
       await nameSelectorRaw.setValue('p');
-      await (await $('[name="submit_targeter"]')).click();
-      await browser.pause(100);
+      await nameSubmitTargeter.waitForClickable();
+      await nameSubmitTargeter.click();
+      await browser.pause(pauseSm);
 
       expect(await (await $('html')).getHTML(false)).to.equal(`<head>
     <title id="title">Fepper HTML Scraper</title>
@@ -244,25 +267,33 @@ menu anchor.</p>
 
     it('import-form submit button posts correctly', async () => {
       const sgNavScrape = await $('.sg-nav-scrape');
+      const sgAccHandle = await sgNavScrape.$('.sg-acc-handle');
+      const sgPop = await sgNavScrape.$('.sg-pop');
       const sgViewport = await $('#sg-viewport');
       const nameUrl = await $('[name="url"]');
       const nameSelectorRaw = await $('[name="selector_raw"]');
+      const nameSubmitTargeter = await $('[name="submit_targeter"]');
       const nameFilename = await $('[name="filename"]');
+      const nameSubmitImporter = await $('[name="submit_importer"]');
 
-      await (await sgNavScrape.$('.sg-acc-handle')).click();
-      await browser.pause(100);
-      await (await sgNavScrape.$('.sg-pop')).click();
+      await sgAccHandle.waitForClickable();
+      await sgAccHandle.click();
+      await sgPop.waitForClickable();
+      await sgPop.click();
       await browser.switchToFrame(sgViewport);
+      await nameUrl.waitForClickable();
       await nameUrl.click();
       await nameUrl.setValue('/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
+      await nameSelectorRaw.waitForClickable();
       await nameSelectorRaw.click();
       await nameSelectorRaw.setValue('p');
-      await (await $('[name="submit_targeter"]')).click();
-      await browser.pause(100);
+      await nameSubmitTargeter.waitForClickable();
+      await nameSubmitTargeter.click();
       await nameFilename.click();
       await nameFilename.setValue('test');
-      await (await $('[name="submit_importer"]')).click();
-      await browser.pause(100);
+      await nameSubmitImporter.waitForClickable();
+      await nameSubmitImporter.click();
+      await browser.pause(pauseSm);
 
       expect(await (await $('html')).getHTML(false)).to.equal(`<head>
     <title id="title">Fepper HTML Scraper</title>
@@ -315,24 +346,34 @@ menu anchor.</p>
 
     it('post-import targeter submit button posts correctly', async () => {
       const sgNavScrape = await $('.sg-nav-scrape');
+      const sgAccHandle = await sgNavScrape.$('.sg-acc-handle');
+      const sgPop = await sgNavScrape.$('.sg-pop');
       const sgViewport = await $('#sg-viewport');
       const nameUrl = await $('[name="url"]');
       const nameSelectorRaw = await $('[name="selector_raw"]');
-      const scraperTargeter = await $('#scraper__targeter');
+      const nameSubmitTargeter = await $('[name="submit_targeter"]');
 
-      await (await sgNavScrape.$('.sg-acc-handle')).click();
-      await browser.pause(100);
-      await (await sgNavScrape.$('.sg-pop')).click();
+      await sgAccHandle.waitForClickable();
+      await sgAccHandle.click();
+      await sgPop.waitForClickable();
+      await sgPop.click();
       await browser.switchToFrame(sgViewport);
+      await nameUrl.waitForClickable();
       await nameUrl.click();
       await nameUrl.setValue('/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
+      await nameSelectorRaw.waitForClickable();
       await nameSelectorRaw.click();
       await nameSelectorRaw.setValue('p');
-      await (await $('[name="submit_targeter"]')).click();
-      await browser.pause(100);
+      await nameSubmitTargeter.waitForClickable();
+      await nameSubmitTargeter.click();
+
+      const scraperTargeter = await $('#scraper__targeter');
+      const scraperTargeterSubmitTargeter = await scraperTargeter.$('[name="submit_targeter"]');
+
       await (await scraperTargeter.$('[name="selector_raw"]')).setValue('h1');
-      await (await scraperTargeter.$('[name="submit_targeter"]')).click();
-      await browser.pause(100);
+      await scraperTargeterSubmitTargeter.waitForClickable();
+      await scraperTargeterSubmitTargeter.click();
+      await browser.pause(pauseSm);
 
       expect(await (await $('html')).getHTML(false)).to.equal(`<head>
     <title id="title">Fepper HTML Scraper</title>
@@ -418,27 +459,33 @@ menu anchor.</p>
 
     it('help button shows and hides help text correctly', async () => {
       const sgNavScrape = await $('.sg-nav-scrape');
+      const sgAccHandle = await sgNavScrape.$('.sg-acc-handle');
+      const sgPop = await sgNavScrape.$('.sg-pop');
+      const sgViewport = await $('#sg-viewport');
+
+      await sgAccHandle.waitForClickable();
+      await sgAccHandle.click();
+      await sgPop.waitForClickable();
+      await sgPop.click();
+      await browser.switchToFrame(sgViewport);
+
       const helpShow = await $('#help-show');
       const helpText = await $('#help-text');
       const helpHide = await $('#help-hide');
-
-      await (await sgNavScrape.$('.sg-acc-handle')).click();
-      await browser.pause(100);
-      await (await sgNavScrape.$('.sg-pop')).click();
-      await browser.switchToFrame(await $('#sg-viewport'));
 
       expect((await helpShow.getCSSProperty('display')).value).to.equal('block');
       expect((await helpText.getCSSProperty('visibility')).value).to.equal('hidden');
       expect((await helpHide.getCSSProperty('display')).value).to.equal('none');
 
+      await helpShow.waitForClickable();
       await helpShow.click();
 
       expect((await helpShow.getCSSProperty('display')).value).to.equal('none');
       expect((await helpText.getCSSProperty('visibility')).value).to.equal('visible');
       expect((await helpHide.getCSSProperty('display')).value).to.equal('block');
 
+      await helpHide.waitForClickable();
       await helpHide.click();
-      await browser.pause(100);
 
       expect((await helpShow.getCSSProperty('display')).value).to.equal('block');
       expect((await helpText.getCSSProperty('visibility')).value).to.equal('hidden');
@@ -447,24 +494,33 @@ menu anchor.</p>
 
     it('importer submit button errors on filename with invalid characters', async () => {
       const sgNavScrape = await $('.sg-nav-scrape');
+      const sgAccHandle = await sgNavScrape.$('.sg-acc-handle');
+      const sgPop = await sgNavScrape.$('.sg-pop');
+      const sgViewport = await $('#sg-viewport');
       const nameUrl = await $('[name="url"]');
       const nameSelectorRaw = await $('[name="selector_raw"]');
-      const message = await $('#message');
+      const nameSubmitTargeter = await $('[name="submit_targeter"]');
+      const nameSubmitImporter = await $('[name="submit_importer"]');
 
       // Just testing error case because that is the only client-side JS logic driven by the listener.
       // A success case will request the Express app which will respond independent of client-side JS.
-      await (await sgNavScrape.$('.sg-acc-handle')).click();
-      await browser.pause(100);
-      await (await sgNavScrape.$('.sg-pop')).click();
-      await browser.switchToFrame(await $('#sg-viewport'));
+      await sgAccHandle.waitForClickable();
+      await sgAccHandle.click();
+      await sgPop.waitForClickable();
+      await sgPop.click();
+      await browser.switchToFrame(sgViewport);
+      await nameUrl.waitForClickable();
       await nameUrl.click();
       await nameUrl.setValue('/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
+      await nameSelectorRaw.waitForClickable();
       await nameSelectorRaw.click();
       await nameSelectorRaw.setValue('p');
-      await (await $('[name="submit_targeter"]')).click();
-      await browser.pause(100);
-      await (await $('[name="submit_importer"]')).click();
-      await browser.pause(100);
+      await nameSubmitTargeter.waitForClickable();
+      await nameSubmitTargeter.click();
+      await nameSubmitImporter.waitForClickable();
+      await nameSubmitImporter.click();
+
+      const message = await $('#message');
 
       expect(await message.getAttribute('class')).to.equal('message error');
       expect(await message.getText()).to.equal('ERROR! Please enter a valid filename.');
@@ -472,27 +528,37 @@ menu anchor.</p>
 
     it('importer submit button errors on filename named "00-html-scraper"', async () => {
       const sgNavScrape = await $('.sg-nav-scrape');
+      const sgAccHandle = await sgNavScrape.$('.sg-acc-handle');
+      const sgPop = await sgNavScrape.$('.sg-pop');
+      const sgViewport = await $('#sg-viewport');
       const nameUrl = await $('[name="url"]');
       const nameSelectorRaw = await $('[name="selector_raw"]');
+      const nameSubmitTargeter = await $('[name="submit_targeter"]');
       const nameFilename = await $('[name="filename"]');
-      const message = await $('#message');
+      const nameSubmitImporter = await $('[name="submit_importer"]');
 
       // Just testing error case because that is the only client-side JS logic driven by the listener.
       // A success case will request the Express app which will respond independent of client-side JS.
-      await (await sgNavScrape.$('.sg-acc-handle')).click();
-      await browser.pause(100);
-      await (await sgNavScrape.$('.sg-pop')).click();
-      await browser.switchToFrame(await $('#sg-viewport'));
+      await sgAccHandle.waitForClickable();
+      await sgAccHandle.click();
+      await sgPop.waitForClickable();
+      await sgPop.click();
+      await browser.switchToFrame(sgViewport);
+      await nameUrl.waitForClickable();
       await nameUrl.click();
       await nameUrl.setValue('/patterns/04-pages-00-homepage/04-pages-00-homepage.html');
+      await nameSelectorRaw.waitForClickable();
       await nameSelectorRaw.click();
       await nameSelectorRaw.setValue('p');
-      await (await $('[name="submit_targeter"]')).click();
-      await browser.pause(100);
+      await nameSubmitTargeter.waitForClickable();
+      await nameSubmitTargeter.click();
+      await nameFilename.waitForClickable();
       await nameFilename.click();
       await nameFilename.setValue('00-html-scraper');
-      await (await $('[name="submit_importer"]')).click();
-      await browser.pause(100);
+      await nameSubmitImporter.waitForClickable();
+      await nameSubmitImporter.click();
+
+      const message = await $('#message');
 
       expect(await message.getAttribute('class')).to.equal('message error');
       expect(await message.getText()).to.equal('ERROR! Please enter a valid filename.');
@@ -509,14 +575,16 @@ menu anchor.</p>
         const sgNavElements = await $('.sg-nav-elements');
         const sgAccHandle = await sgNavElements.$('.sg-acc-handle');
         const sgAccPanel = await sgNavElements.$('.sg-acc-panel');
-        const sgViewport = await $('#sg-viewport');
-        const sgFToggle = await $('#sg-f-toggle');
-        const sgFind = await $('#sg-find');
 
+        await sgAccHandle.waitForClickable();
         await sgAccHandle.click();
 
         expect(await sgAccHandle.getAttribute('class')).to.have.string('active');
         expect(await sgAccPanel.getAttribute('class')).to.have.string('active');
+
+        const sgViewport = await $('#sg-viewport');
+        const sgFToggle = await $('#sg-f-toggle');
+        const sgFind = await $('#sg-find');
 
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Shift', 'f']);
@@ -548,13 +616,18 @@ menu anchor.</p>
         const sgAccHandle = await sgNavElements.$('.sg-acc-handle');
         const sgAccPanel = await sgNavElements.$('.sg-acc-panel');
 
+        await sgAccHandle.waitForClickable();
         await sgAccHandle.click();
 
         expect(await sgAccHandle.getAttribute('class')).to.have.string('active');
         expect(await sgAccPanel.getAttribute('class')).to.have.string('active');
 
-        await browser.switchToFrame(await $('#sg-viewport'));
-        await (await $('body')).click();
+        const sgViewport = await $('#sg-viewport');
+        const body = await $('body');
+
+        await browser.switchToFrame(sgViewport);
+        await body.waitForClickable();
+        await body.click();
         await browser.switchToParentFrame();
 
         expect(await sgAccHandle.getAttribute('class')).to.not.have.string('active');
@@ -564,12 +637,17 @@ menu anchor.</p>
       it('bodyClick closes size panel', async () => {
         const sgFormLabel = await $('#sg-form-label');
 
+        await sgFormLabel.waitForClickable();
         await sgFormLabel.click();
 
         expect(await sgFormLabel.getAttribute('class')).to.have.string('active');
 
-        await browser.switchToFrame(await $('#sg-viewport'));
-        await (await $('body')).click();
+        const sgViewport = await $('#sg-viewport');
+        const body = await $('body');
+
+        await browser.switchToFrame(sgViewport);
+        await body.waitForClickable();
+        await body.click();
         await browser.switchToParentFrame();
 
         expect(await sgFormLabel.getAttribute('class')).to.not.have.string('active');
@@ -578,19 +656,25 @@ menu anchor.</p>
       it('pattern anchor clicks switch the pattern in the iframe', async () => {
         const sgNavPages = await $('.sg-nav-pages');
         const sgAccHandle = await sgNavPages.$('.sg-acc-handle');
+        const sgPop = await sgNavPages.$('.sg-pop');
         const sgRaw = await $('#sg-raw');
 
+        await sgAccHandle.waitForClickable();
         await sgAccHandle.click();
-        await browser.pause(100);
-        await (await sgNavPages.$('.sg-pop')).click();
-        await browser.pause(100);
+        await sgPop.waitForClickable();
+        await sgPop.click();
 
         expect(await sgRaw.getAttribute('href'))
           .to.equal('patterns/04-pages-00-homepage/04-pages-00-homepage.html');
 
-        await browser.switchToFrame(await $('#sg-viewport'));
-        await (await $('a')).click();
-        await browser.pause(100);
+        const sgViewport = await $('#sg-viewport');
+
+        await browser.switchToFrame(sgViewport);
+
+        const a = await $('a');
+
+        await a.waitForClickable();
+        await a.click();
         await browser.switchToParentFrame();
 
         expect(await sgRaw.getAttribute('href'))
@@ -608,7 +692,7 @@ menu anchor.</p>
 
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Alt', 'w']);
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
         await browser.switchToParentFrame();
 
         expect((await sgViewport.getSize()).width).to.equal(1024);
@@ -621,7 +705,7 @@ menu anchor.</p>
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Alt', 'r']);
         await browser.switchToParentFrame();
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         const sgViewportWidthAfter = (await sgViewport.getSize()).width;
 
@@ -638,13 +722,13 @@ menu anchor.</p>
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Alt', 'g']);
         await browser.switchToParentFrame();
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         const sgViewportWidth1 = (await sgViewport.getSize()).width;
 
         expect(sgViewportWidth0).to.not.equal(sgViewportWidth1);
 
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Alt', 'g']);
         await browser.switchToParentFrame();
@@ -653,7 +737,7 @@ menu anchor.</p>
 
         expect(sgViewportWidth1).to.not.equal(sgViewportWidth2);
 
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         const sgViewportWidth3 = (await sgViewport.getSize()).width;
 
@@ -666,7 +750,7 @@ menu anchor.</p>
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Alt', '0']);
         await browser.switchToParentFrame();
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         expect((await sgViewport.getSize()).width).to.equal(320);
       });
@@ -677,7 +761,7 @@ menu anchor.</p>
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Shift', 'x']);
         await browser.switchToParentFrame();
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         expect((await sgViewport.getSize()).width).to.equal(480);
       });
@@ -688,7 +772,7 @@ menu anchor.</p>
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Shift', 'w']);
         await browser.switchToParentFrame();
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         expect((await sgViewport.getSize()).width).to.equal(1024);
       });
@@ -699,7 +783,7 @@ menu anchor.</p>
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Shift', 's']);
         await browser.switchToParentFrame();
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         expect((await sgViewport.getSize()).width).to.equal(767);
       });
@@ -710,7 +794,7 @@ menu anchor.</p>
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Shift', 'm']);
         await browser.switchToParentFrame();
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         expect((await sgViewport.getSize()).width).to.equal(1024);
       });
@@ -721,7 +805,7 @@ menu anchor.</p>
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Shift', 'l']);
         await browser.switchToParentFrame();
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         expect((await sgViewport.getSize()).width).to.equal(1280);
       });
@@ -733,7 +817,7 @@ menu anchor.</p>
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Shift', 'd']);
         await browser.switchToParentFrame();
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         const sgViewportWidth1 = (await sgViewport.getSize()).width;
 
@@ -742,13 +826,13 @@ menu anchor.</p>
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Shift', 'd']);
         await browser.switchToParentFrame();
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         const sgViewportWidth2 = (await sgViewport.getSize()).width;
 
         expect(sgViewportWidth1).to.not.equal(sgViewportWidth2);
 
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         const sgViewportWidth3 = (await sgViewport.getSize()).width;
 
@@ -761,7 +845,7 @@ menu anchor.</p>
         await browser.switchToFrame(sgViewport);
         await browser.keys(['Control', 'Shift', '0']);
         await browser.switchToParentFrame();
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         expect((await sgViewport.getSize()).width).to.equal(320);
       });
