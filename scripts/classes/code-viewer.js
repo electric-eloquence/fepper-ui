@@ -266,7 +266,10 @@ export default class CodeViewer {
 
     switch (type) {
       case 'markdown': {
-        if (!this.patternPartial.startsWith('viewall')) {
+        if (this.patternPartial.startsWith('viewall')) {
+          return this.setPanelContent(type);
+        }
+        else {
           return this.setPanelContent(type)
             .then(() => this.gitPullMarkdown());
         }
