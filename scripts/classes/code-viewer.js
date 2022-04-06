@@ -495,6 +495,7 @@ export default class CodeViewer {
                 const forbidden = doc.getElementById('forbidden');
                 const forbiddenClassName = forbidden.getAttribute('class');
 
+                forbidden.removeAttribute('id'); // To avoid having duplicates with id="forbidden".
                 forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
                 this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-warning');
                 this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('html', forbidden);
@@ -645,6 +646,7 @@ export default class CodeViewer {
               this.markdownHttpPath = null;
               this.markdownSource = null;
 
+              forbidden.removeAttribute('id'); // To avoid having duplicates with id="forbidden".
               forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
               this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-warning');
               this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('html', forbidden);
@@ -742,6 +744,7 @@ export default class CodeViewer {
                 const forbidden = doc.getElementById('forbidden');
                 const forbiddenClassName = forbidden.getAttribute('class');
 
+                forbidden.removeAttribute('id'); // To avoid having duplicates with id="forbidden".
                 forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
                 this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
                 this.$orgs['#sg-code-pane-git-na'].dispatchAction('html', forbidden);
