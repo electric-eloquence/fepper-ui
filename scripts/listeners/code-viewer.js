@@ -220,6 +220,18 @@ export default class CodeViewer {
       return false;
     });
 
-    // TODO: Create keyboard shortcuts to switch between Feplet, Markdown, Requerio, and Git tabs.
+    window.Mousetrap.bind('ctrl+shift+[', (e) => {
+      this.#fepperUi.codeViewer.switchTab(-1);
+
+      e.preventDefault();
+      return false;
+    });
+
+    window.Mousetrap.bind('ctrl+shift+]', (e) => {
+      this.#fepperUi.codeViewer.switchTab(1);
+
+      e.preventDefault();
+      return false;
+    });
   }
 }

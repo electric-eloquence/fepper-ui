@@ -74,7 +74,15 @@ export default class CodeViewer {
 
             break;
 
-            // TODO: Create keyboard shortcuts to switch between Feplet and Requerio tabs.
+          case 'ctrl+shift+[':
+            this.switchTab(-1);
+
+            break;
+
+          case 'ctrl+shift+]':
+            this.switchTab(1);
+
+            break;
 
           case 'esc':
             if (this.codeActive && this.uiProps.dockPosition === 'bottom') {
@@ -774,6 +782,47 @@ export default class CodeViewer {
         return Promise.resolve();
       }
     }
+  }
+
+  switchTab(offset) {
+    const sgCodeContainerState = this.$orgs['#sg-code-container'].getState();
+
+    if (!sgCodeContainerState.classArray.includes('active')) {
+      return
+    }
+
+    const sgCodeTabState = this.$orgs['.sg-code-tab'].getState();
+
+    if (!sgCodeTabState || typeof sgCodeTabState.members !== 'number') {
+      return;
+    }
+
+    let activeCurrent;
+
+    for (let i = 0; i < sgCodeTabState.members; i++) {
+      const sgCodeTabClasses = this.$orgs['.sg-code-tab'].getState(i).classArray;
+
+      if (sgCodeTabClasses.includes('sg-code-tab-active')) {
+        activeCurrent = i;
+      }
+    }
+
+    if (typeof activeCurrent !== 'number') {
+      return;
+    }
+
+    let activeNew = activeCurrent + offset;
+
+    if (activeNew >= sgCodeTabState.members) {
+      activeNew = 0;
+    }
+    else if (activeNew < 0) {
+      activeNew = sgCodeTabState.members - 1;
+    }
+
+    const panels = ['feplet', 'markdown', 'git', 'requerio'];
+
+    this.activateTabAndPanel(panels[activeNew]);
   }
 
   /**

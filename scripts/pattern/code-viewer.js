@@ -95,10 +95,10 @@
     });
   });
 
-  // Bind Mousetrap keyboard shortcuts using ctrl+shift.
+  // Bind Mousetrap keyboard shortcuts for the Code Viewer.
   const keys = [
-    'shift+c', // Toggle the code panel.
-    'shift+u', // Select the mustache tab.
+    'shift+[', // Focus on the tab to the left (or cycle to to the end).
+    'shift+]', // Focus on the tab to the right (or cycle to the beginning).
     'alt+m', // Select the mustache tab.
     'shift+y', // Select the html tab.
     'alt+h' // Select the html tab.
