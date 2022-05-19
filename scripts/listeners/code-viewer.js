@@ -243,6 +243,9 @@ export default class CodeViewer {
       if (dockOpen) {
         this.#fepperUi.viewerHandler.dockLeft();
       }
+
+      e.preventDefault();
+      return false;
     });
 
     // Dock Code Viewer to the bottom.
@@ -252,6 +255,9 @@ export default class CodeViewer {
       if (dockOpen) {
         this.#fepperUi.viewerHandler.dockBottom();
       }
+
+      e.preventDefault();
+      return false;
     });
 
     // Dock Code Viewer to the right.
@@ -261,6 +267,9 @@ export default class CodeViewer {
       if (dockOpen) {
         this.#fepperUi.viewerHandler.dockRight();
       }
+
+      e.preventDefault();
+      return false;
     });
   }
 }

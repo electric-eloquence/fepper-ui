@@ -66,6 +66,8 @@ export default class CodeViewer {
       this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'viewall');
     }
 
+    let dockOpen;
+
     switch (data.event) {
       case 'patternlab.keyPress':
         switch (data.keyPress) {
@@ -314,9 +316,6 @@ export default class CodeViewer {
           return this.setPanelContent(type)
             .then(() => this.gitPullMarkdown());
         }
-
-        /* istanbul ignore next */
-        break;
       }
       default: {
         return this.setPanelContent(type, this.patternPartial);
@@ -821,7 +820,7 @@ export default class CodeViewer {
     const sgCodeContainerState = this.$orgs['#sg-code-container'].getState();
 
     if (!sgCodeContainerState.classArray.includes('active')) {
-      return
+      return;
     }
 
     const sgCodeTabState = this.$orgs['.sg-code-tab'].getState();
