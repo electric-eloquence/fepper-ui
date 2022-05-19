@@ -212,7 +212,7 @@ export default class CodeViewer {
       });
     });
 
-    // Toggle the code panel.
+    // Toggle the Code Viewer.
     window.Mousetrap.bind('ctrl+shift+c', (e) => {
       this.#fepperUi.codeViewer.toggleCode();
 
@@ -220,6 +220,7 @@ export default class CodeViewer {
       return false;
     });
 
+    // Focus on the tab to the left (or cycle to to the end).
     window.Mousetrap.bind('ctrl+shift+[', (e) => {
       this.#fepperUi.codeViewer.switchTab(-1);
 
@@ -227,11 +228,39 @@ export default class CodeViewer {
       return false;
     });
 
+    // Focus on the tab to the right (or cycle to the beginning).
     window.Mousetrap.bind('ctrl+shift+]', (e) => {
       this.#fepperUi.codeViewer.switchTab(1);
 
       e.preventDefault();
       return false;
+    });
+
+    // Dock Code Viewer to the left.
+    window.Mousetrap.bind('ctrl+alt+h', (e) => {
+      const dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
+
+      if (dockOpen) {
+        this.#fepperUi.viewerHandler.dockLeft();
+      }
+    });
+
+    // Dock Code Viewer to the bottom.
+    window.Mousetrap.bind('ctrl+alt+j', (e) => {
+      const dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
+
+      if (dockOpen) {
+        this.#fepperUi.viewerHandler.dockBottom();
+      }
+    });
+
+    // Dock Code Viewer to the right.
+    window.Mousetrap.bind('ctrl+alt+l', (e) => {
+      const dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
+
+      if (dockOpen) {
+        this.#fepperUi.viewerHandler.dockRight();
+      }
     });
   }
 }

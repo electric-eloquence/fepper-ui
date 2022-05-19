@@ -69,18 +69,51 @@ export default class CodeViewer {
     switch (data.event) {
       case 'patternlab.keyPress':
         switch (data.keyPress) {
+          // Toggle the Code Viewer.
           case 'ctrl+shift+c':
             this.toggleCode();
 
             break;
 
+          // Focus on the tab to the left (or cycle to to the end).
           case 'ctrl+shift+[':
             this.switchTab(-1);
 
             break;
 
+          // Focus on the tab to the right (or cycle to the beginning).
           case 'ctrl+shift+]':
             this.switchTab(1);
+
+            break;
+
+          // Dock Code Viewer to the left.
+          case 'ctrl+alt+h':
+            dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
+
+            if (dockOpen) {
+              this.viewerHandler.dockLeft();
+            }
+
+            break;
+
+          // Dock Code Viewer to the bottom.
+          case 'ctrl+alt+j':
+            dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
+
+            if (dockOpen) {
+              this.viewerHandler.dockBottom();
+            }
+
+            break;
+
+          // Dock Code Viewer to the right.
+          case 'ctrl+alt+l':
+            dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
+
+            if (dockOpen) {
+              this.viewerHandler.dockRight();
+            }
 
             break;
 
