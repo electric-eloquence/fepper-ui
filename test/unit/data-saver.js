@@ -34,6 +34,8 @@ describe('dataSaver', function () {
     });
 
     it('saves submitted numbers as strings', function () {
+      dataSaver.removeValue('vpWidth');
+
       const valueBefore = dataSaver.findValue('vpWidth');
 
       dataSaver.addValue('vpWidth', 1337);

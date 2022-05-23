@@ -107,7 +107,7 @@ describe('patternViewport', function () {
       <a href="patterns/98-scrape-00-html-scraper/98-scrape-00-html-scraper.html" class="sg-pop " data-patternpartial="scrape-html-scraper">Html Scraper</a>
     </li>
   </ul></li>
-<li><a href="patterns/viewall/viewall.html" class="sg-pop" data-patternpartial="viewall">All</a></li>
+<li><a href="patterns/viewall/index.html" class="sg-pop" data-patternpartial="viewall">All</a></li>
 `);
       });
 
@@ -117,7 +117,7 @@ describe('patternViewport', function () {
         expect(sgControlsStateAfter.html).to.equal(`<li class="sg-size">
 <div class="sg-current-size">
   <form id="sg-form">
-    <a class="sg-acc-handle sg-size-label" id="sg-form-label">Size</a><input type="text" class="sg-input" id="sg-size-px" value="---"><div class="sg-size-label">px /</div><input type="text" class="sg-input" id="sg-size-em" value="0.00"><div class="sg-size-label">em</div>
+    <a class="sg-acc-handle sg-size-label" id="sg-form-label">Size</a><input type="text" class="sg-input" id="sg-size-px" value="498"><div class="sg-size-label">px /</div><input type="text" class="sg-input" id="sg-size-em" value="0.00"><div class="sg-size-label">em</div>
   </form>
 </div>
 <div class="sg-acc-panel sg-size-options">
