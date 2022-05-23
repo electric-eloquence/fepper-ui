@@ -317,7 +317,8 @@ export default class CodeViewer {
         const patternPartial = (searchParams && searchParams.p) || this.patternPartial;
 
         if (patternPartial.startsWith('viewall')) {
-          return this.setPanelContent(type);
+          return this.setPanelContent(type)
+            .then(() => this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'}));
         }
         else {
           return this.setPanelContent(type)
