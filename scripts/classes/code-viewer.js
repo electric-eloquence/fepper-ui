@@ -77,13 +77,13 @@ export default class CodeViewer {
 
             break;
 
-          // Focus on the tab to the left (or cycle to to the end).
+          // Switch to the tab on the left (or cycle to the end).
           case 'ctrl+shift+[':
             this.switchTab(-1);
 
             break;
 
-          // Focus on the tab to the right (or cycle to the beginning).
+          // Switch to the tab on the right (or cycle to the beginning).
           case 'ctrl+shift+]':
             this.switchTab(1);
 
@@ -167,9 +167,11 @@ export default class CodeViewer {
     }
 
     if (data.lineage) {
-      this.updateMetadata(data.lineage, data.lineageR, data.patternPartial, data.patternState, data.missingPartials);
-      this.setPanelContent('feplet', data.patternPartial);
-      this.setPanelContent('markdown', data.patternPartial);
+      const {lineage, lineageR, missingPartials, patternPartial, patternState} = data;
+
+      this.updateMetadata(lineage, lineageR, patternPartial, patternState, missingPartials);
+      this.setPanelContent('feplet', patternPartial);
+      this.setPanelContent('markdown', patternPartial);
 
       const paneMarkdownNaDisplay = this.$orgs['#sg-code-pane-markdown-na'].getState().css.display;
       const paneMarkdownEditDisplay = this.$orgs['#sg-code-pane-markdown-edit'].getState().css.display;
@@ -309,7 +311,12 @@ export default class CodeViewer {
 
     switch (type) {
       case 'markdown': {
-        if (this.patternPartial.startsWith('viewall')) {
+        // In viewalls, on page load, this.patternPartial will be for the first viewed pattern, not for the viewall.
+        // So get patternPartial from searchParams.
+        const searchParams = this.urlHandler.getSearchParams();
+        const patternPartial = (searchParams && searchParams.p) || this.patternPartial;
+
+        if (patternPartial.startsWith('viewall')) {
           return this.setPanelContent(type);
         }
         else {
@@ -819,12 +826,14 @@ export default class CodeViewer {
   switchTab(offset) {
     const sgCodeContainerState = this.$orgs['#sg-code-container'].getState();
 
+    /* istanbul ignore if */
     if (!sgCodeContainerState.classArray.includes('active')) {
       return;
     }
 
     const sgCodeTabState = this.$orgs['.sg-code-tab'].getState();
 
+    /* istanbul ignore if */
     if (!sgCodeTabState || typeof sgCodeTabState.members !== 'number') {
       return;
     }
@@ -839,6 +848,7 @@ export default class CodeViewer {
       }
     }
 
+    /* istanbul ignore if */
     if (typeof activeCurrent !== 'number') {
       return;
     }
