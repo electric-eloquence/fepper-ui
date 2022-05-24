@@ -77,7 +77,7 @@
 
         this.classList.add('active');
 
-        const patternPartial = this.dataset.patternpartial;
+        const patternPartial = this.dataset.patternPartial;
         const patternDataEl = d.getElementById(`sg-pattern-data-${patternPartial}`);
         let patternData = {};
 

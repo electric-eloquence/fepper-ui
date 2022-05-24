@@ -273,7 +273,7 @@ describe('annotationsViewer', function () {
 
   describe('.updateAnnotations()', function () {
     beforeEach(function () {
-      $orgs['#sg-annotations-container'].dispatchAction('attr', {'data-patternpartial': null});
+      $orgs['#sg-annotations-container'].dispatchAction('attr', {'data-pattern-partial': null});
     });
 
     it('displays "No Annotations" for no annotations', function () {
@@ -384,7 +384,7 @@ menu anchor.</p>
         viewall: false
       };
 
-      $orgs['#sg-annotations-container'].dispatchAction('attr', {'data-patternpartial': null});
+      $orgs['#sg-annotations-container'].dispatchAction('attr', {'data-pattern-partial': null});
       $orgs['#sg-annotations'].dispatchAction('html', '');
 
       const sgAnnotationsBefore = $orgs['#sg-annotations'].getState();

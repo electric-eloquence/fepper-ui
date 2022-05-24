@@ -1097,7 +1097,7 @@ describe('codeViewer', function () {
 
   describe('.updateMetadata()', function () {
     beforeEach(function () {
-      $orgs['#sg-code-container'].dispatchAction('attr', {'data-patternpartial': null});
+      $orgs['#sg-code-container'].dispatchAction('attr', {'data-pattern-partial': null});
       $orgs['#sg-code-pattern-info-state'].dispatchAction('html', null);
       $orgs['#sg-code-lineage'].dispatchAction('css', {display: 'inline'});
       $orgs['#sg-code-lineage-fill'].dispatchAction('html', null);
@@ -1346,7 +1346,7 @@ describe('codeViewer', function () {
 
     it('updates code when submitting pattern data from viewall', function () {
       codeViewer.closeCode();
-      $orgs['#sg-code-container'].dispatchAction('attr', {'data-patternpartial': ''});
+      $orgs['#sg-code-container'].dispatchAction('attr', {'data-pattern-partial': ''});
       $orgs['#sg-code-pattern-info-state'].dispatchAction('html', '');
       $orgs['#sg-code-lineage'].dispatchAction('css', {display: 'inline'});
       $orgs['#sg-code-lineage-fill'].dispatchAction('html', '');
@@ -1406,7 +1406,7 @@ describe('codeViewer', function () {
 
     it('removes viewall styling when submitting data from pattern and not viewall', function () {
       codeViewer.closeCode();
-      $orgs['#sg-code-container'].dispatchAction('attr', {'data-patternpartial': ''});
+      $orgs['#sg-code-container'].dispatchAction('attr', {'data-pattern-partial': ''});
       $orgs['#sg-code-pattern-info-state'].dispatchAction('html', '');
       $orgs['#sg-code-lineage'].dispatchAction('css', {display: 'inline'});
       $orgs['#sg-code-lineage-fill'].dispatchAction('html', '');

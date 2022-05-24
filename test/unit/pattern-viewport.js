@@ -61,53 +61,53 @@ describe('patternViewport', function () {
         expect(sgNavTargetStateAfter.html).to.equal(`
   <li class="sg-nav-elements"><a class="sg-acc-handle">Elements</a><ul class="sg-acc-panel sg-sub-nav">
     <li class="sg-item-nav-elements-paragraph">
-      <a href="patterns/00-elements-paragraph/00-elements-paragraph.html" class="sg-pop " data-patternpartial="elements-paragraph">Paragraph</a>
+      <a href="patterns/00-elements-paragraph/00-elements-paragraph.html" class="sg-pop " data-pattern-partial="elements-paragraph">Paragraph</a>
     </li>
     <li class="sg-item-nav-viewall-elements">
-      <a href="patterns/00-elements/index.html" class="sg-pop " data-patternpartial="viewall-elements">View All</a>
+      <a href="patterns/00-elements/index.html" class="sg-pop " data-pattern-partial="viewall-elements">View All</a>
     </li>
   </ul></li>
   <li class="sg-nav-compounds"><a class="sg-acc-handle">Compounds</a><ul class="sg-acc-panel sg-sub-nav">
     <li class="sg-item-nav-compounds-block">
-      <a href="patterns/01-compounds-block/01-compounds-block.html" class="sg-pop " data-patternpartial="compounds-block">Block</a>
+      <a href="patterns/01-compounds-block/01-compounds-block.html" class="sg-pop " data-pattern-partial="compounds-block">Block</a>
     </li>
     <li class="sg-item-nav-viewall-compounds">
-      <a href="patterns/01-compounds/index.html" class="sg-pop " data-patternpartial="viewall-compounds">View All</a>
+      <a href="patterns/01-compounds/index.html" class="sg-pop " data-pattern-partial="viewall-compounds">View All</a>
     </li>
   </ul></li>
   <li class="sg-nav-components"><a class="sg-acc-handle">Components</a><ul class="sg-acc-panel sg-sub-nav">
     <li class="sg-item-nav-components-region">
-      <a href="patterns/02-components-region/02-components-region.html" class="sg-pop " data-patternpartial="components-region">Region</a>
+      <a href="patterns/02-components-region/02-components-region.html" class="sg-pop " data-pattern-partial="components-region">Region</a>
     </li>
     <li class="sg-item-nav-viewall-components">
-      <a href="patterns/02-components/index.html" class="sg-pop " data-patternpartial="viewall-components">View All</a>
+      <a href="patterns/02-components/index.html" class="sg-pop " data-pattern-partial="viewall-components">View All</a>
     </li>
   </ul></li>
   <li class="sg-nav-templates"><a class="sg-acc-handle">Templates</a><ul class="sg-acc-panel sg-sub-nav">
     <li class="sg-item-nav-templates-page">
-      <a href="patterns/03-templates-page/03-templates-page.html" class="sg-pop " data-patternpartial="templates-page">Page</a>
+      <a href="patterns/03-templates-page/03-templates-page.html" class="sg-pop " data-pattern-partial="templates-page">Page</a>
     </li>
     <li class="sg-item-nav-viewall-templates">
-      <a href="patterns/03-templates/index.html" class="sg-pop " data-patternpartial="viewall-templates">View All</a>
+      <a href="patterns/03-templates/index.html" class="sg-pop " data-pattern-partial="viewall-templates">View All</a>
     </li>
   </ul></li>
   <li class="sg-nav-pages"><a class="sg-acc-handle">Pages</a><ul class="sg-acc-panel sg-sub-nav">
     <li class="sg-item-nav-pages-homepage">
-      <a href="patterns/04-pages-00-homepage/04-pages-00-homepage.html" class="sg-pop " data-patternpartial="pages-homepage">Homepage</a>
+      <a href="patterns/04-pages-00-homepage/04-pages-00-homepage.html" class="sg-pop " data-pattern-partial="pages-homepage">Homepage</a>
     </li>
     <li class="sg-item-nav-pages-test-svg">
-      <a href="patterns/04-pages-test-svg/04-pages-test-svg.html" class="sg-pop " data-patternpartial="pages-test-svg">Test Svg</a>
+      <a href="patterns/04-pages-test-svg/04-pages-test-svg.html" class="sg-pop " data-pattern-partial="pages-test-svg">Test Svg</a>
     </li>
     <li class="sg-item-nav-viewall-pages">
-      <a href="patterns/04-pages/index.html" class="sg-pop " data-patternpartial="viewall-pages">View All</a>
+      <a href="patterns/04-pages/index.html" class="sg-pop " data-pattern-partial="viewall-pages">View All</a>
     </li>
   </ul></li>
   <li class="sg-nav-scrape"><a class="sg-acc-handle">Scrape</a><ul class="sg-acc-panel sg-sub-nav">
     <li class="sg-item-nav-scrape-html-scraper">
-      <a href="patterns/98-scrape-00-html-scraper/98-scrape-00-html-scraper.html" class="sg-pop " data-patternpartial="scrape-html-scraper">Html Scraper</a>
+      <a href="patterns/98-scrape-00-html-scraper/98-scrape-00-html-scraper.html" class="sg-pop " data-pattern-partial="scrape-html-scraper">Html Scraper</a>
     </li>
   </ul></li>
-<li><a href="patterns/viewall/index.html" class="sg-pop" data-patternpartial="viewall">All</a></li>
+<li><a href="patterns/viewall/index.html" class="sg-pop" data-pattern-partial="viewall">All</a></li>
 `);
       });
 

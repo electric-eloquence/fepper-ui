@@ -10,7 +10,7 @@ describe('Pattern end-to-end tests', () => {
       });
 
       it('viewall annotations viewer button toggles annotations viewer', async () => {
-        const sgPop = await $('.sg-pop[data-patternpartial="viewall"]');
+        const sgPop = await $('.sg-pop[data-pattern-partial="viewall"]');
         const sgViewport = await $('#sg-viewport');
         const sgPatternToggleAnnotationsComponentsRegion = await $('#sg-pattern-toggle-annotations-components-region');
 
@@ -98,7 +98,7 @@ menu anchor.</p>
       });
 
       it('viewall code viewer button toggles code viewer', async () => {
-        const sgPop = await $('.sg-pop[data-patternpartial="viewall"]');
+        const sgPop = await $('.sg-pop[data-pattern-partial="viewall"]');
         const sgViewport = await $('#sg-viewport');
         const sgPatternToggleCodeComponentsRegion = await $('#sg-pattern-toggle-code-components-region');
 

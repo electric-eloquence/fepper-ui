@@ -671,7 +671,7 @@ describe('UI compilation of index page js', () => {
       });
 
       it('sends the postMessage to annotate viewall if annotations viewer is toggled on', async () => {
-        const sgPop = $('.sg-pop[data-patternpartial="viewall"]');
+        const sgPop = $('.sg-pop[data-pattern-partial="viewall"]');
         const sgPatternToggleAnnotationsElementsParagraph =
           await $('#sg-pattern-toggle-annotations-elements-paragraph');
 
@@ -704,7 +704,7 @@ describe('UI compilation of index page js', () => {
       });
 
       it('sends the postMessage to load code from viewall if code viewer is toggled on', async () => {
-        const sgPop = $('.sg-pop[data-patternpartial="viewall"]');
+        const sgPop = $('.sg-pop[data-pattern-partial="viewall"]');
         const sgPatternToggleCodeTemplatesPage = await $('#sg-pattern-toggle-code-templates-page');
 
         await sgPop.waitForClickable();
