@@ -71,7 +71,7 @@ export default class CodeViewer {
     switch (data.event) {
       case 'patternlab.keyPress':
         switch (data.keyPress) {
-          // Toggle the Code Viewer.
+          // Toggle the code viewer.
           case 'ctrl+shift+c':
             this.toggleCode();
 
@@ -89,7 +89,7 @@ export default class CodeViewer {
 
             break;
 
-          // Dock Code Viewer to the left.
+          // Dock code viewer to the left.
           case 'ctrl+alt+h':
             dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
 
@@ -99,7 +99,7 @@ export default class CodeViewer {
 
             break;
 
-          // Dock Code Viewer to the bottom.
+          // Dock code viewer to the bottom.
           case 'ctrl+alt+j':
             dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
 
@@ -109,7 +109,7 @@ export default class CodeViewer {
 
             break;
 
-          // Dock Code Viewer to the right.
+          // Dock code viewer to the right.
           case 'ctrl+alt+l':
             dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
 
@@ -571,12 +571,14 @@ export default class CodeViewer {
   openCode() {
     // Flag that viewer is active.
     this.codeActive = true;
+    this.uiProps.lastViewer = 'code';
 
     // Make sure the annotations viewer is off before showing code.
     this.annotationsViewer.closeAnnotations();
     this.viewerHandler.openViewer();
     this.$orgs['#sg-t-code'].dispatchAction('addClass', 'active');
     this.$orgs['#sg-code-container'].dispatchAction('addClass', 'active');
+    this.dataSaver.updateValue('lastViewer', 'code');
 
     // If viewall, scroll to the focused pattern.
     /* istanbul ignore if */

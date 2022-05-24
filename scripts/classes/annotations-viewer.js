@@ -76,6 +76,10 @@ export default class AnnotationsViewer {
     return this.#fepperUi.codeViewer;
   }
 
+  get dataSaver() {
+    return this.#fepperUi.dataSaver;
+  }
+
   get uiFns() {
     return this.#fepperUi.uiFns;
   }
@@ -137,6 +141,7 @@ export default class AnnotationsViewer {
   openAnnotations() {
     // Flag that the viewer is active.
     this.annotationsActive = true;
+    this.uiProps.lastViewer = 'annotations';
 
     // Make sure the code viewer is off before showing annotations.
     this.codeViewer.closeCode();
@@ -145,6 +150,7 @@ export default class AnnotationsViewer {
     this.$orgs['#sg-t-annotations'].dispatchAction('addClass', 'active');
     this.$orgs['#sg-annotations-container'].dispatchAction('addClass', 'active');
     this.viewerHandler.openViewer();
+    this.dataSaver.updateValue('lastViewer', 'annotations');
 
     if (this.moveToNumber !== 0) {
       this.moveTo(this.moveToNumber);

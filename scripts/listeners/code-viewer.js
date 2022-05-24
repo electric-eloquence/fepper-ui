@@ -212,7 +212,7 @@ export default class CodeViewer {
       });
     });
 
-    // Toggle the Code Viewer.
+    // Toggle the code viewer.
     window.Mousetrap.bind('ctrl+shift+c', (e) => {
       this.#fepperUi.codeViewer.toggleCode();
 
@@ -236,7 +236,7 @@ export default class CodeViewer {
       return false;
     });
 
-    // Dock Code Viewer to the left.
+    // Dock code viewer to the left.
     window.Mousetrap.bind('ctrl+alt+h', (e) => {
       const dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
 
@@ -248,7 +248,7 @@ export default class CodeViewer {
       return false;
     });
 
-    // Dock Code Viewer to the bottom.
+    // Dock code viewer to the bottom.
     window.Mousetrap.bind('ctrl+alt+j', (e) => {
       const dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
 
@@ -260,7 +260,7 @@ export default class CodeViewer {
       return false;
     });
 
-    // Dock Code Viewer to the right.
+    // Dock code viewer to the right.
     window.Mousetrap.bind('ctrl+alt+l', (e) => {
       const dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
 
