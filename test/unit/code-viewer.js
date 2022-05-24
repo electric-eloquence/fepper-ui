@@ -233,7 +233,7 @@ describe('codeViewer', function () {
       expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
     });
 
-    it('activates Markdown tab and panel for viewall but without interfacing with Git', function () {
+    it('activates Markdown tab and panel for viewall but without the option to edit', function () {
       global.location.search = '?p=viewall-pages';
 
       codeViewer.stoke();
@@ -242,6 +242,8 @@ describe('codeViewer', function () {
         .then(() => {
           const panelStateBefore = $orgs['#sg-code-panel-markdown'].getState();
           const tabStateBefore = $orgs['#sg-code-tab-markdown'].getState();
+          const paneMarkdownStateBefore = $orgs['#sg-code-pane-markdown'].getState();
+          const paneMarkdownEditStateBefore = $orgs['#sg-code-pane-markdown-edit'].getState();
 
           codeViewer.receiveIframeMessage({
             origin: 'http://localhost:3000',
@@ -261,15 +263,21 @@ describe('codeViewer', function () {
 
           expect(panelStateBefore.classArray).to.not.include('sg-code-panel-active');
           expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
+          expect(paneMarkdownStateBefore.css.display).to.be.undefined;
+          expect(paneMarkdownEditStateBefore.css.display).to.be.undefined;
 
           return codeViewer.activateTabAndPanel('markdown');
         })
         .then(() => {
           const panelStateAfter = $orgs['#sg-code-panel-markdown'].getState();
           const tabStateAfter = $orgs['#sg-code-tab-markdown'].getState();
+          const paneMarkdownStateAfter = $orgs['#sg-code-pane-markdown'].getState();
+          const paneMarkdownEditStateAfter = $orgs['#sg-code-pane-markdown-edit'].getState();
 
           expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
           expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
+          expect(paneMarkdownStateAfter.css.display).to.equal('block');
+          expect(paneMarkdownEditStateAfter.css.display).to.be.undefined;
         });
     });
 
