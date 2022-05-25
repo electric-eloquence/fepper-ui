@@ -31,10 +31,10 @@ describe('Listeners end-to-end tests', () => {
         await sgViewBtnDockRight.click();
         await browser.pause(pauseLg);
 
-        const sgGenContainer = await $('#sg-gen-container');
+        const sgViewContainer = await $('#sg-view-container');
 
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-right');
-        expect((await sgGenContainer.getSize()).width).to.equal(512);
+        expect((await sgViewContainer.getSize()).width).to.equal(512);
       });
 
       it('dock-left button docks the viewer to the left', async () => {
@@ -59,28 +59,28 @@ describe('Listeners end-to-end tests', () => {
         await sgViewBtnDockLeft.click();
         await browser.pause(pauseLg);
 
-        const sgGenContainer = await $('#sg-gen-container');
+        const sgViewContainer = await $('#sg-view-container');
 
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-left');
-        expect((await sgGenContainer.getSize()).width).to.equal(512);
+        expect((await sgViewContainer.getSize()).width).to.equal(512);
       });
 
       it('dock-bottom button docks the viewer to the bottom', async () => {
+        const patternlabBody = await $('#patternlab-body');
+        const sgViewport = await $('#sg-viewport');
+
+        expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-bottom');
+        expect((await sgViewport.getSize()).width).to.equal(498);
+
         const sgViewBtnDockBottom = await $('#sg-view-btn-dock-bottom');
-        const sgFormLabel = await $('#sg-form-label');
-        const sgSizeW = await $('#sg-size-w');
+        const sgViewContainer = await $('#sg-view-container');
 
         await sgViewBtnDockBottom.waitForClickable();
         await sgViewBtnDockBottom.click();
-        await sgFormLabel.waitForClickable();
-        await sgFormLabel.click();
-        await sgSizeW.waitForClickable();
-        await sgSizeW.click();
         await browser.pause(pauseLg);
 
-        const patternlabBody = await $('#patternlab-body');
-
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-bottom');
+        expect((await sgViewContainer.getSize()).width).to.equal(1024);
       });
 
       it('close button closes annotations viewer', async () => {
@@ -142,6 +142,73 @@ menu anchor.</p>
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('0px');
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('636px');
       });
+
+      it('"ctrl+alt+l" docks the viewer to the right', async () => {
+        const sgFormLabel = await $('#sg-form-label');
+        const sgSizeW = await $('#sg-size-w');
+
+        await sgFormLabel.waitForClickable();
+        await sgFormLabel.click();
+        await sgSizeW.waitForClickable();
+        await sgSizeW.click();
+        await browser.keys(['Control', 'Shift', 'a']);
+        await browser.pause(pauseLg);
+
+        const patternlabBody = await $('#patternlab-body');
+        const sgViewport = await $('#sg-viewport');
+
+        expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-right');
+        expect((await sgViewport.getSize()).width).to.equal(1024);
+
+        await browser.keys(['Control', 'Alt', 'l']);
+        await browser.pause(pauseLg);
+
+        const sgViewContainer = await $('#sg-view-container');
+
+        expect(await patternlabBody.getAttribute('class')).to.have.string('dock-right');
+        expect((await sgViewContainer.getSize()).width).to.equal(512);
+      });
+
+      it('"ctrl+alt+h" docks the viewer to the left', async () => {
+        const sgFormLabel = await $('#sg-form-label');
+        const sgSizeW = await $('#sg-size-w');
+
+        await sgFormLabel.waitForClickable();
+        await sgFormLabel.click();
+        await sgSizeW.waitForClickable();
+        await sgSizeW.click();
+        await browser.pause(pauseLg);
+
+        const patternlabBody = await $('#patternlab-body');
+        const sgViewport = await $('#sg-viewport');
+
+        expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-left');
+        expect((await sgViewport.getSize()).width).to.equal(1024);
+
+        await browser.keys(['Control', 'Alt', 'h']);
+        await browser.pause(pauseLg);
+
+        const sgViewContainer = await $('#sg-view-container');
+
+        expect(await patternlabBody.getAttribute('class')).to.have.string('dock-left');
+        expect((await sgViewContainer.getSize()).width).to.equal(512);
+      });
+
+      it('"ctrl+alt+j" docks the viewer to the bottom', async () => {
+        const patternlabBody = await $('#patternlab-body');
+        const sgViewport = await $('#sg-viewport');
+
+        expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-bottom');
+        expect((await sgViewport.getSize()).width).to.equal(498);
+
+        await browser.keys(['Control', 'Alt', 'j']);
+        await browser.pause(pauseLg);
+
+        const sgViewContainer = await $('#sg-view-container');
+
+        expect(await patternlabBody.getAttribute('class')).to.have.string('dock-bottom');
+        expect((await sgViewContainer.getSize()).width).to.equal(1024);
+      });
     });
   });
 
@@ -152,14 +219,20 @@ menu anchor.</p>
       });
 
       it('dock-right button docks the viewer to the right', async () => {
+        const sgFormLabel = await $('#sg-form-label');
+        const sgSizeW = await $('#sg-size-w');
         const sgTToggle = await $('#sg-t-toggle');
         const sgTCode = await $('#sg-t-code');
 
+        await sgFormLabel.waitForClickable();
+        await sgFormLabel.click();
+        await sgSizeW.waitForClickable();
+        await sgSizeW.click();
         await sgTToggle.waitForClickable();
         await sgTToggle.click();
         await sgTCode.waitForClickable();
         await sgTCode.click();
-        await browser.pause(pauseMd);
+        await browser.pause(pauseLg);
 
         const patternlabBody = await $('#patternlab-body');
         const sgViewport = await $('#sg-viewport');
@@ -251,10 +324,19 @@ menu anchor.</p>
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('636px');
       });
 
-      it('feplet and markdown tabs activate their respective panels', async () => {
+      it('markdown tab activates markdown panel', async () => {
+        const sgCodeTabFeplet = await $('#sg-code-tab-feplet');
+        const sgCodeTabMarkdown = await $('#sg-code-tab-markdown');
+        const sgCodePanelFeplet = await $('#sg-code-panel-feplet');
+        const sgCodePanelMarkdown = await $('#sg-code-panel-markdown');
+
+        expect(await sgCodeTabFeplet.getAttribute('class')).to.have.string('sg-code-tab-active');
+        expect(await sgCodeTabMarkdown.getAttribute('class')).to.not.have.string('sg-code-tab-active');
+        expect(await sgCodePanelFeplet.getAttribute('class')).to.have.string('sg-code-panel-active');
+        expect(await sgCodePanelMarkdown.getAttribute('class')).to.not.have.string('sg-code-panel-active');
+
         const sgTToggle = await $('#sg-t-toggle');
         const sgTCode = await $('#sg-t-code');
-        const sgCodeTabMarkdown = await $('#sg-code-tab-markdown');
 
         await sgTToggle.waitForClickable();
         await sgTToggle.click();
@@ -264,7 +346,24 @@ menu anchor.</p>
         await sgCodeTabMarkdown.waitForClickable();
         await sgCodeTabMarkdown.click();
 
+        expect(await sgCodeTabFeplet.getAttribute('class')).to.not.have.string('sg-code-tab-active');
+        expect(await sgCodeTabMarkdown.getAttribute('class')).to.have.string('sg-code-tab-active');
+        expect(await sgCodePanelFeplet.getAttribute('class')).to.not.have.string('sg-code-panel-active');
+        expect(await sgCodePanelMarkdown.getAttribute('class')).to.have.string('sg-code-panel-active');
+      });
+
+      it('feplet tab activates feplet panel', async () => {
+        const sgTToggle = await $('#sg-t-toggle');
+        const sgTCode = await $('#sg-t-code');
+
+        await sgTToggle.waitForClickable();
+        await sgTToggle.click();
+        await sgTCode.waitForClickable();
+        await sgTCode.click();
+        await browser.pause(pauseMd);
+
         const sgCodeTabFeplet = await $('#sg-code-tab-feplet');
+        const sgCodeTabMarkdown = await $('#sg-code-tab-markdown');
         const sgCodePanelFeplet = await $('#sg-code-panel-feplet');
         const sgCodePanelMarkdown = await $('#sg-code-panel-markdown');
 
@@ -429,6 +528,157 @@ menu anchor.</p>
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('636px');
         expect(await sgViewContainer.getAttribute('class')).to.not.have.string('anim-ready');
       });
+
+      it('"ctrl+alt+l" docks the viewer to the right', async () => {
+        const sgFormLabel = await $('#sg-form-label');
+        const sgSizeW = await $('#sg-size-w');
+
+        await sgFormLabel.waitForClickable();
+        await sgFormLabel.click();
+        await sgSizeW.waitForClickable();
+        await sgSizeW.click();
+        await browser.keys(['Control', 'Shift', 'c']);
+        await browser.pause(pauseLg);
+
+        const patternlabBody = await $('#patternlab-body');
+        const sgViewport = await $('#sg-viewport');
+
+        expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-right');
+        expect((await sgViewport.getSize()).width).to.equal(1024);
+
+        await browser.keys(['Control', 'Alt', 'l']);
+        await browser.pause(pauseLg);
+
+        const sgViewContainer = await $('#sg-view-container');
+
+        expect(await patternlabBody.getAttribute('class')).to.have.string('dock-right');
+        expect((await sgViewContainer.getSize()).width).to.equal(512);
+      });
+
+      it('"ctrl+alt+j" docks the viewer to the bottom', async () => {
+        const patternlabBody = await $('#patternlab-body');
+        const sgViewport = await $('#sg-viewport');
+
+        expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-bottom');
+        expect((await sgViewport.getSize()).width).to.equal(498);
+
+        await browser.keys(['Control', 'Alt', 'j']);
+        await browser.pause(pauseLg);
+
+        const sgViewContainer = await $('#sg-view-container');
+
+        expect(await patternlabBody.getAttribute('class')).to.have.string('dock-bottom');
+        expect((await sgViewContainer.getSize()).width).to.equal(1024);
+      });
+
+      it('"ctrl+alt+h" docks the viewer to the left', async () => {
+        const sgFormLabel = await $('#sg-form-label');
+        const sgSizeW = await $('#sg-size-w');
+
+        await sgFormLabel.waitForClickable();
+        await sgFormLabel.click();
+        await sgSizeW.waitForClickable();
+        await sgSizeW.click();
+        await browser.keys(['Control', 'Shift', 'c']);
+        await browser.pause(pauseLg);
+
+        const patternlabBody = await $('#patternlab-body');
+        const sgViewport = await $('#sg-viewport');
+
+        expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-left');
+        expect((await sgViewport.getSize()).width).to.equal(1024);
+
+        await browser.keys(['Control', 'Alt', 'h']);
+        await browser.pause(pauseLg);
+
+        const sgViewContainer = await $('#sg-view-container');
+
+        expect(await patternlabBody.getAttribute('class')).to.have.string('dock-left');
+        expect((await sgViewContainer.getSize()).width).to.equal(512);
+      });
+
+      it('"ctrl+shift+]" switches to the next code viewer tab/panel', async () => {
+        const sgCodeTabFeplet = await $('#sg-code-tab-feplet');
+        const sgCodeTabMarkdown = await $('#sg-code-tab-markdown');
+        const sgCodePanelFeplet = await $('#sg-code-panel-feplet');
+        const sgCodePanelMarkdown = await $('#sg-code-panel-markdown');
+
+        await sgCodeTabFeplet.waitForClickable();
+        await sgCodeTabFeplet.click();
+
+        expect(await sgCodeTabFeplet.getAttribute('class')).to.have.string('sg-code-tab-active');
+        expect(await sgCodeTabMarkdown.getAttribute('class')).to.not.have.string('sg-code-tab-active');
+        expect(await sgCodePanelFeplet.getAttribute('class')).to.have.string('sg-code-panel-active');
+        expect(await sgCodePanelMarkdown.getAttribute('class')).to.not.have.string('sg-code-panel-active');
+
+        await browser.keys(['Control', 'Shift', ']']);
+        await browser.pause(pauseMd);
+
+        expect(await sgCodeTabFeplet.getAttribute('class')).to.not.have.string('sg-code-tab-active');
+        expect(await sgCodeTabMarkdown.getAttribute('class')).to.have.string('sg-code-tab-active');
+        expect(await sgCodePanelFeplet.getAttribute('class')).to.not.have.string('sg-code-panel-active');
+        expect(await sgCodePanelMarkdown.getAttribute('class')).to.have.string('sg-code-panel-active');
+      });
+
+      it('"ctrl+shift+[" switches to the previous code viewer tab/panel', async () => {
+        const sgCodeTabFeplet = await $('#sg-code-tab-feplet');
+        const sgCodeTabMarkdown = await $('#sg-code-tab-markdown');
+        const sgCodePanelFeplet = await $('#sg-code-panel-feplet');
+        const sgCodePanelMarkdown = await $('#sg-code-panel-markdown');
+
+        expect(await sgCodeTabFeplet.getAttribute('class')).to.not.have.string('sg-code-tab-active');
+        expect(await sgCodeTabMarkdown.getAttribute('class')).to.have.string('sg-code-tab-active');
+        expect(await sgCodePanelFeplet.getAttribute('class')).to.not.have.string('sg-code-panel-active');
+        expect(await sgCodePanelMarkdown.getAttribute('class')).to.have.string('sg-code-panel-active');
+
+        await browser.keys(['Control', 'Shift', '[']);
+        await browser.pause(pauseMd);
+
+        expect(await sgCodeTabFeplet.getAttribute('class')).to.have.string('sg-code-tab-active');
+        expect(await sgCodeTabMarkdown.getAttribute('class')).to.not.have.string('sg-code-tab-active');
+        expect(await sgCodePanelFeplet.getAttribute('class')).to.have.string('sg-code-panel-active');
+        expect(await sgCodePanelMarkdown.getAttribute('class')).to.not.have.string('sg-code-panel-active');
+      });
+
+      it('"ctrl+shift+[" switches to the last code viewer tab/panel if on the first tab/panel', async () => {
+        const sgCodeTabFirst = await $('.sg-code-tab:first-child');
+        const sgCodeTabLast = await $('.sg-code-tab:last-child');
+        const sgCodePanelFirst = await $('.sg-code-panel:first-child');
+        const sgCodePanelLast = await $('.sg-code-panel:last-child');
+
+        expect(await sgCodeTabFirst.getAttribute('class')).to.have.string('sg-code-tab-active');
+        expect(await sgCodeTabLast.getAttribute('class')).to.not.have.string('sg-code-tab-active');
+        expect(await sgCodePanelFirst.getAttribute('class')).to.have.string('sg-code-panel-active');
+        expect(await sgCodePanelLast.getAttribute('class')).to.not.have.string('sg-code-panel-active');
+
+        await browser.keys(['Control', 'Shift', '[']);
+        await browser.pause(pauseMd);
+
+        expect(await sgCodeTabFirst.getAttribute('class')).to.not.have.string('sg-code-tab-active');
+        expect(await sgCodeTabLast.getAttribute('class')).to.have.string('sg-code-tab-active');
+        expect(await sgCodePanelFirst.getAttribute('class')).to.not.have.string('sg-code-panel-active');
+        expect(await sgCodePanelLast.getAttribute('class')).to.have.string('sg-code-panel-active');
+      });
+
+      it('"ctrl+shift+]" switches to the first code viewer tab/panel if on the last tab/panel', async () => {
+        const sgCodeTabFirst = await $('.sg-code-tab:first-child');
+        const sgCodeTabLast = await $('.sg-code-tab:last-child');
+        const sgCodePanelFirst = await $('.sg-code-panel:first-child');
+        const sgCodePanelLast = await $('.sg-code-panel:last-child');
+
+        expect(await sgCodeTabFirst.getAttribute('class')).to.not.have.string('sg-code-tab-active');
+        expect(await sgCodeTabLast.getAttribute('class')).to.have.string('sg-code-tab-active');
+        expect(await sgCodePanelFirst.getAttribute('class')).to.not.have.string('sg-code-panel-active');
+        expect(await sgCodePanelLast.getAttribute('class')).to.have.string('sg-code-panel-active');
+
+        await browser.keys(['Control', 'Shift', ']']);
+        await browser.pause(pauseMd);
+
+        expect(await sgCodeTabFirst.getAttribute('class')).to.have.string('sg-code-tab-active');
+        expect(await sgCodeTabLast.getAttribute('class')).to.not.have.string('sg-code-tab-active');
+        expect(await sgCodePanelFirst.getAttribute('class')).to.have.string('sg-code-panel-active');
+        expect(await sgCodePanelLast.getAttribute('class')).to.not.have.string('sg-code-panel-active');
+      });
     });
   });
 
@@ -439,15 +689,8 @@ menu anchor.</p>
       });
 
       it('hot-links partial tags and redirects to the partial\'s pattern page', async () => {
-        const sgTToggle = await $('#sg-t-toggle');
-        const sgTCode = await $('#sg-t-code');
         const sgCodeTabFeplet = await $('#sg-code-tab-feplet');
 
-        await sgTToggle.waitForClickable();
-        await sgTToggle.click();
-        await sgTCode.waitForClickable();
-        await sgTCode.click();
-        await browser.pause(pauseMd);
         await sgCodeTabFeplet.waitForClickable();
         await sgCodeTabFeplet.click();
         await browser.switchToFrame(await $('#sg-code-panel-feplet'));
@@ -559,6 +802,7 @@ menu anchor.</p>
 
         await sgSizeW.waitForClickable();
         await sgSizeW.click();
+        await browser.pause(pauseLg);
 
         const sgViewport = await $('#sg-viewport');
 

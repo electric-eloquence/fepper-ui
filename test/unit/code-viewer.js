@@ -394,24 +394,6 @@ describe('codeViewer', function () {
           expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
         });
     });
-
-    it('activates the Requerio tab and panel - also tests .setPanelContent()', function () {
-      const panelStateBefore = $orgs['#sg-code-panel-requerio'].getState();
-      const tabStateBefore = $orgs['#sg-code-tab-requerio'].getState();
-      codeViewer.patternPartial = 'components-region';
-
-      return codeViewer.activateTabAndPanel('requerio')
-        .then(() => {
-          const panelStateAfter = $orgs['#sg-code-panel-requerio'].getState();
-          const tabStateAfter = $orgs['#sg-code-tab-requerio'].getState();
-
-          expect(panelStateBefore.classArray).to.not.include('sg-code-panel-active');
-          expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
-
-          expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
-          expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
-        });
-    });
   });
 
   describe('.activateMarkdownTextarea()', function () {

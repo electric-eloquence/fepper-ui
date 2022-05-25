@@ -821,6 +821,7 @@ export default class CodeViewer {
       }
       case 'requerio': {
         // TODO: Inspect Requerio organisms.
+        /* istanbul ignore next */
         return Promise.resolve();
       }
     }
