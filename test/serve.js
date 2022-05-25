@@ -248,7 +248,7 @@ module.exports = new Promise((resolve) => {
     <main id="" class="mustache-browser__main">
       <div id="message" class="message "></div>
 <pre><code class="language-markup">{{{ content }}}
-<a href="/?p=templates-page" target="_top" data-path="patterns/03-templates-page/03-templates-page.html" data-patternpartial="templates-page" class="mustache-browser__link">{{> 03-templates/page }}</a>
+<a href="/?p=templates-page" target="_top" data-path="patterns/03-templates-page/03-templates-page.html" data-pattern-partial="templates-page" class="mustache-browser__link">{{> 03-templates/page }}</a>
 </code></pre>
 
     </main>

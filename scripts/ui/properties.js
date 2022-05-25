@@ -27,8 +27,8 @@ export default class UiProps {
     // Modes.
     this.discoMode = false;
     this.growMode = false;
-    this.halfMode = null; // Set later.
-    this.wholeMode = null; // Set later.
+    this.halfMode = null;
+    this.wholeMode = null;
 
     // Right pullbar drag state.
     this.sgRightpull = {
@@ -41,9 +41,11 @@ export default class UiProps {
     this.dockPosition = 'bottom';
     this.growId = 0;
     this.isMobile = 'ontouchstart' in root && this.sw <= 1024;
+    this.lastViewed = null;
     // Any change to sgRightpullWidth needs to be replicated in ui/core/styleguide/index/html/01-body/40-main/main.css
     // in fepper-npm in order to be compiled into styles/ui.css with a consistent width.
     this.sgRightpullWidth = this.isMobile ? 0 : 14;
+    this.tabActive = null;
     this.timeoutDefault = 200;
     this.titleSeparator = ' : ';
     this.viewall = false;

@@ -6,7 +6,8 @@ const $orgs = fepperUi.requerio.$orgs;
 const {
   annotationsViewer,
   codeViewer,
-  dataSaver
+  dataSaver,
+  uiProps
 } = fepperUi;
 
 const timeout = 10;
@@ -232,6 +233,54 @@ describe('codeViewer', function () {
       expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
     });
 
+    it('activates Markdown tab and panel for viewall but without the option to edit', function () {
+      global.location.search = '?p=viewall-pages';
+
+      codeViewer.stoke();
+
+      return codeViewer.activateTabAndPanel('feplet')
+        .then(() => {
+          const panelStateBefore = $orgs['#sg-code-panel-markdown'].getState();
+          const tabStateBefore = $orgs['#sg-code-tab-markdown'].getState();
+          const paneMarkdownStateBefore = $orgs['#sg-code-pane-markdown'].getState();
+          const paneMarkdownEditStateBefore = $orgs['#sg-code-pane-markdown-edit'].getState();
+
+          codeViewer.receiveIframeMessage({
+            origin: 'http://localhost:3000',
+            data: {
+              lineage: [{
+                lineagePattern: 'templates-page',
+                lineagePath: 'patterns/03-templates-page/03-templates-page.html',
+                isHidden: false
+              }],
+              lineageR: [],
+              missingPartials: [],
+              patternPartial: 'pages-homepage',
+              patternState: '',
+              viewall: true
+            }
+          });
+
+          expect(panelStateBefore.classArray).to.not.include('sg-code-panel-active');
+          expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
+          expect(paneMarkdownStateBefore.css.display).to.be.undefined;
+          expect(paneMarkdownEditStateBefore.css.display).to.be.undefined;
+
+          return codeViewer.activateTabAndPanel('markdown');
+        })
+        .then(() => {
+          const panelStateAfter = $orgs['#sg-code-panel-markdown'].getState();
+          const tabStateAfter = $orgs['#sg-code-tab-markdown'].getState();
+          const paneMarkdownStateAfter = $orgs['#sg-code-pane-markdown'].getState();
+          const paneMarkdownEditStateAfter = $orgs['#sg-code-pane-markdown-edit'].getState();
+
+          expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
+          expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
+          expect(paneMarkdownStateAfter.css.display).to.equal('block');
+          expect(paneMarkdownEditStateAfter.css.display).to.be.undefined;
+        });
+    });
+
     it('activates Git tab and panel but does not set panel content if not stoked', function () {
       global.mockResponse = {
         gatekeeper_status: 200,
@@ -341,24 +390,6 @@ describe('codeViewer', function () {
           expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
 
           expect(paneStateAfter.html).to.be.null;
-          expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
-          expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
-        });
-    });
-
-    it('activates the Requerio tab and panel - also tests .setPanelContent()', function () {
-      const panelStateBefore = $orgs['#sg-code-panel-requerio'].getState();
-      const tabStateBefore = $orgs['#sg-code-tab-requerio'].getState();
-      codeViewer.patternPartial = 'components-region';
-
-      return codeViewer.activateTabAndPanel('requerio')
-        .then(() => {
-          const panelStateAfter = $orgs['#sg-code-panel-requerio'].getState();
-          const tabStateAfter = $orgs['#sg-code-tab-requerio'].getState();
-
-          expect(panelStateBefore.classArray).to.not.include('sg-code-panel-active');
-          expect(tabStateBefore.classArray).to.not.include('sg-code-tab-active');
-
           expect(panelStateAfter.classArray).to.include('sg-code-panel-active');
           expect(tabStateAfter.classArray).to.include('sg-code-tab-active');
         });
@@ -835,6 +866,113 @@ describe('codeViewer', function () {
     });
   });
 
+  describe('.switchTab()', function () {
+    before(function (done) {
+      codeViewer.openCode();
+
+      setTimeout(() => {
+        codeViewer.activateTabAndPanel('feplet')
+          .then(() => {
+            done();
+          });
+      }, timeout);
+    });
+
+    after(function (done) {
+      codeViewer.closeCode();
+
+      setTimeout(() => {
+        done();
+      }, timeout);
+    });
+
+    it('switches to the second tab/panel when switching to the right of the first tab/panel', function () {
+      global.mockResponse = {
+        gatekeeper_status: 200
+      };
+
+      const sgCodeTabState0Before = $orgs['.sg-code-tab'].getState(0);
+      const sgCodeTabState1Before = $orgs['.sg-code-tab'].getState(1);
+
+      expect(sgCodeTabState0Before.classArray).to.include('sg-code-tab-active');
+      expect(sgCodeTabState1Before.classArray).to.not.include('sg-code-tab-active');
+
+      codeViewer.switchTab(1);
+
+      const sgCodeTabState0After = $orgs['.sg-code-tab'].getState(0);
+      const sgCodeTabState1After = $orgs['.sg-code-tab'].getState(1);
+
+      expect(sgCodeTabState0After.classArray).to.not.include('sg-code-tab-active');
+      expect(sgCodeTabState1After.classArray).to.include('sg-code-tab-active');
+    });
+
+    it('switches to the first tab/panel when switching to the left of the second tab/panel', function () {
+      global.mockResponse = {
+        gatekeeper_status: 200
+      };
+
+      const sgCodeTabState0Before = $orgs['.sg-code-tab'].getState(0);
+      const sgCodeTabState1Before = $orgs['.sg-code-tab'].getState(1);
+
+      expect(sgCodeTabState0Before.classArray).to.not.include('sg-code-tab-active');
+      expect(sgCodeTabState1Before.classArray).to.include('sg-code-tab-active');
+
+      codeViewer.switchTab(-1);
+
+      const sgCodeTabState0After = $orgs['.sg-code-tab'].getState(0);
+      const sgCodeTabState1After = $orgs['.sg-code-tab'].getState(1);
+
+      expect(sgCodeTabState0After.classArray).to.include('sg-code-tab-active');
+      expect(sgCodeTabState1After.classArray).to.not.include('sg-code-tab-active');
+    });
+
+    it('switches to the last tab/panel when switching to the left of the first tab/panel', function () {
+      global.mockResponse = {
+        gatekeeper_status: 200
+      };
+
+      const numberOfTabs = $orgs['.sg-code-tab'].getState().members;
+      const lastIndex = numberOfTabs - 1;
+
+      const sgCodeTabState0Before = $orgs['.sg-code-tab'].getState(0);
+      const sgCodeTabStateLastBefore = $orgs['.sg-code-tab'].getState(lastIndex);
+
+      expect(sgCodeTabState0Before.classArray).to.include('sg-code-tab-active');
+      expect(sgCodeTabStateLastBefore.classArray).to.not.include('sg-code-tab-active');
+
+      codeViewer.switchTab(-1);
+
+      const sgCodeTabState0After = $orgs['.sg-code-tab'].getState(0);
+      const sgCodeTabStateLastAfter = $orgs['.sg-code-tab'].getState(lastIndex);
+
+      expect(sgCodeTabState0After.classArray).to.not.include('sg-code-tab-active');
+      expect(sgCodeTabStateLastAfter.classArray).to.include('sg-code-tab-active');
+    });
+
+    it('switches to the first tab/panel when switching to the right of the last tab/panel', function () {
+      global.mockResponse = {
+        gatekeeper_status: 200
+      };
+
+      const numberOfTabs = $orgs['.sg-code-tab'].getState().members;
+      const lastIndex = numberOfTabs - 1;
+
+      const sgCodeTabState0Before = $orgs['.sg-code-tab'].getState(0);
+      const sgCodeTabStateLastBefore = $orgs['.sg-code-tab'].getState(lastIndex);
+
+      expect(sgCodeTabState0Before.classArray).to.not.include('sg-code-tab-active');
+      expect(sgCodeTabStateLastBefore.classArray).to.include('sg-code-tab-active');
+
+      codeViewer.switchTab(1);
+
+      const sgCodeTabState0After = $orgs['.sg-code-tab'].getState(0);
+      const sgCodeTabStateLastAfter = $orgs['.sg-code-tab'].getState(lastIndex);
+
+      expect(sgCodeTabState0After.classArray).to.include('sg-code-tab-active');
+      expect(sgCodeTabStateLastAfter.classArray).to.not.include('sg-code-tab-active');
+    });
+  });
+
   describe('.toggleCode()', function () {
     after(function (done) {
       codeViewer.closeCode();
@@ -949,7 +1087,7 @@ describe('codeViewer', function () {
 
   describe('.updateMetadata()', function () {
     beforeEach(function () {
-      $orgs['#sg-code-container'].dispatchAction('attr', {'data-patternpartial': null});
+      $orgs['#sg-code-container'].dispatchAction('attr', {'data-pattern-partial': null});
       $orgs['#sg-code-pattern-info-state'].dispatchAction('html', null);
       $orgs['#sg-code-lineage'].dispatchAction('css', {display: 'inline'});
       $orgs['#sg-code-lineage-fill'].dispatchAction('html', null);
@@ -1175,7 +1313,8 @@ describe('codeViewer', function () {
         lineageR: [],
         missingPartials: [],
         patternPartial: 'pages-homepage',
-        patternState: ''
+        patternState: '',
+        viewall: false
       };
 
       $orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
@@ -1197,7 +1336,7 @@ describe('codeViewer', function () {
 
     it('updates code when submitting pattern data from viewall', function () {
       codeViewer.closeCode();
-      $orgs['#sg-code-container'].dispatchAction('attr', {'data-patternpartial': ''});
+      $orgs['#sg-code-container'].dispatchAction('attr', {'data-pattern-partial': ''});
       $orgs['#sg-code-pattern-info-state'].dispatchAction('html', '');
       $orgs['#sg-code-lineage'].dispatchAction('css', {display: 'inline'});
       $orgs['#sg-code-lineage-fill'].dispatchAction('html', '');
@@ -1257,7 +1396,7 @@ describe('codeViewer', function () {
 
     it('removes viewall styling when submitting data from pattern and not viewall', function () {
       codeViewer.closeCode();
-      $orgs['#sg-code-container'].dispatchAction('attr', {'data-patternpartial': ''});
+      $orgs['#sg-code-container'].dispatchAction('attr', {'data-pattern-partial': ''});
       $orgs['#sg-code-pattern-info-state'].dispatchAction('html', '');
       $orgs['#sg-code-lineage'].dispatchAction('css', {display: 'inline'});
       $orgs['#sg-code-lineage-fill'].dispatchAction('html', '');
@@ -1416,6 +1555,164 @@ describe('codeViewer', function () {
         expect(patternlabBodyAfter.classArray).to.include('dock-open');
         expect(sgTCodeAfter.classArray).to.include('active');
         expect(sgViewContainerAfter.classArray).to.include('anim-ready');
+
+        done();
+      }, timeout);
+    });
+
+    it('switches to the next tab/panel with patternlab.keyPress "ctrl+shift+]"', function () {
+      global.mockResponse = {
+        gatekeeper_status: 200
+      };
+      event.data = {
+        event: 'patternlab.keyPress',
+        keyPress: 'ctrl+shift+]'
+      };
+
+      const sgCodeTabState0Before = $orgs['.sg-code-tab'].getState(0);
+      const sgCodeTabState1Before = $orgs['.sg-code-tab'].getState(1);
+
+      expect(sgCodeTabState0Before.classArray).to.include('sg-code-tab-active');
+      expect(sgCodeTabState1Before.classArray).to.not.include('sg-code-tab-active');
+
+      codeViewer.receiveIframeMessage(event);
+
+      const sgCodeTabState0After = $orgs['.sg-code-tab'].getState(0);
+      const sgCodeTabState1After = $orgs['.sg-code-tab'].getState(1);
+
+      expect(sgCodeTabState0After.classArray).to.not.include('sg-code-tab-active');
+      expect(sgCodeTabState1After.classArray).to.include('sg-code-tab-active');
+    });
+
+    it('switches to the next tab/panel with patternlab.keyPress "ctrl+shift+["', function () {
+      global.mockResponse = {
+        gatekeeper_status: 200
+      };
+      event.data = {
+        event: 'patternlab.keyPress',
+        keyPress: 'ctrl+shift+['
+      };
+
+      const sgCodeTabState0Before = $orgs['.sg-code-tab'].getState(0);
+      const sgCodeTabState1Before = $orgs['.sg-code-tab'].getState(1);
+
+      expect(sgCodeTabState0Before.classArray).to.not.include('sg-code-tab-active');
+      expect(sgCodeTabState1Before.classArray).to.include('sg-code-tab-active');
+
+      codeViewer.receiveIframeMessage(event);
+
+      const sgCodeTabState0After = $orgs['.sg-code-tab'].getState(0);
+      const sgCodeTabState1After = $orgs['.sg-code-tab'].getState(1);
+
+      expect(sgCodeTabState0After.classArray).to.include('sg-code-tab-active');
+      expect(sgCodeTabState1After.classArray).to.not.include('sg-code-tab-active');
+    });
+
+    it('docks the Code Viewer to the left with patternlab.keyPress "ctrl+alt+h"', function (done) {
+      event.data = {
+        event: 'patternlab.keyPress',
+        keyPress: 'ctrl+alt+h'
+      };
+      const dataSaverDockPositionBefore = dataSaver.findValue('dockPosition');
+      const dataSaverHalfModeBefore = dataSaver.findValue('halfMode');
+      const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
+      const uiPropsDockPositionBefore = uiProps.dockPosition;
+      const uiPropsHalfModeBefore = uiProps.halfMode;
+
+      codeViewer.receiveIframeMessage(event);
+
+      setTimeout(() => {
+        const dataSaverDockPositionAfter = dataSaver.findValue('dockPosition');
+        const dataSaverHalfModeAfter = dataSaver.findValue('halfMode');
+        const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+        const uiPropsDockPositionAfter = uiProps.dockPosition;
+        const uiPropsHalfModeAfter = uiProps.halfMode;
+
+        expect(dataSaverDockPositionBefore).to.not.equal('left');
+        expect(dataSaverHalfModeBefore).to.not.equal('true');
+        expect(patternlabBodyBefore.classArray).to.not.include('dock-left');
+        expect(uiPropsDockPositionBefore).to.not.equal('left');
+        expect(uiPropsHalfModeBefore).to.not.be.true;
+
+        expect(dataSaverDockPositionAfter).to.equal('left');
+        expect(dataSaverHalfModeAfter).to.equal('true');
+        expect(patternlabBodyAfter.classArray).to.include('dock-left');
+        expect(uiPropsDockPositionAfter).to.equal('left');
+        expect(uiPropsHalfModeAfter).to.be.true;
+
+        done();
+      }, timeout);
+    });
+
+    it('docks the Code Viewer to the right with patternlab.keyPress "ctrl+alt+l"', function (done) {
+      dataSaver.removeValue('halfMode');
+
+      event.data = {
+        event: 'patternlab.keyPress',
+        keyPress: 'ctrl+alt+l'
+      };
+      uiProps.halfMode = false;
+      const dataSaverDockPositionBefore = dataSaver.findValue('dockPosition');
+      const dataSaverHalfModeBefore = dataSaver.findValue('halfMode');
+      const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
+      const uiPropsDockPositionBefore = uiProps.dockPosition;
+      const uiPropsHalfModeBefore = uiProps.halfMode;
+
+      codeViewer.receiveIframeMessage(event);
+
+      setTimeout(() => {
+        const dataSaverDockPositionAfter = dataSaver.findValue('dockPosition');
+        const dataSaverHalfModeAfter = dataSaver.findValue('halfMode');
+        const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+        const uiPropsDockPositionAfter = uiProps.dockPosition;
+        const uiPropsHalfModeAfter = uiProps.halfMode;
+
+        expect(dataSaverDockPositionBefore).to.not.equal('right');
+        expect(dataSaverHalfModeBefore).to.not.equal('true');
+        expect(patternlabBodyBefore.classArray).to.not.include('dock-right');
+        expect(uiPropsDockPositionBefore).to.not.equal('right');
+        expect(uiPropsHalfModeBefore).to.not.be.true;
+
+        expect(dataSaverDockPositionAfter).to.equal('right');
+        expect(dataSaverHalfModeAfter).to.equal('true');
+        expect(patternlabBodyAfter.classArray).to.include('dock-right');
+        expect(uiPropsDockPositionAfter).to.equal('right');
+        expect(uiPropsHalfModeAfter).to.be.true;
+
+        done();
+      }, timeout);
+    });
+
+    it('docks the Code Viewer to the bottom with patternlab.keyPress "ctrl+alt+j"', function (done) {
+      event.data = {
+        event: 'patternlab.keyPress',
+        keyPress: 'ctrl+alt+j'
+      };
+      const dataSaverDockPositionBefore = dataSaver.findValue('dockPosition');
+      const dataSaverHalfModeBefore = dataSaver.findValue('halfMode');
+      const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
+      const uiPropsDockPositionBefore = uiProps.dockPosition;
+
+      codeViewer.receiveIframeMessage(event);
+
+      setTimeout(() => {
+        const dataSaverDockPositionAfter = dataSaver.findValue('dockPosition');
+        const dataSaverHalfModeAfter = dataSaver.findValue('halfMode');
+        const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
+        const uiPropsDockPositionAfter = uiProps.dockPosition;
+        const uiPropsHalfModeAfter = uiProps.halfMode;
+
+        expect(dataSaverDockPositionBefore).to.not.equal('bottom');
+        expect(dataSaverHalfModeBefore).to.not.be.null;
+        expect(patternlabBodyBefore.classArray).to.not.include('dock-bottom');
+        expect(uiPropsDockPositionBefore).to.not.equal('bottom');
+        expect(uiPropsDockPositionBefore).to.not.be.false;
+
+        expect(dataSaverDockPositionAfter).to.equal('bottom');
+        expect(dataSaverHalfModeAfter).to.be.null;
+        expect(patternlabBodyAfter.classArray).to.include('dock-bottom');
+        expect(uiPropsDockPositionAfter).to.equal('bottom');
+        expect(uiPropsHalfModeAfter).to.be.false;
 
         done();
       }, timeout);

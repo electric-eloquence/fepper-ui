@@ -212,7 +212,7 @@ export default class CodeViewer {
       });
     });
 
-    // Toggle the code panel.
+    // Toggle the code viewer.
     window.Mousetrap.bind('ctrl+shift+c', (e) => {
       this.#fepperUi.codeViewer.toggleCode();
 
@@ -220,6 +220,56 @@ export default class CodeViewer {
       return false;
     });
 
-    // TODO: Create keyboard shortcuts to switch between Feplet, Markdown, Requerio, and Git tabs.
+    // Focus on the tab to the left (or cycle to to the end).
+    window.Mousetrap.bind('ctrl+shift+[', (e) => {
+      this.#fepperUi.codeViewer.switchTab(-1);
+
+      e.preventDefault();
+      return false;
+    });
+
+    // Focus on the tab to the right (or cycle to the beginning).
+    window.Mousetrap.bind('ctrl+shift+]', (e) => {
+      this.#fepperUi.codeViewer.switchTab(1);
+
+      e.preventDefault();
+      return false;
+    });
+
+    // Dock code viewer to the left.
+    window.Mousetrap.bind('ctrl+alt+h', (e) => {
+      const dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
+
+      if (dockOpen) {
+        this.#fepperUi.viewerHandler.dockLeft();
+      }
+
+      e.preventDefault();
+      return false;
+    });
+
+    // Dock code viewer to the bottom.
+    window.Mousetrap.bind('ctrl+alt+j', (e) => {
+      const dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
+
+      if (dockOpen) {
+        this.#fepperUi.viewerHandler.dockBottom();
+      }
+
+      e.preventDefault();
+      return false;
+    });
+
+    // Dock code viewer to the right.
+    window.Mousetrap.bind('ctrl+alt+l', (e) => {
+      const dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
+
+      if (dockOpen) {
+        this.#fepperUi.viewerHandler.dockRight();
+      }
+
+      e.preventDefault();
+      return false;
+    });
   }
 }

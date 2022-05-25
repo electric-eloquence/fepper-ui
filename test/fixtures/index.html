@@ -43,7 +43,7 @@
         <a
           href="{{ pathsPublic.patterns }}/{{ patternLink }}"
           class="sg-pop {{# patternState }}sg-pattern-state {{ patternState }}{{/ patternState }}"
-          data-patternpartial="{{ patternPartial }}"
+          data-pattern-partial="{{ patternPartial }}"
         >{{ patternName }}</a>
       </li>
     {{/ patternSubTypeItems }}
@@ -54,13 +54,13 @@
       <a
         href="{{ pathsPublic.patterns }}/{{ patternLink }}"
         class="sg-pop {{# patternState }}sg-pattern-state {{ patternState }}{{/ patternState }}"
-        data-patternpartial="{{ patternPartial }}"
+        data-pattern-partial="{{ patternPartial }}"
       >{{ patternName }}</a>
     </li>
   {{/ patternTypeItems }}
   </ul></li>
 {{/ patternTypes }}
-<li><a href="{{ pathsPublic.patterns }}/viewall/viewall.html" class="sg-pop" data-patternpartial="viewall">All</a></li>
+<li><a href="{{ pathsPublic.patterns }}/viewall/index.html" class="sg-pop" data-pattern-partial="viewall">All</a></li>
 </ul></div><ul class="sg-controls visually-hidden" id="sg-controls"><li class="sg-size">
 <div class="sg-current-size">
   <form id="sg-form">
@@ -173,7 +173,7 @@
   <li id="sg-code-tab-feplet" class="sg-code-tab sg-code-tab-active" title="Browse Fepper's Mustache templates">Feplet</li>
   <li id="sg-code-tab-markdown" class="sg-code-tab" title="Edit this pattern's Markdown content">Markdown</li>
   <li id="sg-code-tab-git" class="sg-code-tab" title="Download and upload revisions to this project">Git</li>
-  <li id="sg-code-tab-requerio" class="sg-code-tab" title="Inspect this pattern's Requerio states">Requerio</li>
+  
 </ul>
 <div id="sg-code-panels">
   <iframe id="sg-code-panel-feplet" class="sg-code-panel sg-code-panel-active" sandbox="allow-same-origin allow-scripts allow-top-navigation"></iframe>
@@ -201,8 +201,8 @@
       <button id="sg-code-btn-markdown-commit-cancel" class="sg-code-btn" title="Cancel">Cancel</button>
     </div>
     <div id="sg-code-pane-markdown-console" class="sg-code-pane">
-      <pre id="sg-code-console-markdown-log"></pre>
-      <pre id="sg-code-console-markdown-error"></pre>
+      <pre><code id="sg-code-console-markdown-log"></code></pre>
+      <pre><code id="sg-code-console-markdown-error"></code></pre>
       <button id="sg-code-btn-markdown-continue" class="sg-code-btn" title="Continue">Continue</button>
       <div id="sg-code-console-markdown-load-anim" class="sg-code-load-anim">
         <div></div><div></div><div></div><div></div>
@@ -233,11 +233,7 @@
     </div>
     <button id="sg-code-btn-git-disable" class="sg-code-btn" title="Disable Git Interface">Disable Git</button>
   </div>
-  <div id="sg-code-panel-requerio" class="sg-code-panel">
-    <div id="sg-code-pane-requerio-placeholder" class="sg-code-pane" style="display: block;">
-      <code>The Requerio Inspector is a work in progress. Please stay tuned as it comes to life!</code>
-    </div>
-  </div>
+  
 </div>
 </div><div class="sg-view-btns">
 <svg id="sg-view-btn-dock-left" class="sg-view-btn-dock-left sg-view-btn"

@@ -66,15 +66,58 @@ export default class CodeViewer {
       this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'viewall');
     }
 
+    let dockOpen;
+
     switch (data.event) {
       case 'patternlab.keyPress':
         switch (data.keyPress) {
+          // Toggle the code viewer.
           case 'ctrl+shift+c':
             this.toggleCode();
 
             break;
 
-            // TODO: Create keyboard shortcuts to switch between Feplet and Requerio tabs.
+          // Switch to the tab on the left (or cycle to the end).
+          case 'ctrl+shift+[':
+            this.switchTab(-1);
+
+            break;
+
+          // Switch to the tab on the right (or cycle to the beginning).
+          case 'ctrl+shift+]':
+            this.switchTab(1);
+
+            break;
+
+          // Dock code viewer to the left.
+          case 'ctrl+alt+h':
+            dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
+
+            if (dockOpen) {
+              this.viewerHandler.dockLeft();
+            }
+
+            break;
+
+          // Dock code viewer to the bottom.
+          case 'ctrl+alt+j':
+            dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
+
+            if (dockOpen) {
+              this.viewerHandler.dockBottom();
+            }
+
+            break;
+
+          // Dock code viewer to the right.
+          case 'ctrl+alt+l':
+            dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
+
+            if (dockOpen) {
+              this.viewerHandler.dockRight();
+            }
+
+            break;
 
           case 'esc':
             if (this.codeActive && this.uiProps.dockPosition === 'bottom') {
@@ -124,9 +167,11 @@ export default class CodeViewer {
     }
 
     if (data.lineage) {
-      this.updateMetadata(data.lineage, data.lineageR, data.patternPartial, data.patternState, data.missingPartials);
-      this.setPanelContent('feplet', data.patternPartial);
-      this.setPanelContent('markdown', data.patternPartial);
+      const {lineage, lineageR, missingPartials, patternPartial, patternState} = data;
+
+      this.updateMetadata(lineage, lineageR, patternPartial, patternState, missingPartials);
+      this.setPanelContent('feplet', patternPartial);
+      this.setPanelContent('markdown', patternPartial);
 
       const paneMarkdownNaDisplay = this.$orgs['#sg-code-pane-markdown-na'].getState().css.display;
       const paneMarkdownEditDisplay = this.$orgs['#sg-code-pane-markdown-edit'].getState().css.display;
@@ -266,13 +311,19 @@ export default class CodeViewer {
 
     switch (type) {
       case 'markdown': {
-        if (!this.patternPartial.startsWith('viewall')) {
+        // In viewalls, on page load, this.patternPartial will be for the first viewed pattern, not for the viewall.
+        // So get patternPartial from searchParams.
+        const searchParams = this.urlHandler.getSearchParams();
+        const patternPartial = (searchParams && searchParams.p) || this.patternPartial;
+
+        if (patternPartial.startsWith('viewall')) {
+          return this.setPanelContent(type)
+            .then(() => this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'}));
+        }
+        else {
           return this.setPanelContent(type)
             .then(() => this.gitPullMarkdown());
         }
-
-        /* istanbul ignore next */
-        break;
       }
       default: {
         return this.setPanelContent(type, this.patternPartial);
@@ -492,6 +543,7 @@ export default class CodeViewer {
                 const forbidden = doc.getElementById('forbidden');
                 const forbiddenClassName = forbidden.getAttribute('class');
 
+                forbidden.removeAttribute('id'); // To avoid having duplicates with id="forbidden".
                 forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
                 this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-warning');
                 this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('html', forbidden);
@@ -519,12 +571,14 @@ export default class CodeViewer {
   openCode() {
     // Flag that viewer is active.
     this.codeActive = true;
+    this.uiProps.lastViewer = 'code';
 
     // Make sure the annotations viewer is off before showing code.
     this.annotationsViewer.closeAnnotations();
     this.viewerHandler.openViewer();
     this.$orgs['#sg-t-code'].dispatchAction('addClass', 'active');
     this.$orgs['#sg-code-container'].dispatchAction('addClass', 'active');
+    this.dataSaver.updateValue('lastViewer', 'code');
 
     // If viewall, scroll to the focused pattern.
     /* istanbul ignore if */
@@ -642,6 +696,7 @@ export default class CodeViewer {
               this.markdownHttpPath = null;
               this.markdownSource = null;
 
+              forbidden.removeAttribute('id'); // To avoid having duplicates with id="forbidden".
               forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
               this.$orgs['#sg-code-tab-markdown'].dispatchAction('addClass', 'sg-code-tab-warning');
               this.$orgs['#sg-code-pane-markdown-na'].dispatchAction('html', forbidden);
@@ -739,6 +794,7 @@ export default class CodeViewer {
                 const forbidden = doc.getElementById('forbidden');
                 const forbiddenClassName = forbidden.getAttribute('class');
 
+                forbidden.removeAttribute('id'); // To avoid having duplicates with id="forbidden".
                 forbidden.setAttribute('class', forbiddenClassName + ' sg-code-pane-content-warning');
                 this.$orgs['#sg-code-tab-git'].dispatchAction('addClass', 'sg-code-tab-warning');
                 this.$orgs['#sg-code-pane-git-na'].dispatchAction('html', forbidden);
@@ -765,9 +821,54 @@ export default class CodeViewer {
       }
       case 'requerio': {
         // TODO: Inspect Requerio organisms.
+        /* istanbul ignore next */
         return Promise.resolve();
       }
     }
+  }
+
+  switchTab(offset) {
+    const sgCodeContainerState = this.$orgs['#sg-code-container'].getState();
+
+    /* istanbul ignore if */
+    if (!sgCodeContainerState.classArray.includes('active')) {
+      return;
+    }
+
+    const sgCodeTabState = this.$orgs['.sg-code-tab'].getState();
+
+    /* istanbul ignore if */
+    if (!sgCodeTabState || typeof sgCodeTabState.members !== 'number') {
+      return;
+    }
+
+    let activeCurrent;
+
+    for (let i = 0; i < sgCodeTabState.members; i++) {
+      const sgCodeTabClasses = this.$orgs['.sg-code-tab'].getState(i).classArray;
+
+      if (sgCodeTabClasses.includes('sg-code-tab-active')) {
+        activeCurrent = i;
+      }
+    }
+
+    /* istanbul ignore if */
+    if (typeof activeCurrent !== 'number') {
+      return;
+    }
+
+    let activeNew = activeCurrent + offset;
+
+    if (activeNew >= sgCodeTabState.members) {
+      activeNew = 0;
+    }
+    else if (activeNew < 0) {
+      activeNew = sgCodeTabState.members - 1;
+    }
+
+    const panels = ['feplet', 'markdown', 'git', 'requerio'];
+
+    this.activateTabAndPanel(panels[activeNew]);
   }
 
   /**

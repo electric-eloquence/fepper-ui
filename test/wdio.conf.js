@@ -56,7 +56,10 @@ exports.config = {
     //
     browserName: 'chrome',
     'goog:chromeOptions': {
-      args: ['--disable-gpu']
+      args: [
+        '--disable-gpu',
+        '--disable-gpu-program-cache'
+      ]
     }
     // If outputDir is provided WebdriverIO can capture driver session logs
     // it is possible to configure which logTypes to include/exclude.

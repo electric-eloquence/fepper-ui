@@ -129,7 +129,7 @@
           if (viewall) {
             for (const el of sgPatternToggleAnnotations) {
               if (el.classList.contains('focused')) {
-                patternPartial = el.dataset.patternpartial || '';
+                patternPartial = el.dataset.patternPartial || '';
 
                 if (!patternPartial) {
                   break;

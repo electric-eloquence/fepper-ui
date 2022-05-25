@@ -77,7 +77,7 @@
 
         this.classList.add('active');
 
-        const patternPartial = this.dataset.patternpartial;
+        const patternPartial = this.dataset.patternPartial;
         const patternDataEl = d.getElementById(`sg-pattern-data-${patternPartial}`);
         let patternData = {};
 
@@ -95,13 +95,13 @@
     });
   });
 
-  // Bind Mousetrap keyboard shortcuts using ctrl+shift.
+  // Bind Mousetrap keyboard shortcuts for the code viewer.
   const keys = [
-    'shift+c', // Toggle the code panel.
-    'shift+u', // Select the mustache tab.
-    'alt+m', // Select the mustache tab.
-    'shift+y', // Select the html tab.
-    'alt+h' // Select the html tab.
+    'shift+[', // Focus on the tab to the left (or cycle to to the end).
+    'shift+]', // Focus on the tab to the right (or cycle to the beginning).
+    'alt+h', // Dock code viewer to the left.
+    'alt+j', // Dock code viewer to the bottom.
+    'alt+l' // Dock code viewer to the right.
   ];
 
   for (const key of keys) {

@@ -26,7 +26,7 @@ export default class PatternlabViewer {
             path: window.$(this).attr('href')
           };
 
-          fepperUi.uiFns.updatePath(messageObj, this.dataset.patternpartial);
+          fepperUi.uiFns.updatePath(messageObj, this.dataset.patternPartial);
           fepperUi.uiFns.closeAllPanels();
         }
       );

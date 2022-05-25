@@ -57,8 +57,18 @@ export default class Listeners {
         // Set iframe width on halfMode === true.
         this.#fepperUi.uiFns
           .sizeIframe((this.#fepperUi.uiProps.sw / 2) - this.#fepperUi.uiProps.sgRightpullWidth, false, false, true);
-        // Open code viewer.
-        this.#fepperUi.codeViewer.openCode();
+
+        if (
+          this.#fepperUi.uiProps.lastViewer === 'annotations' ||
+          this.#fepperUi.dataSaver.findValue('lastViewer') === 'annotations'
+        ) {
+          // Open annotations viewer if last opened viewer was annotations.
+          this.#fepperUi.annotationsViewer.openAnnotations();
+        }
+        else {
+          // Open code viewer by default.
+          this.#fepperUi.codeViewer.openCode();
+        }
       }
       else if (vpWidth) {
         // .updateViewportWidth() also sizes the iframe, but with fewer bells and whistles.

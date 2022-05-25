@@ -1,18 +1,25 @@
+const pauseLg = 1000;
+const pauseMd = 500;
+
 describe('UI compilation of index page js', () => {
   describe('html/01-body/20-header/30-sg-nav-container/div.js', () => {
     describe('.sg-acc-handle', () => {
       it('click, smaller viewport', async () => {
+        const sgNavToggle = await $('.sg-nav-toggle');
+
+        await browser.setWindowSize(700, 768);
+        await sgNavToggle.waitForClickable();
+        await sgNavToggle.click();
+
+        const sgNavTarget = await $('#sg-nav-target');
         const sgAccHandle = await $('.sg-acc-handle');
         const sgAccPanel = await $('.sg-acc-panel');
 
-        await browser.setWindowSize(700, 768);
-        await (await $('.sg-nav-toggle')).click();
-
-        expect(await (await $('#sg-nav-target')).getAttribute('class')).to.have.string('active');
+        expect(await sgNavTarget.getAttribute('class')).to.have.string('active');
         expect(await sgAccHandle.getAttribute('class')).to.not.have.string('active');
         expect(await sgAccPanel.getAttribute('class')).to.not.have.string('active');
 
-        await browser.pause(100);
+        await sgAccHandle.waitForClickable();
         await sgAccHandle.click();
 
         expect(await sgAccHandle.getAttribute('class')).to.have.string('active');
@@ -28,6 +35,7 @@ describe('UI compilation of index page js', () => {
         expect(await sgAccHandle.getAttribute('class')).to.not.have.string('active');
         expect(await sgAccPanel.getAttribute('class')).to.not.have.string('active');
 
+        await sgAccHandle.waitForClickable();
         await sgAccHandle.click();
 
         expect(await sgAccHandle.getAttribute('class')).to.have.string('active');
@@ -48,6 +56,7 @@ describe('UI compilation of index page js', () => {
 
         expect(await sgNavTarget.getAttribute('class')).to.not.have.string('active');
 
+        await sgNavToggle.waitForClickable();
         await sgNavToggle.click();
 
         expect(await sgNavTarget.getAttribute('class')).to.have.string('active');
@@ -57,10 +66,12 @@ describe('UI compilation of index page js', () => {
         const sgNavToggle = await $('.sg-nav-toggle');
         const sgNavTarget = await $('#sg-nav-target');
 
+        await sgNavToggle.waitForClickable();
         await sgNavToggle.click();
 
         expect(await sgNavTarget.getAttribute('class')).to.have.string('active');
 
+        await sgNavToggle.waitForClickable();
         await sgNavToggle.click();
 
         expect(await sgNavTarget.getAttribute('class')).to.not.have.string('active');
@@ -75,6 +86,7 @@ describe('UI compilation of index page js', () => {
         const sgSize = await $('.sg-size');
 
         await browser.setWindowSize(767, 768);
+        await sgFormLabel.waitForClickable();
         await sgFormLabel.click();
 
         expect(await sgSize.getAttribute('class')).to.not.have.string('active');
@@ -85,10 +97,12 @@ describe('UI compilation of index page js', () => {
         const sgSize = await $('.sg-size');
 
         await browser.setWindowSize(768, 768);
+        await sgFormLabel.waitForClickable();
         await sgFormLabel.click();
 
         expect(await sgSize.getAttribute('class')).to.have.string('active');
 
+        await sgFormLabel.waitForClickable();
         await sgFormLabel.click();
 
         expect(await sgSize.getAttribute('class')).to.not.have.string('active');
@@ -99,6 +113,7 @@ describe('UI compilation of index page js', () => {
         const sgSize = await $('.sg-size');
 
         await browser.setWindowSize(1025, 768);
+        await sgFormLabel.waitForClickable();
         await sgFormLabel.click();
 
         expect(await sgSize.getAttribute('class')).to.not.have.string('active');
@@ -109,12 +124,13 @@ describe('UI compilation of index page js', () => {
         const sgSize = await $('.sg-size');
 
         await browser.setWindowSize(768, 768);
+        await sgFormLabel.waitForClickable();
         await sgFormLabel.click();
 
         expect(await sgSize.getAttribute('class')).to.have.string('active');
 
         await browser.setWindowSize(767, 768);
-        await browser.pause(150);
+        await browser.pause(pauseMd);
 
         expect(await sgSize.getAttribute('class')).to.not.have.string('active');
       });
@@ -124,12 +140,13 @@ describe('UI compilation of index page js', () => {
         const sgSize = await $('.sg-size');
 
         await browser.setWindowSize(768, 768);
+        await sgFormLabel.waitForClickable();
         await sgFormLabel.click();
 
         expect(await sgSize.getAttribute('class')).to.have.string('active');
 
         await browser.setWindowSize(1025, 768);
-        await browser.pause(150);
+        await browser.pause(pauseMd);
 
         expect(await sgSize.getAttribute('class')).to.not.have.string('active');
       });
@@ -144,6 +161,7 @@ describe('UI compilation of index page js', () => {
         const sgSizePx = await $('#sg-size-px');
         const sgViewport = await $('#sg-viewport');
 
+        await sgSizePx.waitForClickable();
         await sgSizePx.click();
 
         expect((await sgViewport.getSize()).width).to.equal(1025);
@@ -157,10 +175,11 @@ describe('UI compilation of index page js', () => {
         const sgSizePx = await $('#sg-size-px');
         const sgViewport = await $('#sg-viewport');
 
+        await sgSizePx.waitForClickable();
         await sgSizePx.click();
         await sgSizePx.doubleClick();
         await browser.elementSendKeys(sgSizePx.elementId, '1023\uE007');
-        await browser.pause(500);
+        await browser.pause(pauseMd);
 
         expect((await sgViewport.getSize()).width).to.equal(1023);
       });
@@ -169,6 +188,7 @@ describe('UI compilation of index page js', () => {
         const sgSizePx = await $('#sg-size-px');
         const sgViewport = await $('#sg-viewport');
 
+        await sgSizePx.waitForClickable();
         await sgSizePx.click();
 
         expect((await sgViewport.getSize()).width).to.equal(1023);
@@ -188,6 +208,7 @@ describe('UI compilation of index page js', () => {
         const sgSizeEm = await $('#sg-size-em');
         const sgViewport = await $('#sg-viewport');
 
+        await sgSizeEm.waitForClickable();
         await sgSizeEm.click();
 
         expect((await sgViewport.getSize()).width).to.equal(1024);
@@ -201,10 +222,11 @@ describe('UI compilation of index page js', () => {
         const sgSizeEm = await $('#sg-size-em');
         const sgViewport = await $('#sg-viewport');
 
+        await sgSizeEm.waitForClickable();
         await sgSizeEm.click();
         await sgSizeEm.doubleClick();
         await browser.elementSendKeys(sgSizeEm.elementId, '64.00\uE007');
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         expect((await sgViewport.getSize()).width).to.equal(1024);
       });
@@ -213,6 +235,7 @@ describe('UI compilation of index page js', () => {
         const sgSizeEm = await $('#sg-size-em');
         const sgViewport = await $('#sg-viewport');
 
+        await sgSizeEm.waitForClickable();
         await sgSizeEm.click();
 
         expect((await sgViewport.getSize()).width).to.equal(1024);
@@ -229,8 +252,11 @@ describe('UI compilation of index page js', () => {
       });
 
       it('resizes to whole width', async () => {
-        await (await $('#sg-size-w')).click();
-        await browser.pause(700);
+        const sgSizeW = await $('#sg-size-w');
+
+        await sgSizeW.waitForClickable();
+        await sgSizeW.click();
+        await browser.pause(pauseLg);
 
         expect((await (await $('#sg-viewport')).getSize()).width).to.equal(1025);
       });
@@ -243,10 +269,12 @@ describe('UI compilation of index page js', () => {
 
       it('resizes to a random width', async () => {
         const sgViewport = await $('#sg-viewport');
+        const sgSizeRandom = await $('#sg-size-random');
         const sgViewportWidthBefore = (await sgViewport.getSize()).width;
 
-        await (await $('#sg-size-random')).click();
-        await browser.pause(1000);
+        await sgSizeRandom.waitForClickable();
+        await sgSizeRandom.click();
+        await browser.pause(pauseLg);
 
         const sgViewportWidthAfter = (await sgViewport.getSize()).width;
 
@@ -267,21 +295,22 @@ describe('UI compilation of index page js', () => {
         const sgViewport = await $('#sg-viewport');
         const sgViewportWidth0 = (await sgViewport.getSize()).width;
 
+        await sgSizeDisco.waitForClickable();
         await sgSizeDisco.click();
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         const sgViewportWidth1 = (await sgViewport.getSize()).width;
 
         expect(sgViewportWidth0).to.not.equal(sgViewportWidth1);
 
         await sgSizeDisco.click();
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         const sgViewportWidth2 = (await sgViewport.getSize()).width;
 
         expect(sgViewportWidth1).to.not.equal(sgViewportWidth2);
 
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         const sgViewportWidth3 = (await sgViewport.getSize()).width;
 
@@ -299,21 +328,22 @@ describe('UI compilation of index page js', () => {
         const sgViewport = await $('#sg-viewport');
         const sgViewportWidth0 = (await sgViewport.getSize()).width;
 
+        await sgSizeGrow.waitForClickable();
         await sgSizeGrow.click();
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         const sgViewportWidth1 = (await sgViewport.getSize()).width;
 
         expect(sgViewportWidth0).to.not.equal(sgViewportWidth1);
 
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
         await sgSizeGrow.click();
 
         const sgViewportWidth2 = (await sgViewport.getSize()).width;
 
         expect(sgViewportWidth1).to.not.equal(sgViewportWidth2);
 
-        await browser.pause(1000);
+        await browser.pause(pauseLg);
 
         const sgViewportWidth3 = (await sgViewport.getSize()).width;
 
@@ -343,20 +373,26 @@ describe('UI compilation of index page js', () => {
       });
 
       it('click, smaller viewport', async () => {
-        const sgNavTarget = await $('#sg-nav-target');
-        const sgFToggle = await $('#sg-f-toggle');
-        const sgFind = await $('#sg-find');
-
         await browser.setWindowSize(700, 768);
+
+        const sgNavToggle = await $('.sg-nav-toggle');
 
         // Test that clicking this toggle closes previous toggle.
         // First toggle previous to active.
-        (await $('.sg-nav-toggle')).click();
+        sgNavToggle.waitForClickable();
+        sgNavToggle.click();
+
+        const sgNavTarget = await $('#sg-nav-target');
 
         expect(await sgNavTarget.getAttribute('class')).to.have.string('active');
 
+        const sgFToggle = await $('#sg-f-toggle');
+
         // Next click #sg-f-toggle and test that it toggled previous to inactive.
+        await sgFToggle.waitForClickable();
         await sgFToggle.click();
+
+        const sgFind = await $('#sg-find');
 
         expect(await sgNavTarget.getAttribute('class')).to.not.have.string('active');
         // Test that its own attributes have been updated.
@@ -370,21 +406,27 @@ describe('UI compilation of index page js', () => {
       });
 
       it('click, larger viewport', async () => {
-        const sgAccHandle = await $('.sg-acc-handle');
-        const sgAccPanel = await $('.sg-acc-panel');
-        const sgFToggle = await $('#sg-f-toggle');
-        const sgFind = await $('#sg-find');
-
         await browser.setWindowSize(1024, 768);
+
+        const sgAccHandle = await $('.sg-acc-handle');
+
         // Test that clicking this toggle closes previous toggle.
         // First toggle previous to active.
+        await sgAccHandle.waitForClickable();
         await sgAccHandle.click();
+
+        const sgAccPanel = await $('.sg-acc-panel');
 
         expect(await sgAccHandle.getAttribute('class')).to.have.string('active');
         expect(await sgAccPanel.getAttribute('class')).to.have.string('active');
 
+        const sgFToggle = await $('#sg-f-toggle');
+
         // Next click #sg-f-toggle and test that it toggled previous to inactive.
+        await sgFToggle.waitForClickable();
         await sgFToggle.click();
+
+        const sgFind = await $('#sg-find');
 
         expect(await sgAccHandle.getAttribute('class')).to.not.have.string('active');
         expect(await sgAccPanel.getAttribute('class')).to.not.have.string('active');
@@ -408,13 +450,17 @@ describe('UI compilation of index page js', () => {
         const sgFToggle = await $('#sg-f-toggle');
         const sgFind = await $('#sg-find');
 
+        await sgFToggle.waitForClickable();
         await sgFToggle.click();
 
         expect(await sgFToggle.getAttribute('class')).to.have.string('active');
         expect(await sgFind.getAttribute('class')).to.have.string('active');
         expect(await (await $(() => document.activeElement)).getAttribute('id')).to.equal('typeahead');
 
-        await $('#sg-size-px').click();
+        const sgSizePx = await $('#sg-size-px');
+
+        await sgSizePx.waitForClickable();
+        await sgSizePx.click();
 
         expect(await sgFToggle.getAttribute('class')).to.not.have.string('active');
         expect(await sgFind.getAttribute('class')).to.not.have.string('active');
@@ -424,10 +470,14 @@ describe('UI compilation of index page js', () => {
       it('select blurs #typeahead, closes patternFinder, and sets iframe', async () => {
         const sgFToggle = await $('#sg-f-toggle');
 
+        await sgFToggle.waitForClickable();
         await sgFToggle.click();
-        await browser.pause(100);
         await (await $('#typeahead')).setValue('elements');
-        await (await (await $('.tt-dataset-0')).$('.tt-suggestion')).click();
+
+        const ttSuggestion = await (await $('.tt-dataset-0')).$('.tt-suggestion');
+
+        await ttSuggestion.waitForClickable();
+        await ttSuggestion.click();
 
         expect(await sgFToggle.getAttribute('class')).to.not.have.string('active');
         expect(await (await $('#sg-find')).getAttribute('class')).to.not.have.string('active');
@@ -439,10 +489,9 @@ describe('UI compilation of index page js', () => {
       it('autocomplete blurs #typeahead, closes patternFinder, and sets iframe', async () => {
         const sgFToggle = await $('#sg-f-toggle');
 
+        await sgFToggle.waitForClickable();
         await sgFToggle.click();
-        await browser.pause(100);
         await (await $('#typeahead')).setValue('pages');
-        await browser.pause(100);
         await browser.keys(['Tab']);
 
         expect(await sgFToggle.getAttribute('class')).to.not.have.string('active');
@@ -467,15 +516,16 @@ describe('UI compilation of index page js', () => {
         const sgView = await $('#sg-view');
         const sgViewContainer = await $('#sg-view-container');
 
+        await sgTToggle.waitForClickable();
         await sgTToggle.click();
-        await browser.pause(100);
         // Open code viewer first to make sure it gets closed.
+        await sgTCode.waitForClickable();
         await sgTCode.click();
-        await browser.pause(700);
+        await browser.pause(pauseMd);
         await sgTToggle.click();
-        await browser.pause(100);
+        await sgTAnnotations.waitForClickable();
         await sgTAnnotations.click();
-        await browser.pause(700);
+        await browser.pause(pauseMd);
 
         expect(await sgTCode.getAttribute('class')).to.not.have.string('active');
         expect(await sgTAnnotations.getAttribute('class')).to.have.string('active');
@@ -484,9 +534,8 @@ describe('UI compilation of index page js', () => {
         expect(await sgTToggle.getAttribute('class')).to.not.have.string('active');
 
         await sgTToggle.click();
-        await browser.pause(100);
         await sgTAnnotations.click();
-        await browser.pause(700);
+        await browser.pause(pauseMd);
 
         expect(await sgTAnnotations.getAttribute('class')).to.not.have.string('active');
         expect(await sgView.getAttribute('class')).to.not.have.string('active');
@@ -507,15 +556,15 @@ describe('UI compilation of index page js', () => {
         const sgView = await $('#sg-view');
         const sgViewContainer = await $('#sg-view-container');
 
+        await sgTToggle.waitForClickable();
         await sgTToggle.click();
-        await browser.pause(100);
         // Open annotations viewer first to make sure it gets closed.
         await sgTAnnotations.click();
-        await browser.pause(700);
+        await browser.pause(pauseMd);
         await sgTToggle.click();
-        await browser.pause(100);
+        await sgTCode.waitForClickable();
         await sgTCode.click();
-        await browser.pause(700);
+        await browser.pause(pauseMd);
 
         expect(await sgTAnnotations.getAttribute('class')).to.not.have.string('active');
         expect(await sgTCode.getAttribute('class')).to.have.string('active');
@@ -524,9 +573,8 @@ describe('UI compilation of index page js', () => {
         expect(await (await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
 
         await sgTToggle.click();
-        await browser.pause(100);
         await sgTCode.click();
-        await browser.pause(700);
+        await browser.pause(pauseMd);
 
         expect(await sgTCode.getAttribute('class')).to.not.have.string('active');
         expect(await sgTToggle.getAttribute('class')).to.not.have.string('active');
@@ -542,10 +590,12 @@ describe('UI compilation of index page js', () => {
 
       it('pattern opens in new tab and menu closes', async () => {
         const sgTToggle = await $('#sg-t-toggle');
+        const sgRaw = await $('#sg-raw');
 
+        await sgTToggle.waitForClickable();
         await sgTToggle.click();
-        await browser.pause(100);
-        await (await $('#sg-raw')).click();
+        await sgRaw.waitForClickable();
+        await sgRaw.click();
 
         const windowHandles = await browser.getWindowHandles();
 
@@ -573,10 +623,12 @@ describe('UI compilation of index page js', () => {
 
       it('Keyboard shortcuts opens in new tab and menu closes', async () => {
         const sgToolsToggle = await $('#sg-tools-toggle');
+        const sgTool = (await $$('.sg-tool'))[1];
 
+        await sgToolsToggle.waitForClickable();
         await sgToolsToggle.click();
-        await browser.pause(100);
-        await (await $$('.sg-tool'))[1].click();
+        await sgTool.waitForClickable();
+        await sgTool.click();
 
         const windowHandles = await browser.getWindowHandles();
 
@@ -600,13 +652,17 @@ describe('UI compilation of index page js', () => {
       });
 
       it('sends the postMessage to annotate pattern if annotations viewer is toggled on', async () => {
-        const p = await $('p');
+        const sgTToggle = await $('#sg-t-toggle');
+        const sgTAnnotations = await $('#sg-t-annotations');
 
-        await (await $('#sg-t-toggle')).click();
-        await browser.pause(100);
-        await (await $('#sg-t-annotations')).click();
-        await browser.pause(700);
+        await sgTToggle.waitForClickable();
+        await sgTToggle.click();
+        await sgTAnnotations.waitForClickable();
+        await sgTAnnotations.click();
+        await browser.pause(pauseMd);
         await browser.switchToFrame(await $('#sg-viewport'));
+
+        const p = await $('p');
 
         expect(await p.getAttribute('class')).to.have.string('has-annotation');
         expect(await p.getHTML()).to.have.string('<span class="annotation-tip">1</span>');
@@ -615,12 +671,18 @@ describe('UI compilation of index page js', () => {
       });
 
       it('sends the postMessage to annotate viewall if annotations viewer is toggled on', async () => {
-        const p = await $('p');
+        const sgPop = $('.sg-pop[data-pattern-partial="viewall"]');
+        const sgPatternToggleAnnotationsElementsParagraph =
+          await $('#sg-pattern-toggle-annotations-elements-paragraph');
 
-        await (await $('.sg-pop[data-patternpartial="viewall"]')).click();
+        await sgPop.waitForClickable();
+        await sgPop.click();
         await browser.switchToFrame(await $('#sg-viewport'));
-        await (await $('#sg-pattern-toggle-annotations-elements-paragraph')).click();
-        await browser.pause(700);
+        await sgPatternToggleAnnotationsElementsParagraph.waitForClickable();
+        await sgPatternToggleAnnotationsElementsParagraph.click();
+        await browser.pause(pauseMd);
+
+        const p = await $('p');
 
         expect(await p.getAttribute('class')).to.have.string('has-annotation');
         expect(await p.getHTML()).to.have.string('<span class="annotation-tip">1</span>');
@@ -629,19 +691,28 @@ describe('UI compilation of index page js', () => {
       });
 
       it('sends the postMessage to load code for pattern if code viewer is toggled on', async () => {
-        await (await $('#sg-t-toggle')).click();
-        await browser.pause(100);
-        await (await $('#sg-t-code')).click();
-        await browser.pause(700);
+        const sgTToggle = await $('#sg-t-toggle');
+        const sgTCode = await $('#sg-t-code');
+
+        await sgTToggle.waitForClickable();
+        await sgTToggle.click();
+        await sgTCode.waitForClickable();
+        await sgTCode.click();
+        await browser.pause(pauseMd);
 
         expect(await (await $('#sg-code-container')).getAttribute('class')).to.have.string('active');
       });
 
       it('sends the postMessage to load code from viewall if code viewer is toggled on', async () => {
-        await (await $('.sg-pop[data-patternpartial="viewall"]')).click();
+        const sgPop = $('.sg-pop[data-pattern-partial="viewall"]');
+        const sgPatternToggleCodeTemplatesPage = await $('#sg-pattern-toggle-code-templates-page');
+
+        await sgPop.waitForClickable();
+        await sgPop.click();
         await browser.switchToFrame(await $('#sg-viewport'));
-        await (await $('#sg-pattern-toggle-code-templates-page')).click();
-        await browser.pause(700);
+        await sgPatternToggleCodeTemplatesPage.waitForClickable();
+        await sgPatternToggleCodeTemplatesPage.click();
+        await browser.pause(pauseMd);
         await browser.switchToParentFrame();
 
         expect(await (await $('#sg-code-container')).getAttribute('class')).to.have.string('active');
