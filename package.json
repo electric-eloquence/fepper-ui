@@ -65,7 +65,7 @@
     "@xmldom/xmldom": "^0.7.5",
     "chai": "4.x",
     "chai-webdriverio": "^1.0.0",
-    "cheerio": "^1.0.0-rc.3",
+    "cheerio": "1.0.0-rc.10",
     "chromedriver": "101.x",
     "coveralls": "3.x",
     "eslint": "8.x",
