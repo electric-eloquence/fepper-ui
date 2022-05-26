@@ -63,7 +63,9 @@ export default class Listeners {
           this.#fepperUi.dataSaver.findValue('lastViewer') === 'annotations'
         ) {
           // Open annotations viewer if last opened viewer was annotations.
-          this.#fepperUi.annotationsViewer.openAnnotations();
+          this.$orgs['#sg-viewport'].on('load', () => {
+            this.#fepperUi.annotationsViewer.openAnnotations();
+          });
         }
         else {
           // Open code viewer by default.
