@@ -215,7 +215,7 @@
 
         const messageObj = {
           annotationsUpdate: true,
-          annotations: annotations,
+          annotations,
           patternPartial
         };
 
