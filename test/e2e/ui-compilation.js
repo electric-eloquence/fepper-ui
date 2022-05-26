@@ -478,6 +478,7 @@ describe('UI compilation of index page js', () => {
 
         await ttSuggestion.waitForClickable();
         await ttSuggestion.click();
+        await browser.pause(pauseMd);
 
         expect(await sgFToggle.getAttribute('class')).to.not.have.string('active');
         expect(await (await $('#sg-find')).getAttribute('class')).to.not.have.string('active');
@@ -493,6 +494,7 @@ describe('UI compilation of index page js', () => {
         await sgFToggle.click();
         await (await $('#typeahead')).setValue('pages');
         await browser.keys(['Tab']);
+        await browser.pause(pauseMd);
 
         expect(await sgFToggle.getAttribute('class')).to.not.have.string('active');
         expect(await (await $('#sg-find')).getAttribute('class')).to.not.have.string('active');
