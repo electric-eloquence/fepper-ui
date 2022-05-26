@@ -1386,11 +1386,11 @@ describe('codeViewer', function () {
       expect(sgCodeLineageAfter.css.display).to.equal('block');
       expect(sgCodeLineageFillAfter.html).to.equal(
       // eslint-disable-next-line indent
-'<a href="patterns/00-elements-paragraph/00-elements-paragraph.html" class="">elements-paragraph</a>');
+'<a href="patterns/00-elements-paragraph/00-elements-paragraph.html" class>elements-paragraph</a>');
       expect(sgCodeLineagerAfter.css.display).to.equal('block');
       expect(sgCodeLineagerFillAfter.html).to.equal(
       // eslint-disable-next-line indent
-'<a href="patterns/02-components-region/02-components-region.html" class="">components-region</a>');
+'<a href="patterns/02-components-region/02-components-region.html" class>components-region</a>');
       expect(codeViewer.viewall).to.be.true;
     });
 
@@ -1446,11 +1446,11 @@ describe('codeViewer', function () {
       expect(sgCodeLineageAfter.css.display).to.equal('block');
       expect(sgCodeLineageFillAfter.html).to.equal(
       // eslint-disable-next-line indent
-'<a href="patterns/00-elements-paragraph/00-elements-paragraph.html" class="">elements-paragraph</a>');
+'<a href="patterns/00-elements-paragraph/00-elements-paragraph.html" class>elements-paragraph</a>');
       expect(sgCodeLineagerAfter.css.display).to.equal('block');
       expect(sgCodeLineagerFillAfter.html).to.equal(
       // eslint-disable-next-line indent
-'<a href="patterns/02-components-region/02-components-region.html" class="">components-region</a>');
+'<a href="patterns/02-components-region/02-components-region.html" class>components-region</a>');
       expect(codeViewer.viewall).to.be.false;
     });
 

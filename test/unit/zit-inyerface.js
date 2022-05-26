@@ -681,7 +681,7 @@ content_key: content
           /* eslint-disable indent */
           expect(messageGitNaStateAfter.html).to.equal(
 `<pre class="sg-code-pane-content-warning"><code>Command failed: git remote --verbose
-'git' is not recognized as an internal or external command, operable program or batch file.</code></pre>`);
+&apos;git&apos; is not recognized as an internal or external command, operable program or batch file.</code></pre>`);
           /* eslint-enable indent */
           expect(paneGitNaStateAfter.css.display).to.equal('block');
           expect(paneGitStateAfter.css).to.not.have.key('display');
@@ -810,7 +810,7 @@ content_key: content
           /* eslint-disable indent */
           expect(messageGitNaStateAfter.html).to.equal(
 `<pre class="sg-code-pane-content-warning"><code>Command failed: git remote --verbose
-'git' is not recognized as an internal or external command, operable program or batch file.</code></pre>`);
+&apos;git&apos; is not recognized as an internal or external command, operable program or batch file.</code></pre>`);
           /* eslint-enable indent */
           expect(paneGitNaStateAfter.css.display).to.equal('block');
           expect(paneGitStateAfter.css).to.not.have.key('display');
@@ -980,7 +980,7 @@ content_key: content
           /* eslint-disable indent */
           expect(messageGitNaStateAfter.html).to.equal(
 `<pre class="sg-code-pane-content-warning"><code>Command failed: git remote --verbose
-'git' is not recognized as an internal or external command, operable program or batch file.</code></pre>`);
+&apos;git&apos; is not recognized as an internal or external command, operable program or batch file.</code></pre>`);
           /* eslint-enable indent */
           expect(paneGitNaStateAfter.css.display).to.equal('block');
           expect(paneGitStateAfter.css).to.not.have.key('display');

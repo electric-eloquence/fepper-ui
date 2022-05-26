@@ -304,8 +304,8 @@ describe('annotationsViewer', function () {
       expect(sgAnnotationsAfter.html).to.equal(`<div id="annotation-1" class="sg-annotation">
 <h2>1. Navigation</h2>
 <div><p>Navigation for responsive web experiences can be tricky. Large navigation menus 
-are typical on desktop sites, but mobile screen sizes don't give us the luxury 
-of space. We're dealing with this situation by creating a simple menu anchor 
+are typical on desktop sites, but mobile screen sizes don&apos;t give us the luxury 
+of space. We&apos;re dealing with this situation by creating a simple menu anchor 
 that toggles the main navigation on small screens. Once the screen size is large 
 enough to accommodate the nav, we show the main navigation links and hide the 
 menu anchor.</p>
@@ -360,8 +360,8 @@ menu anchor.</p>
       expect(sgAnnotationsAfter.html).to.equal(`<div id="annotation-1" class="sg-annotation">
 <h2>1. Navigation</h2>
 <div><p>Navigation for responsive web experiences can be tricky. Large navigation menus 
-are typical on desktop sites, but mobile screen sizes don't give us the luxury 
-of space. We're dealing with this situation by creating a simple menu anchor 
+are typical on desktop sites, but mobile screen sizes don&apos;t give us the luxury 
+of space. We&apos;re dealing with this situation by creating a simple menu anchor 
 that toggles the main navigation on small screens. Once the screen size is large 
 enough to accommodate the nav, we show the main navigation links and hide the 
 menu anchor.</p>
