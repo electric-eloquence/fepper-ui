@@ -179,10 +179,13 @@ export default class CodeViewer {
       const paneMarkdownCommitDisplay = this.$orgs['#sg-code-pane-markdown-commit'].getState().css.display;
 
       if (
-        !paneMarkdownNaDisplay &&
-        !paneMarkdownEditDisplay &&
-        !paneMarkdownLoadAnimDisplay &&
-        !paneMarkdownCommitDisplay
+        data.viewall ||
+        (
+          !paneMarkdownNaDisplay &&
+          !paneMarkdownEditDisplay &&
+          !paneMarkdownLoadAnimDisplay &&
+          !paneMarkdownCommitDisplay
+        )
       ) {
         this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
       }
