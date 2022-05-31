@@ -9,7 +9,10 @@ $orgs['#sg-viewport'][0].contentWindow = {
   },
   postMessage: () => {}
 };
-$orgs['#sg-code-panel-feplet'][0].addEventListener = (event, callback) => {
+$orgs['#sg-code-panel-feplet'].on = (eventName, callback) => {
+  callback();
+};
+$orgs['#sg-code-panel-feplet'][0].addEventListener = (eventName, callback) => {
   callback();
 };
 $orgs['#sg-code-panel-feplet'][0].contentWindow = {
