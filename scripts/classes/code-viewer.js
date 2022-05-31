@@ -179,10 +179,13 @@ export default class CodeViewer {
       const paneMarkdownCommitDisplay = this.$orgs['#sg-code-pane-markdown-commit'].getState().css.display;
 
       if (
-        !paneMarkdownNaDisplay &&
-        !paneMarkdownEditDisplay &&
-        !paneMarkdownLoadAnimDisplay &&
-        !paneMarkdownCommitDisplay
+        data.viewall ||
+        (
+          !paneMarkdownNaDisplay &&
+          !paneMarkdownEditDisplay &&
+          !paneMarkdownLoadAnimDisplay &&
+          !paneMarkdownCommitDisplay
+        )
       ) {
         this.$orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: 'block'});
       }
@@ -618,7 +621,7 @@ export default class CodeViewer {
         return new Promise(
           (resolve) => {
             /* istanbul ignore else */
-            if (this.$orgs['#sg-code-panel-feplet'].length) {
+            if (!this.patternPartial.startsWith('viewall') && this.$orgs['#sg-code-panel-feplet'].length) {
               this.$orgs['#sg-code-panel-feplet'][0]
                 .contentWindow.location.replace(`/mustache-browser?partial=${this.patternPartial}`);
               this.$orgs['#sg-code-panel-feplet'].on('load', () => {
