@@ -15,7 +15,11 @@ function addLineageListeners($orgs, uiFns) {
     root.$('#sg-code-lineage-fill a, #sg-code-lineager-fill a').on('click', function (e) {
       e.preventDefault();
 
+      const annotationsToggle = root.$('#sg-annotations-container').hasClass('active') ? 'on' : 'off';
+      const codeToggle = root.$('#sg-code-container').hasClass('active') ? 'on' : 'off';
       const messageObj = {
+        annotationsToggle,
+        codeToggle,
         event: 'patternlab.updatePath',
         path: root.$(this).attr('href')
       };
