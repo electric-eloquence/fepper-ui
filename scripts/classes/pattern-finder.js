@@ -73,14 +73,6 @@ export default class PatternFinder {
 
   /* GETTERS for fepperUi instance props in case they are undefined at instantiation. */
 
-  get annotationsViewer() {
-    return this.#fepperUi.annotationsViewer;
-  }
-
-  get codeViewer() {
-    return this.#fepperUi.codeViewer;
-  }
-
   get uiData() {
     return this.#fepperUi.uiData;
   }
@@ -112,11 +104,7 @@ export default class PatternFinder {
   }
 
   passPath(item) {
-    const annotationsToggle = this.annotationsViewer.annotationsActive ? 'on' : 'off';
-    const codeToggle = this.codeViewer.codeActive ? 'on' : 'off';
     const messageObj = {
-      annotationsToggle,
-      codeToggle,
       event: 'patternlab.updatePath',
       path: item.patternPath
     };
