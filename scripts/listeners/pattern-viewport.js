@@ -13,8 +13,6 @@ export default class PatternlabViewer {
 
     document.addEventListener('DOMContentLoaded', () => {
       const fepperUi = this.#fepperUi;
-      const $orgs = this.$orgs;
-      const uiProps = this.#fepperUi.uiProps;
 
       // Click handler for links in accordion menus.
       this.$orgs['.sg-pop'].on(
@@ -22,13 +20,6 @@ export default class PatternlabViewer {
         {this: this},
         function (e) {
           e.preventDefault();
-
-          const annotationsToggle = fepperUi.annotationsViewer.annotationsActive ? 'on' : 'off';
-          const codeToggle = fepperUi.codeViewer.codeActive ? 'on' : 'off';
-
-          $orgs['#sg-viewport'].on('load', () => {
-            $orgs['#sg-viewport'][0].contentWindow.postMessage({annotationsToggle, codeToggle}, uiProps.targetOrigin);
-          });
 
           const messageObj = {
             event: 'patternlab.updatePath',

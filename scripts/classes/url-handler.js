@@ -22,14 +22,6 @@ export default class UrlHandler {
 
   /* GETTERS for fepperUi instance props in case they are undefined at instantiation. */
 
-  get annotationsViewer() {
-    return this.#fepperUi.annotationsViewer;
-  }
-
-  get codeViewer() {
-    return this.#fepperUi.codeViewer;
-  }
-
   get uiData() {
     return this.#fepperUi.uiData;
   }
@@ -100,14 +92,7 @@ export default class UrlHandler {
     }
 
     const iframePath = this.uiData.patternPaths[patternPartial];
-    const annotationsToggle = this.annotationsViewer.annotationsActive ? 'on' : 'off';
-    const codeToggle = this.codeViewer.codeActive ? 'on' : 'off';
-    const messageObj = {
-      annotationsToggle,
-      codeToggle,
-      event: 'patternlab.updatePath',
-      path: iframePath
-    };
+    const messageObj = {event: 'patternlab.updatePath', path: iframePath};
     const pParam = this.getSearchParams().p;
 
     if (pParam && pParam !== patternPartial) {
