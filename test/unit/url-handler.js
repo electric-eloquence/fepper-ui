@@ -92,6 +92,12 @@ describe('urlHandler', function () {
   });
 
   describe('.popPattern()', function () {
+    before(function () {
+      global.mockResponse = {
+        gatekeeper_status: 200
+      };
+    });
+
     beforeEach(function () {
       sandbox.spy($orgs['#sg-viewport'][0].contentWindow, 'postMessage');
     });

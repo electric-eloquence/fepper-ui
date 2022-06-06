@@ -26,7 +26,7 @@ export default class PatternlabViewer {
           const annotationsToggle = fepperUi.annotationsViewer.annotationsActive ? 'on' : 'off';
           const codeToggle = fepperUi.codeViewer.codeActive ? 'on' : 'off';
 
-          $orgs['#sg-viewport'].on('load', () => {
+          $orgs['#sg-viewport'].one('load', () => {
             $orgs['#sg-viewport'][0].contentWindow.postMessage({annotationsToggle, codeToggle}, uiProps.targetOrigin);
           });
 
@@ -35,8 +35,8 @@ export default class PatternlabViewer {
             path: window.$(this).attr('href')
           };
 
-          fepperUi.uiFns.updatePath(messageObj, this.dataset.patternPartial);
           fepperUi.uiFns.closeAllPanels();
+          fepperUi.uiFns.updatePath(messageObj, this.dataset.patternPartial);
         }
       );
 
