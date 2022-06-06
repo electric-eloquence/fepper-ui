@@ -41,6 +41,12 @@ describe('patternFinder', function () {
   });
 
   describe('.closeFinder()', function () {
+    before(function () {
+      global.mockResponse = {
+        gatekeeper_status: 200
+      };
+    });
+
     it('works', function () {
       $orgs['#sg-f-toggle'].dispatchAction('addClass', 'active');
       $orgs['#sg-find'].dispatchAction('addClass', 'active');
@@ -67,6 +73,12 @@ describe('patternFinder', function () {
   });
 
   describe('.onAutocompleted()', function () {
+    before(function () {
+      global.mockResponse = {
+        gatekeeper_status: 200
+      };
+    });
+
     it('works', function () {
       sandbox.spy($orgs['#sg-viewport'][0].contentWindow, 'postMessage');
 
@@ -91,7 +103,7 @@ describe('patternFinder', function () {
       expect(sgFToggleStateAfter.classArray).to.not.include('active');
       expect(sgFindStateAfter.classArray).to.not.include('active');
       expect(documentStateAfter.activeOrganism).to.be.null;
-      expect($orgs['#sg-viewport'][0].contentWindow.postMessage.calledOnce).to.be.true;
+      expect($orgs['#sg-viewport'][0].contentWindow.postMessage.called).to.be.true;
 
       sandbox.restore();
     });
@@ -122,7 +134,7 @@ describe('patternFinder', function () {
       expect(sgFToggleStateAfter.classArray).to.not.include('active');
       expect(sgFindStateAfter.classArray).to.not.include('active');
       expect(documentStateAfter.activeOrganism).to.be.null;
-      expect($orgs['#sg-viewport'][0].contentWindow.postMessage.calledOnce).to.be.true;
+      expect($orgs['#sg-viewport'][0].contentWindow.postMessage.called).to.be.true;
 
       sandbox.restore();
     });
@@ -153,7 +165,7 @@ describe('patternFinder', function () {
       expect(sgFToggleStateAfter.classArray).to.not.include('active');
       expect(sgFindStateAfter.classArray).to.not.include('active');
       expect(documentStateAfter.activeOrganism).to.be.null;
-      expect($orgs['#sg-viewport'][0].contentWindow.postMessage.calledOnce).to.be.true;
+      expect($orgs['#sg-viewport'][0].contentWindow.postMessage.called).to.be.true;
 
       sandbox.restore();
     });

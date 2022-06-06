@@ -624,7 +624,7 @@ export default class CodeViewer {
             if (!this.patternPartial.startsWith('viewall') && this.$orgs['#sg-code-panel-feplet'].length) {
               this.$orgs['#sg-code-panel-feplet'][0]
                 .contentWindow.location.replace(`/mustache-browser?partial=${this.patternPartial}`);
-              this.$orgs['#sg-code-panel-feplet'].on('load', () => {
+              this.$orgs['#sg-code-panel-feplet'].one('load', () => {
                 const height =
                   this.$orgs['#sg-code-panel-feplet'][0].contentWindow.document.documentElement.offsetHeight;
 

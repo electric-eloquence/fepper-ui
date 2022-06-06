@@ -1,5 +1,8 @@
 const $orgs = global.FEPPER_UI.requerio.$orgs;
 
+$orgs['#sg-viewport'].one = (eventName, callback) => {
+  callback();
+};
 $orgs['#sg-viewport'][0].contentWindow = {
   location: {
     href: '',
@@ -10,6 +13,9 @@ $orgs['#sg-viewport'][0].contentWindow = {
   postMessage: () => {}
 };
 $orgs['#sg-code-panel-feplet'].on = (eventName, callback) => {
+  callback();
+};
+$orgs['#sg-code-panel-feplet'].one = (eventName, callback) => {
   callback();
 };
 $orgs['#sg-code-panel-feplet'][0].addEventListener = (eventName, callback) => {
