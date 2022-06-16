@@ -658,6 +658,11 @@ export default class CodeViewer {
       case 'markdown': {
         const config = this.uiData.config;
         const patternPath = this.uiData.patternPaths[this.patternPartial];
+
+        if (typeof patternPath !== 'string') {
+          return Promise.reject();
+        }
+
         const markdownHttpPath = patternPath.slice(0, -(config.outfileExtension.length)) + config.frontMatterExtension;
 
         return fetch('/gatekeeper?tool=the+Markdown+Editor')
