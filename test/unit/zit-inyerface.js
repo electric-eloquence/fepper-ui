@@ -4,32 +4,41 @@
  */
 import {expect} from 'chai';
 
-import fepperUi from '../unit';
-
-const {
-  codeViewer,
-  dataSaver,
-  uiData
-} = fepperUi;
-const $orgs = fepperUi.requerio.$orgs;
-
-function updateGitInterfaceBoolean(instanceBool, cookieBool) {
-  uiData.config.gitInterface = instanceBool;
-
-  if (typeof cookieBool === 'undefined') {
-    dataSaver.removeValue('gitInterface');
-  }
-  else {
-    dataSaver.updateValue('gitInterface', cookieBool);
-  }
-}
+import * as uiData from '../fixtures/ui-data';
 
 describe('Git Interface', function () {
+  let fepperUi;
+  let codeViewer;
+  let dataSaver;
+  let $orgs;
+
+  function updateGitInterfaceBoolean(instanceBool, cookieBool) {
+    uiData.config.gitInterface = instanceBool;
+
+    if (typeof cookieBool === 'undefined') {
+      dataSaver.removeValue('gitInterface');
+    }
+    else {
+      dataSaver.updateValue('gitInterface', cookieBool);
+    }
+  }
+
+  before(function () {
+    const $organisms = require('../../scripts/requerio/organisms').default;
+
+    fepperUi = require('../unit')($organisms);
+    codeViewer = fepperUi.codeViewer;
+    dataSaver = fepperUi.dataSaver;
+    $orgs = fepperUi.requerio.$orgs;
+  });
+
+  after(function () {
+    require('../require-cache-bust')();
+  });
+
   describe('from Markdown tab', function () {
     before(function () {
-      global.location = {
-        search: '?view=code'
-      };
+      global.location.search = '?view=code';
       codeViewer.tabActive = 'markdown';
     });
 
@@ -91,9 +100,16 @@ describe('Git Interface', function () {
           expect(tabActiveAfter).to.equal('markdown');
           expect(codePaneMarkdownNaStateAfter.css).to.not.have.key('display');
           expect(codeLanguageMarkdownStateAfter.html).to.equal(`---
-content_key: content
+content_key: nav_content
 ---
-[Component](../../patterns/02-components-region/02-components-region.html)
+*Component*
+
+~*~ # Front Matter separator.
+
+---
+content_key: toggler_content
+---
+<button id="toggler">Toggler</button>
 `);
           expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
           expect(codePaneGitNaStateAfter.css.display).to.equal('none');
@@ -144,9 +160,16 @@ content_key: content
           expect(tabActiveAfter).to.equal('markdown');
           expect(codePaneMarkdownNaStateAfter.css).to.not.have.key('display');
           expect(codeLanguageMarkdownStateAfter.html).to.equal(`---
-content_key: content
+content_key: nav_content
 ---
-[Component](../../patterns/02-components-region/02-components-region.html)
+*Component*
+
+~*~ # Front Matter separator.
+
+---
+content_key: toggler_content
+---
+<button id="toggler">Toggler</button>
 `);
           expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
           expect(codePaneGitNaStateAfter.css.display).to.equal('none');
@@ -199,13 +222,20 @@ content_key: content
           expect(tabActiveAfter).to.equal('markdown');
           expect(codePaneMarkdownNaStateAfter.css).to.not.have.key('display');
           expect(codeLanguageMarkdownStateAfter.html).to.equal(`---
-content_key: content
+content_key: nav_content
 ---
-[Component](../../patterns/02-components-region/02-components-region.html)
+*Component*
+
+~*~ # Front Matter separator.
+
+---
+content_key: toggler_content
+---
+<button id="toggler">Toggler</button>
 `);
           expect(btnMarkdownEditStateAfter.css.display).to.equal('none');
           expect(codePaneGitNaStateAfter.css.display).to.equal('block');
-          expect(codePaneGitStateAfter.css).to.not.have.key('display');
+          expect(codePaneGitStateAfter.css.display).to.equal('none');
         });
     });
 
@@ -221,7 +251,6 @@ content_key: content
       const codePaneMarkdownNaStateBefore = $orgs['#sg-code-pane-markdown-na'].getState();
       const codeLanguageMarkdownStateBefore = $orgs['#sg-code-code-language-markdown'].getState();
       const btnMarkdownEditStateBefore = $orgs['#sg-code-btn-markdown-edit'].getState();
-      const codePaneGitNaStateBefore = $orgs['#sg-code-pane-git-na'].getState();
       const codePaneGitStateBefore = $orgs['#sg-code-pane-git'].getState();
 
       return codeViewer.stoke()
@@ -233,7 +262,6 @@ content_key: content
           const codePaneMarkdownNaStateAfter = $orgs['#sg-code-pane-markdown-na'].getState();
           const codeLanguageMarkdownStateAfter = $orgs['#sg-code-code-language-markdown'].getState();
           const btnMarkdownEditStateAfter = $orgs['#sg-code-btn-markdown-edit'].getState();
-          const codePaneGitNaStateAfter = $orgs['#sg-code-pane-git-na'].getState();
           const codePaneGitStateAfter = $orgs['#sg-code-pane-git'].getState();
 
           expect(codeViewerStokedBefore).to.be.false;
@@ -244,7 +272,6 @@ content_key: content
           expect(codePaneMarkdownNaStateBefore.css.display).to.equal('block');
           expect(codeLanguageMarkdownStateBefore.html).to.be.empty;
           expect(btnMarkdownEditStateBefore.css).to.not.have.key('display');
-          expect(codePaneGitNaStateBefore.css.display).to.not.equal(codePaneGitNaStateAfter.css.display);
           expect(codePaneGitStateBefore.css).to.not.have.key('display');
 
           expect(codeViewerStokedAfter).to.be.true;
@@ -254,12 +281,18 @@ content_key: content
           expect(tabActiveAfter).to.equal('markdown');
           expect(codePaneMarkdownNaStateAfter.css).to.not.have.key('display');
           expect(codeLanguageMarkdownStateAfter.html).to.equal(`---
-content_key: content
+content_key: nav_content
 ---
-[Component](../../patterns/02-components-region/02-components-region.html)
+*Component*
+
+~*~ # Front Matter separator.
+
+---
+content_key: toggler_content
+---
+<button id="toggler">Toggler</button>
 `);
           expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
-          expect(codePaneGitNaStateAfter.css.display).to.be.undefined;
           expect(codePaneGitStateAfter.css.display).to.equal('block');
         });
     });
@@ -309,13 +342,20 @@ content_key: content
           expect(tabActiveAfter).to.equal('markdown');
           expect(codePaneMarkdownNaStateAfter.css).to.not.have.key('display');
           expect(codeLanguageMarkdownStateAfter.html).to.equal(`---
-content_key: content
+content_key: nav_content
 ---
-[Component](../../patterns/02-components-region/02-components-region.html)
+*Component*
+
+~*~ # Front Matter separator.
+
+---
+content_key: toggler_content
+---
+<button id="toggler">Toggler</button>
 `);
           expect(btnMarkdownEditStateAfter.css.display).to.equal('none');
           expect(codePaneGitNaStateAfter.css.display).to.equal('block');
-          expect(codePaneGitStateAfter.css).to.not.have.key('display');
+          expect(codePaneGitStateAfter.css.display).to.equal('none');
         });
     });
 
@@ -331,7 +371,6 @@ content_key: content
       const codePaneMarkdownNaStateBefore = $orgs['#sg-code-pane-markdown-na'].getState();
       const codeLanguageMarkdownStateBefore = $orgs['#sg-code-code-language-markdown'].getState();
       const btnMarkdownEditStateBefore = $orgs['#sg-code-btn-markdown-edit'].getState();
-      const codePaneGitNaStateBefore = $orgs['#sg-code-pane-git-na'].getState();
       const codePaneGitStateBefore = $orgs['#sg-code-pane-git'].getState();
 
       return codeViewer.stoke()
@@ -343,7 +382,6 @@ content_key: content
           const codePaneMarkdownNaStateAfter = $orgs['#sg-code-pane-markdown-na'].getState();
           const codeLanguageMarkdownStateAfter = $orgs['#sg-code-code-language-markdown'].getState();
           const btnMarkdownEditStateAfter = $orgs['#sg-code-btn-markdown-edit'].getState();
-          const codePaneGitNaStateAfter = $orgs['#sg-code-pane-git-na'].getState();
           const codePaneGitStateAfter = $orgs['#sg-code-pane-git'].getState();
 
           expect(codeViewerStokedBefore).to.be.false;
@@ -354,7 +392,6 @@ content_key: content
           expect(codePaneMarkdownNaStateBefore.css.display).to.equal('block');
           expect(codeLanguageMarkdownStateBefore.html).to.be.empty;
           expect(btnMarkdownEditStateBefore.css).to.not.have.key('display');
-          expect(codePaneGitNaStateBefore.css.display).to.not.equal(codePaneGitNaStateAfter.css.display);
           expect(codePaneGitStateBefore.css).to.not.have.key('display');
 
           expect(codeViewerStokedAfter).to.be.true;
@@ -364,12 +401,18 @@ content_key: content
           expect(tabActiveAfter).to.equal('markdown');
           expect(codePaneMarkdownNaStateAfter.css).to.not.have.key('display');
           expect(codeLanguageMarkdownStateAfter.html).to.equal(`---
-content_key: content
+content_key: nav_content
 ---
-[Component](../../patterns/02-components-region/02-components-region.html)
+*Component*
+
+~*~ # Front Matter separator.
+
+---
+content_key: toggler_content
+---
+<button id="toggler">Toggler</button>
 `);
           expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
-          expect(codePaneGitNaStateAfter.css.display).to.be.undefined;
           expect(codePaneGitStateAfter.css.display).to.equal('block');
         });
     });
@@ -417,9 +460,16 @@ content_key: content
           expect(tabActiveAfter).to.equal('markdown');
           expect(codePaneMarkdownNaStateAfter.css).to.not.have.key('display');
           expect(codeLanguageMarkdownStateAfter.html).to.equal(`---
-content_key: content
+content_key: nav_content
 ---
-[Component](../../patterns/02-components-region/02-components-region.html)
+*Component*
+
+~*~ # Front Matter separator.
+
+---
+content_key: toggler_content
+---
+<button id="toggler">Toggler</button>
 `);
           expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
           expect(codePaneGitNaStateAfter.css.display).to.equal('none');
@@ -472,13 +522,20 @@ content_key: content
           expect(tabActiveAfter).to.equal('markdown');
           expect(codePaneMarkdownNaStateAfter.css).to.not.have.key('display');
           expect(codeLanguageMarkdownStateAfter.html).to.equal(`---
-content_key: content
+content_key: nav_content
 ---
-[Component](../../patterns/02-components-region/02-components-region.html)
+*Component*
+
+~*~ # Front Matter separator.
+
+---
+content_key: toggler_content
+---
+<button id="toggler">Toggler</button>
 `);
           expect(btnMarkdownEditStateAfter.css.display).to.equal('none');
           expect(codePaneGitNaStateAfter.css.display).to.equal('block');
-          expect(codePaneGitStateAfter.css).to.not.have.key('display');
+          expect(codePaneGitStateAfter.css.display).to.equal('none');
         });
     });
 
@@ -494,7 +551,6 @@ content_key: content
       const codePaneMarkdownNaStateBefore = $orgs['#sg-code-pane-markdown-na'].getState();
       const codeLanguageMarkdownStateBefore = $orgs['#sg-code-code-language-markdown'].getState();
       const btnMarkdownEditStateBefore = $orgs['#sg-code-btn-markdown-edit'].getState();
-      const codePaneGitNaStateBefore = $orgs['#sg-code-pane-git-na'].getState();
       const codePaneGitStateBefore = $orgs['#sg-code-pane-git'].getState();
 
       return codeViewer.stoke()
@@ -506,7 +562,6 @@ content_key: content
           const codePaneMarkdownNaStateAfter = $orgs['#sg-code-pane-markdown-na'].getState();
           const codeLanguageMarkdownStateAfter = $orgs['#sg-code-code-language-markdown'].getState();
           const btnMarkdownEditStateAfter = $orgs['#sg-code-btn-markdown-edit'].getState();
-          const codePaneGitNaStateAfter = $orgs['#sg-code-pane-git-na'].getState();
           const codePaneGitStateAfter = $orgs['#sg-code-pane-git'].getState();
 
           expect(codeViewerStokedBefore).to.be.false;
@@ -516,8 +571,7 @@ content_key: content
           expect(tabActiveBefore).to.be.null;
           expect(codePaneMarkdownNaStateBefore.css.display).to.equal('block');
           expect(codeLanguageMarkdownStateBefore.html).to.be.empty;
-          expect(btnMarkdownEditStateBefore.css).to.not.have.key('display');
-          expect(codePaneGitNaStateBefore.css.display).to.not.equal(codePaneGitNaStateAfter.css.display);
+          expect(btnMarkdownEditStateBefore.css.display).to.be.undefined;
           expect(codePaneGitStateBefore.css).to.not.have.key('display');
 
           expect(codeViewerStokedAfter).to.be.true;
@@ -527,12 +581,18 @@ content_key: content
           expect(tabActiveAfter).to.equal('markdown');
           expect(codePaneMarkdownNaStateAfter.css).to.not.have.key('display');
           expect(codeLanguageMarkdownStateAfter.html).to.equal(`---
-content_key: content
+content_key: nav_content
 ---
-[Component](../../patterns/02-components-region/02-components-region.html)
+*Component*
+
+~*~ # Front Matter separator.
+
+---
+content_key: toggler_content
+---
+<button id="toggler">Toggler</button>
 `);
           expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
-          expect(codePaneGitNaStateAfter.css.display).to.be.undefined;
           expect(codePaneGitStateAfter.css.display).to.equal('block');
         });
     });
@@ -540,9 +600,7 @@ content_key: content
 
   describe('from Git tab', function () {
     before(function () {
-      global.location = {
-        search: '?view=code'
-      };
+      global.location.search = '?view=code';
       codeViewer.tabActive = 'git';
     });
 
@@ -594,7 +652,7 @@ content_key: content
           expect(tabGitStateAfter.classArray).to.include('sg-code-tab-active');
           expect(panelGitStateAfter.classArray).to.include('sg-code-panel-active');
           expect(tabActiveAfter).to.equal('git');
-          expect(paneGitNaStateAfter.css).to.not.have.key('display');
+          expect(paneGitNaStateAfter.css.display).to.equal('none');
           expect(paneGitStateAfter.css.display).to.equal('block');
           expect(paneGitStateAfter.classArray).to.not.include('git-interface-on');
           expect(radioGitOnStateAfter.prop.checked).to.be.false;
@@ -635,7 +693,7 @@ content_key: content
           expect(tabGitStateAfter.classArray).to.include('sg-code-tab-active');
           expect(panelGitStateAfter.classArray).to.include('sg-code-panel-active');
           expect(tabActiveAfter).to.equal('git');
-          expect(paneGitNaStateAfter.css).to.not.have.key('display');
+          expect(paneGitNaStateAfter.css.display).to.equal('none');
           expect(paneGitStateAfter.css.display).to.equal('block');
           expect(paneGitStateAfter.classArray).to.not.include('git-interface-on');
           expect(radioGitOnStateAfter.prop.checked).to.be.false;
@@ -681,10 +739,10 @@ content_key: content
           /* eslint-disable indent */
           expect(messageGitNaStateAfter.html).to.equal(
 `<pre class="sg-code-pane-content-warning"><code>Command failed: git remote --verbose
-&apos;git&apos; is not recognized as an internal or external command, operable program or batch file.</code></pre>`);
+'git' is not recognized as an internal or external command, operable program or batch file.</code></pre>`);
           /* eslint-enable indent */
           expect(paneGitNaStateAfter.css.display).to.equal('block');
-          expect(paneGitStateAfter.css).to.not.have.key('display');
+          expect(paneGitStateAfter.css.display).to.equal('none');
           expect(paneGitStateAfter.classArray).to.not.include('git-interface-on');
         });
     });
@@ -723,7 +781,7 @@ content_key: content
           expect(panelGitStateAfter.classArray).to.include('sg-code-panel-active');
           expect(tabActiveAfter).to.equal('git');
           expect(paneGitNaStateAfter.css.display).to.equal('block');
-          expect(paneGitStateAfter.css).to.not.have.key('display');
+          expect(paneGitStateAfter.css.display).to.equal('none');
           expect(paneGitStateAfter.classArray).to.not.include('git-interface-on');
         });
     });
@@ -764,7 +822,7 @@ content_key: content
           expect(tabGitStateAfter.classArray).to.include('sg-code-tab-active');
           expect(panelGitStateAfter.classArray).to.include('sg-code-panel-active');
           expect(tabActiveAfter).to.equal('git');
-          expect(paneGitNaStateAfter.css).to.not.have.key('display');
+          expect(paneGitNaStateAfter.css.display).to.equal('none');
           expect(paneGitStateAfter.css.display).to.equal('block');
           expect(paneGitStateAfter.classArray).to.include('git-interface-on');
           expect(radioGitOnStateAfter.prop.checked).to.be.true;
@@ -810,10 +868,10 @@ content_key: content
           /* eslint-disable indent */
           expect(messageGitNaStateAfter.html).to.equal(
 `<pre class="sg-code-pane-content-warning"><code>Command failed: git remote --verbose
-&apos;git&apos; is not recognized as an internal or external command, operable program or batch file.</code></pre>`);
+'git' is not recognized as an internal or external command, operable program or batch file.</code></pre>`);
           /* eslint-enable indent */
           expect(paneGitNaStateAfter.css.display).to.equal('block');
-          expect(paneGitStateAfter.css).to.not.have.key('display');
+          expect(paneGitStateAfter.css.display).to.equal('none');
           expect(paneGitStateAfter.classArray).to.not.include('git-interface-on');
         });
     });
@@ -852,7 +910,7 @@ content_key: content
           expect(panelGitStateAfter.classArray).to.include('sg-code-panel-active');
           expect(tabActiveAfter).to.equal('git');
           expect(paneGitNaStateAfter.css.display).to.equal('block');
-          expect(paneGitStateAfter.css).to.not.have.key('display');
+          expect(paneGitStateAfter.css.display).to.equal('none');
           expect(paneGitStateAfter.classArray).to.not.include('git-interface-on');
         });
     });
@@ -893,7 +951,7 @@ content_key: content
           expect(tabGitStateAfter.classArray).to.include('sg-code-tab-active');
           expect(panelGitStateAfter.classArray).to.include('sg-code-panel-active');
           expect(tabActiveAfter).to.equal('git');
-          expect(paneGitNaStateAfter.css).to.not.have.key('display');
+          expect(paneGitNaStateAfter.css.display).to.equal('none');
           expect(paneGitStateAfter.css.display).to.equal('block');
           expect(paneGitStateAfter.classArray).to.include('git-interface-on');
           expect(radioGitOnStateAfter.prop.checked).to.be.true;
@@ -934,7 +992,7 @@ content_key: content
           expect(tabGitStateAfter.classArray).to.include('sg-code-tab-active');
           expect(panelGitStateAfter.classArray).to.include('sg-code-panel-active');
           expect(tabActiveAfter).to.equal('git');
-          expect(paneGitNaStateAfter.css).to.not.have.key('display');
+          expect(paneGitNaStateAfter.css.display).to.equal('none');
           expect(paneGitStateAfter.css.display).to.equal('block');
           expect(paneGitStateAfter.classArray).to.not.include('git-interface-on');
           expect(radioGitOnStateAfter.prop.checked).to.be.false;
@@ -980,10 +1038,10 @@ content_key: content
           /* eslint-disable indent */
           expect(messageGitNaStateAfter.html).to.equal(
 `<pre class="sg-code-pane-content-warning"><code>Command failed: git remote --verbose
-&apos;git&apos; is not recognized as an internal or external command, operable program or batch file.</code></pre>`);
+'git' is not recognized as an internal or external command, operable program or batch file.</code></pre>`);
           /* eslint-enable indent */
           expect(paneGitNaStateAfter.css.display).to.equal('block');
-          expect(paneGitStateAfter.css).to.not.have.key('display');
+          expect(paneGitStateAfter.css.display).to.equal('none');
           expect(paneGitStateAfter.classArray).to.not.include('git-interface-on');
         });
     });
@@ -1022,7 +1080,7 @@ content_key: content
           expect(panelGitStateAfter.classArray).to.include('sg-code-panel-active');
           expect(tabActiveAfter).to.equal('git');
           expect(paneGitNaStateAfter.css.display).to.equal('block');
-          expect(paneGitStateAfter.css).to.not.have.key('display');
+          expect(paneGitStateAfter.css.display).to.equal('none');
           expect(paneGitStateAfter.classArray).to.not.include('git-interface-on');
         });
     });
@@ -1063,7 +1121,7 @@ content_key: content
           expect(tabGitStateAfter.classArray).to.include('sg-code-tab-active');
           expect(panelGitStateAfter.classArray).to.include('sg-code-panel-active');
           expect(tabActiveAfter).to.equal('git');
-          expect(paneGitNaStateAfter.css).to.not.have.key('display');
+          expect(paneGitNaStateAfter.css.display).to.equal('none');
           expect(paneGitStateAfter.css.display).to.equal('block');
           expect(paneGitStateAfter.classArray).to.include('git-interface-on');
           expect(radioGitOnStateAfter.prop.checked).to.be.true;
@@ -1100,7 +1158,6 @@ content_key: content
           expect(panelGitStateBefore.classArray).to.not.include('sg-code-panel-active');
           expect(tabActiveBefore).to.be.null;
           expect(paneGitNaStateBefore.css.display).to.not.equal(paneGitNaStateAfter.css.display);
-          expect(paneGitNaStateBefore.css.display).to.not.equal(paneGitNaStateAfter.css.display);
           expect(paneGitStateBefore.css).to.not.have.key('display');
           expect(paneGitStateBefore.classArray).to.not.include('git-interface-on');
           expect(radioGitOnStateBefore.prop.checked).to.be.false;
@@ -1110,7 +1167,7 @@ content_key: content
           expect(panelGitStateAfter.classArray).to.include('sg-code-panel-active');
           expect(tabActiveAfter).to.equal('git');
           expect(paneGitNaStateAfter.css.display).to.equal('block');
-          expect(paneGitStateAfter.css).to.not.have.key('display');
+          expect(paneGitStateAfter.css.display).to.equal('none');
           expect(paneGitStateAfter.classArray).to.not.include('git-interface-on');
           expect(radioGitOnStateAfter.prop.checked).to.be.false;
         });

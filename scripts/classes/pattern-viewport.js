@@ -185,19 +185,6 @@ export default class PatternViewport {
         // Check for viewport width cookie.
         vpWidth = Number(this.dataSaver.findValue('vpWidth'));
       }
-
-      // For server-side testing.
-      if (typeof global === 'object') {
-        if (vpWidth) {
-          this.uiFns.updateViewportWidth(vpWidth);
-        }
-        else {
-          // If no search param or cookie, update the size readings with the innerWidth of the viewport.
-          // Must be innerWidth even though other #sg-viewport behaviors act on style.width.
-          // This is because style.width is undefined at this point.
-          this.uiFns.updateSizeReading(this.$orgs['#sg-viewport'].getState().innerWidth);
-        }
-      }
     }
 
     // Load patternPartial.
@@ -249,7 +236,7 @@ export default class PatternViewport {
     // Render Feplet templates.
     try {
       // Render pattern navigation.
-      const templateRenderedNav = this.#root.Feplet.render(
+      const templateRenderedNav = window.Feplet.render(
         this.$orgs['#sg-nav-target'].html(),
         {patternTypes: this.uiData.navItems.patternTypes, pathsPublic: this.uiData.config.pathsPublic}
       );
@@ -258,13 +245,13 @@ export default class PatternViewport {
 
       // Render UI controls. "Ish" is apparently the pre-patternlab name for the viewport resizer.
       // http://bradfrost.com/blog/post/ish/
-      const templateRenderedIsh = this.#root.Feplet.render(
+      const templateRenderedIsh = window.Feplet.render(
         this.$orgs['#sg-controls'].html(),
         this.uiData.ishControls
       );
+
       this.$orgs['#sg-controls'].dispatchAction('html', templateRenderedIsh);
       this.$orgs['#sg-controls'].dispatchAction('removeClass', 'visually-hidden');
-
       // Erase preemptive warning message.
       this.$orgs['#sg-nav-message'].dispatchAction('empty');
     }
@@ -279,6 +266,19 @@ export default class PatternViewport {
 
     // Load pattern in iframe.
     this.$orgs['#sg-viewport'][0].contentWindow.location.replace(iframePath);
+
+    // For server-side testing.
+    if (typeof global === 'object') {
+      if (vpWidth) {
+        this.uiFns.updateViewportWidth(vpWidth);
+      }
+      else {
+        // If no search param or cookie, update the size readings with the innerWidth of the viewport.
+        // Must be innerWidth even though other #sg-viewport behaviors act on style.width.
+        // This is because style.width is undefined at this point.
+        this.uiFns.updateSizeReading(this.$orgs['#sg-viewport'].getState().innerWidth);
+      }
+    }
   }
 
   goResize(bp) {

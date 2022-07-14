@@ -1,11 +1,18 @@
 import {expect} from 'chai';
 
-import fepperUi from '../unit';
-
-const dataSaver = fepperUi.dataSaver;
-
 describe('dataSaver', function () {
+  let dataSaver;
+  let fepperUi;
+
+  before(function () {
+    const $organisms = require('../../scripts/requerio/organisms').default;
+
+    fepperUi = require('../unit')($organisms);
+    dataSaver = fepperUi.dataSaver;
+  });
+
   after(function () {
+    require('../require-cache-bust')();
     dataSaver.removeValue('foo');
     dataSaver.removeValue('vpWidth');
     dataSaver.removeValue('vpHeight');

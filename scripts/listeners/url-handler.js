@@ -1,14 +1,12 @@
 export default class UrlHandler {
-  #fepperUi;
-
   constructor(fepperUi) {
-    this.#fepperUi = fepperUi;
+    this.urlHandler = fepperUi.urlHandler;
   }
 
   listen() {
     window.onpopstate = (e) => {
-      this.#fepperUi.urlHandler.skipBack = true;
-      this.#fepperUi.urlHandler.popPattern(e);
+      this.urlHandler.skipBack = true;
+      this.urlHandler.popPattern(e);
     };
   }
 }

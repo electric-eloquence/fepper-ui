@@ -21,12 +21,14 @@
 
 
   <link rel="stylesheet" href="../../_styles/bld/style.css">
+  <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="../../node_modules/redux/dist/redux.min.js"></script>
   <script src="../../_scripts/src/variables.styl" type="text/javascript"></script>
 </head>
 <body class="">
 <!-- View All -->
 <link rel="stylesheet" href="../../_styles/pattern-scaffolding.css">
-<div class="sg-main" role="main">
+<main class="sg-main">
 
   <!-- Patterns -->
   <div id="sg-patterns">
@@ -41,36 +43,36 @@
         </h2>
       </div><!--end sg-pattern-category-->
     
-      <div id="elements-paragraph" class="sg-pattern">
+      <div id="elements-toggler" class="sg-pattern">
         <div class="sg-pattern-head">
           <h4 class="sg-pattern-title">
             <a
-              href="../../patterns/00-elements-paragraph/00-elements-paragraph.html"
+              href="../../patterns/00-elements-toggler/00-elements-toggler.html"
               class="sg-pattern-link"
-              data-pattern-partial="elements-paragraph"
+              data-pattern-partial="elements-toggler"
               title="Link to Pattern"
-            >Paragraph</a>
+            >Toggler</a>
           </h4>
           <div class="sg-pattern-info-toggles">
             <a
               href="#"
-              id="sg-pattern-toggle-annotations-elements-paragraph"
+              id="sg-pattern-toggle-annotations-elements-toggler"
               class="sg-pattern-info-toggle sg-pattern-toggle-annotations"
-              data-pattern-partial="elements-paragraph"
+              data-pattern-partial="elements-toggler"
               title="View Pattern Annotations"
             >&#x1F4C4;</a>
             <a
               href="#"
-              id="sg-pattern-toggle-code-elements-paragraph"
+              id="sg-pattern-toggle-code-elements-toggler"
               class="sg-pattern-info-toggle sg-pattern-toggle-code"
-              data-pattern-partial="elements-paragraph"
+              data-pattern-partial="elements-toggler"
               title="View Pattern Code"
             >&#x276E;&#x276F;</a>
           </div>
         </div>
         <div class="sg-pattern-example"></div>
-        <script type="text/json" id="sg-pattern-data-elements-paragraph" class="sg-pattern-data">
-          {"lineage":[],"lineageExists":false,"lineageR":[{"lineagePattern":"compounds-block","lineagePath":"patterns/01-compounds-block/01-compounds-block.html","isHidden":false}],"lineageRExists":true,"patternDesc":"","patternExtension":".mustache","patternName":"Paragraph","patternPartial":"elements-paragraph","patternState":"","portReloader":35730,"portServer":3001}
+        <script type="text/json" id="sg-pattern-data-elements-toggler" class="sg-pattern-data">
+          {"lineage":[],"lineageExists":false,"lineageR":[{"lineagePattern":"compounds-block","lineagePath":"patterns/01-compounds-block/01-compounds-block.html","isHidden":false}],"lineageRExists":true,"missingPartials":[],"patternDesc":"","patternExtension":".mustache","patternName":"Toggler","patternPartial":"elements-toggler","patternState":"","portReloader":35730,"portServer":3001}
         </script>
       </div><!--end .sg-pattern-->
     
@@ -113,7 +115,7 @@
         </div>
         <div class="sg-pattern-example"></div>
         <script type="text/json" id="sg-pattern-data-compounds-block" class="sg-pattern-data">
-          {"lineage":[{"lineagePattern":"elements-paragraph","lineagePath":"patterns/00-elements-paragraph/00-elements-paragraph.html","isHidden":false}],"lineageExists":true,"lineageR":[{"lineagePattern":"components-region","lineagePath":"patterns/02-components-region/02-components-region.html","isHidden":false}],"lineageRExists":true,"missingPartials":["organisms-molecules","molecules-atoms"],"patternDesc":"","patternExtension":".mustache","patternName":"Block","patternPartial":"compounds-block","patternState":"","portReloader":35730,"portServer":3001}
+          {"lineage":[{"lineagePattern":"elements-toggler","lineagePath":"patterns/00-elements-toggler/00-elements-toggler.html","isHidden":false}],"lineageExists":true,"lineageR":[{"lineagePattern":"components-region","lineagePath":"patterns/02-components-region/02-components-region.html","isHidden":false}],"lineageRExists":true,"missingPartials":[],"patternDesc":"","patternExtension":".mustache","patternName":"Block","patternPartial":"compounds-block","patternState":"","portReloader":35730,"portServer":3001}
         </script>
       </div><!--end .sg-pattern-->
     
@@ -156,7 +158,7 @@
         </div>
         <div class="sg-pattern-example"></div>
         <script type="text/json" id="sg-pattern-data-components-region" class="sg-pattern-data">
-          {"lineage":[{"lineagePattern":"compounds-block","lineagePath":"patterns/01-compounds-block/01-compounds-block.html","isHidden":false}],"lineageExists":true,"lineageR":[{"lineagePattern":"templates-page","lineagePath":"patterns/03-templates-page/03-templates-page.html","isHidden":false}],"lineageRExists":true,"patternDesc":"","patternExtension":".mustache","patternName":"Region","patternPartial":"components-region","patternState":"","portReloader":35730,"portServer":3001}
+          {"lineage":[{"lineagePattern":"compounds-block","lineagePath":"patterns/01-compounds-block/01-compounds-block.html","isHidden":false}],"lineageExists":true,"lineageR":[{"lineagePattern":"templates-page","lineagePath":"patterns/03-templates-page/03-templates-page.html","isHidden":false}],"lineageRExists":true,"missingPartials":[],"patternDesc":"","patternExtension":".mustache","patternName":"Region","patternPartial":"components-region","patternState":"","portReloader":35730,"portServer":3001}
         </script>
       </div><!--end .sg-pattern-->
     
@@ -199,7 +201,7 @@
         </div>
         <div class="sg-pattern-example"></div>
         <script type="text/json" id="sg-pattern-data-templates-page" class="sg-pattern-data">
-          {"lineage":[{"lineagePattern":"components-region","lineagePath":"patterns/02-components-region/02-components-region.html","isHidden":false}],"lineageExists":true,"lineageR":[{"lineagePattern":"pages-homepage","lineagePath":"patterns/04-pages-00-homepage/04-pages-00-homepage.html","isHidden":false}],"lineageRExists":true,"patternDesc":"","patternExtension":".mustache","patternName":"Page","patternPartial":"templates-page","patternState":"","portReloader":35730,"portServer":3001}
+          {"lineage":[{"lineagePattern":"components-region","lineagePath":"patterns/02-components-region/02-components-region.html","isHidden":false}],"lineageExists":true,"lineageR":[{"lineagePattern":"pages-homepage","lineagePath":"patterns/04-pages-00-homepage/04-pages-00-homepage.html","isHidden":false}],"lineageRExists":true,"missingPartials":[],"patternDesc":"","patternExtension":".mustache","patternName":"Page","patternPartial":"templates-page","patternState":"","portReloader":35730,"portServer":3001}
         </script>
       </div><!--end .sg-pattern-->
     
@@ -242,13 +244,13 @@
         </div>
         <div class="sg-pattern-example"></div>
         <script type="text/json" id="sg-pattern-data-pages-homepage" class="sg-pattern-data">
-          {"lineage":[{"lineagePattern":"templates-page","lineagePath":"patterns/03-templates-page/03-templates-page.html","isHidden":false}],"lineageExists":true,"lineageR":[],"lineageRExists":false,"patternDesc":"","patternExtension":".mustache","patternName":"Homepage","patternPartial":"pages-homepage","patternState":"","portReloader":35730,"portServer":3001}
+          {"lineage":[{"lineagePattern":"templates-page","lineagePath":"patterns/03-templates-page/03-templates-page.html","isHidden":false}],"lineageExists":true,"lineageR":[],"lineageRExists":false,"missingPartials":[],"patternDesc":"","patternExtension":".mustache","patternName":"Homepage","patternPartial":"pages-homepage","patternState":"","portReloader":35730,"portServer":3001}
         </script>
       </div><!--end .sg-pattern-->
     
   </div> <!--end #sg-patterns-->
 
-</div><!--end .sg-main-->
+</main><!--end .sg-main-->
 
 <script>
   // Hydrate viewalls.

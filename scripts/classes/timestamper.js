@@ -1,4 +1,5 @@
 export default class Timestamper {
+  // Private class fields.
   #fepperUi;
   #root;
 
@@ -29,7 +30,7 @@ export default class Timestamper {
 
     // Only write timestamp to cookie if the cookie doesn't exist or if timestamp > cookie value.
     if (timestamp > fepperTs) {
-      this.cookies.set('fepper_ts', timestamp, {maxAge: 31536000, path: '/', sameSite: 'strict'});
+      this.cookies.set('fepper_ts', timestamp.toString(), {maxAge: 31536000, path: '/', sameSite: 'strict'});
     }
   }
 }

@@ -1,9 +1,3 @@
-// Set globals before requiring Bloodhound.
-global.$.Deferred = () => Object.create({
-  resolve: () => Object.create({
-    promise: () => {}
-  })
-});
 global._ = require('lodash');
 global.oParser = {
   local: () => {},
@@ -31,4 +25,4 @@ global.tokenizers = {
   }
 };
 
-global.Bloodhound = require('typeahead.js/src/bloodhound/bloodhound').Bloodhound;
+module.exports = require('typeahead.js/src/bloodhound/bloodhound').Bloodhound;

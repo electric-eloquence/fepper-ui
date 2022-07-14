@@ -1,20 +1,25 @@
 export default class PatternlabViewer {
-  #fepperUi;
-
   constructor(fepperUi) {
-    this.#fepperUi = fepperUi;
-
+    this.annotationsViewer = fepperUi.annotationsViewer;
+    this.codeViewer = fepperUi.codeViewer;
+    this.patternViewport = fepperUi.patternViewport;
+    this.uiFns = fepperUi.uiFns;
+    this.uiProps = fepperUi.uiProps;
     this.$orgs = fepperUi.requerio.$orgs;
   }
 
   listen() {
     // e2e test this by triggering the pattern to postMessage to be received here.
-    window.addEventListener('message', this.#fepperUi.patternViewport.receiveIframeMessage);
+    window.addEventListener('message', this.patternViewport.receiveIframeMessage);
 
     document.addEventListener('DOMContentLoaded', () => {
-      const fepperUi = this.#fepperUi;
-      const $orgs = this.$orgs;
-      const uiProps = this.#fepperUi.uiProps;
+      const {
+        annotationsViewer,
+        codeViewer,
+        uiFns,
+        uiProps,
+        $orgs
+      } = this;
 
       // Click handler for links in accordion menus.
       this.$orgs['.sg-pop'].on(
@@ -23,11 +28,12 @@ export default class PatternlabViewer {
         function (e) {
           e.preventDefault();
 
-          const annotationsToggle = fepperUi.annotationsViewer.annotationsActive ? 'on' : 'off';
-          const codeToggle = fepperUi.codeViewer.codeActive ? 'on' : 'off';
+          const annotationsToggle = annotationsViewer.annotationsActive ? 'on' : 'off';
+          const codeToggle = codeViewer.codeActive ? 'on' : 'off';
 
           $orgs['#sg-viewport'].one('load', () => {
-            $orgs['#sg-viewport'][0].contentWindow.postMessage({annotationsToggle, codeToggle}, uiProps.targetOrigin);
+            $orgs['#sg-viewport'][0].contentWindow.postMessage(
+              {annotationsToggle, codeToggle}, uiProps.targetOrigin);
           });
 
           const messageObj = {
@@ -35,40 +41,40 @@ export default class PatternlabViewer {
             path: window.$(this).attr('href')
           };
 
-          fepperUi.uiFns.closeAllPanels();
-          fepperUi.uiFns.updatePath(messageObj, this.dataset.patternPartial);
+          uiFns.closeAllPanels();
+          uiFns.updatePath(messageObj, this.dataset.patternPartial);
         }
       );
 
       // Click handlers for viewport resize buttons.
-      for (const bp of Object.keys(this.#fepperUi.uiProps.bpObj)) {
-        if (!this.$orgs['#sg-size-' + bp]) {
+      for (const bp of Object.keys(uiProps.bpObj)) {
+        if (!$orgs['#sg-size-' + bp]) {
           continue;
         }
 
-        this.$orgs['#sg-size-' + bp].on('click', (e) => {
+        $orgs['#sg-size-' + bp].on('click', (e) => {
           e.preventDefault();
 
-          const bpObjSize = this.#fepperUi.uiProps.bpObj[bp];
+          const bpObjSize = uiProps.bpObj[bp];
           let newSize;
 
-          if (bpObjSize > this.#fepperUi.uiProps.maxViewportWidth) {
+          if (bpObjSize > uiProps.maxViewportWidth) {
             // If the entered size is larger than the max allowed viewport size, cap
             // value at max vp size.
-            newSize = this.#fepperUi.uiProps.maxViewportWidth;
+            newSize = uiProps.maxViewportWidth;
           }
-          else if (bpObjSize < this.#fepperUi.uiProps.minViewportWidth) {
+          else if (bpObjSize < uiProps.minViewportWidth) {
             // If the entered size is less than the minimum allowed viewport size, cap
             // value at min vp size.
-            newSize = this.#fepperUi.uiProps.minViewportWidth;
+            newSize = uiProps.minViewportWidth;
           }
           else {
             newSize = bpObjSize;
           }
 
-          this.#fepperUi.uiFns.stopDisco();
-          this.#fepperUi.uiFns.stopGrow();
-          this.#fepperUi.uiFns.sizeIframe(newSize);
+          uiFns.stopDisco();
+          uiFns.stopGrow();
+          uiFns.sizeIframe(newSize);
         });
       }
     });
@@ -79,7 +85,7 @@ export default class PatternlabViewer {
     // Publicly documenting ctrl+alt+0 because ctrl+shift+0 does not work in Windows.
     // However, allowing ctrl+shift+0 because it is publicly documented by Pattern Lab.
     Mousetrap.bind(['ctrl+alt+0', 'ctrl+shift+0'], (e) => {
-      this.#fepperUi.patternViewport.goXXSmall();
+      this.patternViewport.goXXSmall();
 
       e.preventDefault();
       return false;
@@ -87,7 +93,7 @@ export default class PatternlabViewer {
 
     // Extra small.
     Mousetrap.bind('ctrl+shift+x', (e) => {
-      this.#fepperUi.patternViewport.goXSmall();
+      this.patternViewport.goXSmall();
 
       e.preventDefault();
       return false;
@@ -95,7 +101,7 @@ export default class PatternlabViewer {
 
     // Small.
     Mousetrap.bind('ctrl+shift+s', (e) => {
-      this.#fepperUi.patternViewport.goSmall();
+      this.patternViewport.goSmall();
 
       e.preventDefault();
       return false;
@@ -103,7 +109,7 @@ export default class PatternlabViewer {
 
     // Medium.
     Mousetrap.bind('ctrl+shift+m', (e) => {
-      this.#fepperUi.patternViewport.goMedium();
+      this.patternViewport.goMedium();
 
       e.preventDefault();
       return false;
@@ -111,7 +117,7 @@ export default class PatternlabViewer {
 
     // Large.
     Mousetrap.bind('ctrl+shift+l', (e) => {
-      this.#fepperUi.patternViewport.goLarge();
+      this.patternViewport.goLarge();
 
       e.preventDefault();
       return false;
@@ -121,7 +127,7 @@ export default class PatternlabViewer {
     // shortcuts. However, ctrl+shift+w cannot be publicly documented since browser behavior may change without
     // warning in the future (however unlikely).
     Mousetrap.bind(['ctrl+alt+w', 'ctrl+shift+w'], (e) => {
-      this.#fepperUi.patternViewport.goWhole();
+      this.patternViewport.goWhole();
 
       e.preventDefault();
       return false;
@@ -129,7 +135,7 @@ export default class PatternlabViewer {
 
     // Random width.
     Mousetrap.bind('ctrl+alt+r', (e) => {
-      this.#fepperUi.patternViewport.goRandom();
+      this.patternViewport.goRandom();
 
       e.preventDefault();
       return false;
@@ -137,7 +143,7 @@ export default class PatternlabViewer {
 
     // Disco mode.
     Mousetrap.bind('ctrl+shift+d', (e) => {
-      this.#fepperUi.uiFns.toggleDisco();
+      this.uiFns.toggleDisco();
 
       e.preventDefault();
       return false;
@@ -145,7 +151,7 @@ export default class PatternlabViewer {
 
     // Grow animation.
     Mousetrap.bind('ctrl+alt+g', (e) => {
-      this.#fepperUi.uiFns.toggleGrow();
+      this.uiFns.toggleGrow();
 
       e.preventDefault();
       return false;

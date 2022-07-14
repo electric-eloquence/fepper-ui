@@ -247,8 +247,9 @@ module.exports = new Promise((resolve) => {
   <body class="mustache-browser__body">
     <main id="" class="mustache-browser__main">
       <div id="message" class="message "></div>
-<pre><code class="language-markup">{{{ content }}}
-<a href="/?p=templates-page" target="_top" data-path="patterns/03-templates-page/03-templates-page.html" data-pattern-partial="templates-page" class="mustache-browser__link">{{> 03-templates/page }}</a>
+<pre><code class="language-markup"><a href="/?p=templates-page" target="_top" data-path="patterns/03-templates-page/03-templates-page.html" data-pattern-partial="templates-page" class="mustache-browser__link">{{&gt; templates-page }}</a>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>{{ link.components-region }}<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>Component<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>../../_scripts/src/requerio-app.js<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
 </code></pre>
 
     </main>
@@ -283,14 +284,15 @@ module.exports = new Promise((resolve) => {
       else if (urlObj.pathname.startsWith('/annotations/')) {
         filePath = `${__dirname}/fixtures${filePath}`;
       }
-      else if (urlObj.pathname.startsWith('/webserved/')) {
-        filePath = `${__dirname}/../node_modules/fepper/core${filePath}`;
-      }
-      else if (urlObj.pathname.startsWith('/_scripts/')) {
-        filePath = `${__dirname}/../node_modules/fepper/excludes/profiles/base/source${filePath}`;
+      else if (urlObj.pathname.startsWith('/_scripts/src')) {
+        filePath = filePath.replace('/_scripts/src', '');
+        filePath = `${__dirname}/fixtures${filePath}`;
       }
       else if (urlObj.pathname.startsWith('/_styles/')) {
         filePath = `${__dirname}/../node_modules/fepper/excludes/profiles/base/source${filePath}`;
+      }
+      else if (urlObj.pathname.startsWith('/webserved/')) {
+        filePath = `${__dirname}/../node_modules/fepper/core${filePath}`;
       }
       else {
         filePath = `${__dirname}/..${filePath}`;

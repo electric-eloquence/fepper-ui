@@ -1,4 +1,4 @@
-global.history = {
+module.exports = {
   _stateStack: [],
   state: {},
   pushState: (stateObj) => {

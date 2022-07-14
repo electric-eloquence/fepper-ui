@@ -12,7 +12,7 @@ describe('Pattern end-to-end tests', () => {
       it('viewall annotations viewer button toggles annotations viewer', async () => {
         const sgPop = await $('.sg-pop[data-pattern-partial="viewall"]');
         const sgViewport = await $('#sg-viewport');
-        const sgPatternToggleAnnotationsComponentsRegion = await $('#sg-pattern-toggle-annotations-components-region');
+        const sgPatternToggleAnnotationsComponentsRegion = await $('#sg-pattern-toggle-annotations-templates-page');
 
         await sgPop.waitForClickable();
         await sgPop.click();

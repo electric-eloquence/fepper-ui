@@ -6,7 +6,8 @@
     "$": true,
     "$$": true,
     "browser": true,
-    "expect": true
+    "expect": true,
+    "Redux": true
   },
   "rules": {
     "no-multi-str": 0,

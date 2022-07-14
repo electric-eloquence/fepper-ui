@@ -1,57 +1,65 @@
 import {expect} from 'chai';
 import sinon from 'sinon';
 
-import fepperUi from '../unit';
-
 const sandbox = sinon.createSandbox();
 
-const $orgs = fepperUi.requerio.$orgs;
-const urlHandler = fepperUi.urlHandler;
-const patternPartial = 'elements-paragraph';
-const patternPartialHomepage = 'pages-homepage';
-const patternPath = 'patterns/00-elements-paragraph/00-elements-paragraph.html';
-const patternPathHomepage = 'patterns/04-pages-00-homepage/04-pages-00-homepage.html';
-
 describe('urlHandler', function () {
+  const patternPartial = 'elements-toggler';
+  const patternPartialHomepage = 'pages-homepage';
+  const patternPath = 'patterns/00-elements-toggler/00-elements-toggler.html';
+  const patternPathHomepage = 'patterns/04-pages-00-homepage/04-pages-00-homepage.html';
+
+  let fepperUi;
+  let $orgs;
+  let urlHandler;
+
+  before(function () {
+    const $organisms = require('../../scripts/requerio/organisms').default;
+
+    fepperUi = require('../unit')($organisms);
+    urlHandler = fepperUi.urlHandler;
+    $orgs = fepperUi.requerio.$orgs;
+  });
+
+  after(function () {
+    require('../require-cache-bust')();
+  });
+
   describe('.getAddressReplacement()', function () {
+    before(function () {
+      global.location.protocol = 'http:';
+      global.location.host = 'localhost:3000';
+      global.location.search = '';
+    });
+
     it('works for protocol file: with no search param', function () {
-      global.location = {
-        href: 'file:///home/user/fepper/public/index.html',
-        protocol: 'file:'
-      };
+      global.location.href = 'file:///home/user/fepper/public/index.html';
+      global.location.protocol = 'file:';
       const address = urlHandler.getAddressReplacement(patternPartial);
 
       expect(address).to.equal(`file:///home/user/fepper/public/index.html?p=${patternPartial}`);
     });
 
     it('works for protocol file: with search param', function () {
-      global.location = {
-        href: 'file:///home/user/fepper/public/index.html?p=compounds-block',
-        protocol: 'file:'
-      };
+      global.location.href = 'file:///home/user/fepper/public/index.html?p=compounds-block';
+      global.location.protocol = 'file:';
       const address = urlHandler.getAddressReplacement(patternPartial);
 
       expect(address).to.equal(`file:///home/user/fepper/public/index.html?p=${patternPartial}`);
     });
 
     it('works for protocol http: with no search param', function () {
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000',
-        pathname: '/'
-      };
+      global.location.protocol = 'http:';
+      global.location.host = 'localhost:3000';
       const address = urlHandler.getAddressReplacement(patternPartial);
 
       expect(address).to.equal(`http://localhost:3000/?p=${patternPartial}`);
     });
 
     it('works for protocol http: with search param', function () {
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000',
-        pathname: '/',
-        search: '?p=compounds-block'
-      };
+      global.location.protocol = 'http:';
+      global.location.host = 'localhost:3000';
+      global.location.search = '?p=compounds-block';
       const address = urlHandler.getAddressReplacement(patternPartial);
 
       expect(address).to.equal(`http://localhost:3000/?p=${patternPartial}`);
@@ -59,10 +67,14 @@ describe('urlHandler', function () {
   });
 
   describe('.getSearchParams()', function () {
+    before(function () {
+      global.location.protocol = 'http:';
+      global.location.host = 'localhost:3000';
+      global.location.search = '';
+    });
+
     it('returns an object of search param keys and values for a single param', function () {
-      global.location = {
-        search: '?p=compounds-block'
-      };
+      global.location.search = '?p=compounds-block';
       const paramsObj = urlHandler.getSearchParams();
 
       expect(paramsObj).to.be.an.instanceof(Object);
@@ -70,9 +82,7 @@ describe('urlHandler', function () {
     });
 
     it('returns an object of search param keys and values for multiple params', function () {
-      global.location = {
-        search: '?p=compounds-block&ts=1234567890'
-      };
+      global.location.search = '?p=compounds-block&ts=1234567890';
       const paramsObj = urlHandler.getSearchParams();
 
       expect(paramsObj).to.be.an.instanceof(Object);
@@ -81,9 +91,7 @@ describe('urlHandler', function () {
     });
 
     it('returns an empty object for no params', function () {
-      global.location = {
-        search: ''
-      };
+      global.location.search = '';
       const paramsObj = urlHandler.getSearchParams();
 
       expect(paramsObj).to.be.an.instanceof(Object);
@@ -93,6 +101,9 @@ describe('urlHandler', function () {
 
   describe('.popPattern()', function () {
     before(function () {
+      global.location.protocol = 'http:';
+      global.location.host = 'localhost:3000';
+      global.location.search = '';
       global.mockResponse = {
         gatekeeper_status: 200
       };
@@ -110,12 +121,6 @@ describe('urlHandler', function () {
       const documentTitleBefore = global.document.title;
       const sgRawAttribsBefore = $orgs['#sg-raw'].getState().attribs;
 
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000',
-        pathname: '/',
-        search: ''
-      };
       const event = {
         state: {}
       };
@@ -137,12 +142,6 @@ describe('urlHandler', function () {
       const documentTitleBefore = global.document.title;
       const sgRawAttribsBefore = $orgs['#sg-raw'].getState().attribs;
 
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000',
-        pathname: '/',
-        search: ''
-      };
       const event = {
         state: {
           pattern: 'pages-homepage'
@@ -164,16 +163,11 @@ describe('urlHandler', function () {
 
     it('works with search param', function () {
       global.document.title = `Fepper : ${patternPartialHomepage}`;
+      global.location.search = `?p=${patternPartial}`;
 
       const documentTitleBefore = global.document.title;
       const sgRawAttribsBefore = $orgs['#sg-raw'].getState().attribs;
 
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000',
-        pathname: '/',
-        search: `?p=${patternPartial}`
-      };
       const event = {
         state: {
           pattern: patternPartial
@@ -195,19 +189,15 @@ describe('urlHandler', function () {
 
     it('sets history.state.pattern = event.state.pattern if event.state.pattern !== p search param', function () {
       global.document.title = `Fepper : ${patternPartialHomepage}`;
-      global.history.replaceState({pattern: patternPartialHomepage});
+
+      global.history.replaceState({pattern: patternPartialHomepage}, '');
       $orgs['#sg-raw'].dispatchAction('attr', {href: patternPathHomepage});
 
+      global.location.search = '?p=compounds-block';
       const documentTitleBefore = global.document.title;
       const historyStateBefore = global.history.state;
       const sgRawAttribsBefore = $orgs['#sg-raw'].getState().attribs;
 
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000',
-        pathname: '/',
-        search: '?p=compounds-block'
-      };
       const event = {
         state: {
           pattern: patternPartial
@@ -232,24 +222,26 @@ describe('urlHandler', function () {
   });
 
   describe('.pushPattern()', function () {
+    before(function () {
+      global.location.protocol = 'http:';
+      global.location.host = 'localhost:3000';
+      global.location.search = '';
+    });
+
     it('works', function () {
       global.document.title = `Fepper : ${patternPartialHomepage}`;
-      global.history.replaceState({pattern: patternPartialHomepage});
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000',
-        pathname: '/',
-        search: `?p=${patternPartial}`
-      };
+
+      global.history.replaceState({pattern: patternPartialHomepage}, '');
       $orgs['#sg-raw'].dispatchAction('attr', {href: patternPathHomepage});
 
-      const documentTitleBefore = global.document.title;
+      global.location.search = `?p=${patternPartial}`;
+      const documentTitleBefore = document.title;
       const historyStateBefore = global.history.state;
       const sgRawAttribsBefore = $orgs['#sg-raw'].getState().attribs;
 
       urlHandler.pushPattern(patternPartial);
 
-      const documentTitleAfter = global.document.title;
+      const documentTitleAfter = document.title;
       const historyStateAfter = global.history.state;
       const sgRawAttribsAfter = $orgs['#sg-raw'].getState().attribs;
 

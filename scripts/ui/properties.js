@@ -1,4 +1,5 @@
 export default class UiProps {
+  // Private class fields.
   #fepperUi;
   #root;
 
@@ -7,22 +8,15 @@ export default class UiProps {
     this.#root = root;
 
     this.$orgs = fepperUi.requerio.$orgs;
-
-    /* istanbul ignore if */
-    if (typeof window === 'object') {
-      this.bodyFontSize = parseFloat(window.getComputedStyle(window.document.body).getPropertyValue('font-size'));
-      // Client-side only. No use-case for targetOrigin server-side.
-      this.targetOrigin =
-        (window.location.protocol === 'file:') ? '*' : window.location.protocol + '//' + window.location.host;
-    }
+    this.bodyFontSize = parseFloat(window.getComputedStyle(window.document.body).getPropertyValue('font-size'));
 
     // Measurements.
     this.bodyFontSize = this.bodyFontSize || 16;
     this.bpObj = this.uiFns.getBreakpointsSorted();
     this.bpMd = 1024; // Not to be user-configured.
     this.bpSm = 767; // Not to be user-configured.
-    this.maxViewportWidth = root.config ? parseInt(root.config.ishMaximum) : 2600; // Maxiumum Size for Viewport.
-    this.minViewportWidth = root.config ? parseInt(root.config.ishMinimum) : 240; // Minimum Size for Viewport.
+    this.maxViewportWidth = this.#root.config ? parseInt(this.#root.config.ishMaximum) : 2600;
+    this.minViewportWidth = this.#root.config ? parseInt(this.#root.config.ishMinimum) : 240;
 
     // Modes.
     this.discoMode = false;
@@ -61,30 +55,16 @@ export default class UiProps {
   /* ADDITIONAL GETTERS */
 
   get sw() {
-    if (typeof window === 'object') {
-      /* istanbul ignore next */
-      return window.innerWidth;
-    }
-    else if (this.$orgs.window) {
-      return this.$orgs.window.getState().innerWidth;
-    }
-    else {
-      /* istanbul ignore next */
-      return 1024;
-    }
+    return window.innerWidth;
   }
 
   get sh() {
-    if (typeof window === 'object') {
-      /* istanbul ignore next */
-      return window.innerHeight;
-    }
-    else if (this.$orgs.window) {
-      return this.$orgs.window.getState().innerHeight;
-    }
-    else {
-      /* istanbul ignore next */
-      return 768;
-    }
+    return window.innerHeight;
+  }
+
+  get targetOrigin() {
+    return (this.#root.location.protocol === 'file:') ?
+      '*' :
+      this.#root.location.protocol + '//' + this.#root.location.host;
   }
 }

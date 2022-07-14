@@ -1,25 +1,13 @@
 export default class CodeViewer {
-  #fepperUi;
-
   constructor(fepperUi) {
-    this.#fepperUi = fepperUi;
-
+    this.codeViewer = fepperUi.codeViewer;
+    this.dataSaver = fepperUi.dataSaver;
+    this.uiData = fepperUi.uiData;
+    this.uiProps = fepperUi.uiProps;
+    this.urlHandler = fepperUi.urlHandler;
+    this.viewerHandler = fepperUi.viewerHandler;
     this.$orgs = fepperUi.requerio.$orgs;
     this.patternPartial = null;
-  }
-
-  // Getters for fepperUi instance props in case they are undefined at instantiation.
-
-  get uiData() {
-    return this.#fepperUi.uiData;
-  }
-
-  get uiProps() {
-    return this.#fepperUi.uiProps;
-  }
-
-  get urlHandler() {
-    return this.#fepperUi.urlHandler;
   }
 
   listen() {
@@ -27,7 +15,7 @@ export default class CodeViewer {
     this.patternPartial = searchParams.p;
 
     // e2e test this by triggering the pattern to postMessage to be received here.
-    window.addEventListener('message', this.#fepperUi.codeViewer.receiveIframeMessage);
+    window.addEventListener('message', this.codeViewer.receiveIframeMessage);
 
     document.addEventListener('DOMContentLoaded', () => {
       this.$orgs['#sg-code-container'].dispatchAction('css', 'bottom'); // Set this measurement in state.
@@ -71,26 +59,26 @@ export default class CodeViewer {
       });
 
       this.$orgs['#sg-code-tab-feplet'].on('click', () => {
-        this.#fepperUi.codeViewer.activateTabAndPanel('feplet');
+        this.codeViewer.activateTabAndPanel('feplet');
       });
 
       this.$orgs['#sg-code-tab-markdown'].on('click', () => {
-        this.#fepperUi.codeViewer.activateTabAndPanel('markdown');
+        this.codeViewer.activateTabAndPanel('markdown');
       });
 
       this.$orgs['#sg-code-tab-git'].on('click', () => {
-        this.#fepperUi.codeViewer.activateTabAndPanel('git');
+        this.codeViewer.activateTabAndPanel('git');
       });
 
       this.$orgs['#sg-code-tab-requerio'].on('click', () => {
-        this.#fepperUi.codeViewer.activateTabAndPanel('requerio');
+        this.codeViewer.activateTabAndPanel('requerio');
       });
 
       this.$orgs['#sg-code-btn-markdown-edit'].on('click', () => {
         fetch('/gatekeeper')
           .then((response) => {
             if (response.status === 200) {
-              this.#fepperUi.codeViewer.activateMarkdownTextarea();
+              this.codeViewer.activateMarkdownTextarea();
 
               return Promise.resolve();
             }
@@ -111,11 +99,11 @@ export default class CodeViewer {
       });
 
       this.$orgs['#sg-code-btn-markdown-save'].on('click', () => {
-        this.#fepperUi.codeViewer.markdownSave();
+        this.codeViewer.markdownSave();
       });
 
       this.$orgs['#sg-code-btn-markdown-save-cancel'].on('click', () => {
-        this.#fepperUi.codeViewer.deActivateMarkdownTextarea();
+        this.codeViewer.deActivateMarkdownTextarea();
       });
 
       this.$orgs['#sg-code-btn-markdown-commit'].on('click', () => {
@@ -136,8 +124,8 @@ export default class CodeViewer {
           markdownSource = markdownData.markdownSource;
         }
 
-        this.#fepperUi.codeViewer.revisionAdd(markdownSource)
-          .then(() => this.#fepperUi.codeViewer.revisionCommit(body))
+        this.codeViewer.revisionAdd(markdownSource)
+          .then(() => this.codeViewer.revisionCommit(body))
           .then((responseText) => {
             this.$orgs['#sg-code-console-markdown-log'].dispatchAction('html', responseText);
             this.$orgs['#sg-code-pane-markdown-commit'].dispatchAction('css', {display: ''});
@@ -147,7 +135,7 @@ export default class CodeViewer {
 
             return Promise.resolve();
           })
-          .then(() => this.#fepperUi.codeViewer.revisionPush())
+          .then(() => this.codeViewer.revisionPush())
           .then((responseText) => {
             this.$orgs['#sg-code-console-markdown-load-anim'].dispatchAction('css', {display: ''});
             this.$orgs['#sg-code-console-markdown-log'].dispatchAction('append', responseText);
@@ -170,7 +158,7 @@ export default class CodeViewer {
       });
 
       this.$orgs['#sg-code-btn-markdown-commit-cancel'].on('click', () => {
-        this.#fepperUi.codeViewer.deActivateMarkdownTextarea();
+        this.codeViewer.deActivateMarkdownTextarea();
       });
 
       this.$orgs['#sg-code-btn-markdown-continue'].on('click', () => {
@@ -187,34 +175,34 @@ export default class CodeViewer {
       });
 
       this.$orgs['#sg-code-radio-git-off'].on('change', () => {
-        this.#fepperUi.codeViewer.gitInterface = false;
+        this.codeViewer.gitInterface = false;
 
         this.$orgs['#sg-code-pane-git'].toggleClass('git-interface-on');
 
-        if (this.#fepperUi.dataSaver.findValue('gitInterface') === 'true') {
-          this.#fepperUi.dataSaver.updateValue('gitInterface', 'false');
+        if (this.dataSaver.findValue('gitInterface') === 'true') {
+          this.dataSaver.updateValue('gitInterface', 'false');
         }
       });
 
       this.$orgs['#sg-code-radio-git-on'].on('change', () => {
-        this.#fepperUi.codeViewer.gitInterface = true;
+        this.codeViewer.gitInterface = true;
 
         this.$orgs['#sg-code-pane-git'].toggleClass('git-interface-on');
 
-        if (this.#fepperUi.dataSaver.findValue('gitInterface') !== 'true') {
-          this.#fepperUi.dataSaver.updateValue('gitInterface', 'true');
+        if (this.dataSaver.findValue('gitInterface') !== 'true') {
+          this.dataSaver.updateValue('gitInterface', 'true');
         }
       });
 
       this.$orgs['#sg-code-btn-git-disable'].on('click', () => {
-        this.#fepperUi.dataSaver.updateValue('gitInterface', 'false');
+        this.dataSaver.updateValue('gitInterface', 'false');
         window.location.reload();
       });
     });
 
     // Toggle the code viewer.
     window.Mousetrap.bind('ctrl+shift+c', (e) => {
-      this.#fepperUi.codeViewer.toggleCode();
+      this.codeViewer.toggleCode();
 
       e.preventDefault();
       return false;
@@ -222,7 +210,7 @@ export default class CodeViewer {
 
     // Focus on the tab to the left (or cycle to to the end).
     window.Mousetrap.bind('ctrl+shift+[', (e) => {
-      this.#fepperUi.codeViewer.switchTab(-1);
+      this.codeViewer.switchTab(-1);
 
       e.preventDefault();
       return false;
@@ -230,7 +218,7 @@ export default class CodeViewer {
 
     // Focus on the tab to the right (or cycle to the beginning).
     window.Mousetrap.bind('ctrl+shift+]', (e) => {
-      this.#fepperUi.codeViewer.switchTab(1);
+      this.codeViewer.switchTab(1);
 
       e.preventDefault();
       return false;
@@ -241,7 +229,7 @@ export default class CodeViewer {
       const dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
 
       if (dockOpen) {
-        this.#fepperUi.viewerHandler.dockLeft();
+        this.viewerHandler.dockLeft();
       }
 
       e.preventDefault();
@@ -253,7 +241,7 @@ export default class CodeViewer {
       const dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
 
       if (dockOpen) {
-        this.#fepperUi.viewerHandler.dockBottom();
+        this.viewerHandler.dockBottom();
       }
 
       e.preventDefault();
@@ -265,7 +253,7 @@ export default class CodeViewer {
       const dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
 
       if (dockOpen) {
-        this.#fepperUi.viewerHandler.dockRight();
+        this.viewerHandler.dockRight();
       }
 
       e.preventDefault();

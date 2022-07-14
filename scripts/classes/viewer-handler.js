@@ -65,17 +65,6 @@ export default class ViewerHandler {
 
     this.$orgs['#patternlab-body'].dispatchAction('removeClass', 'dock-open');
 
-    // DEPRECATED: Here for backward-compatibility. Will be removed.
-    /* istanbul ignore if */
-    if (!this.$orgs['#sg-view-container'].length) {
-      this.$orgs['#sg-annotations-container']
-        .dispatchAction('removeClass', 'anim-ready')
-        .dispatchAction('css', {bottom: 'auto'});
-      this.$orgs['#sg-code-container']
-        .dispatchAction('removeClass', 'anim-ready')
-        .dispatchAction('css', {bottom: 'auto'});
-    }
-
     setTimeout(() => {
       this.$orgs['#sg-view-container'].dispatchAction('removeClass', 'anim-ready');
     }, this.transitionDuration);
@@ -188,19 +177,6 @@ export default class ViewerHandler {
         else {
           this.transitionDuration = 0;
         }
-      }
-    }
-    // DEPRECATED: Here for backward-compatibility. Will be removed.
-    else {
-      if (this.annotationsViewer.annotationsActive) {
-        this.$orgs['#sg-annotations-container']
-          .dispatchAction('addClass', 'anim-ready')
-          .dispatchAction('css', {bottom: '0'});
-      }
-      else if (this.codeViewer.codeActive) {
-        this.$orgs['#sg-code-container']
-          .dispatchAction('addClass', 'anim-ready')
-          .dispatchAction('css', {bottom: '0'});
       }
     }
 
