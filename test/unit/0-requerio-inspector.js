@@ -7,41 +7,30 @@ import path from 'path';
 
 import {expect} from 'chai';
 
-describe('Requerio Inspector', function () {
-  /* eslint-disable max-len */
-  const stateHtmlSubString =
+/* eslint-disable max-len */
+const stateHtmlSubString =
 `<span class="sg-code-tree-requerio-value">{}</span></li><li class="sg-code-tree-requerio sg-code-tree-requerio-node sg-code-tree-requerio-branch"><span class="clickable sg-code-tree-requerio-key">data:</span>
 <ul class="sg-code-tree-requerio sg-code-tree-requerio-branch sg-code-tree-requerio-value"><li class="sg-code-tree-requerio sg-code-tree-requerio-node sg-code-tree-requerio-leaf"><span class="sg-code-tree-requerio-key">test:</span>
 <span class="sg-code-tree-requerio-value">"pass"</span></li></ul></li><li class="sg-code-tree-requerio sg-code-tree-requerio-node sg-code-tree-requerio-leaf"><span class="sg-code-tree-requerio-key">html:</span>`;
   /* eslint-enable max-len */
 
-  let fepperUi;
-  let $orgs;
-  let requerio;
-  let requerioInspector;
-  let requerioInspectorOut;
-  let requerioP;
+const $organisms = {
+  '#sg-code-pane-requerio': null,
+  '#sg-code-pane-requerio-na': null,
+  '#sg-nav-message-test': null,
+  '#sg-viewport': null
+};
 
-  before(function (done) {
-    const $organisms = {
-      '#sg-code-pane-requerio': null,
-      '#sg-code-pane-requerio-na': null,
-      '#sg-nav-message-test': null,
-      '#sg-viewport': null
-    };
+const fepperUi = require('../unit')($organisms);
+const $orgs = fepperUi.requerio.$orgs;
+const requerio = fepperUi.requerio;
+const requerioInspector = fepperUi.requerioInspector;
+const requerioInspectorOut = fs.readFileSync(
+  path.resolve(__dirname, '..', 'fixtures', 'requerio-inspector.out'), 'utf8');
 
-    fepperUi = require('../unit')($organisms);
-    $orgs = fepperUi.requerio.$orgs;
-    requerio = fepperUi.requerio;
-    requerioInspector = fepperUi.requerioInspector;
-    requerioInspectorOut = fs.readFileSync(
-      path.resolve(__dirname, '..', 'fixtures', 'requerio-inspector.out'), 'utf8');
+const requerioP = require('../mocks/requerioP')(requerio, $orgs);
 
-    requerioP = require('../mocks/requerioP')(requerio, $orgs);
-
-    done();
-  });
-
+describe('Requerio Inspector', function () {
   after(function () {
     require('../require-cache-bust')();
   });
