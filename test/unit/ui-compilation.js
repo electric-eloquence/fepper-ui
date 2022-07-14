@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 
-import * as uiComp from '../../scripts/ui/compilation.js';
+import * as uiComp from '../fixtures/ui-compilation.js';
 
 describe('uiComp', function () {
   const timeout = 10;
