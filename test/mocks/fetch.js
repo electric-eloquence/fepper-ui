@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 
-global.fetch = (url, init) => {
+module.exports = (url, init) => {
   return new Promise(
     (resolve) => {
       if (url.startsWith('/gatekeeper')) {

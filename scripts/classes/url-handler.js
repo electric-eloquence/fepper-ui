@@ -5,6 +5,7 @@
  * @param {object} root - `global` or `window`.
  */
 export default class UrlHandler {
+  // Private class fields.
   #fepperUi;
   #root;
   #searchParams;
@@ -56,7 +57,7 @@ export default class UrlHandler {
   /**
    * Get query string search params for a particular item.
    *
-   * @returns {object} An object containing to keys and values of window.location.search.
+   * @returns {object} An object containing to keys and values of location.search.
    */
   getSearchParams() {
     if (this.#searchString !== this.#root.location.search) {
@@ -98,7 +99,7 @@ export default class UrlHandler {
     if (pParam && pParam !== patternPartial) {
       const addressReplacement = this.getAddressReplacement(patternPartial);
 
-      this.#root.history.replaceState(state, null, addressReplacement);
+      history.replaceState(state, null, addressReplacement);
     }
 
     this.uiFns.updatePatternInfo(patternPartial, iframePath);
@@ -114,7 +115,7 @@ export default class UrlHandler {
     const addressReplacement = this.getAddressReplacement(patternPartial);
     const data = {pattern: patternPartial};
 
-    this.#root.history.pushState(data, null, addressReplacement);
+    history.pushState(data, null, addressReplacement);
     this.uiFns.updatePatternInfo(patternPartial, this.uiData.patternPaths[patternPartial]);
   }
 }

@@ -1,4 +1,5 @@
 export default class UiFns {
+  // Private class fields.
   #fepperUi;
   #root;
 
@@ -202,7 +203,20 @@ export default class UiFns {
    * @param {[boolean]} wholeMode - In wholeMode, the iframe will dynamically resize when #sg-rightpull is dragged.
    * @param {[boolean]} halfMode - Like wholeMode, but half. wholeMode has priority in the case of conflict.
    */
-  sizeIframe(size_, animate = true, wholeMode = false, halfMode = false) {
+  sizeIframe(size_, animate = true, wholeMode = false, halfMode_) {
+    let halfMode;
+
+    if (typeof halfMode_ === 'undefined') {
+      const halfModeCookie = this.dataSaver.findValue('halfMode');
+
+      if (typeof halfModeCookie === 'string') {
+        halfMode = halfModeCookie === 'true' ? true : false;
+      }
+    }
+    else {
+      halfMode = halfMode_;
+    }
+
     // Conditionally remove CSS animation class from viewport.
     if (animate === false) {
       this.$orgs['#sg-gen-container'].dispatchAction('removeClass', 'vp-animate');
@@ -238,11 +252,6 @@ export default class UiFns {
 
         this.dataSaver.updateValue('halfMode', this.uiProps.halfMode);
         this.viewerHandler.dockBottom();
-      }
-      else if ((size + this.uiProps.sgRightpullWidth) < widthHalf) {
-        this.uiProps.halfMode = false;
-
-        this.dataSaver.updateValue('halfMode', this.uiProps.halfMode);
       }
     }
   }
@@ -314,6 +323,18 @@ export default class UiFns {
   }
 
   /**
+   * Update the URL path location of the iframe.
+   *
+   * @param {object} messageObj - The data being messaged to the iframe.
+   * @param {string} patternPartial - The pattern to update to.
+   */
+  updatePath(messageObj, patternPartial) {
+    this.codeViewer.setPanelContent('feplet', patternPartial);
+    this.codeViewer.setPanelContent('markdown', patternPartial);
+    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
+  }
+
+  /**
    * Update the document title and "Open in new window" href per pattern.
    *
    * @param {string} patternPartial - The shorthand partials syntax for a given pattern.
@@ -324,18 +345,6 @@ export default class UiFns {
     this.#root.document.title = titleSplit[0] + this.uiProps.titleSeparator + patternPartial;
 
     this.$orgs['#sg-raw'].dispatchAction('attr', {href: path});
-  }
-
-  /**
-   * Update the URL path location of the iframe.
-   *
-   * @param {object} messageObj - The data being messaged to the iframe.
-   * @param {string} patternPartial - The pattern to update to.
-   */
-  updatePath(messageObj, patternPartial) {
-    this.codeViewer.setPanelContent('feplet', patternPartial);
-    this.codeViewer.setPanelContent('markdown', patternPartial);
-    this.$orgs['#sg-viewport'][0].contentWindow.postMessage(messageObj, this.uiProps.targetOrigin);
   }
 
   /**

@@ -1,3 +1,3 @@
-global.he = {
+module.exports = {
   encode: str => str
 };

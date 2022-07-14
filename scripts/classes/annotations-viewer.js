@@ -67,7 +67,6 @@ export default class AnnotationsViewer {
     this.annotationsActive = false;
     this.moveToNumber = 0;
     this.$orgs = fepperUi.requerio.$orgs;
-    this.viewall = false; // DEPRECATED.
   }
 
   /* GETTERS for fepperUi instance props in case they are undefined at instantiation. */
@@ -164,7 +163,6 @@ export default class AnnotationsViewer {
     // If viewall, scroll to the focused pattern.
     /* istanbul ignore if */
     if (this.uiProps.viewall) {
-      this.viewall = this.uiProps.viewall; // DEPRECATED.
       this.scrollViewall();
     }
   }

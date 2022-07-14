@@ -1,20 +1,31 @@
 import {expect} from 'chai';
 import sinon from 'sinon';
 
-import fepperUi from '../unit';
-
 const sandbox = sinon.createSandbox();
-
-const $orgs = fepperUi.requerio.$orgs;
-const patternFinder = fepperUi.patternFinder;
 const typeaheadData = {
   patternPartial: 'elements-paragraph',
   patternPath: 'patterns/00-elements-paragraph/00-elements-paragraph.html'
 };
 
 describe('patternFinder', function () {
+  let fepperUi;
+  let $orgs;
+  let patternFinder;
+
+  before(function () {
+    const $organisms = require('../../scripts/requerio/organisms').default;
+
+    fepperUi = require('../unit')($organisms);
+    $orgs = fepperUi.requerio.$orgs;
+    patternFinder = fepperUi.patternFinder;
+  });
+
   afterEach(function () {
     $orgs['#typeahead'].dispatchAction('blur');
+  });
+
+  after(function () {
+    require('../require-cache-bust')();
   });
 
   describe('.constructor()', function () {
@@ -36,7 +47,7 @@ describe('patternFinder', function () {
         expect(patternFinder.data[i].patternPath).to.equal(patternFinder.uiData.patternPaths[patternPartial]);
       });
 
-      expect(patternFinder.patterns).to.be.an.instanceof(global.Bloodhound);
+      expect(patternFinder.patterns).to.be.an.instanceof(window.Bloodhound);
     });
   });
 
@@ -213,10 +224,8 @@ describe('patternFinder', function () {
 
   describe('.receiveIframeMessage()', function () {
     it('invokes toggleFinder open for keyPress "ctrl+shift+f"', function () {
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000'
-      };
+      global.location.protocol = 'http:';
+      global.location.host = 'localhost:3000';
       const event = {
         data: {
           event: 'patternlab.keyPress',
@@ -247,10 +256,8 @@ describe('patternFinder', function () {
     });
 
     it('invokes toggleFinder close for keyPress "ctrl+shift+f"', function () {
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000'
-      };
+      global.location.protocol = 'http:';
+      global.location.host = 'localhost:3000';
       const event = {
         data: {
           event: 'patternlab.keyPress',
@@ -275,10 +282,8 @@ describe('patternFinder', function () {
     });
 
     it('invokes closeFinder for keyPress "esc"', function () {
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000'
-      };
+      global.location.protocol = 'http:';
+      global.location.host = 'localhost:3000';
       const event = {
         data: {
           event: 'patternlab.keyPress',
@@ -311,10 +316,8 @@ describe('patternFinder', function () {
     });
 
     it('does nothing if requesting a remote location over HTTP', function () {
-      global.location = {
-        protocol: 'http:',
-        host: 'remotehost:3000'
-      };
+      global.location.protocol = 'http:';
+      global.location.host = 'remotehost:3000';
       const event = {
         data: {
           event: 'patternlab.keyPress',

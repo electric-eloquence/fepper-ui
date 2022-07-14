@@ -1,39 +1,47 @@
 import {expect} from 'chai';
 
-import fepperUi from '../unit';
-
-const $orgs = fepperUi.requerio.$orgs;
-const {
-  annotationsViewer,
-  codeViewer
-} = fepperUi;
-
-const timeout = 10;
-
-const annotations = [{
-  el: 'p',
-  title: 'Navigation',
-  annotation: `<p>Navigation for responsive web experiences can be tricky. Large navigation menus 
+describe('annotationsViewer', function () {
+  const timeout = 10;
+  const annotations = [{
+    el: 'p',
+    title: 'Navigation',
+    annotation: `<p>Navigation for responsive web experiences can be tricky. Large navigation menus 
 are typical on desktop sites, but mobile screen sizes don&#39;t give us the luxury 
 of space. We&#39;re dealing with this situation by creating a simple menu anchor 
 that toggles the main navigation on small screens. Once the screen size is large 
 enough to accommodate the nav, we show the main navigation links and hide the 
 menu anchor.</p>
 `,
-  number: 1,
-  state: true
-}];
+    number: 1,
+    state: true
+  }];
 
-describe('annotationsViewer', function () {
+  let annotationsViewer;
+  let codeViewer;
+  let fepperUi;
+  let $orgs;
+
+  before(function () {
+    const $organisms = require('../../scripts/requerio/organisms').default;
+
+    fepperUi = require('../unit')($organisms);
+    annotationsViewer = fepperUi.annotationsViewer;
+    codeViewer = fepperUi.codeViewer;
+    $orgs = fepperUi.requerio.$orgs;
+  });
+
+  after(function () {
+    require('../require-cache-bust')();
+  });
+
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
       expect(annotationsViewer.constructor.name).to.equal('AnnotationsViewer');
-      expect(Object.keys(annotationsViewer).length).to.equal(5);
+      expect(Object.keys(annotationsViewer).length).to.equal(4);
       expect(annotationsViewer).to.have.property('receiveIframeMessage');
       expect(annotationsViewer).to.have.property('annotationsActive');
       expect(annotationsViewer).to.have.property('moveToNumber');
       expect(annotationsViewer).to.have.property('$orgs');
-      expect(annotationsViewer).to.have.property('viewall');
     });
   });
 
@@ -49,9 +57,8 @@ describe('annotationsViewer', function () {
     });
 
     it('opens annotations viewer with a "view=annotations" param', function (done) {
-      global.location = {
-        search: '?view=annotations'
-      };
+      global.location.search = '?view=annotations';
+
       const annotationsActiveBefore = annotationsViewer.annotationsActive;
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgTAnnotationsBefore = $orgs['#sg-t-annotations'].getState();
@@ -80,9 +87,8 @@ describe('annotationsViewer', function () {
     });
 
     it('opens code viewer with a "view=a" param', function (done) {
-      global.location = {
-        search: '?view=a'
-      };
+      global.location.search = '?view=a';
+
       const annotationsActiveBefore = annotationsViewer.annotationsActive;
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgTAnnotationsBefore = $orgs['#sg-t-annotations'].getState();
@@ -111,9 +117,8 @@ describe('annotationsViewer', function () {
     });
 
     it('sets .moveToNumber with a "view=annotations&number=" param', function (done) {
-      global.location = {
-        search: '?view=annotations&number=2'
-      };
+      global.location.search = '?view=annotations&number=2';
+
       const annotationsActiveBefore = annotationsViewer.annotationsActive;
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgTAnnotationsBefore = $orgs['#sg-t-annotations'].getState();
@@ -304,8 +309,8 @@ describe('annotationsViewer', function () {
       expect(sgAnnotationsAfter.html).to.equal(`<div id="annotation-1" class="sg-annotation">
 <h2>1. Navigation</h2>
 <div><p>Navigation for responsive web experiences can be tricky. Large navigation menus 
-are typical on desktop sites, but mobile screen sizes don&apos;t give us the luxury 
-of space. We&apos;re dealing with this situation by creating a simple menu anchor 
+are typical on desktop sites, but mobile screen sizes don't give us the luxury 
+of space. We're dealing with this situation by creating a simple menu anchor 
 that toggles the main navigation on small screens. Once the screen size is large 
 enough to accommodate the nav, we show the main navigation links and hide the 
 menu anchor.</p>
@@ -330,10 +335,6 @@ menu anchor.</p>
     let event;
 
     before(function () {
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000'
-      };
       event = {
         origin: 'http://localhost:3000'
       };
@@ -360,8 +361,8 @@ menu anchor.</p>
       expect(sgAnnotationsAfter.html).to.equal(`<div id="annotation-1" class="sg-annotation">
 <h2>1. Navigation</h2>
 <div><p>Navigation for responsive web experiences can be tricky. Large navigation menus 
-are typical on desktop sites, but mobile screen sizes don&apos;t give us the luxury 
-of space. We&apos;re dealing with this situation by creating a simple menu anchor 
+are typical on desktop sites, but mobile screen sizes don't give us the luxury 
+of space. We're dealing with this situation by creating a simple menu anchor 
 that toggles the main navigation on small screens. Once the screen size is large 
 enough to accommodate the nav, we show the main navigation links and hide the 
 menu anchor.</p>

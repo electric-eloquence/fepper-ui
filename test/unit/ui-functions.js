@@ -1,19 +1,31 @@
 import {expect} from 'chai';
 import sinon from 'sinon';
 
-import fepperUi from '../unit';
 import 'fepper/excludes/profiles/base/source/_scripts/src/variables.styl';
 
 const sandbox = sinon.createSandbox();
 
-const $orgs = fepperUi.requerio.$orgs;
-const {
-  uiFns,
-  uiProps,
-  dataSaver
-} = fepperUi;
-
 describe('uiFns', function () {
+  let fepperUi;
+  let dataSaver;
+  let $orgs;
+  let uiFns;
+  let uiProps;
+
+  before(function () {
+    const $organisms = require('../../scripts/requerio/organisms').default;
+
+    fepperUi = require('../unit')($organisms);
+    dataSaver = fepperUi.dataSaver;
+    $orgs = fepperUi.requerio.$orgs;
+    uiFns = fepperUi.uiFns;
+    uiProps = fepperUi.uiProps;
+  });
+
+  after(function () {
+    require('../require-cache-bust')();
+  });
+
   describe('.closeAllPanels()', function () {
     it('works', function () {
       $orgs['#sg-nav-target'].dispatchAction('addClass', 'active');
@@ -117,10 +129,8 @@ describe('uiFns', function () {
 
   describe('.receiveIframeMessageBoilerplate()', function () {
     it('returns a reference to data submitted as an object', function () {
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000'
-      };
+      global.location.protocol = 'http:';
+      global.location.host = 'localhost:3000';
       const event = {
         data: {
           event: 'patternlab.keyPress',
@@ -135,10 +145,8 @@ describe('uiFns', function () {
     });
 
     it('returns an object when data are submitted as a string', function () {
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000'
-      };
+      global.location.protocol = 'http:';
+      global.location.host = 'localhost:3000';
       const event = {
         data: '{"event":"patternlab.keyPress","keyPress":"ctrl+shift+f"}',
         origin: 'http://localhost:3000'
@@ -150,10 +158,8 @@ describe('uiFns', function () {
     });
 
     it('returns nothing if requesting a remote location over HTTP', function () {
-      global.location = {
-        protocol: 'http:',
-        host: 'remotehost:3000'
-      };
+      global.location.protocol = 'http:';
+      global.location.host = 'remotehost:3000';
       const event = {
         data: {
           event: 'patternlab.keyPress',
@@ -257,6 +263,7 @@ describe('uiFns', function () {
         expect(sgViewportStateAfter.classArray).to.not.include('vp-animate');
 
         uiFns.stopGrow();
+
         done();
       }, uiProps.timeoutDefault);
     });
@@ -282,6 +289,48 @@ describe('uiFns', function () {
         expect(documentStateAfter.activeOrganism).to.not.equal('#sg-size-grow');
         expect(growModeAfter).to.be.false;
         expect(growIdAfter).to.be.undefined;
+
+        done();
+      }, uiProps.timeoutDefault);
+    });
+
+    it('grow mode stops when viewport width reaches or exceeds window width', function (done) {
+      const swOrig = uiProps.sw;
+
+      window.innerWidth = 245;
+      $orgs['#sg-size-grow'].dispatchAction('blur');
+      $orgs['#sg-gen-container'].dispatchAction('addClass', 'vp-animate');
+      $orgs['#sg-viewport'].dispatchAction('addClass', 'vp-animate');
+
+      const documentStateBefore = $orgs.document.getState();
+      const growModeBefore = fepperUi.uiProps.growMode;
+      const growIdBefore = fepperUi.uiProps.growId;
+      const sgGenContainerStateBefore = $orgs['#sg-gen-container'].getState();
+      const sgViewportStateBefore = $orgs['#sg-viewport'].getState();
+
+      uiFns.toggleGrow();
+
+      let swFinal;
+
+      setTimeout(() => {
+        const documentStateAfter = $orgs.document.getState();
+        const growModeAfter = fepperUi.uiProps.growMode;
+        const growIdAfter = fepperUi.uiProps.growId;
+        const sgGenContainerStateAfter = $orgs['#sg-gen-container'].getState();
+        const sgViewportStateAfter = $orgs['#sg-viewport'].getState();
+        swFinal = uiProps.sw;
+
+        expect(documentStateBefore.activeOrganism).to.equal(documentStateAfter.activeOrganism);
+        expect(growModeBefore).to.equal(growModeAfter);
+        expect(growIdBefore).to.equal(growIdAfter);
+        expect(sgGenContainerStateBefore.classArray).to.include('vp-animate');
+        expect(sgViewportStateBefore.classArray).to.include('vp-animate');
+
+        expect(sgGenContainerStateAfter.classArray).to.not.include('vp-animate');
+        expect(sgViewportStateAfter.classArray).to.not.include('vp-animate');
+        expect(swFinal).to.equal(sgViewportStateAfter.outerWidth);
+
+        window.innerWidth = swOrig;
 
         done();
       }, uiProps.timeoutDefault);
@@ -528,28 +577,6 @@ describe('uiFns', function () {
       uiProps.dockPosition = 'right';
 
       uiFns.sizeIframe(499);
-
-      expect(halfModeBefore).to.be.true;
-
-      expect(uiProps.halfMode).to.be.false;
-    });
-
-    it('in dockPosition left exits halfMode if width is less than the halfMode threshold', function () {
-      const halfModeBefore = uiProps.halfMode = true;
-      uiProps.dockPosition = 'left';
-
-      uiFns.sizeIframe(497);
-
-      expect(halfModeBefore).to.be.true;
-
-      expect(uiProps.halfMode).to.be.false;
-    });
-
-    it('in dockPosition right exits halfMode if width is less than the halfMode threshold', function () {
-      const halfModeBefore = uiProps.halfMode = true;
-      uiProps.dockPosition = 'right';
-
-      uiFns.sizeIframe(497);
 
       expect(halfModeBefore).to.be.true;
 

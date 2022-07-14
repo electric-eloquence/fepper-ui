@@ -2,16 +2,29 @@ import {expect} from 'chai';
 import fs from 'fs';
 import sinon from 'sinon';
 
-import fepperUi from '../unit';
-
 const sandbox = sinon.createSandbox();
 
-const $orgs = fepperUi.requerio.$orgs;
-const patternViewport = fepperUi.patternViewport;
-const uiFns = fepperUi.uiFns;
-const uiProps = fepperUi.uiProps;
-
 describe('patternViewport', function () {
+  let fepperUi;
+  let $orgs;
+  let patternViewport;
+  let uiFns;
+  let uiProps;
+
+  before(function () {
+    const $organisms = require('../../scripts/requerio/organisms').default;
+
+    fepperUi = require('../unit')($organisms);
+    $orgs = fepperUi.requerio.$orgs;
+    patternViewport = fepperUi.patternViewport;
+    uiFns = fepperUi.uiFns;
+    uiProps = fepperUi.uiProps;
+  });
+
+  after(function () {
+    require('../require-cache-bust')();
+  });
+
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
       expect(patternViewport.constructor.name).to.equal('PatternViewport');
@@ -27,12 +40,6 @@ describe('patternViewport', function () {
   });
 
   describe('.stoke()', function () {
-    before(function () {
-      global.location = {
-        protocol: 'http:'
-      };
-    });
-
     // Test rendering first so we can capture initial state.
     describe('rendering', function () {
       let patternlabHtmlStateBefore;
@@ -60,8 +67,8 @@ describe('patternViewport', function () {
 
         expect(sgNavTargetStateAfter.html).to.equal(`
   <li class="sg-nav-elements"><a class="sg-acc-handle">Elements</a><ul class="sg-acc-panel sg-sub-nav">
-    <li class="sg-item-nav-elements-paragraph">
-      <a href="patterns/00-elements-paragraph/00-elements-paragraph.html" class="sg-pop " data-pattern-partial="elements-paragraph">Paragraph</a>
+    <li class="sg-item-nav-elements-toggler">
+      <a href="patterns/00-elements-toggler/00-elements-toggler.html" class="sg-pop " data-pattern-partial="elements-toggler">Toggler</a>
     </li>
     <li class="sg-item-nav-viewall-elements">
       <a href="patterns/00-elements/index.html" class="sg-pop " data-pattern-partial="viewall-elements">View All</a>
@@ -95,9 +102,6 @@ describe('patternViewport', function () {
     <li class="sg-item-nav-pages-homepage">
       <a href="patterns/04-pages-00-homepage/04-pages-00-homepage.html" class="sg-pop " data-pattern-partial="pages-homepage">Homepage</a>
     </li>
-    <li class="sg-item-nav-pages-test-svg">
-      <a href="patterns/04-pages-test-svg/04-pages-test-svg.html" class="sg-pop " data-pattern-partial="pages-test-svg">Test Svg</a>
-    </li>
     <li class="sg-item-nav-viewall-pages">
       <a href="patterns/04-pages/index.html" class="sg-pop " data-pattern-partial="viewall-pages">View All</a>
     </li>
@@ -117,7 +121,7 @@ describe('patternViewport', function () {
         expect(sgControlsStateAfter.html).to.equal(`<li class="sg-size">
 <div class="sg-current-size">
   <form id="sg-form">
-    <a class="sg-acc-handle sg-size-label" id="sg-form-label">Size</a><input type="text" class="sg-input" id="sg-size-px" value="498"><div class="sg-size-label">px /</div><input type="text" class="sg-input" id="sg-size-em" value="0.00"><div class="sg-size-label">em</div>
+    <a class="sg-acc-handle sg-size-label" id="sg-form-label">Size</a><input type="text" class="sg-input" id="sg-size-px" value="---"><div class="sg-size-label">px /</div><input type="text" class="sg-input" id="sg-size-em" value="---"><div class="sg-size-label">em</div>
   </form>
 </div>
 <div class="sg-acc-panel sg-size-options">
@@ -178,9 +182,8 @@ describe('patternViewport', function () {
 
     describe('adjusts size', function () {
       beforeEach(function () {
-        global.location = {
-          protocol: 'http:'
-        };
+        global.location.search = '';
+
         $orgs['#sg-viewport'].dispatchAction('innerWidth', 1010);
         $orgs['#sg-viewport'].dispatchAction('css', {width: null});
       });
@@ -459,27 +462,26 @@ describe('patternViewport', function () {
         const sgSizePxStateAfter = $orgs['#sg-size-px'].getState();
         const sgSizeEmStateAfter = $orgs['#sg-size-em'].getState();
 
-        expect(sgViewportStateBefore.innerWidth).to.equal(1010);
+        expect(sgViewportStateBefore.innerWidth).to.equal(1006);
         expect(sgSizePxStateBefore.val).to.not.equal(sgSizePxStateAfter.val);
         expect(sgSizeEmStateBefore.val).to.not.equal(sgSizeEmStateAfter.val);
 
         expect(sgViewportStateAfter.css.width).to.equal(sgViewportStateBefore.css.width);
-        expect(sgSizePxStateAfter.val).to.equal('1010');
-        expect(sgSizeEmStateAfter.val).to.equal('63.13');
+        expect(sgSizePxStateAfter.val).to.equal('1006');
+        expect(sgSizeEmStateAfter.val).to.equal('62.88');
 
         fepperUi.dataSaver.removeValue('vpWidth');
       });
     });
 
     describe('loads pattern', function () {
-      const defaultPatternOrig = patternViewport.uiData.config.defaultPattern;
+      let defaultPatternOrig;
 
       beforeEach(function () {
-        sandbox.spy($orgs['#sg-viewport'][0].contentWindow.location, 'replace');
+        global.location.search = '';
+        defaultPatternOrig = patternViewport.uiData.config.defaultPattern;
 
-        global.location = {
-          protocol: 'http:'
-        };
+        sandbox.spy($orgs['#sg-viewport'][0].contentWindow.location, 'replace');
       });
 
       afterEach(function () {
@@ -491,7 +493,7 @@ describe('patternViewport', function () {
       });
 
       it('with a "p" search param', function () {
-        global.location.search = '?p=elements-paragraph';
+        global.location.search = '?p=elements-toggler';
         patternViewport.urlHandler.skipBack = false;
 
         const skipBackBefore = patternViewport.urlHandler.skipBack;
@@ -506,7 +508,7 @@ describe('patternViewport', function () {
         expect(historyStateBefore.pattern).to.not.equal(historyStateAfter.pattern);
 
         expect(skipBackAfter).to.be.true;
-        expect(historyStateAfter.pattern).to.equal('elements-paragraph');
+        expect(historyStateAfter.pattern).to.equal('elements-toggler');
         expect($orgs['#sg-viewport'][0].contentWindow.location.replace.calledOnce).to.be.true;
       });
 
@@ -568,10 +570,11 @@ describe('patternViewport', function () {
   });
 
   describe('.goResize()', function () {
-    const bpObjOrig = fepperUi.uiProps.bpObj;
+    let bpObjOrig;
 
     before(function () {
       fepperUi.uiProps.bpObj.foo = 1337;
+      bpObjOrig = fepperUi.uiProps.bpObj;
     });
 
     after(function () {
@@ -1041,10 +1044,8 @@ describe('patternViewport', function () {
     let event;
 
     before(function () {
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000'
-      };
+      global.location.search = '';
+
       event = {
         origin: 'http://localhost:3000'
       };
@@ -1804,17 +1805,12 @@ describe('patternViewport', function () {
     });
 
     it('pushes pattern on patternlab.pageLoad', function () {
-      const patternPartial = 'elements-paragraph';
+      global.document.title = 'Fepper';
+      const patternPartial = 'elements-toggler';
+      global.location.search = `?p=${patternPartial}`;
       event.data = {
         event: 'patternlab.pageLoad',
         patternPartial
-      };
-      global.document.title = 'Fepper';
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000',
-        pathname: '/',
-        search: `?p=${patternPartial}`
       };
       fepperUi.urlHandler.skipBack = false;
 
@@ -1834,20 +1830,15 @@ describe('patternViewport', function () {
 
       expect(documentTitleAfter).to.equal(`Fepper : ${patternPartial}`);
       expect(historyStateAfter.pattern).to.equal(patternPartial);
-      expect(sgRawAttribsAfter.href).to.equal('patterns/00-elements-paragraph/00-elements-paragraph.html');
+      expect(sgRawAttribsAfter.href).to.equal('patterns/00-elements-toggler/00-elements-toggler.html');
     });
 
     it('skips pattern push on patternlab.pageLoad if skipBack === true', function () {
       const patternPartial = 'pages-homepage';
+      global.location.search = `?p=${patternPartial}`;
       event.data = {
         event: 'patternlab.pageLoad',
         patternPartial
-      };
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000',
-        pathname: '/',
-        search: `?p=${patternPartial}`
       };
       fepperUi.urlHandler.skipBack = true;
 
@@ -1874,18 +1865,13 @@ describe('patternViewport', function () {
     it(
       'skips pattern push on patternlab.pageLoad if latest pattern in history does matches submitted patternPartial',
       function () {
+        global.history.state.pattern = 'pages-homepage';
         const patternPartial = 'pages-homepage';
+        global.location.search = `?p=${patternPartial}`;
         event.data = {
           event: 'patternlab.pageLoad',
           patternPartial
         };
-        global.location = {
-          protocol: 'http:',
-          host: 'localhost:3000',
-          pathname: '/',
-          search: `?p=${patternPartial}`
-        };
-        global.history.state.pattern = 'pages-homepage';
 
         const documentTitleBefore = global.document.title;
         const historyStateBefore = global.history.state;

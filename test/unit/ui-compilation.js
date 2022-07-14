@@ -1,13 +1,24 @@
 import {expect} from 'chai';
 
-import fepperUi from '../unit';
-
-const $orgs = fepperUi.requerio.$orgs;
-const uiComp = fepperUi.uiComp;
-
-const timeout = 10;
+import * as uiComp from '../../scripts/ui/compilation.js';
 
 describe('uiComp', function () {
+  const timeout = 10;
+
+  let fepperUi;
+  let $orgs;
+
+  before(function () {
+    const $organisms = require('../../scripts/requerio/organisms').default;
+
+    fepperUi = require('../unit')($organisms);
+    $orgs = fepperUi.requerio.$orgs;
+  });
+
+  after(function () {
+    require('../require-cache-bust')();
+  });
+
   it('.sgAccHandleClick() toggles on', function () {
     const sgAccHandleLength = $orgs['.sg-acc-handle'].length;
 

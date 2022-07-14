@@ -4,39 +4,37 @@
 import fs from 'fs';
 import path from 'path';
 
-import cheerio from 'cheerio';
+import {JSDOM} from 'jsdom';
 import Feplet from 'feplet';
 import * as Redux from 'redux';
 import Requerio from 'requerio';
-import Cookies from 'universal-cookie';
+import UniversalCookie from 'universal-cookie';
+import 'fepper/excludes/profiles/base/source/_scripts/src/variables.styl';
 
 import FepperUi from '../scripts/requerio/fepper-ui';
-import $organisms from '../scripts/requerio/organisms';
-import * as uiComp from './fixtures/ui-compilation';
 import * as uiData from './fixtures/ui-data';
 
-global.Feplet = Feplet;
-global.UniversalCookie = Cookies;
+module.exports = ($organisms) => {
+  const html = fs.readFileSync(path.resolve(__dirname, 'fixtures', 'index.html'), 'utf8');
+  const {window} = new JSDOM(html);
+  window.Feplet = Feplet;
+  window.UniversalCookie = UniversalCookie;
+  global.window = window;
+  global.document = window.document;
 
-const html = fs.readFileSync(path.resolve(__dirname, 'fixtures', 'index.html'), 'utf8');
-const $ = global.$ = cheerio.load(html);
+  global.$ = window.$ = window.jQuery = require('jquery');
+  global.fetch = require('./mocks/fetch');
+  global.history = require('./mocks/history');
+  window.Bloodhound = require('./mocks/bloodhound');
+  window.he = require('./mocks/he');
+  require('./mocks/jQuery')();
 
-// Use "require" to load after imports and declarations.
-require('fepper/excludes/profiles/base/source/_scripts/src/variables.styl');
-require('./mocks/bloodhound');
-require('./mocks/document');
-require('./mocks/DOMParser');
-require('./mocks/fetch');
-require('./mocks/he');
-require('./mocks/history');
-require('./mocks/location');
-require('./mocks/Prism');
-require('./mocks/XMLHttpRequest');
+  const fepperUi = new FepperUi(Requerio, window.$, Redux, $organisms, global, uiData);
 
-const fepperUi = new FepperUi(Requerio, $, Redux, $organisms, global, uiData);
-fepperUi.uiComp = uiComp;
+  require('./mocks/location')(fepperUi.requerio.$orgs);
 
-export default fepperUi;
+  window.outerWidth = window.innerWidth = 1024;
+  window.outerHeight = window.innerHeight = 768;
 
-// Use "require" to load after inception of organisms.
-require('./mocks/organisms');
+  return fepperUi;
+};

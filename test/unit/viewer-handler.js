@@ -1,19 +1,32 @@
 import {expect} from 'chai';
 
-import fepperUi from '../unit';
-
-const $orgs = fepperUi.requerio.$orgs;
-const {
-  annotationsViewer,
-  codeViewer,
-  uiFns,
-  uiProps,
-  viewerHandler
-} = fepperUi;
-
-const timeout = 10;
-
 describe('viewerHandler', function () {
+  const timeout = 10;
+
+  let annotationsViewer;
+  let codeViewer;
+  let fepperUi;
+  let uiFns;
+  let uiProps;
+  let viewerHandler;
+  let $orgs;
+
+  before(function () {
+    const $organisms = require('../../scripts/requerio/organisms').default;
+
+    fepperUi = require('../unit')($organisms);
+    annotationsViewer = fepperUi.annotationsViewer;
+    codeViewer = fepperUi.codeViewer;
+    uiFns = fepperUi.uiFns;
+    uiProps = fepperUi.uiProps;
+    viewerHandler = fepperUi.viewerHandler;
+    $orgs = fepperUi.requerio.$orgs;
+  });
+
+  after(function () {
+    require('../require-cache-bust')();
+  });
+
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
       expect(viewerHandler.constructor.name).to.equal('ViewerHandler');
@@ -61,10 +74,12 @@ describe('viewerHandler', function () {
     });
 
     it('docks the viewer to the bottom if the viewport is small', function () {
+      viewerHandler.dockLeft();
+
       const dockPositionBefore = uiProps.dockPosition;
       const swBefore = uiProps.sw;
+      window.outerWidth = window.innerWidth = 512;
 
-      $orgs.window.innerWidth(512);
       viewerHandler.stoke();
 
       const dockPositionAfter = uiProps.dockPosition;
@@ -260,10 +275,13 @@ describe('viewerHandler', function () {
     // Test .dockLeft(), .dockBottom(), and .dockRight() in that order in order to test sizing of the viewport,
     // i.e. shrink for .dockLeft(), expand for .dockBottom(), shrink for .dockRight().
     it('.dockLeft() docks the codeViewer to the left of the browser', function (done) {
+      viewerHandler.dockBottom();
+
       const dockPositionBefore = uiProps.dockPosition;
       codeViewer.codeActive = true;
 
       uiFns.sizeIframe(1024);
+      window.outerWidth = window.innerWidth = 1024;
       // Dispatching addClass instead of calling viewerHandler.openViewer()
       // because viewerHandler.openViewer() uses setTimeout().
       $orgs['#patternlab-body'].dispatchAction('addClass', 'dock-open');
@@ -281,7 +299,7 @@ describe('viewerHandler', function () {
         const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
 
         expect(dockPositionBefore).to.equal('bottom');
-        expect(halfModeBefore).to.be.false;
+        expect(halfModeBefore).to.be.undefined;
         expect(patternlabBodyBefore.classArray).to.include('dock-bottom');
         expect(vpWidthBefore).to.equal(1024);
 
@@ -355,7 +373,7 @@ describe('viewerHandler', function () {
         const patternlabBodyAfter = $orgs['#patternlab-body'].getState();
 
         expect(dockPositionBefore).to.equal('bottom');
-        expect(halfModeBefore).to.be.false;
+        expect(halfModeBefore).to.be.undefined;
         expect(vpWidthBefore).to.equal(1024);
         expect(patternlabBodyBefore.classArray).to.include('dock-bottom');
 

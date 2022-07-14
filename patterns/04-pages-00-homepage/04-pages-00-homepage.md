@@ -1,4 +1,11 @@
 ---
-content_key: content
+content_key: nav_content
 ---
-[Component](../../patterns/02-components-region/02-components-region.html)
+*Component*
+
+~*~ # Front Matter separator.
+
+---
+content_key: toggler_content
+---
+<button id="toggler">Toggler</button>

@@ -1,22 +1,34 @@
 import {expect} from 'chai';
 
-import fepperUi from '../unit';
-
-const $orgs = fepperUi.requerio.$orgs;
-const {
-  annotationsViewer,
-  codeViewer,
-  dataSaver,
-  uiProps
-} = fepperUi;
-
-const timeout = 10;
-
 describe('codeViewer', function () {
+  const timeout = 10;
+
+  let annotationsViewer;
+  let codeViewer;
+  let dataSaver;
+  let fepperUi;
+  let $orgs;
+  let uiProps;
+
+  before(function () {
+    const $organisms = require('../../scripts/requerio/organisms').default;
+
+    fepperUi = require('../unit')($organisms);
+    annotationsViewer = fepperUi.annotationsViewer;
+    codeViewer = fepperUi.codeViewer;
+    dataSaver = fepperUi.dataSaver;
+    $orgs = fepperUi.requerio.$orgs;
+    uiProps = fepperUi.uiProps;
+  });
+
+  after(function () {
+    require('../require-cache-bust')();
+  });
+
   describe('.constructor()', function () {
     it('instantiates correctly', function () {
       expect(codeViewer.constructor.name).to.equal('CodeViewer');
-      expect(Object.keys(codeViewer).length).to.equal(12);
+      expect(Object.keys(codeViewer).length).to.equal(11);
       expect(codeViewer).to.have.property('receiveIframeMessage');
       expect(codeViewer).to.have.property('codeActive');
       expect(codeViewer).to.have.property('gitInterface');
@@ -28,7 +40,6 @@ describe('codeViewer', function () {
       expect(codeViewer).to.have.property('saving');
       expect(codeViewer).to.have.property('stoked');
       expect(codeViewer).to.have.property('tabActive');
-      expect(codeViewer).to.have.property('viewall');
     });
   });
 
@@ -42,9 +53,7 @@ describe('codeViewer', function () {
     });
 
     it('opens code viewer with a "view=code" param', function (done) {
-      global.location = {
-        search: '?view=code'
-      };
+      global.location.search = '?view=code';
 
       const codeActiveBefore = codeViewer.codeActive;
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
@@ -73,9 +82,7 @@ describe('codeViewer', function () {
     });
 
     it('opens code viewer with a "view=c" param', function (done) {
-      global.location = {
-        search: '?view=c'
-      };
+      global.location.search = '?view=c';
 
       const codeActiveBefore = codeViewer.codeActive;
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
@@ -104,9 +111,8 @@ describe('codeViewer', function () {
     });
 
     it('opens code viewer with a "defaultShowPatternInfo": true config', function (done) {
-      global.location = {
-        search: ''
-      };
+      global.location.search = '';
+
       codeViewer.uiData.config.defaultShowPatternInfo = true;
 
       const codeActiveBefore = codeViewer.codeActive;
@@ -140,11 +146,7 @@ describe('codeViewer', function () {
 
   describe('.activateTabAndPanel()', function () {
     before(function () {
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000',
-        search: '?p=pages-homepage'
-      };
+      global.location.search = '?p=pages-homepage';
 
       codeViewer.stoke();
     });
@@ -236,6 +238,7 @@ describe('codeViewer', function () {
     it('activates Markdown tab and panel for viewall but without the option to edit', function () {
       global.location.search = '?p=viewall-pages';
 
+      $orgs['#sg-code-pane-markdown'].dispatchAction('css', {display: ''});
       codeViewer.stoke();
 
       return codeViewer.activateTabAndPanel('feplet')
@@ -416,9 +419,9 @@ describe('codeViewer', function () {
       expect(textareaStateBefore.css).to.not.have.key('width');
 
       expect(documentStateAfter.activeOrganism).to.equal('#sg-code-textarea-markdown');
-      expect(paneStateAfter.css).to.not.have.key('display');
-      expect(textareaStateAfter.height).to.equal(121);
-      expect(textareaStateAfter.width).to.equal(996);
+      expect(paneStateAfter.css.display).to.equal('none');
+      expect(textareaStateAfter.height).to.equal(115);
+      expect(textareaStateAfter.width).to.equal(990);
     });
   });
 
@@ -435,12 +438,12 @@ describe('codeViewer', function () {
       const paneEditStateAfter = $orgs['#sg-code-pane-markdown-edit'].getState();
 
       expect(documentStateBefore.activeOrganism).to.equal('#sg-code-textarea-markdown');
-      expect(paneStateBefore.css).to.not.have.key('display');
+      expect(paneStateBefore.css.display).to.equal('none');
       expect(paneEditStateBefore.css.display).to.equal('block');
 
       expect(documentStateAfter.activeOrganism).to.be.null;
       expect(paneStateAfter.css.display).to.equal('block');
-      expect(paneEditStateAfter.css).to.not.have.key('display');
+      expect(paneEditStateAfter.css.display).to.equal('none');
     });
   });
 
@@ -681,7 +684,7 @@ describe('codeViewer', function () {
           expect(textareaCommitMessageStateBefore.val).to.equal(textareaCommitMessageStateAfter.val);
 
           expect(codeViewerSavingAfter).to.be.false;
-          expect(paneMarkdownLoadAnimStateAfter.css).to.not.have.key('display');
+          expect(paneMarkdownLoadAnimStateAfter.css.display).to.equal('none');
           expect(paneMarkdownNaStateAfter.textContent).to.equal(`
   ERROR! You can only use the Markdown Editor on the machine that is running this Fepper instance!
   If you are on this machine, you may need to resync this browser with Fepper.
@@ -728,10 +731,10 @@ describe('codeViewer', function () {
           expect(textareaCommitMessageStateBefore.val).to.not.equal(textareaCommitMessageStateAfter.val);
 
           expect(codeViewerSavingAfter).to.be.false;
-          expect(paneMarkdownLoadAnimStateAfter.css).to.not.have.key('display');
+          expect(paneMarkdownLoadAnimStateAfter.css.display).to.equal('none');
           expect(paneMarkdownStateAfter.css.display).to.equal('block');
-          expect(paneMarkdownEditStateAfter.css).to.not.have.key('display');
-          expect(paneMarkdownCommitStateAfter.css).to.not.have.key('display');
+          expect(paneMarkdownEditStateAfter.css.display).to.equal('none');
+          expect(paneMarkdownCommitStateAfter.css.display).to.equal('none');
           expect(textareaCommitMessageStateAfter.val).to.equal('');
         });
     });
@@ -804,9 +807,9 @@ describe('codeViewer', function () {
           expect(documentStateBefore.activeOrganism).to.be.null;
 
           expect(codeViewerSavingAfter).to.be.false;
-          expect(paneMarkdownLoadAnimStateAfter.css).to.not.have.key('display');
+          expect(paneMarkdownLoadAnimStateAfter.css.display).to.equal('none');
           expect(panelMarkdownStateAfter.data.markdownSource).to.equal('04-pages/00-homepage.md');
-          expect(paneMarkdownEditStateAfter.css).to.not.have.key('display');
+          expect(paneMarkdownEditStateAfter.css.display).to.equal('none');
           expect(paneMarkdownCommitStateAfter.css.display).to.equal('block');
           expect(documentStateAfter.activeOrganism).to.equal('#sg-code-textarea-commit-message');
         });
@@ -836,7 +839,7 @@ describe('codeViewer', function () {
           expect(paneMarkdownEditStateBefore.css.display).to.not.equal(paneMarkdownEditStateAfter.css.display);
 
           expect(codeViewerSavingAfter).to.be.false;
-          expect(paneMarkdownEditStateAfter.css).to.not.have.key('display');
+          expect(paneMarkdownEditStateAfter.css.display).to.equal('none');
         });
     });
   });
@@ -860,7 +863,7 @@ describe('codeViewer', function () {
           expect(paneStateBefore.css.display).to.equal('block');
           expect(paneMarkdownNaStateBefore.css).to.not.have.key('display');
 
-          expect(paneStateAfter.css).to.not.have.key('display');
+          expect(paneStateAfter.css.display).to.equal('none');
           expect(paneMarkdownNaStateAfter.css.display).to.equal('block');
         });
     });
@@ -1298,10 +1301,6 @@ describe('codeViewer', function () {
     let event;
 
     before(function () {
-      global.location = {
-        protocol: 'http:',
-        host: 'localhost:3000'
-      };
       event = {
         origin: 'http://localhost:3000'
       };
@@ -1386,12 +1385,11 @@ describe('codeViewer', function () {
       expect(sgCodeLineageAfter.css.display).to.equal('block');
       expect(sgCodeLineageFillAfter.html).to.equal(
       // eslint-disable-next-line indent
-'<a href="patterns/00-elements-paragraph/00-elements-paragraph.html" class>elements-paragraph</a>');
+'<a href="patterns/00-elements-paragraph/00-elements-paragraph.html" class="">elements-paragraph</a>');
       expect(sgCodeLineagerAfter.css.display).to.equal('block');
       expect(sgCodeLineagerFillAfter.html).to.equal(
       // eslint-disable-next-line indent
-'<a href="patterns/02-components-region/02-components-region.html" class>components-region</a>');
-      expect(codeViewer.viewall).to.be.true;
+'<a href="patterns/02-components-region/02-components-region.html" class="">components-region</a>');
     });
 
     it('removes viewall styling when submitting data from pattern and not viewall', function () {
@@ -1446,12 +1444,11 @@ describe('codeViewer', function () {
       expect(sgCodeLineageAfter.css.display).to.equal('block');
       expect(sgCodeLineageFillAfter.html).to.equal(
       // eslint-disable-next-line indent
-'<a href="patterns/00-elements-paragraph/00-elements-paragraph.html" class>elements-paragraph</a>');
+'<a href="patterns/00-elements-paragraph/00-elements-paragraph.html" class="">elements-paragraph</a>');
       expect(sgCodeLineagerAfter.css.display).to.equal('block');
       expect(sgCodeLineagerFillAfter.html).to.equal(
       // eslint-disable-next-line indent
-'<a href="patterns/02-components-region/02-components-region.html" class>components-region</a>');
-      expect(codeViewer.viewall).to.be.false;
+'<a href="patterns/02-components-region/02-components-region.html" class="">components-region</a>');
     });
 
     it('opens code on data.codeViewallClick = "on"', function (done) {
@@ -1805,7 +1802,7 @@ describe('codeViewer', function () {
         expect(paneMarkdownLoadAnimStateBefore.css.display).to.equal('block');
         expect(paneMarkdownStateBefore.css).to.not.have.key('display');
 
-        expect(paneMarkdownLoadAnimStateAfter.css).to.not.have.key('display');
+        expect(paneMarkdownLoadAnimStateAfter.css.display).to.equal('none');
         expect(paneMarkdownStateAfter.css).to.not.have.key('display');
 
         done();
@@ -1833,7 +1830,7 @@ describe('codeViewer', function () {
         expect(paneMarkdownLoadAnimStateBefore.css.display).to.equal('block');
         expect(paneMarkdownStateBefore.css).to.not.have.key('display');
 
-        expect(paneMarkdownLoadAnimStateAfter.css).to.not.have.key('display');
+        expect(paneMarkdownLoadAnimStateAfter.css.display).to.equal('none');
         expect(paneMarkdownStateAfter.css.display).to.equal('block');
 
         done();
@@ -1886,10 +1883,10 @@ describe('codeViewer', function () {
 
         expect(paneMarkdownLoadAnimStateAfter.css).to.not.have.key('display');
         expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
-        expect(paneMarkdownConsoleStateAfter.css).to.not.have.key('display');
+        expect(paneMarkdownConsoleStateAfter.css.display).to.equal('none');
         expect(consoleMarkdownLogStateAfter.html).to.be.empty;
         expect(consoleMarkdownErrorStateAfter.html).to.be.empty;
-        expect(btnMarkdownContinueStateAfter.css).to.not.have.key('display');
+        expect(btnMarkdownContinueStateAfter.css.display).to.equal('none');
         expect(tabGitStateAfter.classArray).to.not.include('sg-code-tab-warning');
         expect(messageGitNaStateAfter.html).to.be.empty;
 
@@ -1943,10 +1940,10 @@ describe('codeViewer', function () {
 
         expect(paneMarkdownLoadAnimStateAfter.css).to.not.have.key('display');
         expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
-        expect(paneMarkdownConsoleStateAfter.css).to.not.have.key('display');
+        expect(paneMarkdownConsoleStateAfter.css.display).to.equal('none');
         expect(consoleMarkdownLogStateAfter.html).to.be.empty;
         expect(consoleMarkdownErrorStateAfter.html).to.be.empty;
-        expect(btnMarkdownContinueStateAfter.css).to.not.have.key('display');
+        expect(btnMarkdownContinueStateAfter.css.display).to.equal('none');
         expect(tabGitStateAfter.classArray).to.not.include('sg-code-tab-warning');
         expect(messageGitNaStateAfter.html).to.be.empty;
 
@@ -1957,9 +1954,16 @@ describe('codeViewer', function () {
     it('sets panel content with patternlab.updatePath', function (done) {
       const expectedMarkdown =
 `---
-content_key: content
+content_key: nav_content
 ---
-[Component](../../patterns/02-components-region/02-components-region.html)
+*Component*
+
+~*~ # Front Matter separator.
+
+---
+content_key: toggler_content
+---
+<button id="toggler">Toggler</button>
 `;
       global.mockResponse = {
         gatekeeper_status: 200

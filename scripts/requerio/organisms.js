@@ -25,7 +25,6 @@ export default {
   '#sg-code-console-markdown-load-anim': null,
   '#sg-code-console-markdown-log': null,
   '#sg-code-container': null,
-  '#sg-code-fill': null, // DEPRECATED: Here for backward-compatibility.
   '#sg-code-label-commit-message': null,
   '#sg-code-lineage': null,
   '#sg-code-lineage-fill': null,
@@ -42,6 +41,8 @@ export default {
   '#sg-code-pane-markdown-edit': null,
   '#sg-code-pane-markdown-load-anim': null,
   '#sg-code-pane-markdown-na': null,
+  '#sg-code-pane-requerio': null,
+  '#sg-code-pane-requerio-na': null,
   '#sg-code-panels': null,
   '#sg-code-panel-feplet': null,
   '#sg-code-panel-git': null,
@@ -67,6 +68,7 @@ export default {
   '#sg-form-label': null,
   '#sg-gen-container': null,
   '#sg-nav-message': null,
+  '#sg-nav-message-test': null,
   '#sg-nav-target': null,
   '#sg-raw': null,
   '#sg-resize-btns': null,
@@ -98,6 +100,5 @@ export default {
   '.sg-nav-toggle': null,
   '.sg-pop': null,
   '.sg-size': null,
-  '.sg-tool': null,
-  '.sg-view-close-btn': null // DEPRECATED: Here for backward-compatibility.
+  '.sg-tool': null
 };

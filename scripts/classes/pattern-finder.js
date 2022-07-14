@@ -55,7 +55,7 @@ export default class PatternFinder {
     }
 
     // Instantiate the bloodhound suggestion engine.
-    const Bloodhound = this.#root.Bloodhound;
+    const Bloodhound = window.Bloodhound;
 
     this.patterns = new Bloodhound({
       datumTokenizer: function (data) {
@@ -114,6 +114,10 @@ export default class PatternFinder {
   passPath(item) {
     const annotationsToggle = this.annotationsViewer.annotationsActive ? 'on' : 'off';
     const codeToggle = this.codeViewer.codeActive ? 'on' : 'off';
+    const messageObj = {
+      event: 'patternlab.updatePath',
+      path: item.patternPath
+    };
 
     this.$orgs['#sg-viewport'].one('load', () => {
       this.$orgs['#sg-viewport'][0].contentWindow.postMessage(
@@ -121,11 +125,6 @@ export default class PatternFinder {
         this.uiProps.targetOrigin
       );
     });
-
-    const messageObj = {
-      event: 'patternlab.updatePath',
-      path: item.patternPath
-    };
 
     // Update the iframe via the history api handler.
     this.closeFinder();

@@ -484,7 +484,7 @@ describe('UI compilation of index page js', () => {
         expect(await (await $('#sg-find')).getAttribute('class')).to.not.have.string('active');
         expect(await (await $(() => document.activeElement)).getAttribute('id')).to.not.equal('typeahead');
         expect(await (await $('#sg-raw')).getAttribute('href'))
-          .to.equal('patterns/00-elements-paragraph/00-elements-paragraph.html');
+          .to.equal('patterns/00-elements-toggler/00-elements-toggler.html');
       });
 
       it('autocomplete blurs #typeahead, closes patternFinder, and sets iframe', async () => {
@@ -664,10 +664,13 @@ describe('UI compilation of index page js', () => {
         await browser.pause(pauseMd);
         await browser.switchToFrame(await $('#sg-viewport'));
 
-        const p = await $('p');
+        const nav = await $('#nav');
 
-        expect(await p.getAttribute('class')).to.have.string('has-annotation');
-        expect(await p.getHTML()).to.have.string('<span class="annotation-tip">1</span>');
+        expect(await nav.getAttribute('id')).to.equal('nav');
+        /* eslint-disable max-len */
+        expect(await nav.getHTML()).to.equal(
+          '<a id="nav" href="../02-components-region/02-components-region.html" class="has-annotation"><span class="annotation-tip">1</span><p><em>Component</em></p>\n</a>');
+        /* eslint-enable max-len */
 
         await browser.switchToParentFrame();
       });
@@ -675,7 +678,7 @@ describe('UI compilation of index page js', () => {
       it('sends the postMessage to annotate viewall if annotations viewer is toggled on', async () => {
         const sgPop = $('.sg-pop[data-pattern-partial="viewall"]');
         const sgPatternToggleAnnotationsElementsParagraph =
-          await $('#sg-pattern-toggle-annotations-elements-paragraph');
+          await $('#sg-pattern-toggle-annotations-templates-page');
 
         await sgPop.waitForClickable();
         await sgPop.click();
@@ -684,10 +687,13 @@ describe('UI compilation of index page js', () => {
         await sgPatternToggleAnnotationsElementsParagraph.click();
         await browser.pause(pauseMd);
 
-        const p = await $('p');
+        const nav = await $('#nav');
 
-        expect(await p.getAttribute('class')).to.have.string('has-annotation');
-        expect(await p.getHTML()).to.have.string('<span class="annotation-tip">1</span>');
+        expect(await nav.getAttribute('id')).to.equal('nav');
+        /* eslint-disable max-len */
+        expect(await nav.getHTML()).to.equal(
+          '<a id="nav" href="../02-components-region/02-components-region.html" class="has-annotation"><span class="annotation-tip">1</span><p>For placement only</p></a>');
+        /* eslint-enable max-len */
 
         await browser.switchToParentFrame();
       });
