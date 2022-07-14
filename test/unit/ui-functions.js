@@ -333,7 +333,7 @@ describe('uiFns', function () {
         window.innerWidth = swOrig;
 
         done();
-      }, uiProps.timeoutDefault);
+      }, uiProps.timeoutDefault * 2);
     });
   });
 
