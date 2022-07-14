@@ -22,7 +22,7 @@ describe('Requerio Inspector', function () {
   let requerioInspectorOut;
   let requerioP;
 
-  before(function () {
+  before(function (done) {
     const $organisms = {
       '#sg-code-pane-requerio': null,
       '#sg-code-pane-requerio-na': null,
@@ -38,6 +38,8 @@ describe('Requerio Inspector', function () {
       path.resolve(__dirname, '..', 'fixtures', 'requerio-inspector.out'), 'utf8');
 
     requerioP = require('../mocks/requerioP')(requerio, $orgs);
+
+    done();
   });
 
   after(function () {
