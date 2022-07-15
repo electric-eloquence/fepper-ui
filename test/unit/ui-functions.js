@@ -302,6 +302,7 @@ describe('uiFns', function () {
       $orgs['#sg-gen-container'].dispatchAction('addClass', 'vp-animate');
       $orgs['#sg-viewport'].dispatchAction('addClass', 'vp-animate');
 
+      const documentStateBefore = $orgs.document.getState();
       const growModeBefore = fepperUi.uiProps.growMode;
       const growIdBefore = fepperUi.uiProps.growId;
       const sgGenContainerStateBefore = $orgs['#sg-gen-container'].getState();
@@ -312,12 +313,14 @@ describe('uiFns', function () {
       let swFinal;
 
       setTimeout(() => {
+        const documentStateAfter = $orgs.document.getState();
         const growModeAfter = fepperUi.uiProps.growMode;
         const growIdAfter = fepperUi.uiProps.growId;
         const sgGenContainerStateAfter = $orgs['#sg-gen-container'].getState();
         const sgViewportStateAfter = $orgs['#sg-viewport'].getState();
         swFinal = uiProps.sw;
 
+        expect(documentStateBefore.activeOrganism).to.equal(documentStateAfter.activeOrganism);
         expect(growModeBefore).to.equal(growModeAfter);
         expect(growIdBefore).to.equal(growIdAfter);
         expect(sgGenContainerStateBefore.classArray).to.include('vp-animate');
@@ -330,7 +333,7 @@ describe('uiFns', function () {
         window.innerWidth = swOrig;
 
         done();
-      }, uiProps.timeoutDefault);
+      }, uiProps.timeoutDefault * 2);
     });
   });
 
