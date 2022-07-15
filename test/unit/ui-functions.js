@@ -308,17 +308,13 @@ describe('uiFns', function () {
       const sgGenContainerStateBefore = $orgs['#sg-gen-container'].getState();
       const sgViewportStateBefore = $orgs['#sg-viewport'].getState();
 
-      uiFns.toggleGrow();
-
-      let swFinal;
-
       setTimeout(() => {
         const documentStateAfter = $orgs.document.getState();
         const growModeAfter = fepperUi.uiProps.growMode;
         const growIdAfter = fepperUi.uiProps.growId;
         const sgGenContainerStateAfter = $orgs['#sg-gen-container'].getState();
         const sgViewportStateAfter = $orgs['#sg-viewport'].getState();
-        swFinal = uiProps.sw;
+        const swFinal = uiProps.sw;
 
         expect(documentStateBefore.activeOrganism).to.equal(documentStateAfter.activeOrganism);
         expect(growModeBefore).to.equal(growModeAfter);
@@ -333,7 +329,9 @@ describe('uiFns', function () {
         window.innerWidth = swOrig;
 
         done();
-      }, uiProps.timeoutDefault * 2);
+      }, uiProps.timeoutDefault);
+
+      uiFns.toggleGrow();
     });
   });
 
