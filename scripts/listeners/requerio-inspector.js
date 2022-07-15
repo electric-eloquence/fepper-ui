@@ -1,9 +1,9 @@
 export default class RequerioInspector {
   constructor(fepperUi) {
     this.codeViewer = fepperUi.codeViewer;
-    this.requerioInspector = fepperUi.requerioInspector;
+    this.$orgs = fepperUi.requerio.$orgs;
     this.requerio = fepperUi.requerio;
-    this.$orgs = this.requerio.$orgs;
+    this.requerioInspector = fepperUi.requerioInspector;
     this.stoked = false;
   }
 
@@ -11,17 +11,41 @@ export default class RequerioInspector {
     const $orgs = this.$orgs;
 
     $orgs['#sg-viewport'].on('load', () => {
-      this.requerio.incept('#sg-code-tree-requerio-trunk');
-      this.requerio.incept('#sg-code-tree-requerio-trunk>li');
-      this.requerio.incept('li.sg-code-tree-requerio-branch');
-      this.requerio.incept('li.sg-code-tree-requerio-branch>.clickable');
-
       const classesNew = [];
-      const $listItemsTrunk = $orgs['#sg-code-tree-requerio-trunk>li'];
       const requerioInspector = this.requerioInspector;
-      const requerioP = requerioInspector.requerioP;
+      const requerioP = this.$orgs['#sg-viewport'][0].contentWindow.requerio;
       const selectorsOrig = [];
       const selectorsNew = [];
+
+      if (!$orgs['#sg-code-tree-requerio-trunk']) {
+        this.requerio.incept('#sg-code-tree-requerio-trunk');
+      }
+      else if (!$orgs['#sg-code-tree-requerio-trunk'].length) {
+        $orgs['#sg-code-tree-requerio-trunk'].populateMembers();
+      }
+
+      if (!$orgs['#sg-code-tree-requerio-trunk>li']) {
+        this.requerio.incept('#sg-code-tree-requerio-trunk>li');
+      }
+      else if (!$orgs['#sg-code-tree-requerio-trunk>li'].length) {
+        $orgs['#sg-code-tree-requerio-trunk>li'].populateMembers();
+      }
+
+      if (!$orgs['li.sg-code-tree-requerio-branch']) {
+        this.requerio.incept('li.sg-code-tree-requerio-branch');
+      }
+      else if (!$orgs['li.sg-code-tree-requerio-branch'].length) {
+        $orgs['li.sg-code-tree-requerio-branch'].populateMembers();
+      }
+
+      if (!$orgs['li.sg-code-tree-requerio-branch>.clickable']) {
+        this.requerio.incept('li.sg-code-tree-requerio-branch>.clickable');
+      }
+      else if (!$orgs['li.sg-code-tree-requerio-branch>.clickable'].length) {
+        $orgs['li.sg-code-tree-requerio-branch>.clickable'].populateMembers();
+      }
+
+      const $listItemsTrunk = $orgs['#sg-code-tree-requerio-trunk>li'];
 
       if (
         !requerioP ||
@@ -29,11 +53,17 @@ export default class RequerioInspector {
         !$orgs['#sg-code-tree-requerio-trunk>li'] ||
         !$orgs['#sg-code-tree-requerio-trunk>li'].length
       ) {
-        $orgs['#sg-code-pane-requerio'].dispatchAction('html', this.requerioInspector.htmlOrig);
-        $orgs['#sg-code-pane-requerio'].dispatchAction('css', {display: 'none'});
-        $orgs['#sg-code-pane-requerio-na'].dispatchAction('css', {display: 'block'});
+        this.hideRequerioShowNa();
 
         return;
+      }
+
+      // Be sure not to incept organisms with names beginning with .sg-code-tree-requerio- elsewhere.
+      // They will get deleted by this loop.
+      for (const key of Object.keys($orgs)) {
+        if (key.startsWith('.sg-code-tree-requerio-')) {
+          delete $orgs[key];
+        }
       }
 
       for (let i = 0, l = $listItemsTrunk.length; i < l; i++) {
@@ -84,6 +114,8 @@ export default class RequerioInspector {
         }
       }
 
+      let displayedItemsLength = 0;
+
       for (let i = 0, l = selectorsOrig.length; i < l; i++) {
         const selectorOrig = selectorsOrig[i];
         const selectorNew = selectorsNew[i];
@@ -93,6 +125,7 @@ export default class RequerioInspector {
         }
 
         $orgs[selectorNew].dispatchAction('css', {display: 'list-item'});
+        displayedItemsLength++;
 
         if (selectorOrig === 'window' || selectorOrig === 'document') {
           continue;
@@ -164,6 +197,16 @@ export default class RequerioInspector {
         });
       }
 
+      if (!displayedItemsLength) {
+        this.hideRequerioShowNa();
+
+        return;
+      }
+
+      // If you've made it this far, show Requerio and hide NA.
+      this.$orgs['#sg-code-pane-requerio'].dispatchAction('css', {display: 'block'});
+      this.$orgs['#sg-code-pane-requerio-na'].dispatchAction('css', {display: 'none'});
+
       $orgs['li.sg-code-tree-requerio-branch>.clickable'].on('click', function () {
         requerioInspector.toggleExpandableBranch(this.parentElement);
       });
@@ -215,5 +258,11 @@ export default class RequerioInspector {
         }
       }, 250);
     });
+  }
+
+  hideRequerioShowNa() {
+    this.$orgs['#sg-code-pane-requerio'].dispatchAction('html', this.requerioInspector.htmlOrig);
+    this.$orgs['#sg-code-pane-requerio'].dispatchAction('css', {display: 'none'});
+    this.$orgs['#sg-code-pane-requerio-na'].dispatchAction('css', {display: 'block'});
   }
 }

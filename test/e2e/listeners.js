@@ -753,7 +753,90 @@ menu anchor.</p>
           '<span class="sg-code-tree-requerio-key">class:</span> <span class="sg-code-tree-requerio-value">"toggled-on"</span>');
         expect(await requerioNavClassArrayAfter.getHTML(false)).to.equal(
           '<span class="sg-code-tree-requerio-key">0:</span> <span class="sg-code-tree-requerio-value">"toggled-on"</span>');
+      });
 
+      it('switching to a pattern without organisms shows that Requerio is not available', async () => {
+        const sgNavTemplates = await $('.sg-nav-templates');
+        const sgAccHandleTemplates = await sgNavTemplates.$('.sg-acc-handle');
+        const sgPopTemplates = await sgNavTemplates.$('.sg-pop');
+
+        await sgAccHandleTemplates.waitForClickable();
+        await sgAccHandleTemplates.click();
+        await sgPopTemplates.waitForClickable();
+        await sgPopTemplates.click();
+
+        const sgCodePaneRequerioBefore = await $('#sg-code-pane-requerio');
+        const sgCodePaneRequerioNaBefore = await $('#sg-code-pane-requerio-na');
+        const sgCodeTreeTrunkBefore = await $('#sg-code-tree-requerio-trunk');
+        const sgRawBefore = await $('#sg-raw');
+
+        expect((await sgCodePaneRequerioBefore.getCSSProperty('display')).value).to.equal('block');
+        expect((await sgCodePaneRequerioNaBefore.getCSSProperty('display')).value).to.equal('none');
+        expect(await sgCodeTreeTrunkBefore.isExisting()).to.be.true;
+        expect(await sgRawBefore.getAttribute('href'))
+          .to.equal('patterns/03-templates-page/03-templates-page.html');
+
+        const sgNavCompounds = await $('.sg-nav-compounds');
+        const sgAccHandleCompounds = await sgNavCompounds.$('.sg-acc-handle');
+        const sgPopCompounds = await sgNavCompounds.$('.sg-pop');
+
+        await sgAccHandleCompounds.waitForClickable();
+        await sgAccHandleCompounds.click();
+        await sgPopCompounds.waitForClickable();
+        await sgPopCompounds.click();
+
+        const sgCodePaneRequerioAfter = await $('#sg-code-pane-requerio');
+        const sgCodePaneRequerioNaAfter = await $('#sg-code-pane-requerio-na');
+        const sgCodeTreeTrunkAfter = await $('#sg-code-tree-requerio-trunk');
+        const sgRawAfter = await $('#sg-raw');
+
+        expect((await sgCodePaneRequerioAfter.getCSSProperty('display')).value).to.equal('none');
+        expect((await sgCodePaneRequerioNaAfter.getCSSProperty('display')).value).to.equal('block');
+        expect(await sgCodeTreeTrunkAfter.isExisting()).to.be.false;
+        expect(await sgRawAfter.getAttribute('href'))
+          .to.equal('patterns/01-compounds-block/01-compounds-block.html');
+      });
+
+      it('switching to a pattern with organisms shows the Requerio Inspector tree', async () => {
+        const sgNavComponents = await $('.sg-nav-components');
+        const sgAccHandleComponents = await sgNavComponents.$('.sg-acc-handle');
+        const sgPopComponents = await sgNavComponents.$('.sg-pop');
+
+        await sgAccHandleComponents.waitForClickable();
+        await sgAccHandleComponents.click();
+        await sgPopComponents.waitForClickable();
+        await sgPopComponents.click();
+
+        const sgCodePaneRequerioBefore = await $('#sg-code-pane-requerio');
+        const sgCodePaneRequerioNaBefore = await $('#sg-code-pane-requerio-na');
+        const sgCodeTreeTrunkBefore = await $('#sg-code-tree-requerio-trunk');
+        const sgRawBefore = await $('#sg-raw');
+
+        expect((await sgCodePaneRequerioBefore.getCSSProperty('display')).value).to.equal('none');
+        expect((await sgCodePaneRequerioNaBefore.getCSSProperty('display')).value).to.equal('block');
+        expect(await sgCodeTreeTrunkBefore.isExisting()).to.be.false;
+        expect(await sgRawBefore.getAttribute('href'))
+          .to.equal('patterns/02-components-region/02-components-region.html');
+
+        const sgNavPages = await $('.sg-nav-pages');
+        const sgAccHandlePages = await sgNavPages.$('.sg-acc-handle');
+        const sgPopPages = await sgNavPages.$('.sg-pop');
+
+        await sgAccHandlePages.waitForClickable();
+        await sgAccHandlePages.click();
+        await sgPopPages.waitForClickable();
+        await sgPopPages.click();
+
+        const sgCodePaneRequerioAfter = await $('#sg-code-pane-requerio');
+        const sgCodePaneRequerioNaAfter = await $('#sg-code-pane-requerio-na');
+        const sgCodeTreeTrunkAfter = await $('#sg-code-tree-requerio-trunk');
+        const sgRawAfter = await $('#sg-raw');
+
+        expect((await sgCodePaneRequerioAfter.getCSSProperty('display')).value).to.equal('block');
+        expect((await sgCodePaneRequerioNaAfter.getCSSProperty('display')).value).to.equal('none');
+        expect(await sgCodeTreeTrunkAfter.isExisting()).to.be.true;
+        expect(await sgRawAfter.getAttribute('href'))
+          .to.equal('patterns/04-pages-00-homepage/04-pages-00-homepage.html');
       });
 
       it('greater than half viewport width docks the viewer to the bottom', async () => {
