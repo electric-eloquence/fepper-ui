@@ -29,9 +29,7 @@ export default class RequerioInspector {
         !$orgs['#sg-code-tree-requerio-trunk>li'] ||
         !$orgs['#sg-code-tree-requerio-trunk>li'].length
       ) {
-        $orgs['#sg-code-pane-requerio'].dispatchAction('html', this.requerioInspector.htmlOrig);
-        $orgs['#sg-code-pane-requerio'].dispatchAction('css', {display: 'none'});
-        $orgs['#sg-code-pane-requerio-na'].dispatchAction('css', {display: 'block'});
+        this.hideRequerioShowNa();
 
         return;
       }
@@ -84,6 +82,8 @@ export default class RequerioInspector {
         }
       }
 
+      let displayedItemsLength = 0;
+
       for (let i = 0, l = selectorsOrig.length; i < l; i++) {
         const selectorOrig = selectorsOrig[i];
         const selectorNew = selectorsNew[i];
@@ -93,6 +93,7 @@ export default class RequerioInspector {
         }
 
         $orgs[selectorNew].dispatchAction('css', {display: 'list-item'});
+        displayedItemsLength++;
 
         if (selectorOrig === 'window' || selectorOrig === 'document') {
           continue;
@@ -164,6 +165,12 @@ export default class RequerioInspector {
         });
       }
 
+      if (!displayedItemsLength) {
+        this.hideRequerioShowNa();
+
+        return;
+      }
+
       $orgs['li.sg-code-tree-requerio-branch>.clickable'].on('click', function () {
         requerioInspector.toggleExpandableBranch(this.parentElement);
       });
@@ -215,5 +222,11 @@ export default class RequerioInspector {
         }
       }, 250);
     });
+  }
+
+  hideRequerioShowNa() {
+    this.$orgs['#sg-code-pane-requerio'].dispatchAction('html', this.requerioInspector.htmlOrig);
+    this.$orgs['#sg-code-pane-requerio'].dispatchAction('css', {display: 'none'});
+    this.$orgs['#sg-code-pane-requerio-na'].dispatchAction('css', {display: 'block'});
   }
 }
