@@ -2,26 +2,24 @@ export default class RequerioInspector {
   constructor(fepperUi) {
     this.htmlOrig = null;
     this.$orgs = fepperUi.requerio.$orgs; // Organisms in the UI.
-    this.$orgsP = null; // Organisms in the pattern.
-    this.requerioP = null;
   }
 
   stoke() {
     this.$orgs['#sg-viewport'].on('load', () => {
-      this.requerioP = this.$orgs['#sg-viewport'][0].contentWindow.requerio;
+      const requerioP = this.$orgs['#sg-viewport'][0].contentWindow.requerio;
 
       /* istanbul ignore if */
-      if (!this.requerioP) {
+      if (!requerioP) {
         return;
       }
 
       this.$orgs['#sg-code-pane-requerio'].dispatchAction('html');
 
-      this.$orgsP = this.requerioP.$orgs;
-      const state = this.requerioP.store.getState();
+      const state = requerioP.store.getState();
       const htmlOrig = this.$orgs['#sg-code-pane-requerio'].getState().html;
       // eslint-disable-next-line eqeqeq
       this.htmlOrig = htmlOrig == null ? '' : htmlOrig;
+      this.htmlOrig = this.htmlOrig.replace(/\s*<ul id="sg-code-tree-requerio-trunk"[\S\s]*/, '');
 
       this.$orgs['#sg-code-pane-requerio-na'].dispatchAction('css', {display: 'none'});
 
@@ -36,12 +34,10 @@ export default class RequerioInspector {
         throw err;
       }
 
-      const html = this.buildHtml(state);
+      const htmlToAppend = this.buildHtml(state);
 
       // Not using the 'append' action because the Requerio Inspector gets stoked multiple times by LiveReload.
-      if (!this.htmlOrig || !this.htmlOrig.includes(html)) {
-        this.$orgs['#sg-code-pane-requerio'].dispatchAction('html', this.htmlOrig + html);
-      }
+      this.$orgs['#sg-code-pane-requerio'].dispatchAction('html', this.htmlOrig + htmlToAppend);
 
       this.$orgs['#sg-code-pane-requerio'].dispatchAction('css', {display: 'block'});
     });
