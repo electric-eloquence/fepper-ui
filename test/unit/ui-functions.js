@@ -308,6 +308,8 @@ describe('uiFns', function () {
       const sgGenContainerStateBefore = $orgs['#sg-gen-container'].getState();
       const sgViewportStateBefore = $orgs['#sg-viewport'].getState();
 
+      uiFns.toggleGrow();
+
       setTimeout(() => {
         const documentStateAfter = $orgs.document.getState();
         const growModeAfter = fepperUi.uiProps.growMode;
@@ -329,9 +331,7 @@ describe('uiFns', function () {
         window.innerWidth = swOrig;
 
         done();
-      }, uiProps.timeoutDefault);
-
-      uiFns.toggleGrow();
+      }, 1000);
     });
   });
 
