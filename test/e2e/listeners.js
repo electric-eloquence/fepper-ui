@@ -63,7 +63,7 @@ describe('Listeners end-to-end tests', () => {
         expect((await sgViewContainer.getSize()).width).to.equal(1024);
       });
 
-      it('close button closes annotations viewer', async () => {
+      it('close button closes Annotations Viewer', async () => {
         const sgTToggle = await $('#sg-t-toggle');
         const sgTAnnotations = await $('#sg-t-annotations');
 
@@ -152,7 +152,7 @@ describe('Listeners end-to-end tests', () => {
         await browser.setWindowSize(1024, 768);
       });
 
-      it('"ctrl+shift+a" toggles on the annotations viewer', async () => {
+      it('"ctrl+shift+a" toggles on the Annotations Viewer', async () => {
         const patternlabBody = await $('#patternlab-body');
 
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-open');
@@ -256,7 +256,7 @@ menu anchor.</p>
         expect((await sgViewContainer.getSize()).width).to.equal(512);
       });
 
-      it('"ctrl+shift+a" toggles off the annotations viewer', async () => {
+      it('"ctrl+shift+a" toggles off the Annotations Viewer', async () => {
         const patternlabBody = await $('#patternlab-body');
         const sgVpWrap = await $('#sg-vp-wrap');
         const sgViewContainer = await $('#sg-view-container');
@@ -298,12 +298,12 @@ menu anchor.</p>
 
       it('dock-left button docks the viewer to the left', async () => {
         const sgTToggle = await $('#sg-t-toggle');
-        const sgTAnnotations = await $('#sg-t-annotations');
+        const sgTCode = await $('#sg-t-code');
 
         await sgTToggle.waitForClickable();
         await sgTToggle.click();
-        await sgTAnnotations.waitForClickable();
-        await sgTAnnotations.click();
+        await sgTCode.waitForClickable();
+        await sgTCode.click();
 
         const patternlabBody = await $('#patternlab-body');
         const sgViewContainer = await $('#sg-view-container');
@@ -352,7 +352,7 @@ menu anchor.</p>
         expect((await sgViewContainer.getSize()).width).to.equal(1024);
       });
 
-      it('close button closes code viewer', async () => {
+      it('close button closes Code Viewer', async () => {
         const sgTToggle = await $('#sg-t-toggle');
         const sgTCode = await $('#sg-t-code');
 
@@ -411,7 +411,7 @@ menu anchor.</p>
         expect((await sgViewContainer.getSize()).width).to.equal(512);
       });
 
-      it('markdown tab activates markdown panel', async () => {
+      it('Markdown tab activates Markdown panel', async () => {
         const sgCodeTabFeplet = await $('#sg-code-tab-feplet');
         const sgCodeTabMarkdown = await $('#sg-code-tab-markdown');
         const sgCodePanelFeplet = await $('#sg-code-panel-feplet');
@@ -431,7 +431,7 @@ menu anchor.</p>
         expect(await sgCodePanelMarkdown.getAttribute('class')).to.have.string('sg-code-panel-active');
       });
 
-      it('feplet tab activates feplet panel', async () => {
+      it('Feplet tab activates Feplet panel', async () => {
         const sgCodeTabFeplet = await $('#sg-code-tab-feplet');
         const sgCodeTabMarkdown = await $('#sg-code-tab-markdown');
         const sgCodePanelFeplet = await $('#sg-code-panel-feplet');
@@ -451,7 +451,7 @@ menu anchor.</p>
         expect(await sgCodePanelMarkdown.getAttribute('class')).to.not.have.string('sg-code-panel-active');
       });
 
-      it('the markdown edit button activates the markdown edit pane', async () => {
+      it('the Markdown edit button activates the Markdown edit pane', async () => {
         const sgCodeTabMarkdown = await $('#sg-code-tab-markdown');
         const sgCodeBtnMarkdownEdit = await $('#sg-code-btn-markdown-edit');
 
@@ -467,7 +467,7 @@ menu anchor.</p>
         expect((await sgCodePaneMarkdownEdit.getCSSProperty('display')).value).to.equal('block');
       });
 
-      it('the markdown edit cancel button exits the markdown edit pane', async () => {
+      it('the Markdown edit cancel button exits the Markdown edit pane', async () => {
         const sgCodeTabMarkdown = await $('#sg-code-tab-markdown');
         const sgCodeBtnMarkdownEdit = await $('#sg-code-btn-markdown-edit');
         const sgCodeBtnMarkdownSaveCancel = await $('#sg-code-btn-markdown-save-cancel');
@@ -486,7 +486,7 @@ menu anchor.</p>
         expect((await sgCodePaneMarkdownEdit.getCSSProperty('display')).value).to.equal('none');
       });
 
-      it('the markdown edit save button exits the markdown edit pane if markdown unchanged', async () => {
+      it('the Markdown edit save button exits the Markdown edit pane if Markdown unchanged', async () => {
         const sgCodeTabMarkdown = await $('#sg-code-tab-markdown');
         const sgCodeBtnMarkdownEdit = await $('#sg-code-btn-markdown-edit');
         const sgCodeBtnMarkdownSave = await $('#sg-code-btn-markdown-save');
@@ -505,7 +505,7 @@ menu anchor.</p>
         expect((await sgCodePaneMarkdownEdit.getCSSProperty('display')).value).to.equal('none');
       });
 
-      it('the markdown edit save button exits the markdown edit pane if edited markdown is saved', async () => {
+      it('the Markdown edit save button exits the Markdown edit pane if edited Markdown is saved', async () => {
         const sgCodeTabMarkdown = await $('#sg-code-tab-markdown');
         const sgCodeBtnMarkdownEdit = await $('#sg-code-btn-markdown-edit');
         const sgCodeTextareaMarkdown = await $('#sg-code-textarea-markdown');
@@ -526,7 +526,7 @@ menu anchor.</p>
         expect((await sgCodePaneMarkdownEdit.getCSSProperty('display')).value).to.equal('none');
       });
 
-      it('the git tab activates the git panel', async () => {
+      it('the Git tab activates the Git panel', async () => {
         const sgCodeTabGit = await $('#sg-code-tab-git');
 
         await sgCodeTabGit.waitForClickable();
@@ -539,7 +539,7 @@ menu anchor.</p>
         expect((await sgCodePaneGitNa.getCSSProperty('display')).value).to.equal('block');
       });
 
-      it('the requerio tab activates the requerio panel, and shows instructions if the pattern has no requerio\
+      it('the Requerio tab activates the Requerio panel, and shows instructions if the pattern has no Requerio\
 ', async () => {
         const sgNavElements = await $('.sg-nav-elements');
         const sgAccHandleElements = await sgNavElements.$('.sg-acc-handle');
@@ -564,7 +564,7 @@ menu anchor.</p>
         expect((await sgCodePaneRequerioNa.getCSSProperty('display')).value).to.equal('block');
       });
 
-      it('the requerio panel displays the state of organisms in a pattern that has requerio', async () => {
+      it('the Requerio panel displays the state of organisms in a pattern that has Requerio', async () => {
         const sgCodePanelRequerio = await $('#sg-code-panel-requerio');
         const sgCodePaneRequerio = await $('#sg-code-pane-requerio');
         const sgCodePaneRequerioNa = await $('#sg-code-pane-requerio-na');
@@ -574,7 +574,7 @@ menu anchor.</p>
         expect((await sgCodePaneRequerioNa.getCSSProperty('display')).value).to.equal('none');
       });
 
-      it('the requerio inspector help text for an organism can be expanded and then collapsed again\
+      it('the Requerio Inspector help text for an organism can be expanded and then collapsed again\
 ', async () => {
         const helpTextToggler = await $('#sg-code-tree-requerio-help > .sg-code-tree-requerio-branch');
         const helpTextTogglerClickable = await $('#sg-code-tree-requerio-help > .sg-code-tree-requerio-branch > ' +
@@ -869,7 +869,7 @@ menu anchor.</p>
         await browser.setWindowSize(1024, 768);
       });
 
-      it('"ctrl+shift+c" toggles on the code viewer', async () => {
+      it('"ctrl+shift+c" toggles on the Code Viewer', async () => {
         const patternlabBody = await $('#patternlab-body');
 
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-open');
@@ -962,7 +962,7 @@ menu anchor.</p>
         expect((await sgViewContainer.getSize()).width).to.equal(512);
       });
 
-      it('"ctrl+shift+]" switches to the next code viewer tab/panel', async () => {
+      it('"ctrl+shift+]" switches to the next Code Viewer tab/panel', async () => {
         const sgCodeTabFeplet = await $('#sg-code-tab-feplet');
         const sgCodeTabMarkdown = await $('#sg-code-tab-markdown');
         const sgCodePanelFeplet = await $('#sg-code-panel-feplet');
@@ -985,7 +985,7 @@ menu anchor.</p>
         expect(await sgCodePanelMarkdown.getAttribute('class')).to.have.string('sg-code-panel-active');
       });
 
-      it('"ctrl+shift+[" switches to the previous code viewer tab/panel', async () => {
+      it('"ctrl+shift+[" switches to the previous Code Viewer tab/panel', async () => {
         const sgCodeTabFeplet = await $('#sg-code-tab-feplet');
         const sgCodeTabMarkdown = await $('#sg-code-tab-markdown');
         const sgCodePanelFeplet = await $('#sg-code-panel-feplet');
@@ -1005,7 +1005,7 @@ menu anchor.</p>
         expect(await sgCodePanelMarkdown.getAttribute('class')).to.not.have.string('sg-code-panel-active');
       });
 
-      it('"ctrl+shift+[" switches to the last code viewer tab/panel if on the first tab/panel', async () => {
+      it('"ctrl+shift+[" switches to the last Code Viewer tab/panel if on the first tab/panel', async () => {
         const sgCodeTabFirst = await $('.sg-code-tab:first-child');
         const sgCodeTabLast = await $('.sg-code-tab:last-child');
         const sgCodePanelFirst = await $('.sg-code-panel:first-child');
@@ -1025,7 +1025,7 @@ menu anchor.</p>
         expect(await sgCodePanelLast.getAttribute('class')).to.have.string('sg-code-panel-active');
       });
 
-      it('"ctrl+shift+]" switches to the first code viewer tab/panel if on the last tab/panel', async () => {
+      it('"ctrl+shift+]" switches to the first Code Viewer tab/panel if on the last tab/panel', async () => {
         const sgCodeTabFirst = await $('.sg-code-tab:first-child');
         const sgCodeTabLast = await $('.sg-code-tab:last-child');
         const sgCodePanelFirst = await $('.sg-code-panel:first-child');
@@ -1045,7 +1045,7 @@ menu anchor.</p>
         expect(await sgCodePanelLast.getAttribute('class')).to.not.have.string('sg-code-panel-active');
       });
 
-      it('"ctrl+shift+c" toggles off the code viewer', async () => {
+      it('"ctrl+shift+c" toggles off the Code Viewer', async () => {
         const patternlabBody = await $('#patternlab-body');
         const sgVpWrap = await $('#sg-vp-wrap');
         const sgViewContainer = await $('#sg-view-container');

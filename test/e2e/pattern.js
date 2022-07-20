@@ -9,7 +9,7 @@ describe('Pattern end-to-end tests', () => {
         await browser.setWindowSize(1024, 768);
       });
 
-      it('viewall annotations viewer button toggles annotations viewer', async () => {
+      it('viewall Annotations Viewer button toggles Annotations Viewer', async () => {
         const sgPop = await $('.sg-pop[data-pattern-partial="viewall"]');
         const sgViewport = await $('#sg-viewport');
         const sgPatternToggleAnnotationsComponentsRegion = await $('#sg-pattern-toggle-annotations-templates-page');
@@ -55,7 +55,7 @@ menu anchor.</p>
         await browser.setWindowSize(1024, 768);
       });
 
-      it('"ctrl+shift+a" toggles annotations viewer', async () => {
+      it('"ctrl+shift+a" toggles Annotations Viewer', async () => {
         const sgViewport = await $('#sg-viewport');
 
         await browser.switchToFrame(sgViewport);
@@ -92,12 +92,121 @@ menu anchor.</p>
   });
 
   describe('code-viewer.js', () => {
+    describe('navigation within the pattern', () => {
+      it('updates the Feplet pane of the Code Viewer', async () => {
+        const sgTToggle = await $('#sg-t-toggle');
+        const sgTCode = await $('#sg-t-code');
+        const sgCodePanelFeplet = await $('#sg-code-panel-feplet');
+
+        await sgTToggle.waitForClickable();
+        await sgTToggle.click();
+        await sgTCode.waitForClickable();
+        await sgTCode.click();
+        await browser.switchToFrame(sgCodePanelFeplet);
+
+        const fepletIframeBodyBefore = await (await $('body')).getHTML(false);
+
+        /* eslint-disable max-len */
+        expect(fepletIframeBodyBefore).to.equal(`
+    <main id="" class="mustache-browser__main">
+      <div id="message" class="message "></div>
+<pre><code class="language-markup"><a href="/?p=templates-page" target="_top" data-path="patterns/03-templates-page/03-templates-page.html" data-pattern-partial="templates-page" class="mustache-browser__link">{{&gt; templates-page }}</a>
+</code></pre>
+
+    </main>
+    
+  
+`);
+        /* eslint-enable max-len */
+
+        await browser.switchToParentFrame();
+
+        const sgViewport = await $('#sg-viewport');
+
+        await browser.switchToFrame(sgViewport);
+
+        const nav = await $('#nav');
+
+        await nav.waitForClickable();
+        await nav.click();
+        await browser.switchToParentFrame();
+        await browser.switchToFrame(sgCodePanelFeplet);
+
+        const fepletIframeBodyAfter = await (await $('body')).getHTML(false);
+
+        expect(fepletIframeBodyBefore).to.not.equal(fepletIframeBodyAfter);
+        /* eslint-disable max-len */
+        expect(fepletIframeBodyAfter).to.equal(`
+    <main id="" class="mustache-browser__main">
+      <div id="message" class="message "></div>
+<pre><code class="language-markup"><a href="/?p=compounds-block" target="_top" data-path="patterns/01-compounds-block/01-compounds-block.html" data-pattern-partial="compounds-block" class="mustache-browser__link">{{&gt; 01-compounds/block }}</a>
+</code></pre>
+
+    </main>
+    
+  
+`);
+        /* eslint-enable max-len */
+      });
+
+      it('updates the Markdown pane of the Code Viewer', async () => {
+        const sgTToggle = await $('#sg-t-toggle');
+        const sgTCode = await $('#sg-t-code');
+        const sgCodePaneMarkdownNa = await $('#sg-code-pane-markdown-na');
+        const sgCodePaneMarkdown = await $('#sg-code-pane-markdown');
+
+        await sgTToggle.waitForClickable();
+        await sgTToggle.click();
+        await sgTCode.waitForClickable();
+        await sgTCode.click();
+
+        expect((await sgCodePaneMarkdownNa.getCSSProperty('display')).value).to.equal('none');
+        expect((await sgCodePaneMarkdown.getCSSProperty('display')).value).to.equal('block');
+        /* eslint-disable max-len */
+        expect(await sgCodePaneMarkdown.getHTML(false)).to.equal(`
+      <pre id="sg-code-pre-language-markdown"><code id="sg-code-code-language-markdown" class="language-markdown">---
+content_key: nav_content
+---
+*Component*
+
+~*~ # Front Matter separator.
+
+---
+content_key: toggler_content
+---
+&lt;button id="toggler"&gt;Toggler&lt;/button&gt;
+</code></pre>
+      <button id="sg-code-btn-markdown-edit" class="sg-code-btn" title="Edit this pattern's Markdown content">Edit</button>
+    `);
+        /* eslint-enable max-len */
+
+        await browser.switchToParentFrame();
+
+        const sgViewport = await $('#sg-viewport');
+
+        await browser.switchToFrame(sgViewport);
+
+        const nav = await $('#nav');
+
+        await nav.waitForClickable();
+        await nav.click();
+        await browser.switchToParentFrame();
+
+        expect((await sgCodePaneMarkdownNa.getCSSProperty('display')).value).to.equal('block');
+        expect((await sgCodePaneMarkdown.getCSSProperty('display')).value).to.equal('none');
+        expect(await sgCodePaneMarkdownNa.getHTML(false)).to.equal(`
+      <p>There is no .md file associated with this pattern.</p>
+      <p>Please refer to <a href="/readme#markdown-content" target="_blank">the docs</a> for additional information.</p>
+    `);
+      });
+    });
+
     describe('click', () => {
       before(async () => {
         await browser.setWindowSize(1024, 768);
       });
 
-      it('viewall code viewer button toggles code viewer', async () => {
+      it('viewall Code Viewer button toggles Code Viewer', async () => {
         const sgPop = await $('.sg-pop[data-pattern-partial="viewall"]');
         const sgViewport = await $('#sg-viewport');
         const sgPatternToggleCodeComponentsRegion = await $('#sg-pattern-toggle-code-components-region');
@@ -133,7 +242,7 @@ menu anchor.</p>
         browser.setWindowSize(1024, 768);
       });
 
-      it('"ctrl+shift+c" toggles code viewer', async () => {
+      it('"ctrl+shift+c" toggles Code Viewer', async () => {
         const sgViewport = await $('#sg-viewport');
 
         await browser.switchToFrame(sgViewport);
@@ -677,6 +786,7 @@ menu anchor.</p>
         await a.click();
         await browser.switchToParentFrame();
 
+        expect(await browser.getUrl()).to.equal('http://localhost:8080/?p=components-region');
         expect(await sgRaw.getAttribute('href'))
           .to.equal('patterns/02-components-region/02-components-region.html');
       });

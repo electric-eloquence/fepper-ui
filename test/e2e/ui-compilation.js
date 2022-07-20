@@ -511,7 +511,7 @@ describe('UI compilation of index page js', () => {
         await browser.setWindowSize(1024, 768);
       });
 
-      it('click toggles annotations viewer', async () => {
+      it('click toggles Annotations Viewer', async () => {
         const sgTToggle = await $('#sg-t-toggle');
         const sgTCode = await $('#sg-t-code');
         const sgTAnnotations = await $('#sg-t-annotations');
@@ -520,7 +520,7 @@ describe('UI compilation of index page js', () => {
 
         await sgTToggle.waitForClickable();
         await sgTToggle.click();
-        // Open code viewer first to make sure it gets closed.
+        // Open Code Viewer first to make sure it gets closed.
         await sgTCode.waitForClickable();
         await sgTCode.click();
         await browser.pause(pauseMd);
@@ -551,7 +551,7 @@ describe('UI compilation of index page js', () => {
         await browser.setWindowSize(1024, 768);
       });
 
-      it('click toggles code viewer', async () => {
+      it('click toggles Code Viewer', async () => {
         const sgTToggle = await $('#sg-t-toggle');
         const sgTCode = await $('#sg-t-code');
         const sgTAnnotations = await $('#sg-t-annotations');
@@ -560,7 +560,7 @@ describe('UI compilation of index page js', () => {
 
         await sgTToggle.waitForClickable();
         await sgTToggle.click();
-        // Open annotations viewer first to make sure it gets closed.
+        // Open Annotations Viewer first to make sure it gets closed.
         await sgTAnnotations.click();
         await browser.pause(pauseMd);
         await sgTToggle.click();
@@ -653,7 +653,7 @@ describe('UI compilation of index page js', () => {
         await browser.setWindowSize(1024, 768);
       });
 
-      it('sends the postMessage to annotate pattern if annotations viewer is toggled on', async () => {
+      it('sends the postMessage to annotate pattern if Annotations Viewer is toggled on', async () => {
         const sgTToggle = await $('#sg-t-toggle');
         const sgTAnnotations = await $('#sg-t-annotations');
 
@@ -675,7 +675,7 @@ describe('UI compilation of index page js', () => {
         await browser.switchToParentFrame();
       });
 
-      it('sends the postMessage to annotate viewall if annotations viewer is toggled on', async () => {
+      it('sends the postMessage to annotate viewall if Annotations Viewer is toggled on', async () => {
         const sgPop = $('.sg-pop[data-pattern-partial="viewall"]');
         const sgPatternToggleAnnotationsElementsParagraph =
           await $('#sg-pattern-toggle-annotations-templates-page');
@@ -698,7 +698,7 @@ describe('UI compilation of index page js', () => {
         await browser.switchToParentFrame();
       });
 
-      it('sends the postMessage to load code for pattern if code viewer is toggled on', async () => {
+      it('sends the postMessage to load code for pattern if Code Viewer is toggled on', async () => {
         const sgTToggle = await $('#sg-t-toggle');
         const sgTCode = await $('#sg-t-code');
 
@@ -711,7 +711,7 @@ describe('UI compilation of index page js', () => {
         expect(await (await $('#sg-code-container')).getAttribute('class')).to.have.string('active');
       });
 
-      it('sends the postMessage to load code from viewall if code viewer is toggled on', async () => {
+      it('sends the postMessage to load code from viewall if Code Viewer is toggled on', async () => {
         const sgPop = $('.sg-pop[data-pattern-partial="viewall"]');
         const sgPatternToggleCodeTemplatesPage = await $('#sg-pattern-toggle-code-templates-page');
 
