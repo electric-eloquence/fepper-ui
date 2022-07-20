@@ -244,7 +244,7 @@
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(
       () => {
-        // Do not fire if the annotations viewer is closed.
+        // Do not fire if the Annotations Viewer is closed.
         if (!annotationsActive) {
           return;
         }

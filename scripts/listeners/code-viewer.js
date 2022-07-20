@@ -200,7 +200,7 @@ export default class CodeViewer {
       });
     });
 
-    // Toggle the code viewer.
+    // Toggle the Code Viewer.
     window.Mousetrap.bind('ctrl+shift+c', (e) => {
       this.codeViewer.toggleCode();
 
@@ -224,7 +224,7 @@ export default class CodeViewer {
       return false;
     });
 
-    // Dock code viewer to the left.
+    // Dock Code Viewer to the left.
     window.Mousetrap.bind('ctrl+alt+h', (e) => {
       const dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
 
@@ -236,7 +236,7 @@ export default class CodeViewer {
       return false;
     });
 
-    // Dock code viewer to the bottom.
+    // Dock Code Viewer to the bottom.
     window.Mousetrap.bind('ctrl+alt+j', (e) => {
       const dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
 
@@ -248,7 +248,7 @@ export default class CodeViewer {
       return false;
     });
 
-    // Dock code viewer to the right.
+    // Dock Code Viewer to the right.
     window.Mousetrap.bind('ctrl+alt+l', (e) => {
       const dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
 

@@ -257,7 +257,7 @@ module.exports = new Promise((resolve) => {
 
             return;
           }
-          // Default the mustache browser to the homepage.
+          // Default the Mustache Browser to the homepage.
           else {
             res.writeHead(200, {'Content-Type': 'text/html'});
             /* eslint-disable max-len */

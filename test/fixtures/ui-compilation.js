@@ -219,7 +219,7 @@ if (typeof window === 'object') {
 
 /**
  * @file ui/core/styleguide/index//html/01-body/20-header/60-sg-controls/60-sg-view/li.js
- * @description Annotations and code viewer toggles.
+ * @description Annotations and Code Viewer toggles.
  */
 // Annotations toggle click handler.
 export function sgTAnnotationsClick(event) {

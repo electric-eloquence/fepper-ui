@@ -66,13 +66,13 @@ export default class Listeners {
           this.uiProps.lastViewer === 'annotations' ||
           this.dataSaver.findValue('lastViewer') === 'annotations'
         ) {
-          // Open annotations viewer if last opened viewer was annotations.
+          // Open Annotations Viewer if last opened viewer was annotations.
           this.$orgs['#sg-viewport'].one('load', () => {
             this.annotationsViewer.openAnnotations();
           });
         }
         else {
-          // Open code viewer by default.
+          // Open Code Viewer by default.
           this.codeViewer.openCode();
         }
       }

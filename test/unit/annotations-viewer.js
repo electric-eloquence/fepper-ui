@@ -56,7 +56,7 @@ menu anchor.</p>
       }, timeout);
     });
 
-    it('opens annotations viewer with a "view=annotations" param', function (done) {
+    it('opens Annotations Viewer with a "view=annotations" param', function (done) {
       global.location.search = '?view=annotations';
 
       const annotationsActiveBefore = annotationsViewer.annotationsActive;
@@ -86,7 +86,7 @@ menu anchor.</p>
       }, timeout);
     });
 
-    it('opens code viewer with a "view=a" param', function (done) {
+    it('opens Code Viewer with a "view=a" param', function (done) {
       global.location.search = '?view=a';
 
       const annotationsActiveBefore = annotationsViewer.annotationsActive;
@@ -228,7 +228,7 @@ menu anchor.</p>
       }, timeout);
     });
 
-    it('switches from code viewer to annotations viewer', function (done) {
+    it('switches from Code Viewer to Annotations Viewer', function (done) {
       codeViewer.openCode();
       $orgs['#sg-t-annotations'].dispatchAction('removeClass', 'active');
 
@@ -545,7 +545,7 @@ menu anchor.</p>
         expect(sgTAnnotationsAfter.classArray).to.not.include('active');
         expect(sgViewContainerAfter.classArray).to.not.include('anim-ready');
 
-        // Reopen annotations viewer in order to run the following test.
+        // Reopen Annotations Viewer in order to run the following test.
         annotationsViewer.openAnnotations();
 
         setTimeout(() => {

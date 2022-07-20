@@ -99,7 +99,7 @@ export default class AnnotationsViewer {
 
   // Declared before other methods because it must be unit tested before other methods. Be sure to e2e test .stoke().
   stoke() {
-    // Load the query strings in case annotations viewer has to show by default.
+    // Load the query strings in case Annotations Viewer has to show by default.
     const searchParams = this.urlHandler.getSearchParams();
 
     if (searchParams.view && (searchParams.view === 'annotations' || searchParams.view === 'a')) {
@@ -142,9 +142,9 @@ export default class AnnotationsViewer {
     this.annotationsActive = true;
     this.uiProps.lastViewer = 'annotations';
 
-    // Make sure the code viewer is off before showing annotations.
+    // Make sure the Code Viewer is off before showing annotations.
     this.codeViewer.closeCode();
-    // Tell the pattern that the annotations viewer has been turned on.
+    // Tell the pattern that the Annotations Viewer has been turned on.
     this.$orgs['#sg-viewport'][0].contentWindow.postMessage({annotationsToggle: 'on'}, this.uiProps.targetOrigin);
     this.$orgs['#sg-t-annotations'].dispatchAction('addClass', 'active');
     this.$orgs['#sg-annotations-container'].dispatchAction('addClass', 'active');

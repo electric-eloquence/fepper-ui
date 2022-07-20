@@ -164,7 +164,7 @@ export default class UiFns {
    * @param {string} url - The known URL.
    * @returns {string|undefined} The patternPartial or undefined.
    */
-  getPatternPartialFromURL(url) {
+  getPatternPartialFromUrl(url) {
     for (const key of Object.keys(this.uiData.patternPaths)) {
       if (url.endsWith(this.uiData.patternPaths[key])) {
         return key;

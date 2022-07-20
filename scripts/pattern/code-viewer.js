@@ -95,13 +95,13 @@
     });
   });
 
-  // Bind Mousetrap keyboard shortcuts for the code viewer.
+  // Bind Mousetrap keyboard shortcuts for the Code Viewer.
   const keys = [
     'shift+[', // Focus on the tab to the left (or cycle to to the end).
     'shift+]', // Focus on the tab to the right (or cycle to the beginning).
-    'alt+h', // Dock code viewer to the left.
-    'alt+j', // Dock code viewer to the bottom.
-    'alt+l' // Dock code viewer to the right.
+    'alt+h', // Dock Code Viewer to the left.
+    'alt+j', // Dock Code Viewer to the bottom.
+    'alt+l' // Dock Code Viewer to the right.
   ];
 
   for (const key of keys) {

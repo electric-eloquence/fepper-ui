@@ -127,10 +127,10 @@ describe('uiFns', function () {
     });
   });
 
-  describe('.getPatternPartialFromURL()', function () {
+  describe('.getPatternPartialFromUrl()', function () {
     it('gets an unknown patternPartial from a known URL', function () {
       const url = 'http://localhost:3000/patterns/04-pages-00-homepage/04-pages-00-homepage.html';
-      const patternPartial = uiFns.getPatternPartialFromURL(url);
+      const patternPartial = uiFns.getPatternPartialFromUrl(url);
 
       expect(patternPartial).to.equal('pages-homepage');
     });
