@@ -14,6 +14,7 @@ export default class UiFns {
     this.#root = root;
 
     this.$orgs = fepperUi.requerio.$orgs;
+    this.uiData = fepperUi.uiData;
   }
 
   /* GETTERS for fepperUi instance props in case they are undefined at instantiation. */
@@ -95,7 +96,7 @@ export default class UiFns {
   }
 
   /**
-   * Takes breakpoint configurations from customizable sources and returns a sorted object of key-value pairs.
+   * Take breakpoint configurations from customizable sources and return a sorted object of key-value pairs.
    *
    * @returns {object} Breakpoints sorted from largest to smallest.
    */
@@ -158,7 +159,21 @@ export default class UiFns {
   }
 
   /**
-   * Returns a random number between min and max.
+   * Get an unknown patternPartial from a known URL.
+   *
+   * @param {string} url - The known URL.
+   * @returns {string|undefined} The patternPartial or undefined.
+   */
+  getPatternPartialFromUrl(url) {
+    for (const key of Object.keys(this.uiData.patternPaths)) {
+      if (url.endsWith(this.uiData.patternPaths[key])) {
+        return key;
+      }
+    }
+  }
+
+  /**
+   * Return a random number between min and max.
    *
    * @param {number} min - Start of range.
    * @param {number} max - End of range.

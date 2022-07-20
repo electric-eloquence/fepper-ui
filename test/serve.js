@@ -221,10 +221,10 @@ module.exports = new Promise((resolve) => {
           return;
 
         case '/mustache-browser':
-          res.writeHead(200, {'Content-Type': 'text/html'});
-          /* eslint-disable max-len */
-          res.end(`
-
+          if (urlObj.query.partial === 'components-region') {
+            res.writeHead(200, {'Content-Type': 'text/html'});
+            /* eslint-disable max-len */
+            res.end(`
 <!DOCTYPE html>
 <html class="mustache-browser">
   <head>
@@ -247,18 +247,54 @@ module.exports = new Promise((resolve) => {
   <body class="mustache-browser__body">
     <main id="" class="mustache-browser__main">
       <div id="message" class="message "></div>
-<pre><code class="language-markup"><a href="/?p=templates-page" target="_top" data-path="patterns/03-templates-page/03-templates-page.html" data-pattern-partial="templates-page" class="mustache-browser__link">{{&gt; templates-page }}</a>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>{{ link.components-region }}<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>Component<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>../../_scripts/src/requerio-app.js<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+<pre><code class="language-markup"><a href="/?p=compounds-block" target="_top" data-path="patterns/01-compounds-block/01-compounds-block.html" data-pattern-partial="compounds-block" class="mustache-browser__link">{{> 01-compounds/block }}</a>
 </code></pre>
 
     </main>
     
   </body>
 </html>`);
-          /* eslint-enable max-len */
 
-          return;
+            return;
+          }
+          // Default the Mustache Browser to the homepage.
+          else {
+            res.writeHead(200, {'Content-Type': 'text/html'});
+            /* eslint-disable max-len */
+            res.end(`
+<!DOCTYPE html>
+<html class="mustache-browser">
+  <head>
+    <title id="title">Fepper Mustache Browser</title>
+    <meta charset="utf-8">
+
+    <!-- Disable cache -->
+    <meta http-equiv="cache-control" content="max-age=0">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
+    <meta http-equiv="pragma" content="no-cache">
+
+    
+    <link rel="stylesheet" href="/webserved/prism-twilight.css">
+    <link rel="stylesheet" href="/webserved/mustache-browser.css">
+    <script src="/webserved/mustache-browser.js"></script>
+  </head>
+
+  <body class="mustache-browser__body">
+    <main id="" class="mustache-browser__main">
+      <div id="message" class="message "></div>
+<pre><code class="language-markup"><a href="/?p=templates-page" target="_top" data-path="patterns/03-templates-page/03-templates-page.html" data-pattern-partial="templates-page" class="mustache-browser__link">{{> templates-page }}</a>
+</code></pre>
+
+    </main>
+    
+  </body>
+</html>`);
+            /* eslint-enable max-len */
+
+            return;
+          }
       }
 
       const excerpt = '/node_modules/fepper-ui';

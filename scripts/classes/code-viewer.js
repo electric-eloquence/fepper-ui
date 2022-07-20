@@ -63,7 +63,7 @@ export default class CodeViewer {
     switch (data.event) {
       case 'patternlab.keyPress':
         switch (data.keyPress) {
-          // Toggle the code viewer.
+          // Toggle the Code Viewer.
           case 'ctrl+shift+c':
             this.toggleCode();
 
@@ -81,7 +81,7 @@ export default class CodeViewer {
 
             break;
 
-          // Dock code viewer to the left.
+          // Dock Code Viewer to the left.
           case 'ctrl+alt+h':
             dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
 
@@ -91,7 +91,7 @@ export default class CodeViewer {
 
             break;
 
-          // Dock code viewer to the bottom.
+          // Dock Code Viewer to the bottom.
           case 'ctrl+alt+j':
             dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
 
@@ -101,7 +101,7 @@ export default class CodeViewer {
 
             break;
 
-          // Dock code viewer to the right.
+          // Dock Code Viewer to the right.
           case 'ctrl+alt+l':
             dockOpen = this.$orgs['#patternlab-body'].getState().classArray.includes('dock-open');
 
@@ -162,8 +162,6 @@ export default class CodeViewer {
       const {lineage, lineageR, missingPartials, patternPartial, patternState} = data;
 
       this.updateMetadata(lineage, lineageR, patternPartial, patternState, missingPartials);
-      this.setPanelContent('feplet', patternPartial);
-      this.setPanelContent('markdown', patternPartial);
 
       const paneMarkdownNaDisplay = this.$orgs['#sg-code-pane-markdown-na'].getState().css.display;
       const paneMarkdownEditDisplay = this.$orgs['#sg-code-pane-markdown-edit'].getState().css.display;
@@ -575,7 +573,7 @@ export default class CodeViewer {
     this.codeActive = true;
     this.uiProps.lastViewer = 'code';
 
-    // Make sure the annotations viewer is off before showing code.
+    // Make sure the Annotations Viewer is off before showing code.
     this.annotationsViewer.closeAnnotations();
     this.viewerHandler.openViewer();
     this.$orgs['#sg-t-code'].dispatchAction('addClass', 'active');
@@ -893,7 +891,7 @@ export default class CodeViewer {
   }
 
   /**
-   * When turning on or switching between patterns with code viewer on, make sure we get the code from the pattern via
+   * When turning on or switching between patterns with Code Viewer on, make sure we get the code from the pattern via
    * postMessage.
    *
    * @param {array} lineage - Lineage array.

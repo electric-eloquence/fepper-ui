@@ -52,7 +52,7 @@ describe('codeViewer', function () {
       }, timeout);
     });
 
-    it('opens code viewer with a "view=code" param', function (done) {
+    it('opens Code Viewer with a "view=code" param', function (done) {
       global.location.search = '?view=code';
 
       const codeActiveBefore = codeViewer.codeActive;
@@ -81,7 +81,7 @@ describe('codeViewer', function () {
       }, timeout);
     });
 
-    it('opens code viewer with a "view=c" param', function (done) {
+    it('opens Code Viewer with a "view=c" param', function (done) {
       global.location.search = '?view=c';
 
       const codeActiveBefore = codeViewer.codeActive;
@@ -110,7 +110,7 @@ describe('codeViewer', function () {
       }, timeout);
     });
 
-    it('opens code viewer with a "defaultShowPatternInfo": true config', function (done) {
+    it('opens Code Viewer with a "defaultShowPatternInfo": true config', function (done) {
       global.location.search = '';
 
       codeViewer.uiData.config.defaultShowPatternInfo = true;
@@ -1040,7 +1040,7 @@ describe('codeViewer', function () {
       }, timeout);
     });
 
-    it('switches from annotations viewer to code viewer', function (done) {
+    it('switches from Annotations Viewer to Code Viewer', function (done) {
       annotationsViewer.openAnnotations();
       $orgs['#sg-t-code'].dispatchAction('removeClass', 'active');
 
@@ -1306,7 +1306,7 @@ describe('codeViewer', function () {
       };
     });
 
-    it('displays Markdown panel content in a fresh state (although the code viewer might be closed)', function () {
+    it('displays Markdown panel content in a fresh state (although the Code Viewer might be closed)', function () {
       event.data = {
         lineage: [],
         lineageR: [],

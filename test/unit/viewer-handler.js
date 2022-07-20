@@ -108,7 +108,7 @@ describe('viewerHandler', function () {
       }, timeout);
     });
 
-    it('does not open viewer if both annotations and code viewers are inactive', function (done) {
+    it('does not open viewer if both annotations and Code Viewers are inactive', function (done) {
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
@@ -131,7 +131,7 @@ describe('viewerHandler', function () {
       }, timeout);
     });
 
-    it('opens viewer if annotations viewer is active', function (done) {
+    it('opens viewer if Annotations Viewer is active', function (done) {
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
       annotationsViewer.annotationsActive = true;
@@ -155,7 +155,7 @@ describe('viewerHandler', function () {
       }, timeout);
     });
 
-    it('opens viewer if code viewer is active', function (done) {
+    it('opens viewer if Code Viewer is active', function (done) {
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
       codeViewer.codeActive = true;
@@ -192,7 +192,7 @@ describe('viewerHandler', function () {
       }, timeout);
     });
 
-    it('does not close viewer if annotations viewers is active', function (done) {
+    it('does not close viewer if Annotations Viewer is active', function (done) {
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
@@ -218,7 +218,7 @@ describe('viewerHandler', function () {
       }, timeout);
     });
 
-    it('does not close viewer if annotations viewers is active', function (done) {
+    it('does not close viewer if Annotations Viewer is active', function (done) {
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
@@ -244,7 +244,7 @@ describe('viewerHandler', function () {
       }, timeout);
     });
 
-    it('closes viewer if both code and annotations viewers are inactive', function (done) {
+    it('closes viewer if both code and Annotations Viewer are inactive', function (done) {
       const patternlabBodyBefore = $orgs['#patternlab-body'].getState();
       const sgViewContainerBefore = $orgs['#sg-view-container'].getState();
 
