@@ -43,7 +43,7 @@ export default class RequerioInspector {
     });
   }
 
-  buildExpandableHtmlAndTextContent(key, value) {
+  buildClickableHtmlAndTextContent(key, value) {
     let htmlString = `<span class="clickable sg-code-tree-requerio-key">${key}:</span> `;
     htmlString += '<ul class="sg-code-tree-requerio sg-code-tree-requerio-branch sg-code-tree-requerio-value">';
     htmlString += '<li class="sg-code-tree-requerio sg-code-tree-requerio-node sg-code-tree-requerio-leaf">';
@@ -92,7 +92,7 @@ export default class RequerioInspector {
           case 'html':
           case 'textContent':
             htmlString += ' sg-code-tree-requerio-branch">';
-            htmlString += this.buildExpandableHtmlAndTextContent(key, branch[key]);
+            htmlString += this.buildClickableHtmlAndTextContent(key, branch[key]);
 
             break;
           default:
@@ -131,11 +131,10 @@ export default class RequerioInspector {
           switch (nowKey) {
             case 'html':
             case 'textContent':
+              domChildren[i].innerHTML = this.buildClickableHtmlAndTextContent(nowKey, nowValue);
+
               domChildren[i].classList.remove('sg-code-tree-requerio-leaf');
               domChildren[i].classList.add('sg-code-tree-requerio-branch');
-              domChildren[i].innerHTML = this.buildExpandableHtmlAndTextContent(nowKey, nowValue);
-
-
               /* istanbul ignore next */
               domChildren[i].children[0].addEventListener('click', () => {
                 this.toggleExpandableBranch(domChildren[i]);
@@ -145,19 +144,20 @@ export default class RequerioInspector {
             default: {
               // Declaring const and wrapping in braces because putting the regex in backticks breaks vim highlighting.
               const nowValueEscaped = nowValue.replace(/"/g, '\\"');
+              domChildren[i].innerHTML = `<span class="sg-code-tree-requerio-key">${nowKey}:</span> ` +
+                `<span class="sg-code-tree-requerio-value">"${window.he.encode(nowValueEscaped)}"</span>`;
 
               domChildren[i].classList.remove('sg-code-tree-requerio-branch');
               domChildren[i].classList.add('sg-code-tree-requerio-leaf');
-              domChildren[i].innerHTML = `<span class="sg-code-tree-requerio-key">${nowKey}:</span> ` +
-                `<span class="sg-code-tree-requerio-value">"${window.he.encode(nowValueEscaped)}"</span>`;
             }
           }
         }
         else {
-          domChildren[i].classList.remove('sg-code-tree-requerio-branch');
-          domChildren[i].classList.add('sg-code-tree-requerio-leaf');
           domChildren[i].innerHTML = `<span class="sg-code-tree-requerio-key">${nowKey}:</span> ` +
             `<span class="sg-code-tree-requerio-value">${nowValue}</span>`;
+
+          domChildren[i].classList.remove('sg-code-tree-requerio-branch');
+          domChildren[i].classList.add('sg-code-tree-requerio-leaf');
         }
       }
       // Cannot use instanceof Object on state properties.
@@ -202,9 +202,6 @@ export default class RequerioInspector {
           }
           // Rewrite the DOM for empty objects and arrays.
           else {
-            domChildren[i].classList.remove('sg-code-tree-requerio-branch');
-            domChildren[i].classList.add('sg-code-tree-requerio-leaf');
-
             if (Array.isArray(nowValue)) {
               domChildren[i].innerHTML = `<span class="sg-code-tree-requerio-key">${nowKey}:</span> ` +
                '<span class="sg-code-tree-requerio-value">[]</span>';
@@ -213,6 +210,9 @@ export default class RequerioInspector {
               domChildren[i].innerHTML = `<span class="sg-code-tree-requerio-key">${nowKey}:</span> ` +
                '<span class="sg-code-tree-requerio-value">{}</span>';
             }
+
+            domChildren[i].classList.remove('sg-code-tree-requerio-branch');
+            domChildren[i].classList.add('sg-code-tree-requerio-leaf');
           }
         }
       }

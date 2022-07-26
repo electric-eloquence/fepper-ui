@@ -168,9 +168,8 @@ describe('Requerio Inspector', function () {
   });
 
   // Test this method last as it alters the DOM the most.
-  describe('.buildExpandableHtmlAndTextContent()', function () {
-    it('dispatching an "html" action builds an expandable HTML element around values for .html and .textContent\
-', function () {
+  describe('.buildClickableHtmlAndTextContent()', function () {
+    it('dispatching an "html" action builds clickable HTML around values for .html and .textContent', function () {
       const patternStoreStateBefore = requerioP.store.getState();
       const sgCodePaneRequerioStateBefore = $orgs['#sg-code-pane-requerio'].getState();
       const sgCodePaneRequerioStateBeforeHtml = sgCodePaneRequerioStateBefore.html.replace(/> </g, '>\n<');
@@ -195,8 +194,7 @@ describe('Requerio Inspector', function () {
       expect(sgCodePaneRequerioStateAfterHtml).to.have.string(stateHtmlSubStringTextContent);
     });
 
-    it('dispatching a "text" action builds an expandable HTML element around values for .html and .textContent\
-', function () {
+    it('dispatching a "text" action builds clickable HTML around values for .html and .textContent', function () {
       const patternStoreStateBefore = requerioP.store.getState();
       const sgCodePaneRequerioStateBefore = $orgs['#sg-code-pane-requerio'].getState();
       const sgCodePaneRequerioStateBeforeHtml = sgCodePaneRequerioStateBefore.html.replace(/> </g, '>\n<');
