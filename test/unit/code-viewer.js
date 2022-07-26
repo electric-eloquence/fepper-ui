@@ -1963,7 +1963,7 @@ content_key: nav_content
 ---
 content_key: toggler_content
 ---
-<button id="toggler">Toggler</button>
+<button id="toggler">Toggle</button>
 `;
       global.mockResponse = {
         gatekeeper_status: 200

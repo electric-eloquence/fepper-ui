@@ -174,7 +174,7 @@ content_key: nav_content
 ---
 content_key: toggler_content
 ---
-&lt;button id="toggler"&gt;Toggler&lt;/button&gt;
+&lt;button id="toggler"&gt;Toggle&lt;/button&gt;
 </code></pre>
       <button id="sg-code-btn-markdown-edit" class="sg-code-btn" title="Edit this pattern's Markdown content">Edit</button>
     `);
