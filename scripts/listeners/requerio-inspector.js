@@ -231,7 +231,16 @@ export default class RequerioInspector {
 
       setInterval(() => {
         if (this.codeViewer.codeActive && this.codeViewer.tabActive === 'requerio') {
-          if (!this.stoked) {
+          let patternStoreStateNow;
+
+          if (this.stoked) {
+            patternStoreStateNow = requerioP.store.getState();
+
+            for (const organism of Object.keys(patternStoreStateNow)) {
+              requerioP.$orgs[organism].updateMeasurements(patternStoreStateNow[organism]);
+            }
+          }
+          else {
             for (const patternOrgKey of Object.keys(requerioP.$orgs)) {
               const patternOrg = requerioP.$orgs[patternOrgKey];
 
@@ -242,9 +251,8 @@ export default class RequerioInspector {
             }
 
             this.stoked = true;
+            patternStoreStateNow = requerioP.store.getState();
           }
-
-          const patternStoreStateNow = requerioP.store.getState();
 
           if (patternStoreStateBefore !== patternStoreStateNow) {
             this.requerioInspector.recurseStatesAndDom(
