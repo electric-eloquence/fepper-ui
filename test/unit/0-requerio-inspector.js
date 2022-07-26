@@ -12,6 +12,10 @@ const stateHtmlSubString =
 `<span class="sg-code-tree-requerio-value">{}</span></li><li class="sg-code-tree-requerio sg-code-tree-requerio-node sg-code-tree-requerio-branch"><span class="clickable sg-code-tree-requerio-key">data:</span>
 <ul class="sg-code-tree-requerio sg-code-tree-requerio-branch sg-code-tree-requerio-value"><li class="sg-code-tree-requerio sg-code-tree-requerio-node sg-code-tree-requerio-leaf"><span class="sg-code-tree-requerio-key">test:</span>
 <span class="sg-code-tree-requerio-value">"pass"</span></li></ul></li><li class="sg-code-tree-requerio sg-code-tree-requerio-node sg-code-tree-requerio-leaf"><span class="sg-code-tree-requerio-key">html:</span>`;
+const stateHtmlSubStringEscaped =
+`<span class="sg-code-tree-requerio-value">{}</span></li><li class="sg-code-tree-requerio sg-code-tree-requerio-node sg-code-tree-requerio-branch"><span class="clickable sg-code-tree-requerio-key">data:</span>
+<ul class="sg-code-tree-requerio sg-code-tree-requerio-branch sg-code-tree-requerio-value"><li class="sg-code-tree-requerio sg-code-tree-requerio-node sg-code-tree-requerio-leaf"><span class="sg-code-tree-requerio-key">test:</span>
+<span class="sg-code-tree-requerio-value">"\\"pass\\""</span></li></ul></li><li class="sg-code-tree-requerio sg-code-tree-requerio-node sg-code-tree-requerio-leaf"><span class="sg-code-tree-requerio-key">html:</span>`;
   /* eslint-enable max-len */
 
 const $organisms = {
@@ -73,6 +77,28 @@ describe('Requerio Inspector', function () {
 
       expect(sgCodePaneRequerioStateBeforeHtml).to.not.have.string(stateHtmlSubString);
       expect(sgCodePaneRequerioStateAfterHtml).to.have.string(stateHtmlSubString);
+    });
+
+    it('the state tree of the pattern\'s Requerio organisms escapes double-quotes for data values', function () {
+      const patternStoreStateBefore = requerioP.store.getState();
+      const sgCodePaneRequerioStateBefore = $orgs['#sg-code-pane-requerio'].getState();
+      const sgCodePaneRequerioStateBeforeHtml = sgCodePaneRequerioStateBefore.html.replace(/> </g, '>\n<');
+
+      $orgs['#sg-nav-message-test'].dispatchAction('data', {test: '"pass"'}, 0);
+
+      const patternStoreStateNow = requerio.store.getState();
+
+      requerioInspector.recurseStatesAndDom(
+        patternStoreStateBefore,
+        patternStoreStateNow,
+        $orgs['#sg-code-tree-requerio-trunk'][0].children
+      );
+
+      const sgCodePaneRequerioStateAfter = $orgs['#sg-code-pane-requerio'].getState();
+      const sgCodePaneRequerioStateAfterHtml = sgCodePaneRequerioStateAfter.html.replace(/> </g, '>\n<');
+
+      expect(sgCodePaneRequerioStateBeforeHtml).to.not.have.string(stateHtmlSubStringEscaped);
+      expect(sgCodePaneRequerioStateAfterHtml).to.have.string(stateHtmlSubStringEscaped);
     });
   });
 

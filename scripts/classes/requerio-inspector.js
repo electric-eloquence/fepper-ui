@@ -43,52 +43,72 @@ export default class RequerioInspector {
     });
   }
 
-  buildHtml(state) {
-    let html = '<ul id="sg-code-tree-requerio-trunk" class="sg-code-tree-requerio">';
-    html += this.buildTree(state);
-    html += '</ul>';
+  buildExpandableHtmlAndTextContent(key, value) {
+    let htmlString = `<span class="clickable sg-code-tree-requerio-key">${key}:</span> `;
+    htmlString += '<ul class="sg-code-tree-requerio sg-code-tree-requerio-branch sg-code-tree-requerio-value">';
+    htmlString += '<li class="sg-code-tree-requerio sg-code-tree-requerio-node sg-code-tree-requerio-leaf">';
+    htmlString += `<span class="sg-code-tree-requerio-value">${window.he.encode(value)}</span>`;
+    htmlString += '</li></ul>';
 
-    return html;
+    return htmlString;
+  }
+
+  buildHtml(state) {
+    let htmlString = '<ul id="sg-code-tree-requerio-trunk" class="sg-code-tree-requerio">';
+    htmlString += this.buildTree(state);
+    htmlString += '</ul>';
+
+    return htmlString;
   }
 
   buildTree(branch) {
-    let html = '';
+    let htmlString = '';
 
     for (const key of Object.keys(branch)) {
-      html += '<li class="sg-code-tree-requerio sg-code-tree-requerio-node';
+      htmlString += '<li class="sg-code-tree-requerio sg-code-tree-requerio-node';
 
       // Cannot use instanceof Object on state properties.
       if (branch[key] && typeof branch[key] === 'object') {
         if (Object.keys(branch[key]).length) {
-          html += ` sg-code-tree-requerio-branch"><span class="clickable sg-code-tree-requerio-key">${key}:</span> `;
-          html += '<ul class="sg-code-tree-requerio sg-code-tree-requerio-branch sg-code-tree-requerio-value">';
-          html += this.buildTree(branch[key]);
-          html += '</ul>';
+          htmlString += ' sg-code-tree-requerio-branch">';
+          htmlString += `<span class="clickable sg-code-tree-requerio-key">${key}:</span> `;
+          htmlString += '<ul class="sg-code-tree-requerio sg-code-tree-requerio-branch sg-code-tree-requerio-value">';
+          htmlString += this.buildTree(branch[key]);
+          htmlString += '</ul>';
         }
         else {
           if (Array.isArray(branch[key])) {
-            html += ` sg-code-tree-requerio-leaf"><span class="sg-code-tree-requerio-key">${key}:</span> ` +
+            htmlString += ` sg-code-tree-requerio-leaf"><span class="sg-code-tree-requerio-key">${key}:</span> ` +
               '<span class="sg-code-tree-requerio-value">[]</span>';
           }
           else {
-            html += ` sg-code-tree-requerio-leaf"><span class="sg-code-tree-requerio-key">${key}:</span> ` +
+            htmlString += ` sg-code-tree-requerio-leaf"><span class="sg-code-tree-requerio-key">${key}:</span> ` +
               '<span class="sg-code-tree-requerio-value">{}</span>';
           }
         }
       }
       else if (typeof branch[key] === 'string') {
-        html += ` sg-code-tree-requerio-leaf"><span class="sg-code-tree-requerio-key">${key}:</span> ` +
-          `<span class="sg-code-tree-requerio-value">"${window.he.encode(branch[key])}"</span>`;
+        switch (key) {
+          case 'html':
+          case 'textContent':
+            htmlString += ' sg-code-tree-requerio-branch">';
+            htmlString += this.buildExpandableHtmlAndTextContent(key, branch[key]);
+
+            break;
+          default:
+            htmlString += ` sg-code-tree-requerio-leaf"><span class="sg-code-tree-requerio-key">${key}:</span> ` +
+              `<span class="sg-code-tree-requerio-value">"${window.he.encode(branch[key])}"</span>`;
+        }
       }
       else {
-        html += ` sg-code-tree-requerio-leaf"><span class="sg-code-tree-requerio-key">${key}:</span> ` +
+        htmlString += ` sg-code-tree-requerio-leaf"><span class="sg-code-tree-requerio-key">${key}:</span> ` +
           `<span class="sg-code-tree-requerio-value">${branch[key]}</span>`;
       }
 
-      html += '</li>';
+      htmlString += '</li>';
     }
 
-    return html;
+    return htmlString;
   }
 
   recurseStatesAndDom(stateBranchBefore, stateBranchNow, domChildren, level) {
@@ -107,15 +127,35 @@ export default class RequerioInspector {
 
       if (!nowValue || typeof nowValue === 'string' || typeof nowValue === 'number') {
         // Always rewrite the DOM for non-objects and non-arrays.
-        domChildren[i].classList.remove('sg-code-tree-requerio-branch');
-        domChildren[i].classList.add('sg-code-tree-requerio-leaf');
-
         if (typeof nowValue === 'string') {
-          domChildren[i].innerHTML = `<span class="sg-code-tree-requerio-key">${nowKey}:</span> ` +
-            `<span class="sg-code-tree-requerio-value">"${window.he.encode(nowValue)}"</span>`;
+          switch (nowKey) {
+            case 'html':
+            case 'textContent':
+              domChildren[i].classList.remove('sg-code-tree-requerio-leaf');
+              domChildren[i].classList.add('sg-code-tree-requerio-branch');
+              domChildren[i].innerHTML = this.buildExpandableHtmlAndTextContent(nowKey, nowValue);
 
+
+              /* istanbul ignore next */
+              domChildren[i].children[0].addEventListener('click', () => {
+                this.toggleExpandableBranch(domChildren[i]);
+              });
+
+              break;
+            default: {
+              // Declaring const and wrapping in braces because putting the regex in backticks breaks vim highlighting.
+              const nowValueEscaped = nowValue.replace(/"/g, '\\"');
+
+              domChildren[i].classList.remove('sg-code-tree-requerio-branch');
+              domChildren[i].classList.add('sg-code-tree-requerio-leaf');
+              domChildren[i].innerHTML = `<span class="sg-code-tree-requerio-key">${nowKey}:</span> ` +
+                `<span class="sg-code-tree-requerio-value">"${window.he.encode(nowValueEscaped)}"</span>`;
+            }
+          }
         }
         else {
+          domChildren[i].classList.remove('sg-code-tree-requerio-branch');
+          domChildren[i].classList.add('sg-code-tree-requerio-leaf');
           domChildren[i].innerHTML = `<span class="sg-code-tree-requerio-key">${nowKey}:</span> ` +
             `<span class="sg-code-tree-requerio-value">${nowValue}</span>`;
         }

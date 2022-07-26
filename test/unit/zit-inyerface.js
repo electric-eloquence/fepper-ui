@@ -109,7 +109,7 @@ content_key: nav_content
 ---
 content_key: toggler_content
 ---
-<button id="toggler">Toggler</button>
+<button id="toggler">Toggle</button>
 `);
           expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
           expect(codePaneGitNaStateAfter.css.display).to.equal('none');
@@ -169,7 +169,7 @@ content_key: nav_content
 ---
 content_key: toggler_content
 ---
-<button id="toggler">Toggler</button>
+<button id="toggler">Toggle</button>
 `);
           expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
           expect(codePaneGitNaStateAfter.css.display).to.equal('none');
@@ -231,7 +231,7 @@ content_key: nav_content
 ---
 content_key: toggler_content
 ---
-<button id="toggler">Toggler</button>
+<button id="toggler">Toggle</button>
 `);
           expect(btnMarkdownEditStateAfter.css.display).to.equal('none');
           expect(codePaneGitNaStateAfter.css.display).to.equal('block');
@@ -290,7 +290,7 @@ content_key: nav_content
 ---
 content_key: toggler_content
 ---
-<button id="toggler">Toggler</button>
+<button id="toggler">Toggle</button>
 `);
           expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
           expect(codePaneGitStateAfter.css.display).to.equal('block');
@@ -351,7 +351,7 @@ content_key: nav_content
 ---
 content_key: toggler_content
 ---
-<button id="toggler">Toggler</button>
+<button id="toggler">Toggle</button>
 `);
           expect(btnMarkdownEditStateAfter.css.display).to.equal('none');
           expect(codePaneGitNaStateAfter.css.display).to.equal('block');
@@ -410,7 +410,7 @@ content_key: nav_content
 ---
 content_key: toggler_content
 ---
-<button id="toggler">Toggler</button>
+<button id="toggler">Toggle</button>
 `);
           expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
           expect(codePaneGitStateAfter.css.display).to.equal('block');
@@ -469,7 +469,7 @@ content_key: nav_content
 ---
 content_key: toggler_content
 ---
-<button id="toggler">Toggler</button>
+<button id="toggler">Toggle</button>
 `);
           expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
           expect(codePaneGitNaStateAfter.css.display).to.equal('none');
@@ -531,7 +531,7 @@ content_key: nav_content
 ---
 content_key: toggler_content
 ---
-<button id="toggler">Toggler</button>
+<button id="toggler">Toggle</button>
 `);
           expect(btnMarkdownEditStateAfter.css.display).to.equal('none');
           expect(codePaneGitNaStateAfter.css.display).to.equal('block');
@@ -590,7 +590,7 @@ content_key: nav_content
 ---
 content_key: toggler_content
 ---
-<button id="toggler">Toggler</button>
+<button id="toggler">Toggle</button>
 `);
           expect(btnMarkdownEditStateAfter.css).to.not.have.key('display');
           expect(codePaneGitStateAfter.css.display).to.equal('block');
