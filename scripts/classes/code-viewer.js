@@ -214,6 +214,10 @@ export default class CodeViewer {
     return this.#fepperUi.dataSaver;
   }
 
+  get requerioInspector() {
+    return this.#fepperUi.requerioInspector;
+  }
+
   get uiData() {
     return this.#fepperUi.uiData;
   }
@@ -836,6 +840,8 @@ export default class CodeViewer {
 
   switchTab(offset) {
     const sgCodeContainerState = this.$orgs['#sg-code-container'].getState();
+    // Enable frequent polling if switching to the Requerio Inspector tab.
+    this.requerioInspector.pollCount = 0;
 
     /* istanbul ignore if */
     if (!sgCodeContainerState.classArray.includes('active')) {

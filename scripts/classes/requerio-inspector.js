@@ -2,6 +2,7 @@ export default class RequerioInspector {
   constructor(fepperUi) {
     this.htmlOrig = null;
     this.$orgs = fepperUi.requerio.$orgs; // Organisms in the UI.
+    this.pollCount = 0;
   }
 
   stoke() {
