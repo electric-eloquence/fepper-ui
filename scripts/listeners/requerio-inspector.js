@@ -2,6 +2,7 @@ export default class RequerioInspector {
   constructor(fepperUi) {
     this.codeViewer = fepperUi.codeViewer;
     this.$orgs = fepperUi.requerio.$orgs;
+    this.poll = true;
     this.requerio = fepperUi.requerio;
     this.requerioInspector = fepperUi.requerioInspector;
     this.stoked = false;
@@ -13,7 +14,7 @@ export default class RequerioInspector {
     $orgs['#sg-viewport'].on('load', () => {
       const classesNew = [];
       const requerioInspector = this.requerioInspector;
-      const requerioP = this.$orgs['#sg-viewport'][0].contentWindow.requerio;
+      const requerioP = $orgs['#sg-viewport'][0].contentWindow.requerio;
       const selectorsOrig = [];
       const selectorsNew = [];
 
@@ -230,41 +231,93 @@ export default class RequerioInspector {
       }
 
       setInterval(() => {
-        if (this.codeViewer.codeActive && this.codeViewer.tabActive === 'requerio') {
-          let patternStoreStateNow;
+        // Poll 4 times a second continuously for 10 minutes. Reduce or stop the polling when inactive.
+        // Polling stops when switching to a different browser tab.
+        // Polling restarts when switching back to this tab.
+        // pollCount resets to 0 when:
+        // 1. Switching to a different tab and then switching back.
+        // 2. Mouse moves within the UI document.
+        // 3. Mouse moves within the pattern iframe document.
+        // If pollCount reaches 2400 (10 minutes), polling will only occur every 4 seconds unless pollCount resets to 0.
+        //
+        // Cannot reasonably test with automation. Instead:
+        // 1. Check that the polling slows after exceeding pollCount threshold.
+        // 2. Check that the polling stops when switching to a different browser tab.
+        // 2. Check that the polling resets and restarts when switching back to this tab.
+        // 3. Check that pollCount resets when mouse moves within the UI document.
+        // 3. Check that pollCount resets when mouse moves within the pattern iframe document.
+        if (this.poll) {
+          if (this.requerioInspector.pollCount < 2400 || this.requerioInspector.pollCount % 16 === 0) {
+          // eslint-disable-next-line max-len
+          // if (this.requerioInspector.pollCount < 40 || this.requerioInspector.pollCount % 16 === 0) { // DEBUGGING ONLY
 
-          if (this.stoked) {
-            patternStoreStateNow = requerioP.store.getState();
+            if (this.codeViewer.codeActive && this.codeViewer.tabActive === 'requerio') {
+              // console.log(Math.floor(Date.now() / 1000), this.requerioInspector.pollCount); // DEBUGGING ONLY
 
-            for (const organism of Object.keys(patternStoreStateNow)) {
-              requerioP.$orgs[organism].updateMeasurements(patternStoreStateNow[organism]);
-            }
-          }
-          else {
-            for (const patternOrgKey of Object.keys(requerioP.$orgs)) {
-              const patternOrg = requerioP.$orgs[patternOrgKey];
+              const patternStoreStateBeforeString = JSON.stringify(patternStoreStateBefore);
+              let patternStoreStateNow;
+              let patternStoreStateNowString;
 
-              // Unset temporary data.
-              if (patternOrgKey === 'window' || patternOrgKey === 'window') {
-                patternOrg.dispatchAction('removeData', 'stoked');
+              if (this.stoked) {
+                for (const organism of Object.keys(patternStoreStateBefore)) {
+                  requerioP.$orgs[organism].updateMeasurements(patternStoreStateBefore[organism]);
+                }
+
+                patternStoreStateNow = requerioP.store.getState();
+                patternStoreStateNowString = JSON.stringify(patternStoreStateNow);
+              }
+              else {
+                for (const patternOrgKey of Object.keys(requerioP.$orgs)) {
+                  const patternOrg = requerioP.$orgs[patternOrgKey];
+
+                  // Unset temporary data.
+                  if (patternOrgKey === 'window' || patternOrgKey === 'window') {
+                    patternOrg.dispatchAction('removeData', 'stoked');
+                  }
+                }
+
+                this.stoked = true;
+                patternStoreStateNow = requerioP.store.getState();
+                patternStoreStateNowString = JSON.stringify(patternStoreStateNow);
+              }
+
+              if (patternStoreStateBeforeString !== patternStoreStateNowString) {
+                this.requerioInspector.recurseStatesAndDom(
+                  patternStoreStateBefore,
+                  patternStoreStateNow,
+                  $orgs['#sg-code-tree-requerio-trunk'][0].children
+                );
+
+                patternStoreStateBefore = patternStoreStateNow;
               }
             }
-
-            this.stoked = true;
-            patternStoreStateNow = requerioP.store.getState();
           }
 
-          if (patternStoreStateBefore !== patternStoreStateNow) {
-            this.requerioInspector.recurseStatesAndDom(
-              patternStoreStateBefore,
-              patternStoreStateNow,
-              $orgs['#sg-code-tree-requerio-trunk'][0].children
-            );
-
-            patternStoreStateBefore = patternStoreStateNow;
-          }
+          this.requerioInspector.pollCount++;
         }
       }, 250);
+
+      // Add an event listener for mousemoves within the iframe. Necessary because mousemoves within the iframe will not
+      // trigger events on the UI document.
+      $orgs['#sg-viewport'][0].contentWindow.document.addEventListener('mousemove', () => {
+        this.requerioInspector.pollCount = 0;
+      });
+    });
+
+    // Reset pollCount if there is a mousemove within the document of the UI.
+    document.addEventListener('mousemove', () => {
+      this.requerioInspector.pollCount = 0;
+    });
+
+    window.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        this.poll = true;
+        this.requerioInspector.pollCount = 0;
+      }
+      // Stop polling if switching to a different browser tab.
+      else {
+        this.poll = false;
+      }
     });
   }
 

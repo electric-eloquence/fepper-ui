@@ -8,7 +8,7 @@ export default class UiProps {
     this.#root = root;
 
     this.$orgs = fepperUi.requerio.$orgs;
-    this.bodyFontSize = parseFloat(window.getComputedStyle(window.document.body).getPropertyValue('font-size'));
+    this.bodyFontSize = parseFloat(window.getComputedStyle(document.body).getPropertyValue('font-size'));
 
     // Measurements.
     this.bodyFontSize = this.bodyFontSize || 16;
