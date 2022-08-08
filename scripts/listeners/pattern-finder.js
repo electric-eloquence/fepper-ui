@@ -10,6 +10,7 @@ export default class PatternFinder {
 
     const Mousetrap = window.Mousetrap;
 
+    // These items are dynamically loaded, not hard-coded in public/index.html.
     document.addEventListener('DOMContentLoaded', () => {
       Mousetrap(this.$orgs['#typeahead'][0]).bind('ctrl+shift+f', (e) => {
         this.patternFinder.toggleFinder();
