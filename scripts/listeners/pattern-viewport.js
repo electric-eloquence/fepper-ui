@@ -12,6 +12,7 @@ export default class PatternlabViewer {
     // e2e test this by triggering the pattern to postMessage to be received here.
     window.addEventListener('message', this.patternViewport.receiveIframeMessage);
 
+    // These items are dynamically loaded, not hard-coded in public/index.html.
     document.addEventListener('DOMContentLoaded', () => {
       const {
         annotationsViewer,
