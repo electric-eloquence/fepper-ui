@@ -65,7 +65,7 @@
     "chai": "4.x",
     "chai-webdriverio": "^1.0.0",
     "cheerio": "1.0.0-rc.3",
-    "chromedriver": "104.x",
+    "chromedriver": "103.x",
     "coveralls": "3.x",
     "eslint": "8.x",
     "fepper": "*",
