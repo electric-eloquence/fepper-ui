@@ -143,7 +143,7 @@ describe('patternViewport', function () {
   <ul class="sg-acc-panel sg-right sg-checklist" id="sg-view">
     <li><a href="#" class="sg-checklist-icon sg-icon sg-icon-radio" id="sg-t-annotations">Annotations</a></li>
     <li><a href="#" class="sg-checklist-icon sg-icon sg-icon-radio" id="sg-t-code">Code</a></li>
-    <li><a href="patterns/04-pages-00-homepage/04-pages-00-homepage.html" target="_blank" id="sg-raw" class="sg-checklist-icon sg-icon sg-icon-link">Open in new window</a></li>
+    <li><a href="patterns/04-pages-00-homepage/04-pages-00-homepage.html" target="_blank" id="sg-raw" class="sg-checklist-icon sg-icon sg-icon-link">Open in new tab</a></li>
   </ul>
 </li><li class="sg-tools">
   <a href="#" class="sg-acc-handle sg-control-trigger sg-icon sg-icon-cog" id="sg-tools-toggle" title="Tools"><span class="visually-hidden">Tools</span></a>
