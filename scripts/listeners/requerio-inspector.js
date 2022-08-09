@@ -319,6 +319,19 @@ export default class RequerioInspector {
         this.poll = false;
       }
     });
+
+    $orgs['#sg-viewport'].on('load', () => {
+      const logo = $orgs['#sg-viewport'][0].contentWindow.document.querySelector('.img-alt-h1 > .logo');
+
+      if (logo && logo.title === 'Fepper Demo Site') {
+        $orgs['#sg-code-requerio-demo-link-container'].dispatchAction('css', {display: 'block'});
+        $orgs['#sg-code-main-distro-link-container'].dispatchAction('css', {display: 'none'});
+      }
+      else {
+        $orgs['#sg-code-requerio-demo-link-container'].dispatchAction('css', {display: 'none'});
+        $orgs['#sg-code-main-distro-link-container'].dispatchAction('css', {display: 'block'});
+      }
+    });
   }
 
   hideRequerioShowNa() {
