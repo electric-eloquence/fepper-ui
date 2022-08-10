@@ -25,8 +25,10 @@ describe('Pattern end-to-end tests', () => {
         const sgVpWrap = await $('#sg-vp-wrap');
         const sgViewContainer = await $('#sg-view-container');
         const sgAnnotations = await $('#sg-annotations');
+        const sgVpWrapPaddingBottom = parseFloat((await sgVpWrap.getCSSProperty('padding-bottom')).value);
 
-        expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
+        expect(sgVpWrapPaddingBottom).to.be.at.least(321.5);
+        expect(sgVpWrapPaddingBottom).to.be.at.most(322);
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
         expect(await sgAnnotations.getHTML(false)).to.equal(`<div id="annotation-1" class="sg-annotation">
 <h2>1. Navigation</h2>
@@ -45,8 +47,11 @@ menu anchor.</p>
         await browser.pause(pauseMd);
         await browser.switchToParentFrame();
 
+        const sgViewContainerBottom = parseFloat((await sgViewContainer.getCSSProperty('bottom')).value);
+
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('0px');
-        expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('636px');
+        expect(sgViewContainerBottom).to.be.at.least(635);
+        expect(sgViewContainerBottom).to.be.at.most(636);
       });
     });
 
@@ -66,8 +71,10 @@ menu anchor.</p>
         const sgVpWrap = await $('#sg-vp-wrap');
         const sgViewContainer = await $('#sg-view-container');
         const sgAnnotations = await $('#sg-annotations');
+        const sgVpWrapPaddingBottom = parseFloat((await sgVpWrap.getCSSProperty('padding-bottom')).value);
 
-        expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
+        expect(sgVpWrapPaddingBottom).to.be.at.least(321.5);
+        expect(sgVpWrapPaddingBottom).to.be.at.most(322);
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
         expect(await sgAnnotations.getHTML(false)).to.equal(`<div id="annotation-1" class="sg-annotation">
 <h2>1. Navigation</h2>
@@ -85,8 +92,11 @@ menu anchor.</p>
         await browser.pause(pauseMd);
         await browser.switchToParentFrame();
 
+        const sgViewContainerBottom = parseFloat((await sgViewContainer.getCSSProperty('bottom')).value);
+
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('0px');
-        expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('636px');
+        expect(sgViewContainerBottom).to.be.at.least(635);
+        expect(sgViewContainerBottom).to.be.at.most(636);
       });
     });
   });
@@ -221,8 +231,10 @@ content_key: toggler_content
 
         const sgVpWrap = await $('#sg-vp-wrap');
         const sgViewContainer = await $('#sg-view-container');
+        const sgVpWrapPaddingBottom = parseFloat((await sgVpWrap.getCSSProperty('padding-bottom')).value);
 
-        expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
+        expect(sgVpWrapPaddingBottom).to.be.at.least(321.5);
+        expect(sgVpWrapPaddingBottom).to.be.at.most(322);
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
         expect(await sgViewContainer.getAttribute('class')).to.have.string('anim-ready');
 
@@ -231,8 +243,11 @@ content_key: toggler_content
         await browser.pause(pauseMd);
         await browser.switchToParentFrame();
 
+        const sgViewContainerBottom = parseFloat((await sgViewContainer.getCSSProperty('bottom')).value);
+
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('0px');
-        expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('636px');
+        expect(sgViewContainerBottom).to.be.at.least(635);
+        expect(sgViewContainerBottom).to.be.at.most(636);
         expect(await sgViewContainer.getAttribute('class')).to.not.have.string('anim-ready');
       });
     });
@@ -252,8 +267,10 @@ content_key: toggler_content
 
         const sgVpWrap = await $('#sg-vp-wrap');
         const sgViewContainer = await $('#sg-view-container');
+        const sgVpWrapPaddingBottom = parseFloat((await sgVpWrap.getCSSProperty('padding-bottom')).value);
 
-        expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
+        expect(sgVpWrapPaddingBottom).to.be.at.least(321.5);
+        expect(sgVpWrapPaddingBottom).to.be.at.most(322);
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
         expect(await sgViewContainer.getAttribute('class')).to.have.string('anim-ready');
 
@@ -262,8 +279,11 @@ content_key: toggler_content
         await browser.pause(pauseMd);
         await browser.switchToParentFrame();
 
+        const sgViewContainerBottom = parseFloat((await sgViewContainer.getCSSProperty('bottom')).value);
+
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('0px');
-        expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('636px');
+        expect(sgViewContainerBottom).to.be.at.least(635);
+        expect(sgViewContainerBottom).to.be.at.most(636);
         expect(await sgViewContainer.getAttribute('class')).to.not.have.string('anim-ready');
       });
     });

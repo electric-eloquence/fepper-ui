@@ -539,9 +539,12 @@ describe('UI compilation of index page js', () => {
         await sgTAnnotations.click();
         await browser.pause(pauseMd);
 
+        const sgViewContainerBottom = parseFloat((await sgViewContainer.getCSSProperty('bottom')).value);
+
         expect(await sgTAnnotations.getAttribute('class')).to.not.have.string('active');
         expect(await sgView.getAttribute('class')).to.not.have.string('active');
-        expect(await (await sgViewContainer.getCSSProperty('bottom')).value).to.equal('636px');
+        expect(sgViewContainerBottom).to.be.at.least(635);
+        expect(sgViewContainerBottom).to.be.at.most(636);
         expect(await sgTToggle.getAttribute('class')).to.not.have.string('active');
       });
     });
@@ -578,10 +581,13 @@ describe('UI compilation of index page js', () => {
         await sgTCode.click();
         await browser.pause(pauseMd);
 
+        const sgViewContainerBottom = parseFloat((await sgViewContainer.getCSSProperty('bottom')).value);
+
         expect(await sgTCode.getAttribute('class')).to.not.have.string('active');
         expect(await sgTToggle.getAttribute('class')).to.not.have.string('active');
         expect(await sgView.getAttribute('class')).to.not.have.string('active');
-        expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('636px');
+        expect(sgViewContainerBottom).to.be.at.least(635);
+        expect(sgViewContainerBottom).to.be.at.most(636);
       });
     });
 

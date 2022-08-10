@@ -55,10 +55,13 @@ describe('Listeners end-to-end tests', () => {
         await sgViewBtnDockBottom.click();
         await browser.pause(pauseMd);
 
+        const sgVpWrapPaddingBottom = parseFloat((await sgVpWrap.getCSSProperty('padding-bottom')).value);
+
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-left');
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-bottom');
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-right');
-        expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
+        expect(sgVpWrapPaddingBottom).to.be.at.least(321.5);
+        expect(sgVpWrapPaddingBottom).to.be.at.most(322);
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
         expect((await sgViewContainer.getSize()).width).to.equal(1024);
       });
@@ -76,9 +79,11 @@ describe('Listeners end-to-end tests', () => {
         const patternlabBody = await $('#patternlab-body');
         const sgVpWrap = await $('#sg-vp-wrap');
         const sgViewContainer = await $('#sg-view-container');
+        const sgVpWrapPaddingBottom = parseFloat((await sgVpWrap.getCSSProperty('padding-bottom')).value);
 
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-open');
-        expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
+        expect(sgVpWrapPaddingBottom).to.be.at.least(321.5);
+        expect(sgVpWrapPaddingBottom).to.be.at.most(322);
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
 
         const sgViewBtnClose = await $('#sg-view-btn-close');
@@ -87,9 +92,12 @@ describe('Listeners end-to-end tests', () => {
         await sgViewBtnClose.click();
         await browser.pause(pauseMd);
 
+        const sgViewContainerBottom = parseFloat((await sgViewContainer.getCSSProperty('bottom')).value);
+
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-open');
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('0px');
-        expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('636px');
+        expect(sgViewContainerBottom).to.be.at.least(635);
+        expect(sgViewContainerBottom).to.be.at.most(636);
       });
 
       it('dock-right button docks the viewer to the right', async () => {
@@ -163,9 +171,11 @@ describe('Listeners end-to-end tests', () => {
         const sgVpWrap = await $('#sg-vp-wrap');
         const sgViewContainer = await $('#sg-view-container');
         const sgAnnotations = await $('#sg-annotations');
+        const sgVpWrapPaddingBottom = parseFloat((await sgVpWrap.getCSSProperty('padding-bottom')).value);
 
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-open');
-        expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
+        expect(sgVpWrapPaddingBottom).to.be.at.least(321.5);
+        expect(sgVpWrapPaddingBottom).to.be.at.most(322);
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
         expect(await sgViewContainer.getAttribute('class')).to.have.string('anim-ready');
         expect(await sgAnnotations.getHTML(false)).to.equal(`<div id="annotation-1" class="sg-annotation">
@@ -182,8 +192,11 @@ menu anchor.</p>
         await browser.keys(['Control', 'Shift', 'a']);
         await browser.pause(pauseMd);
 
+        const sgViewContainerBottom = parseFloat((await sgViewContainer.getCSSProperty('bottom')).value);
+
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('0px');
-        expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('636px');
+        expect(sgViewContainerBottom).to.be.at.least(635);
+        expect(sgViewContainerBottom).to.be.at.most(636);
         expect(await sgViewContainer.getAttribute('class')).to.not.have.string('anim-ready');
       });
 
@@ -226,11 +239,14 @@ menu anchor.</p>
         await browser.keys(['Control', 'Alt', 'j']);
         await browser.pause(pauseMd);
 
+        const sgVpWrapPaddingBottom = parseFloat((await sgVpWrap.getCSSProperty('padding-bottom')).value);
+
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-open');
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-left');
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-bottom');
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-right');
-        expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
+        expect(sgVpWrapPaddingBottom).to.be.at.least(321.5);
+        expect(sgVpWrapPaddingBottom).to.be.at.most(322);
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
         expect((await sgViewContainer.getSize()).width).to.equal(1024);
       });
@@ -272,20 +288,26 @@ menu anchor.</p>
         await browser.keys(['Control', 'Alt', 'j']);
         await browser.pause(pauseMd);
 
+        const sgVpWrapPaddingBottom = parseFloat((await sgVpWrap.getCSSProperty('padding-bottom')).value);
+
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-open');
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-left');
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-bottom');
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-right');
-        expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
+        expect(sgVpWrapPaddingBottom).to.be.at.least(321.5);
+        expect(sgVpWrapPaddingBottom).to.be.at.most(322);
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
         expect((await sgViewContainer.getSize()).width).to.equal(1024);
 
         await browser.keys(['Control', 'Shift', 'a']);
         await browser.pause(pauseMd);
 
+        const sgViewContainerBottom = parseFloat((await sgViewContainer.getCSSProperty('bottom')).value);
+
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-open');
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('0px');
-        expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('636px');
+        expect(sgViewContainerBottom).to.be.at.least(635);
+        expect(sgViewContainerBottom).to.be.at.most(636);
       });
     });
   });
@@ -344,10 +366,13 @@ menu anchor.</p>
         await sgViewBtnDockBottom.click();
         await browser.pause(pauseMd);
 
+        const sgVpWrapPaddingBottom = parseFloat((await sgVpWrap.getCSSProperty('padding-bottom')).value);
+
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-left');
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-bottom');
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-right');
-        expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
+        expect(sgVpWrapPaddingBottom).to.be.at.least(321.5);
+        expect(sgVpWrapPaddingBottom).to.be.at.most(322);
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
         expect((await sgViewContainer.getSize()).width).to.equal(1024);
       });
@@ -366,8 +391,11 @@ menu anchor.</p>
         const sgVpWrap = await $('#sg-vp-wrap');
         const sgViewContainer = await $('#sg-view-container');
 
+        const sgVpWrapPaddingBottom = parseFloat((await sgVpWrap.getCSSProperty('padding-bottom')).value);
+
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-open');
-        expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
+        expect(sgVpWrapPaddingBottom).to.be.at.least(321.5);
+        expect(sgVpWrapPaddingBottom).to.be.at.most(322);
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
 
         const sgViewBtnClose = await $('#sg-view-btn-close');
@@ -376,9 +404,12 @@ menu anchor.</p>
         await sgViewBtnClose.click();
         await browser.pause(pauseMd);
 
+        const sgViewContainerBottom = parseFloat((await sgViewContainer.getCSSProperty('bottom')).value);
+
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-open');
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('0px');
-        expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('636px');
+        expect(sgViewContainerBottom).to.be.at.least(635);
+        expect(sgViewContainerBottom).to.be.at.most(636);
       });
 
       it('dock-right button docks the viewer to the right', async () => {
@@ -879,17 +910,22 @@ menu anchor.</p>
 
         const sgVpWrap = await $('#sg-vp-wrap');
         const sgViewContainer = await $('#sg-view-container');
+        const sgVpWrapPaddingBottom = parseFloat((await sgVpWrap.getCSSProperty('padding-bottom')).value);
 
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-open');
-        expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
+        expect(sgVpWrapPaddingBottom).to.be.at.least(321.5);
+        expect(sgVpWrapPaddingBottom).to.be.at.most(322);
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
         expect(await sgViewContainer.getAttribute('class')).to.have.string('anim-ready');
 
         await browser.keys(['Control', 'Shift', 'c']);
         await browser.pause(pauseMd);
 
+        const sgViewContainerBottom = parseFloat((await sgViewContainer.getCSSProperty('bottom')).value);
+
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('0px');
-        expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('636px');
+        expect(sgViewContainerBottom).to.be.at.least(635);
+        expect(sgViewContainerBottom).to.be.at.most(636);
         expect(await sgViewContainer.getAttribute('class')).to.not.have.string('anim-ready');
       });
 
@@ -932,11 +968,14 @@ menu anchor.</p>
         await browser.keys(['Control', 'Alt', 'j']);
         await browser.pause(pauseMd);
 
+        const sgVpWrapPaddingBottom = parseFloat((await sgVpWrap.getCSSProperty('padding-bottom')).value);
+
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-open');
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-left');
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-bottom');
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-right');
-        expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
+        expect(sgVpWrapPaddingBottom).to.be.at.least(321.5);
+        expect(sgVpWrapPaddingBottom).to.be.at.most(322);
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
         expect((await sgViewContainer.getSize()).width).to.equal(1024);
       });
@@ -1061,20 +1100,26 @@ menu anchor.</p>
         await browser.keys(['Control', 'Alt', 'j']);
         await browser.pause(pauseMd);
 
+        const sgVpWrapPaddingBottom = parseFloat((await sgVpWrap.getCSSProperty('padding-bottom')).value);
+
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-open');
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-left');
         expect(await patternlabBody.getAttribute('class')).to.have.string('dock-bottom');
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-right');
-        expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('322px');
+        expect(sgVpWrapPaddingBottom).to.be.at.least(321.5);
+        expect(sgVpWrapPaddingBottom).to.be.at.most(322);
         expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('0px');
         expect((await sgViewContainer.getSize()).width).to.equal(1024);
 
         await browser.keys(['Control', 'Shift', 'c']);
         await browser.pause(pauseMd);
 
+        const sgViewContainerBottom = parseFloat((await sgViewContainer.getCSSProperty('bottom')).value);
+
         expect(await patternlabBody.getAttribute('class')).to.not.have.string('dock-open');
         expect((await sgVpWrap.getCSSProperty('padding-bottom')).value).to.equal('0px');
-        expect((await sgViewContainer.getCSSProperty('bottom')).value).to.equal('636px');
+        expect(sgViewContainerBottom).to.be.at.least(635);
+        expect(sgViewContainerBottom).to.be.at.most(636);
       });
     });
   });
