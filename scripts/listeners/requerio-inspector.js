@@ -12,6 +12,10 @@ export default class RequerioInspector {
     const $orgs = this.$orgs;
 
     $orgs['#sg-viewport'].on('load', () => {
+      if (this.interval) {
+        this.interval = clearInterval(this.interval);
+      }
+
       const classesNew = [];
       const requerioInspector = this.requerioInspector;
       const requerioP = $orgs['#sg-viewport'][0].contentWindow.requerio;
@@ -230,7 +234,7 @@ export default class RequerioInspector {
         }
       }
 
-      setInterval(() => {
+      this.interval = setInterval(() => {
         // Poll 4 times a second continuously for 10 minutes. Reduce or stop the polling when inactive.
         // Polling stops when switching to a different browser tab.
         // Polling restarts when switching back to this tab.
