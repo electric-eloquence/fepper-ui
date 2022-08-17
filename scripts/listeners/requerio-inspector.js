@@ -98,8 +98,10 @@ export default class RequerioInspector {
         this.requerio.incept(selectorNew);
       }
 
+      const selectorsOrigLength = selectorsOrig.length;
+
       // Using additional logic in case elements already have a contrast filter.
-      for (let i = 0, l = selectorsOrig.length; i < l; i++) {
+      for (let i = 0; i < selectorsOrigLength; i++) {
         const selectorOrig = selectorsOrig[i];
 
         if (!requerioP || !requerioP.$orgs || !requerioP.$orgs[selectorOrig]) {
@@ -121,7 +123,7 @@ export default class RequerioInspector {
 
       let displayedItemsLength = 0;
 
-      for (let i = 0, l = selectorsOrig.length; i < l; i++) {
+      for (let i = 0; i < selectorsOrigLength; i++) {
         const selectorOrig = selectorsOrig[i];
         const selectorNew = selectorsNew[i];
 
@@ -264,7 +266,14 @@ export default class RequerioInspector {
 
               if (this.stoked) {
                 for (const organism of Object.keys(patternStoreStateBefore)) {
-                  requerioP.$orgs[organism].updateMeasurements(patternStoreStateBefore[organism]);
+                  const $organism = requerioP.$orgs[organism];
+                  const memberIdxs = $organism.$members.map((val, idx) => idx);
+
+                  for (let memberIdx of memberIdxs) {
+                    $organism.getState(memberIdx);
+                  }
+
+                  $organism.updateMeasurements(patternStoreStateBefore[organism]);
                 }
 
                 patternStoreStateNow = requerioP.store.getState();
