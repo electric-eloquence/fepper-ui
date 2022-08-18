@@ -46,7 +46,7 @@
     "jquery": "^3.5.1",
     "mousetrap": "1.6.5",
     "redux": "^4.0.5",
-    "requerio": "^0.7.4",
+    "requerio": "^0.7.5-rc.0",
     "typeahead.js": "0.10.5",
     "universal-cookie": "4.0.3",
     "wolfy87-eventemitter": "5.2.9"
