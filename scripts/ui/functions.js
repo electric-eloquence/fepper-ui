@@ -190,7 +190,7 @@ export default class UiFns {
    * @returns {object|undefined} Event data.
    */
   receiveIframeMessageBoilerplate(event) {
-    // Does the origin sending the message match the current host? If not, dev/null the request.
+    // Does the origin sending the message match the current host? If not, /dev/null the request.
     if (
       this.#root.location.protocol !== 'file:' &&
       event.origin !== this.#root.location.protocol + '//' + this.#root.location.host

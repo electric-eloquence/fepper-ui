@@ -25,7 +25,7 @@ function addLineageListeners($orgs, uiFns) {
 export default class CodeViewer {
 
   /* CLASS FIELDS */
-  // The following functions are declared as class fields to retain function-scoped `this` context while keeping the
+  // The following function is declared as a class field to retain the Event function prototype while keeping the
   // class constructor tidy. Exposed as properties on the instance so they can be unit tested.
 
   receiveIframeMessage = (event) => {
