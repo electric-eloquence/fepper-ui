@@ -47,7 +47,7 @@
     "redux": "^4.0.5",
     "requerio": "*",
     "typeahead.js": "0.10.5",
-    "universal-cookie": "4.0.3",
+    "universal-cookie": "7.2.1",
     "wolfy87-eventemitter": "5.2.9"
   },
   "devDependencies": {
